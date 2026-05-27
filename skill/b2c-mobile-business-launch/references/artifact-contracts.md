@@ -1,0 +1,768 @@
+# Artifact Contracts
+
+These are the reusable document shapes from the model launch session. Keep docs concise enough to be read, but complete enough to block future drift.
+
+## Contents
+
+- Canonical File Map
+- Core docs: `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
+- Conversion docs: `ONBOARDING.md`, `onboarding.html`
+- Launch ops: `LAUNCH.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
+- Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
+- Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
+
+## Canonical File Map
+
+Use this structure when the business is still pre-build or being handed to a builder:
+
+```text
+AGENTS.md                 # agent entrypoint and canonical operating instructions
+CLAUDE.md                 # optional tool-specific addendum that points back to AGENTS.md
+APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
+TOOL_DECISIONS.md         # paid/account-gated tool access, confirmed fallbacks, limitations, and blocked routes
+ANALYTICS.md              # upfront measurement, attribution, event catalog, funnels, dashboards, and QA gates
+analytics-plan.html       # founder-visible rendered analytics/attribution plan and dashboard wireframes
+LAUNCH_TRACE.md           # evidence-to-product-to-brand/design-to-build-to-proof traceability matrix
+TECH_SPEC.md              # data/API/state/permission/integration contracts when actual implementation is in scope
+ENGINEERING_PLAN.md       # Compound Engineering plan or implementation plan when actual app build is in scope
+PRODUCTION_READINESS.md   # end-to-end proof across frontend, backend, mobile device, providers, and release gates
+PROMPTS.md                # sequenced builder/Rork prompts
+RESEARCH.md               # AppKittie, XPOZ, Firecrawl, review, keyword, and competitor evidence
+SPEC.md                   # research-grounded product spec
+BRAND.md                  # name, voice, brand rules, copy calibration
+DESIGN.md                 # google design.md token/prose design system source of truth
+DESIGN_SYSTEM.md          # optional expanded app-specific design appendix
+design.md                 # screen-by-screen implementation design spec
+design.html               # rendered visual system, components, and screen proofs
+ONBOARDING.md             # onboarding, personalization, review prompt, paywall timing, and activation contract
+onboarding.html           # rendered onboarding/paywall/review/offer flow proof
+LAUNCH.md                 # ASO, screenshots, ads, launch sequence, metrics
+EMAIL_OPS.md              # Resend/domain/lifecycle/broadcast/webhook/inbound email operations
+REVENUE_OPS.md            # RevenueCat, Stripe, store products, web funnels, entitlements, and purchase validation
+GEO_SEO.md                # public-site GEO/SEO, AI crawler, schema, llms.txt, and citability state
+PRIVACY.md                # privacy policy source draft and data-practices matrix
+TERMS.md                  # terms of service / EULA source draft
+LEGAL_REVIEW.md           # founder/legal decisions, risk flags, source URLs, review status
+STORE_CONSOLE.md          # copy-paste App Store Connect and Google Play Console packet with click paths and blockers
+store-console.html        # rendered founder-facing mock console grouped by ASC/Play page
+SCREENSHOTS.md            # device capture, composition, dimensions, locale, and upload matrix
+STORE_OPS.md              # optional review, email-routing, console status, and post-launch growth state when submission is active
+UGC_PLAYBOOK.md           # creator-led organic growth fit, 90-day Day 0 plan, budget, creator ops, scripts, tracking, stop/scale rules
+FASTLANE_OPS.md           # Fastlane workspace, connections, content engine, schedule, and analytics loop
+OUTREACH.md               # endorsement/partner drafts when relevant
+brand.html                # optional rendered brand book
+landing/                  # optional pre-launch funnel
+screenshots/              # raw MobAI/device captures, compositions, and final store upload assets
+fastlane/                 # campaign brief, prompts, angles, preferences, sanitized API logs, runs, schedules, metrics
+ugc/                      # creator list, briefs, scripts, tracker, weekly review, rights/disclosure notes
+assets/                   # visual references, screenshot mockups, production assets embedded into HTML proofs
+AUDIT_PROMPT.md           # independent audit brief for public funnel or app
+agents/                   # simple role prompts/configs: orchestrator, marketing, engineering, product, design, customer success
+```
+
+When handing to Rork or another generated-app builder, duplicate the needed subset into:
+
+```text
+rork-ready/
+  README.md
+  AGENTS.md
+  CLAUDE.md
+  APP_AGENTS.md
+  TOOL_DECISIONS.md
+  ANALYTICS.md
+  analytics-plan.html
+  LAUNCH_TRACE.md
+  TECH_SPEC.md
+  ENGINEERING_PLAN.md
+  PRODUCTION_READINESS.md
+  PROMPTS.md
+  DESIGN.md
+  design.md
+  design.html
+  ONBOARDING.md
+  onboarding.html
+  STORE_CONSOLE.md
+  store-console.html
+  SCREENSHOTS.md
+  UGC_PLAYBOOK.md
+  FASTLANE_OPS.md
+  docs/
+  ugc/
+  fastlane/
+  agents/
+  assets/
+```
+
+## `AGENTS.md`
+
+Must include:
+- 60-second project brief
+- source-of-truth file map
+- `LAUNCH_TRACE.md` and `TECH_SPEC.md` when they exist
+- brand voice rules and banned/owned words
+- `DESIGN.md` and HTML visual-proof enforcement rules
+- onboarding, review prompt, paywall, closing offer, and activation rules when in scope
+- architecture conventions
+- V1 scope, V2/V3 scope, and banned scope
+- analytics rules
+- Compound Engineering routing, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
+- app-local agent roster pointer to `APP_AGENTS.md` and `agents/`, including orchestrator ownership and specialist audit roles
+- MobAI/device testing rules and serialized device ownership
+- paid-tool routing and approved MobAI/XcodeBuildMCP fallback rules
+- UGC/Fastlane growth rules when social distribution is in scope
+- backend/frontend E2E and production-readiness gates
+- common agent mistakes
+- verification requirements
+
+Acceptance:
+- An agent can answer "what should I read first?"
+- Banned scope is explicit enough to stop feature creep.
+- Implementation rules are specific to the stack.
+- A future engineering agent knows when to use parallel agents and when to serialize MobAI, git, migrations, releases, or shared-file edits.
+- A future app-management agent knows which local role prompt owns product, marketing, engineering, design, or customer-success follow-up.
+
+## `APP_AGENTS.md` And `agents/`
+
+Use for real app builds, generated-app handoffs, or post-launch management packages. Keep these lightweight; they are role entrypoints, not a second product spec.
+
+Must include:
+- one orchestrator role that owns source-of-truth docs, sequencing, worktree/subagent safety, integration, git/release coordination, and `PRODUCTION_READINESS.md`
+- one marketing guru role for ASO, GEO/SEO, Fastlane, UGC, attribution learning, reviews, launch calendar, claims, and channel experiments
+- one engineering leader role for `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, frontend/backend/provider integration, test strategy, observability, and production-readiness evidence
+- one product leader role for ICP, problem framing, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
+- one design guru role for `DESIGN.md`, `design.md`, `design.html`, visual QA, accessibility, screenshots, icons, motion, and Higgsfield asset use
+- one customer success role for support email, help/FAQ, privacy/delete/refund/restore paths, review responses, lifecycle copy, and feedback triage
+- each role's inputs, outputs, forbidden actions, and when to ask the founder
+- a note that role agents review and propose by default; implementation requires orchestrator assignment, file-overlap check, and integration proof
+
+Minimum `agents/` files:
+- `agents/orchestrator.md`
+- `agents/marketing-guru.md`
+- `agents/engineering-leader.md`
+- `agents/product-leader.md`
+- `agents/design-guru.md`
+- `agents/customer-success.md`
+
+Acceptance:
+- `APP_AGENTS.md` points each role to canonical docs instead of duplicating them.
+- The orchestrator can launch parallel audits against the skill definition without letting specialists stage, commit, release, or edit overlapping files independently.
+- Product, design, marketing, engineering, and support follow-up work has a named owner after bootstrap.
+
+## `TOOL_DECISIONS.md`
+
+Use when paid or account-gated tools affect research, visuals, testing, store ops, revenue, email, analytics, UGC, or post-launch growth.
+
+Must include:
+- tool and lane
+- intended paid/account-gated workflow
+- runtime access status
+- founder confirmation or blocker
+- selected route: paid, user export, free fallback, blocked, deferred
+- fallback limitation and confidence impact
+- downstream artifacts affected
+- date checked
+
+Acceptance:
+- No fallback work is mistaken for the intended paid-tool workflow.
+- A future agent can tell whether AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, paid ASO/MMP tools, creator marketplaces, RevenueCat, Stripe, PostHog, Resend, App Store Connect, or Google Play access was used, blocked, or intentionally bypassed.
+- Founder-only spend, account, credential, posting, and submission decisions are explicit.
+
+## `LAUNCH_TRACE.md`
+
+Use for any multi-artifact launch so the chain from research to implementation does not drift.
+
+Must include:
+- evidence index with source, date, tool/query/URL, confidence, and affected decision area
+- decision trace table with stable IDs
+- research finding, product decision, brand/design decision, build contract, analytics/revenue/privacy/store impact, verification method, and status
+- rejected decisions and why
+- founder-only decisions and approval status
+- implementation blockers and proof blockers
+
+Acceptance:
+- A future agent can explain why each major screen, claim, onboarding question, paywall behavior, event, data collection, and store-console answer exists.
+- Brand/design work cites research/product trace rows.
+- `ENGINEERING_PLAN.md`, builder prompts, and production-readiness checks can reference trace IDs instead of restating context.
+
+## `TECH_SPEC.md`
+
+Use when app, backend, or web-funnel implementation needs precise contracts beyond visual screen specs.
+
+Must include:
+- source docs and trace IDs
+- architecture overview and repo boundaries
+- auth/session model, anonymous-to-known transition, roles, logout/reset behavior
+- data model: entities, fields, ownership, retention, deletion, indexes, migrations, and seed fixtures
+- API/RPC/webhook contracts: route, method, auth, request, response, errors, idempotency, rate limits, and retry behavior
+- state machines: onboarding, account, entitlement, subscription, restore, deletion, support, lifecycle messaging, offline/cache
+- permissions/platform capabilities and just-in-time prompts
+- integration contracts for analytics, revenue, email, crash, backend, push, AI, Fastlane, store notifications, and support tools
+- app integrity/abuse decision: Apple App Attest/DeviceCheck, Google Play Integrity, bot/rate-limit protections, replay/idempotency protection when in scope
+- remote config, feature flags, kill switches, staged/phased rollout controls, and test fixtures
+
+Acceptance:
+- A builder does not invent schema, endpoint, state, permission, provider, or fixture behavior.
+- `PRODUCTION_READINESS.md` can test frontend/device actions against backend/provider truth.
+- Privacy, store, analytics, and revenue disclosures trace to actual implementation behavior.
+
+## `CLAUDE.md`
+
+Use when Claude Code, Rork, or another builder expects Claude-specific guidance.
+
+Must include:
+- one-line pointer that `AGENTS.md` is canonical
+- Claude-specific skill/plugin notes only when they differ from general agent guidance
+- a warning not to duplicate product truth from `AGENTS.md`
+
+Acceptance:
+- Claude can find the same canonical docs without creating a second source of truth.
+- Product, design, analytics, and engineering rules remain in `AGENTS.md` unless truly Claude-specific.
+
+## `ANALYTICS.md`
+
+Must include:
+- vendor and identity model
+- current PostHog docs checked, date checked, and stack-specific doc links
+- PostHog host/region and project-grouping decision
+- north-star metric and launch learning questions
+- super-properties
+- naming convention
+- attribution model: UTMs, click IDs, referrer, deep links, referral/creator codes, vanity URLs, store/ad-platform limits, and self-reported source
+- self-reported attribution data contract: stable source keys, `other` free text, `attribution_source_selected`, PostHog person properties, backend/profile fields, anonymous-to-identified reconciliation, and QA evidence
+- web events if a landing funnel exists
+- iOS/mobile events by flow
+- backend/provider events for purchases, entitlements, webhooks, email, and referral truth
+- email lifecycle events if Resend or another email provider is used
+- subscription lifecycle events
+- web checkout and entitlement events when RevenueCat/Stripe/web funnels exist
+- funnel definitions and targets
+- dashboard/insight definitions, feature flag and experiment registry, session replay/survey posture, privacy notes, and QA checklist
+- dashboard and QA checklist
+
+Rules:
+- Use snake_case event names.
+- Mirror events across surfaces when the concept is the same.
+- Do not invent event names in build prompts; update the catalog first.
+- Public analytics tokens may live in public bundles only when the vendor documents them as publishable/write-only. Service keys never go into git.
+- Render `analytics-plan.html` before builder handoff or launch so the founder can inspect the measurement plan, attribution map, funnel cards, and blocked credentials visually.
+- Do not call attribution wired if it only emits an event or updates local state; `self_reported_source` must reach PostHog person properties and backend/profile storage where identity exists.
+
+## `ENGINEERING_PLAN.md`
+
+Use when the actual app, backend, or web funnel will be implemented by Codex, Claude, Rork, or another builder.
+
+Must include:
+- origin docs, `LAUNCH_TRACE.md` IDs, and requirements trace
+- product brainstorm source when `ce-brainstorm` was used
+- `TECH_SPEC.md` pointer or an inline technical contract section when implementation contracts are in scope
+- architecture and repo boundaries
+- implementation units with repo-relative paths
+- safe parallelization map: independent units, serial dependencies, shared files, and worktree needs
+- frontend, backend, database, analytics, revenue, email, privacy, and store-console impacts
+- test scenarios for each unit
+- MobAI/device E2E scenarios
+- backend/provider verification scenarios
+- production-readiness gates and blockers
+
+Acceptance:
+- It can be passed to `ce-work` or a builder without re-deciding product behavior.
+- It explains where parallel agents are safe and where orchestration must stay serial.
+- It keeps implementation units tied back to launch docs rather than standalone tasks.
+
+## `PRODUCTION_READINESS.md`
+
+Use before declaring an app build ready for beta, store submission, or production launch.
+
+Must include:
+- build/typecheck/lint/test commands and outcomes for every touched repo
+- frontend/browser E2E evidence when web surfaces exist
+- MobAI mobile E2E evidence when app flows exist, or founder-confirmed XcodeBuildMCP Apple-platform evidence with limitations when MobAI is unavailable
+- backend/database proof for frontend actions, including real test records or provider logs
+- RevenueCat/Stripe entitlement proof when monetized
+- PostHog analytics proof when events are in scope
+- self-reported attribution proof when onboarding/signup/waitlist exists: early screen, stable stored key, `other` free text, PostHog person property, backend/profile write, and anonymous-to-identified stitching
+- Resend/email/webhook proof when lifecycle or transactional email is in scope
+- Sentry/crash/release-health status or a documented no-Sentry reason
+- release-build or staging-build proof that mocks are disabled and secrets are not bundled
+- remaining blockers and founder-only gates
+
+Acceptance:
+- Unit tests alone are not enough.
+- A reviewer can trace a user action from frontend/device to backend/provider state.
+- Blocked E2E flows are explicit and do not get flattened into "done."
+
+## `SPEC.md`
+
+Must include:
+- one-line promise
+- problem/villain language
+- evidence for the language
+- category/storefront strategy
+- competitor threat model
+- core product loop
+- aha moment and onboarding sequence
+- monetization and paywall posture
+- viral/referral loops
+- feature surfaces
+- tech architecture
+- metrics
+- roadmap
+- risks and open questions
+- evidence appendix
+
+Acceptance:
+- The spec explains why the app can win, not just what it does.
+- The category strategy uses store data, not internal language.
+- The moat is stated as a bundle of advantages, not one vague differentiator.
+
+## `RESEARCH.md`
+
+Use when research spans app stores, social platforms, competitor websites, reviews, creators, keywords, pricing, or paid acquisition signals.
+
+Must include:
+- research date, target country/market, tool/source, query, and limits/credit budget
+- AppKittie findings: category economics, competitors, downloads/revenue estimates, IAP/pricing, screenshots, ad presence, creator partnerships, contact/social links, review themes, and keyword results
+- XPOZ findings: platform, query, creator/subreddit/handle, post/comment evidence, user language, emotional register, objections, and ad/organic content formats
+- Firecrawl/web findings: competitor pages crawled, pricing, plans, claims, CTAs, FAQ/help/policy pages, SEO/GEO patterns, and source URLs
+- decision log: what each evidence cluster changed in the spec, brand, ASO, pricing, funnel, or roadmap
+- trace IDs or `LAUNCH_TRACE.md` pointers for every major decision that moves forward
+- rejected claims and why they are unsupported or risky
+
+Acceptance:
+- A future agent can reproduce the research path without guessing queries.
+- App-store estimates, social evidence, and web claims are labeled by source type.
+- No claim moves into public copy unless it has supporting evidence or is marked as founder opinion.
+
+## `BRAND.md`
+
+Must include:
+- name and meaning
+- mascot/character rules when applicable
+- voice principles
+- banned words/phrases
+- owned words
+- tone examples
+- product copy samples
+- proof/endorsement constraints
+- trace IDs for voice, promise, mascot, naming, proof, and banned-copy decisions
+
+Acceptance:
+- A visible string can be judged pass/fail against this doc.
+- Brand choices map back to research/product evidence instead of generic taste.
+- Any use of a creator/expert/framework name is constrained by permission status.
+
+## `DESIGN.md`
+
+Use this as the canonical design-system source of truth, following the Google Labs `design.md` format: YAML front matter for machine-readable tokens plus Markdown prose for rationale and application rules.
+
+Must include:
+- `name`, description, color tokens, typography tokens, radius tokens, spacing tokens, and component tokens where supported by the spec
+- overview, colors, typography, layout/spacing, elevation/depth, shapes, components, and do/don't sections in canonical order
+- trace/source notes for the product, category, emotional tone, accessibility, and surface constraints the visual system expresses
+- component states for primary actions, secondary actions, form controls, tabs/segmented controls, cards/lists, modals/sheets, nav, paywalls, and store screenshot frames when relevant
+- accessibility rules: contrast, focus states, reduced motion, text scaling, hit targets, dark/light constraints if supported
+- export or implementation notes for the target app stack: CSS variables, Tailwind theme, SwiftUI tokens, React Native theme, Flutter theme, or Rork/builder prompt rules
+
+Acceptance:
+- `npx @google/design.md lint DESIGN.md` passes when the CLI is available, or validation is marked blocked with the exact error.
+- Tokens are specific enough for a builder to implement without inventing fonts, colors, spacing, or components.
+- Any existing `DESIGN_SYSTEM.md` defers to `DESIGN.md` for token truth.
+
+## `DESIGN_SYSTEM.md`
+
+Use only when the project needs a larger appendix than `DESIGN.md` can comfortably hold, or when the target repo already has this convention. It must not conflict with `DESIGN.md`.
+
+Must include:
+- color tokens
+- type tokens
+- spacing/radius/shadow/motion tokens
+- component inventory
+- banned components
+- accessibility and reduced-motion rules
+- asset usage rules
+- implementation namespace or token API for the app stack
+
+Acceptance:
+- New screens can be built from tokens and components only.
+- Design drift can be called a bug with a file reference.
+
+## `design.md`
+
+Use this as the builder-facing screen implementation spec. It should reference `DESIGN.md` for tokens and visual rules rather than redefining them.
+
+Must include:
+- product surfaces
+- screen-by-screen flows
+- trace IDs from `LAUNCH_TRACE.md` for key screens, copy claims, onboarding questions, paywall decisions, data collection, and screenshot concepts
+- component contracts
+- important animations
+- states and empty/error/loading behavior
+- copy calibration set
+- accessibility details
+- analytics hooks by screen
+- corresponding HTML proof path for each key surface
+
+Acceptance:
+- The builder can implement the screen without asking what it looks like.
+- The builder can tell why each screen exists and which product/research decision it implements.
+- The design spec references `ANALYTICS.md` for event names.
+- The design spec references `DESIGN.md` for token names and component rules.
+
+## `design.html`
+
+Use this as the human-visible proof that the design system works in real layout. Every visual artifact created by this skill should be represented in HTML, even if it also uses generated images or exported screenshots.
+
+Must include:
+- CSS variables or theme definitions derived from `DESIGN.md`
+- token swatches, typography specimens, spacing/radius/motion examples, and component states
+- mobile-first screen frames for onboarding, aha moment, core loop, paywall/revenue surface when relevant, settings/account, empty/loading/error states, and share/referral surfaces when relevant
+- desktop or responsive variants for public landing, legal, support, and checkout/funnel pages when relevant
+- ASO screenshot-frame concepts when store creative is in scope
+- labels that mark assets as `direction`, `draft`, or `production`
+- local preview instructions and browser/mobile visual QA notes
+
+Acceptance:
+- The file can be opened or served locally and visually inspected.
+- Mobile and desktop layouts do not overlap, clip critical text, or rely on invisible/remote-only assets.
+- Visual concepts, generated images, brand books, screenshot frames, and UI explorations are not left as prose-only artifacts.
+
+## `ONBOARDING.md`
+
+Use when the app has onboarding, personalization questions, a mascot/guide, demo video, attribution capture, review prompt, paywall, closing offer, or first-session activation.
+
+Must include:
+- onboarding goal, target user state, and desired post-onboarding state
+- screen-by-screen sequence with purpose, copy, visual asset, motion, analytics event, and exit/back behavior
+- data collection matrix: question, answer options, personalization use, attribution use, lifecycle-message use, privacy/legal note, and required/optional status
+- attribution question and answer taxonomy with stable stored keys, display labels, `other` free text, analytics event properties, PostHog person properties, backend/profile fields, and anonymous-to-identified reconciliation
+- mascot/guide plan with Higgsfield source assets, emotion states, and accessibility fallback when used
+- demo-video plan, including aha moment, duration, source UI, captions/no-audio fallback, and Higgsfield generation/scoring path when used
+- review prompt trigger, native platform API, cooldown, compliance notes, and fallback when the prompt is not shown
+- hard/soft paywall decision, paywall placement, RevenueCat offering/experiment, restore path, and product package matrix
+- closing-offer or reverse-trial behavior after paywall dismissal, if used
+- first-session activation task and Day 0 cancellation prevention notes
+
+Acceptance:
+- Every onboarding question has a reason beyond "engagement".
+- Self-reported attribution is visible early in the rendered flow and passes the analytics/backend data contract; it is not just a local UI choice.
+- Review prompt behavior is native-platform compliant and not incentivized.
+- Paywall, pricing, trial, and closing offer match `REVENUE_OPS.md`, `TERMS.md`, store products, and analytics events.
+
+## `onboarding.html`
+
+Use this as the visual proof for onboarding and paywall flow. It can be a standalone file or a section inside `design.html` for small launches.
+
+Must include:
+- all onboarding screens at mobile dimensions
+- mascot states, question UI, personalized plan, demo video placeholder/clip, review prompt placeholder, paywall, closing offer, loading/error/offline states, and post-paywall activation
+- CSS variables from `DESIGN.md`
+- embedded Higgsfield assets or local references with `direction`, `draft`, or `production` labels
+- reduced-motion and no-video fallback notes
+
+Acceptance:
+- The full onboarding path is inspectable in a browser before implementation.
+- Text does not clip or overlap on mobile.
+- Visuals, icons, and animations use the design system instead of a separate generated style.
+
+## `LAUNCH.md`
+
+Must include:
+- ASO context or pointer to `app-marketing-context.md`
+- App Store fields and character counts
+- Google Play fields when Android is in scope
+- screenshot frame table or pointer to `SCREENSHOTS.md`
+- screenshot production notes, especially if AI-generated backgrounds need manual text overlay
+- ad-copy library by tested angle
+- Apple Search Ads or equivalent paid-search plan
+- launch calendar
+- monetization tracking thresholds
+- monetization architecture or pointer to `REVENUE_OPS.md`
+- rating/review prompt strategy
+- store-console readiness checklist or pointer to `STORE_CONSOLE.md` and `store-console.html`
+- support/privacy email alias status
+- Resend or transactional/lifecycle email readiness, or pointer to `EMAIL_OPS.md`
+- open founder decisions
+
+Acceptance:
+- The App Store listing can be pasted from the doc.
+- Launch tasks are dated or sequenced relative to launch week.
+- Metrics include intervention thresholds.
+- Store-console, screenshot, privacy, and contact-route blockers are explicit.
+
+## `STORE_CONSOLE.md`
+
+Use when a founder or agent must create, fill, submit, or audit App Store Connect or Google Play Console.
+
+Must include:
+- official docs checked with URLs and dates
+- App Store Connect field table grouped by exact console page and click path
+- ASC CLI route when used: commands, dry-run/applied status, JSON output paths, resolved IDs, and founder-gated mutations
+- Google Play Console field table grouped by exact console page and click path
+- field limits, character/byte counts, paste-ready values, source artifact, evidence, and status
+- Apple App Privacy data-type matrix mapped to `PRIVACY.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `REVENUE_OPS.md`, SDKs, backend schema, and vendors
+- Google Play Data safety matrix mapped to the same data inventory
+- account deletion, privacy choices, support/privacy URLs, reviewer credentials, review notes, age/content rating, export compliance, and app access instructions
+- screenshot upload matrix or pointer to `SCREENSHOTS.md`
+- founder-only gates for developer account access, pricing, legal approval, privacy claims, paid products, screenshot approval, and final submission
+
+Acceptance:
+- A founder can open ASC or Play Console and fill every known field without asking where it goes.
+- Apple App Privacy and Google Data safety answers trace to actual data flows, not generic legal copy.
+- Any unknown console item is marked `blocked` with the exact data/access needed.
+
+## `store-console.html`
+
+Use this as the human-facing copy surface for console work. It should be local, static, and dense enough to act like a mock ASC/Play Console.
+
+Must include:
+- tabs or sections for App Store Connect and Google Play
+- cards in console click-path order
+- field labels, limits, live or precomputed character counts, paste-ready values, source document path, status badge, and official-doc link
+- privacy/App Privacy and Data safety tables
+- screenshot matrix with thumbnails or local file paths
+- founder-only approvals highlighted separately from agent-fillable fields
+- last verified date for Apple and Google documentation
+
+Acceptance:
+- The user can copy values from the HTML without scanning a long Markdown file.
+- It uses the project `DESIGN.md` tokens when available, but reads as an operator console rather than a marketing page.
+- It can be opened locally and is usable on desktop and mobile.
+
+## `SCREENSHOTS.md`
+
+Use when App Store or Play Store screenshots, previews, icons, feature graphics, or store creative are in scope.
+
+Must include:
+- current official screenshot/asset sources checked with URLs and dates
+- device matrix by platform, device class, display well, locale, required/optional status, and dimensions
+- raw MobAI/device capture path, or founder-confirmed XcodeBuildMCP Apple-platform capture path, design-system frame path, final upload path, visual proof path, and upload status
+- screenshot slot strategy: first three conversion frames, source screen, headline, claim risk, localization, and production readiness
+- generated asset use: Higgsfield or other AI assets labeled `direction`, `draft`, or `production`, with proof that real app UI remains truthful and visible
+- capture notes: device/OS/app build, locale, theme, account fixture, data fixture, accessibility IDs, and any manual steps
+
+Acceptance:
+- Every final screenshot can be traced to a real app screen or an explicitly approved mock state.
+- Final dimensions match current Apple or Google requirements.
+- Raw captures are preserved separately from composed upload assets.
+
+## `UGC_PLAYBOOK.md`
+
+Use when founder-led or creator-led organic TikTok/Reels/Shorts, Sideshift/creator marketplaces, creator payments, UGC scripts, or post-launch content engines are in scope.
+
+Must include:
+- UGC fit decision: visible product moment, emotional hook, audience size, comment/share potential, compliance risks, and source evidence
+- 90-day Day 0 plan with weeks 1-2 sourcing and weeks 3-12 format-discovery cadence
+- budget: base-only floor, working case, breakout case, founder approvals, and paid-tool decisions
+- creator profile: geography, personal follower range, camera criteria, coachability criteria, and disqualifiers
+- sourcing workflow and outreach template shape without forcing app-specific copy
+- contract checklist: account ownership, handover, content/ad usage rights, pay terms, termination, tax forms, disclosure
+- payment model: base, bonus trigger, measurement window, payout path, and scale-stage changes
+- account handling: niche-themed account, creator-operated device, brand backup access, login hygiene
+- script and review workflow: founder writes scripts, same-day feedback, approval gates, trust loosening rules
+- format tracker: format IDs, hooks, angles, product insertion, CTA mechanic, views, comments, install/search signal, payout status
+- stop and scale rules: replace creator by day 7 if inactive, give formats 5-8 reps, clone breakout hooks within 24 hours, scale only after repeatable format hits, stop after 3 months with no breakout/improvement/lift
+- legal/store/brand guardrails: partner disclosure, unsupported claims, app-store consistency, privacy/terms constraints
+
+Acceptance:
+- The channel is marked fit, blocked, deferred, or not a fit before spend starts.
+- Creator operations are not confused with influencer marketing.
+- The program can run without inventing contracts, payment rules, scripts, or tracking from scratch.
+- Fastlane or paid ads consume only approved and rights-cleared UGC inputs.
+
+## `EMAIL_OPS.md`
+
+Use when the launch uses Resend or another email provider for transactional, lifecycle, broadcast, inbound, or support email.
+
+Must include:
+- email purpose map: auth, waitlist, welcome, onboarding nudges, trial/renewal, payment recovery, receipts, support, broadcasts, admin alerts
+- sender map: from, reply-to, domain/subdomain, owner, purpose, unsubscribe requirement, and environment
+- Resend domain/DNS state: SPF, DKIM, DMARC, region, custom return path, tracking subdomain, and verification timestamps
+- API key inventory: permission, domain scope, environment variable, deploy target, rotation date, and owner
+- templates and code paths: server-only wrapper, React Email/hosted template path, tags, idempotency-key strategy, retry/logging behavior
+- webhook plan: endpoint, event list, signing secret storage, raw-body verification, `svix-id` duplicate handling, storage/log path, and replay test
+- audience/lifecycle plan: Contacts, properties, Segments, Topics, Broadcasts, Automations, unsubscribe/preference behavior, and contact deletion behavior
+- optional inbound plan: receiving domain, MX conflict risk, `email.received` webhook, attachment policy, support escalation, and retention
+- validation log: test sends, header checks, webhook replay, unsubscribe test, automation run, broadcast test, and inbound test where relevant
+
+Acceptance:
+- Production email does not rely on `resend.dev`.
+- Runtime keys are not exposed to the browser and use least privilege where possible.
+- Marketing/lifecycle email has unsubscribe/preference handling.
+- Resend behavior is reflected in privacy/legal docs and analytics events.
+
+## `REVENUE_OPS.md`
+
+Use when the app has subscriptions, paid access, RevenueCat, Stripe, web checkout, web funnels, or app-store products.
+
+Must include:
+- monetization path: waitlist-only, mobile IAP only, RevenueCat Web Billing, Stripe Billing via RevenueCat Web, existing Stripe sync, or no live checkout
+- founder-approved pricing: monthly, annual, lifetime, trial, intro offer, renewal price, refund/cancellation posture, supported countries, and approval date
+- product matrix: App Store product IDs, Play product/base plan IDs, RevenueCat product IDs, Stripe product/price IDs, entitlement, offering, package, duration, price, currency, intro/trial status
+- RevenueCat setup: project/app IDs, public SDK key locations, store/web configs, products, `premium` entitlement, `default` offering, packages, server notifications, webhooks, and environment status
+- Stripe setup: account mode, Checkout/Payment Links/Customer Portal/Billing choice, tax posture, products/prices, webhook events, customer portal URL/path, branding/support settings, and live/sandbox status
+- web funnel setup: RevenueCat Web Purchase Link, Web Funnel, Web SDK, Stripe Checkout/Payment Link, success/cancel URLs, redemption links, deep links, QR/desktop fallback, campaign parameters, and sandbox/production URL separation
+- identity map: app UID, RevenueCat App User ID, Stripe customer ID, store transaction ID, email, anonymous redemption ID, and support lookup path
+- validation log: sandbox/Test Store purchase, restore purchases, cancellation/expiration, failed payment, web purchase, redemption, webhook delivery, entitlement active in app, analytics event received
+- open blockers and founder-only approval list
+
+Acceptance:
+- A purchase can be traced from checkout/store transaction to active app entitlement.
+- Restore purchases works and is visible in support/debug docs.
+- Web-to-app purchase redemption is tested on a real mobile path before public traffic.
+- Public prices, paywalls, terms, store products, RevenueCat offerings, Stripe prices, and analytics agree.
+- Live checkout is not enabled without founder approval.
+
+## `GEO_SEO.md`
+
+Use for public launch funnels, docs, content hubs, or policy pages that should be discoverable by search and AI answer engines. This can be a standalone file or a section in `LAUNCH.md`/`AUDIT_PROMPT.md` for smaller launches.
+
+Must include:
+- live URLs audited and timestamp
+- metadata status: title, description, canonical, Open Graph, Twitter/X cards, favicon/app icon, and theme color
+- crawlability: HTTPS, redirects, `robots.txt`, meta robots, headers, `sitemap.xml`, and AI crawler access
+- `llms.txt` status and key sections
+- schema status and JSON-LD types present
+- citability findings and rewritten answer sections
+- brand/entity consistency notes across site, store listing, social profiles, press, and creator/partner mentions
+- platform notes for ChatGPT, Perplexity, Gemini, Google AI Overviews, and Bing Copilot when checked
+- open fixes, owner, and next monitoring date
+
+Acceptance:
+- The canonical domain can be crawled and parsed without auth or client-only rendering failures.
+- AI/search-visible facts match the app store listing, legal pages, and brand docs.
+- Any unsupported claims are removed or tracked in legal/launch risk notes.
+
+## `STORE_OPS.md`
+
+Use when the app is near submission, already in review, rejected, or actively monitored post-launch. This can be a standalone file or a section in `LAUNCH.md` for smaller launches.
+
+Must include:
+- platform, app ID/bundle ID/package name, version/build, target countries, category, and current console status
+- pointer to `STORE_CONSOLE.md`, `store-console.html`, and `SCREENSHOTS.md` when those are separate files
+- store-console checklist status: metadata, screenshots, privacy labels/Data safety, privacy manifest, age/content rating, export compliance, IAP/subscriptions, review notes, demo credentials, account deletion, release track, and build status
+- support/privacy/security email alias table with destination, routing/DNS status, external test result, and published locations
+- screenshot upload set by device/locale/slot with dimensions and source files
+- review/rejection log with exact message, suspected surface, fix, verification, and final status
+- post-launch ASO monitoring loop: keywords, rankings, reviews, ratings, ASA terms, conversion, country performance, competitor deltas, crash/support signals
+
+Acceptance:
+- A future agent can tell whether the app is blocked by copy, binary, privacy, legal, email, DNS, payment, or review-state work.
+- Email addresses published in stores/legal pages actually receive mail.
+- Final submission/resubmission remains founder-approved.
+
+## `FASTLANE_OPS.md`
+
+Use after the app is approved, in public beta, or ready for organic social marketing through Fastlane AI at `usefastlane.ai`.
+
+Must include:
+- official/current sources checked: Fastlane app home, in-app guide, developer docs, installed `usefastlane-ai` skill, and any user-provided Fastlane skill file
+- launch readiness gate: store/beta URLs, landing URLs, privacy/terms/support links, approved claims, screenshots, pricing, and founder approval
+- workspace setup state: workspace name, owner, product profile, website/store URLs, brand voice, banned claims, and conversion goal
+- social connections table: platform, handle, connection status, posting mode, warmup status, owner, limits, and last verified timestamp
+- API setup state: `FASTLANE_API_KEY` storage location only, base URL, safe-read discovery results, rate limits, active angles, preferences, content/post counts
+- campaign plan: content pillars, target platforms, hooks, CTAs, UTM convention, 30-day cadence, and claims to avoid
+- media input plan: MobAI screenshots/recordings, app previews, store screenshots, Higgsfield assets, founder/UGC clips, and source paths
+- UGC input plan or pointer to `UGC_PLAYBOOK.md` when creator-tested hooks, scripts, or clips shape Fastlane campaigns
+- live automation state or pointer to `fastlane/`: angles, preferences, generated content, QA results, schedule, sanitized API logs, and metrics snapshots
+- founder-only gates for account connections, API keys, public posts, scheduled posts, deletes/cancels, spend, and profile changes
+- weekly iteration loop tying Fastlane metrics to installs, trials, purchases, attribution answers, and product analytics
+
+Acceptance:
+- A future agent can inspect the Fastlane workspace safely without guessing endpoints or exposing keys.
+- No content is scheduled or posted without explicit approval.
+- Generated posts trace back to launch docs, real product media, and approved claims.
+- Fastlane performance is connected to product metrics, not treated as vanity-only social analytics.
+
+## `PRIVACY.md`
+
+Use as the source draft for privacy policy, privacy choices, account deletion, and app-store privacy disclosures. Also generate publishable pages from it when the launch has a public site.
+
+Must include:
+- effective date and last updated date
+- legal/business entity and privacy contact
+- app/site names covered
+- audience and age posture
+- data inventory by surface: landing, app, backend, analytics, subscriptions, support, ads, AI, notifications, device permissions
+- purposes for each data type
+- vendors/processors and what each receives
+- whether data is linked to the user, used for tracking, shared, sold, or used for advertising
+- retention and deletion policy
+- account deletion URL and request flow when accounts exist
+- user rights by jurisdiction where applicable
+- security summary in plain language
+- international transfers where applicable
+- children, health/sensitive data, AI/model-training, and biometrics sections when relevant
+- app-store disclosure mapping for Apple App Privacy and Google Play Data safety
+
+Acceptance:
+- The policy matches actual code, SDKs, backend tables, analytics events, and app-store labels.
+- The page is public, non-geofenced, not a PDF, and linked from app/site/store metadata where required.
+- Any uncertainty is in `LEGAL_REVIEW.md`, not silently papered over.
+
+## `TERMS.md`
+
+Use as the source draft for terms of service and, if needed, a custom EULA.
+
+Must include:
+- effective date and contracting entity
+- eligibility and account rules
+- license/use rights and prohibited conduct
+- user content ownership and moderation rules if user content exists
+- subscriptions, free trials, renewals, cancellation, refunds, and platform-billing caveats
+- AI output disclaimer if AI-generated plans/coaching/content exist
+- health/financial/legal/professional-advice disclaimer when relevant
+- intellectual property and feedback
+- third-party services and platform terms
+- warranty disclaimer, limitation of liability, indemnity, termination, changes, governing law, and contact
+- Apple/Google platform terms notes, including whether relying on Apple's standard EULA or custom terms
+
+Acceptance:
+- Subscription terms match the paywall, App Store/Play metadata, checkout copy, and cancellation flow.
+- Claims and disclaimers are consistent with product behavior and public marketing.
+- Founder/legal approval is required before publishing as final.
+
+## `LEGAL_REVIEW.md`
+
+Use to keep legal work auditable without pretending an agent is a lawyer.
+
+Must include:
+- official sources checked with dates and URLs
+- jurisdiction assumptions
+- data inventory evidence: files, SDKs, tables, events, permissions, vendors
+- policy sections drafted
+- open legal questions for founder/counsel
+- publish blockers
+- approval status and approver
+
+## `PROMPTS.md`
+
+Each build prompt must include:
+- what to read first
+- files/components to create
+- implementation constraints
+- analytics events required
+- definition of done
+- explicit scope exclusions
+
+Acceptance:
+- Prompts are ordered; later prompts can assume earlier outputs.
+- A builder can paste one prompt at a time.
+- Analytics instrumentation is part of each prompt, not a later cleanup.
+
+## `AUDIT_PROMPT.md`
+
+Use for independent public-surface review. Include:
+- repo URL and live URL
+- stack
+- intended funnel behavior
+- brand rules
+- audit dimensions in order: security, performance, brand/design, GEO/SEO, accessibility, code quality, funnel mechanics, pre-launch hygiene
+- include launch-coverage dimensions when asking for readiness review: research, ASO/store, revenue, legal, analytics, support, QA, lifecycle messaging, crash/performance, and post-launch loop
+- expected finding format
+- "do not" section to prevent generic recommendations
+
+Acceptance:
+- Another frontier model can produce prioritized findings without a briefing call.
+- The prompt includes live validation URLs for robots, sitemap, llms, schema, cards, and Lighthouse when applicable.

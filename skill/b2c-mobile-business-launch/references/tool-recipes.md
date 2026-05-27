@@ -1,0 +1,608 @@
+# Tool Recipes
+
+Use current tools and live data whenever possible. Treat this file as workflow, not fixed facts.
+
+## Contents
+
+- AppKittie App-Store Intelligence
+- Paid Tool Decision Protocol
+- Social-Language Research
+- Firecrawl Web Intelligence
+- Higgsfield Visual And Motion Production
+- Name And Keyword Collision
+- ASO Skill Routing
+- MobAI And XcodeBuildMCP Store Screenshot Capture
+- UGC Creator Engine Routing
+- Fastlane Organic Growth Routing
+- GEO/SEO Skill Routing
+- Revenue And Monetization Routing
+- Resend Email Routing
+- PostHog Analytics And Attribution Routing
+- Compound Engineering And Agent Orchestration
+- Founder-Only Gates
+- Privacy And Terms Research
+- Cloudflare Email Routing
+- Landing Funnel Verification
+- Cloudflare/Supabase Waitlist Pattern
+- Audit Prompt Pattern
+
+## Paid Tool Decision Protocol
+
+Before using a free fallback for any paid or account-gated tool, load `paid-tool-routing.md` and ask the founder to confirm the route. Missing runtime access is not evidence that the founder lacks the paid tool or does not want to use it.
+
+Paid/account-gated lanes in this skill include AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane AI, paid ASO/MMP/ad tools, Sideshift or creator marketplaces, and paid/account features of RevenueCat, Stripe, PostHog, and Resend.
+
+Record the selected route in `TOOL_DECISIONS.md` or the relevant ops doc:
+- paid tool used
+- user-provided export used
+- free fallback approved
+- blocked waiting for access
+- deferred with reason
+
+Do not spend tokens on the weaker fallback until the founder confirms.
+
+## AppKittie App-Store Intelligence
+
+Purpose: choose the market/category by revenue and downloads, then position inside or against it. Also use AppKittie to monitor competitors, ads, creators, screenshots, keywords, reviews, and post-launch deltas.
+
+Access:
+- AppKittie is a paid/account-gated intelligence path. If unavailable in the runtime, use `paid-tool-routing.md` before substituting public store research.
+
+Run:
+- `search_apps` across 3-5 plausible categories or query clusters
+- top revenue apps, top download apps, trending apps, and fastest growth apps by downloads/revenue/reviews
+- filtered searches for apps with Meta ads, Apple Search Ads, creator partnerships, websites, or contact emails
+- `get_app_detail` for the top 5-10 competitors, including screenshots, IAPs, developer/site/socials, historical downloads/revenue/reviews/ratings, ads, and creator partnerships
+- `get_app_reviews` for 50-300 recent reviews across the most relevant competitors, depending on credit budget
+- `batch_keyword_difficulty` for the candidate name, subtitle, category terms, competitor alternatives, and long-tail pains; use `get_keyword_difficulty` for final deep dives
+- `get_supported_countries` before non-US keyword research
+
+Record:
+- monthly downloads and revenue estimates
+- lifetime downloads/revenue where available
+- rating and review count
+- update recency
+- pricing and trial structure
+- in-app purchase tiers
+- app age and growth rate
+- ad presence and creative pattern
+- screenshots and app-store positioning
+- user complaints and feature requests
+- Meta/ASA ad presence and creative patterns
+- creator/influencer partnership signals
+- contact emails, websites, and social links for partnership/press/ads research
+- keyword popularity, difficulty, traffic, and top-ranking apps by country
+
+Decision rule:
+- The storefront category is where users already search and spend.
+- The product identity can be a contrarian wedge against that category.
+- If a phrase has no search volume, keep it as brand/category creation, not the only acquisition path.
+- AppKittie data is directional unless first-party; cite it as estimates and pair it with reviews/social evidence.
+
+## Social-Language Research
+
+Purpose: find the words users already use for the pain.
+
+Sources:
+- Reddit subreddits around the job-to-be-done and competitor categories
+- TikTok hashtags and creator formats
+- X/Twitter keyword clusters
+- YouTube/creator comments when the concept is creator-led
+
+Preferred local tool:
+- Use XPOZ for Reddit, TikTok, X/Twitter, and Instagram social/market-language research when available.
+- Prefer the installed XPOZ MCP/CLI. If only a local CLI exists, resolve its path before use instead of assuming it is on `PATH`.
+- Put global flags before the platform: `xpoz-cli --output json tiktok search_posts ...`
+- Check auth first: `xpoz-cli --output pretty auth status`
+- Useful platforms/methods: `reddit search_posts`, `reddit search_comments`, `reddit get_subreddit_with_posts`, `tiktok search_posts`, `tiktok search_users`, `tiktok get_posts_by_user`, `twitter search_posts`, `twitter count_posts`, `instagram search_posts`, `instagram get_posts_by_user`.
+
+Access:
+- XPOZ is a paid/account-gated research path. If auth is missing or the CLI is unavailable, ask before using public search, platform-native browser search, reviews, or founder-provided screenshots as the fallback.
+
+Queries:
+- problem phrases from the source spec
+- competitor names plus "quit", "alternative", "too much", "expensive", "worth it"
+- category verbs, not just nouns
+- aspirational phrases and "I wish..." phrases
+- trend containers such as "Sunday reset", "weekly review", "AI coach", "habit tracker", adapted to the current product
+
+Record:
+- verbatim language
+- emotional register
+- repeated failure modes
+- screenshots/posts worth citing
+- social formats that can become ads or organic content
+
+Rules:
+- Do not overfit to one viral post.
+- Separate broad cultural trend from app-store search behavior.
+- Keep sensitive or copyrighted material summarized unless the source allows direct quotation.
+- Prefer creator handles, subreddits, compact hashtags, and competitor names over broad generic phrases; broad XPOZ queries are often noisy.
+- Record query, platform, date, result URL/post ID/creator handle where possible, and how the evidence changed positioning or copy.
+
+## Firecrawl Web Intelligence
+
+Purpose: inspect public web surfaces that AppKittie and XPOZ do not cover well: competitor landing pages, pricing pages, docs, help centers, policy pages, blog/SEO content, feature pages, and funnel claims.
+
+Use Firecrawl MCP/API when available:
+- `firecrawl_search` for broad web discovery with scraped result content
+- `firecrawl_map` to discover URLs on a competitor/domain and find pricing, terms, support, blog, FAQ, or docs pages
+- `firecrawl_scrape` for a single page when the URL is known
+- `firecrawl_crawl` for multi-page competitor/site audits
+- `firecrawl_extract` for structured fields such as pricing, plans, claims, CTAs, features, testimonials, integrations, and policy commitments
+- batch scrape when comparing several competitors or policy pages
+
+Fallback:
+- Firecrawl is a paid/account-gated crawler. If unavailable or blocked, use `paid-tool-routing.md` before switching to ordinary web search, `curl`, browser snapshots, `sitemap.xml`, `robots.txt`, or manual page notes.
+
+Record:
+- source URL, crawl date, page type, extracted facts, claims copied into product/marketing, and claims rejected as unsupported
+- competitor pricing and plan names
+- funnel steps and CTAs
+- support/privacy/contact/deletion pages
+- SEO/GEO content patterns: FAQ, schema, blog topics, `llms.txt`, sitemap, and robots behavior
+
+Rules:
+- Respect robots, login walls, paywalls, and terms. Do not bypass access controls.
+- Use Firecrawl for public web evidence, not for App Store intelligence where AppKittie/ASO tools are stronger.
+- Do not rely on Firecrawl metadata extraction alone for schema/security checks; verify important items directly on the live page when launching.
+
+## Higgsfield Visual And Motion Production
+
+Purpose: produce launch visuals, mockups, icons, mascots, animations, demo videos, screenshot art, and ad creative from the locked design system.
+
+Use after `DESIGN.md` exists or after a provisional design direction is explicitly labeled `draft`.
+
+Access:
+- Higgsfield is a paid/account-gated visual production path. If unavailable, ask before using local HTML/CSS/SVG/canvas, founder-owned assets, public-domain assets, or real app screenshots as the free fallback.
+
+Local skill routing:
+- `higgsfield-product-photoshoot` for product/brand images, hero banners, lifestyle scenes, Pinterest pins, social carousels, and static ad creative packs.
+- `higgsfield-generate` for app icons, general images, text-forward graphics, UI illustrations, video generation, image-to-video, Marketing Studio ads, and Virality Predictor analysis.
+- `higgsfield-soul-id` for face-faithful founder/presenter/avatar identity when owned photos are available and the user approves.
+- `higgsfield-marketplace-cards` when a marketplace/listing visual card is the target output.
+
+Model intent:
+- GPT Image 2: icons, graphic UI imagery, launch visuals, text-forward concepts.
+- Nano Banana 2/Pro: mascots, character sheets, stylized references, expressive guide states.
+- Seedance 2.0: 4-15 second product demos, onboarding animation clips, image-to-video, multi-shot motion.
+- Marketing Studio: UGC ads, presenter videos, product demos, unboxing/review formats, hooks/settings/avatars/products.
+- Virality Predictor: score finished demo/ad/onboarding videos for hook, attention, retention, and distraction risk.
+
+Rules:
+- Put `DESIGN.md` constraints into the generation brief: palette, typography mood, shapes, texture, motion energy, banned aesthetics, and intended surface.
+- All generated assets must be embedded or referenced in HTML proofs: `design.html`, `onboarding.html`, screenshot HTML, landing HTML, or ad-preview HTML.
+- Label assets as `direction`, `draft`, or `production`.
+- Do not present generated screenshots as real app functionality. Store screenshots must show truthful app UI and avoid unsupported claims, prices, or features.
+- For animations, write the storyboard and reduced-motion fallback before generation, then verify the clip in layout.
+
+## Name And Keyword Collision
+
+Check:
+- App Store search and exact title collisions
+- high-revenue apps/games using the term
+- generic utility apps that own the keyword
+- domain availability
+- trademark obvious conflicts
+- social handle availability when relevant
+- pronunciation and "did you do your ___?" usability
+
+Decision rule:
+- A beautiful name that is invisible in App Store search can still win if the brand has another acquisition path, but the launch dossier must compensate.
+- Do not lock a name until ASO collision and domain options are known.
+
+## ASO Skill Routing
+
+Purpose: avoid re-creating specialist ASO work inside the broad launch skill.
+
+Use `aso-store-ops.md` as the router, then load `store-console-workflow.md` when the work moves from strategy into App Store Connect, Google Play Console, privacy forms, screenshots, or submission. When the runtime exposes ASO skills, delegate:
+- `app-marketing-context` before any ASO project
+- `keyword-research` before title/subtitle/keyword locks
+- `metadata-optimization` before App Store Connect or Play Console copy
+- `screenshot-optimization` before screenshot briefs or upload assets
+- `aso-audit` before changing an existing listing
+- `app-launch` for launch calendar and channel sequencing
+- `apple-search-ads` for ASA campaign structure and budget rules
+- `localization` for non-US markets or localized listings
+- `review-management` and `rating-prompt-strategy` for ratings/review loops
+- `subscription-lifecycle` and `monetization-strategy` for subscription funnels
+- `asc-metrics`, `app-analytics`, and `competitor-tracking` after launch
+- `android-aso` when Google Play is in scope
+
+Fallback:
+- If the ASO skills are installed but not discoverable in the current runtime, search local skill/plugin directories for the skill name and read its `SKILL.md`.
+- If no ASO skill pack is installed, use `paid-tool-routing.md` before replacing paid ASO tooling with AppKittie, public App Store/Play Console research, manual keyword sheets, and the same outputs: context, keyword map, metadata variants, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, launch calendar, and post-launch monitoring loop.
+
+## MobAI And XcodeBuildMCP Store Screenshot Capture
+
+Purpose: capture truthful app UI for App Store and Google Play screenshots, then compose final assets with the design system.
+
+Use when:
+- a local iOS or Android build exists
+- store screenshots need real app state
+- review/rejection work depends on what a reviewer sees
+- screenshot copy or layout must be verified on actual device sizes
+
+Preferred routing:
+- Use the MobAI MCP tools when exposed in the current runtime.
+- Before any device interaction, read the MobAI device automation reference or the local `using-mobai-cli` skill.
+- Observe the UI tree before tapping, prefer accessibility IDs, wait for stable UI after each navigation, then observe again.
+- Save raw full-quality screenshots before composition.
+
+MobAI CLI route:
+- Check the current CLI first: `npm view @mobai-app/cli dist-tags.latest`, then prefer `npx @mobai-app/cli@latest` or a verified global install.
+- `mobai devices list`
+- set `MOBAI_DEVICE` for the target device
+- `mobai observe --include ui_tree`
+- navigate with stable selectors or accessibility IDs
+- `mobai wait --stable --timeout-ms 3000`
+- `mobai screenshot --full --path ./screenshots/raw --name <platform-device-slot>`
+- use `mobai record` for screen recordings when product-demo clips are needed and the current CLI supports it
+
+Confirmed free fallback:
+- MobAI is a paid third-party tool. If MobAI is unavailable, load `paid-tool-routing.md` and ask before using XcodeBuildMCP as the Apple-platform fallback.
+- After confirmation, load `xcodebuildmcp-testing.md` for iOS/iPadOS/macOS/tvOS/watchOS/visionOS build, run, UI automation, screenshot, video, and log workflows.
+- Use XcodeBuildMCP for Apple simulator/device captures and record the missing MobAI coverage. Use Android emulator/ADB or mark Android proof blocked for Android-only flows.
+
+Record in `SCREENSHOTS.md`:
+- platform, device model/class, OS, app build, locale, theme, account fixture, and data fixture
+- screen path and selector path used to reach it
+- raw capture path
+- design-system frame/composition path
+- final upload path and dimensions
+- Apple display well or Google device class satisfied
+- visual QA notes and upload status
+
+Rules:
+- Do not use generated art as a replacement for real app UI.
+- Use Higgsfield for supporting backgrounds, mascots, icons, motion, or frame art only after the app screen is truthful.
+- Keep raw captures separate from final upload assets.
+- If capture is blocked by missing device/app access, leave the exact blocker. Continue with a clearly labeled design-system mock only after the founder approves the fallback.
+
+## UGC Creator Engine Routing
+
+Purpose: decide whether creator-led organic growth is a real channel and, if so, run a Day 0 format-discovery program before scaling or feeding Fastlane.
+
+Use `ugc-creator-engine.md` before:
+- TikTok/Reels/Shorts founder-led organic content
+- Sideshift or other creator marketplace work
+- creator sourcing, contracts, payments, or account ownership decisions
+- UGC scripts, shot lists, creator briefs, or tracker artifacts
+- adapting creator videos into ads or Fastlane campaigns
+
+Inputs:
+- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `ONBOARDING.md`, `LAUNCH.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`
+- AppKittie/XPOZ/review evidence for audience language and competitor creator patterns
+- real app screenshots/recordings from MobAI or confirmed XcodeBuildMCP fallback
+- Higgsfield visuals only as supporting assets constrained by `DESIGN.md`
+
+Outputs:
+- `UGC_PLAYBOOK.md`
+- `ugc/creator-list.csv`
+- `ugc/creator-brief.md`
+- `ugc/script-bank.md`
+- `ugc/tracker.csv` or sheet link
+- `ugc/weekly-review.md`
+
+Rules:
+- Ask before spending on Sideshift, creator platforms, paid creator tools, or creator payments.
+- Do not start a mature creator program at Day 0. Start with 3-5 creators and founder-written scripts.
+- Do not schedule or post creator content without disclosure, claim review, and founder approval.
+- Treat one viral video as luck; treat 2-3 hits from one structure across creators as the earliest scale signal.
+
+## Fastlane Organic Growth Routing
+
+Purpose: set up Fastlane AI as the post-launch content engine for organic TikTok, Instagram Reels, YouTube Shorts, and any other connected destinations supported in the current workspace.
+
+Use `fastlane-growth-ops.md` after launch approval/public beta or when the user asks for `usefastlane.ai`, Fastlane setup, the Fastlane guide, developer API, Blitz campaigns, content generation, scheduling, or short-form analytics.
+
+Access:
+- Fastlane AI is paid/account-gated. If the app, API, workspace, or installed skill is unavailable, use `paid-tool-routing.md` before switching to a manual content calendar, local prompt set, platform-native drafts, or spreadsheet schedule.
+
+Delegate:
+- load the installed `usefastlane-ai` skill before API work
+- compare a user-provided Fastlane `SKILL.md` against the installed skill when the user supplies one
+- use current app/docs/API state as source truth because `developers.usefastlane.ai` can be a JavaScript shell
+- use safe reads first: preferences, angles, connections, content, posts, analytics when post IDs exist
+- build `FASTLANE_OPS.md` and `fastlane/` artifacts before generating or scheduling content
+
+Inputs:
+- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `LAUNCH.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`, and `RESEARCH.md`
+- MobAI screenshots/recordings for real app proof
+- confirmed XcodeBuildMCP screenshots/recordings when MobAI fallback was approved for Apple-platform media
+- Higgsfield assets for design-system constrained hooks, mascots, backgrounds, and motion
+- `UGC_PLAYBOOK.md`, `ugc/script-bank.md`, and creator/post results when a creator-led engine exists
+
+Rules:
+- never store or print `FASTLANE_API_KEY`
+- ask before connecting accounts, scheduling, canceling, deleting, changing profiles, or posting publicly
+- treat platform posting limits and account warmup as launch gates
+- QA every generated content item against brand, legal, store, pricing, and product truth before scheduling
+- connect content metrics back to installs, trials, purchases, attribution answers, and product analytics
+
+## GEO/SEO Skill Routing
+
+Purpose: make the public launch funnel discoverable by both traditional search and AI answer engines.
+
+Use `geo-seo.md` as the router. When the runtime exposes GEO skills from the `geo-seo-claude` workflow, delegate:
+- `geo` or `geo-audit` for the full GEO+SEO pass
+- `geo-technical` for crawlability, SSR/static rendering, performance, security, and indexability
+- `geo-crawlers` for AI crawler access through `robots.txt`, meta tags, and headers
+- `geo-llmstxt` for `llms.txt` generation or validation
+- `geo-schema` for JSON-LD entity markup
+- `geo-citability` for answer-style sections and citation readiness
+- `geo-content` for E-E-A-T and proof structure
+- `geo-brand-mentions` for entity/authority gaps
+- `geo-platform-optimizer` for ChatGPT, Perplexity, Gemini, Google AI Overviews, and Bing Copilot differences
+- `geo-compare` for monthly before/after tracking
+
+Fallback:
+- If the GEO skills are installed but not discoverable in the current runtime, search `.agents/skills`, `.claude/skills`, `.codex/skills`, and plugin caches for the relevant `SKILL.md`.
+- If no GEO skill pack is installed, still produce the minimum launch outputs: metadata, schema, `robots.txt`, `sitemap.xml`, `llms.txt`, AI-crawler access notes, citability notes, and live HTTP checks.
+
+## Revenue And Monetization Routing
+
+Purpose: set up purchase infrastructure without confusing payment success with app entitlement access.
+
+Use `revenue-monetization.md` as the router. Delegate to local skills when available:
+- `setup-revenuecat` for initial RevenueCat project, `premium` entitlement, and default offering scaffold.
+- `stripe-best-practices` before Stripe Checkout, Payment Links, Billing, Customer Portal, webhooks, or tax decisions.
+- ASO `monetization-strategy`, `subscription-lifecycle`, and `retention-optimization` for pricing, paywall timing, churn, and lifecycle loops.
+- `setup-posthog` once the product repo exists and purchase/subscription events need validation.
+- `setup-supabase` if the funnel or backend needs accounts, waitlist, referrals, or subscription projection storage.
+- `resend-email-ops.md` before subscription lifecycle emails, payment recovery, receipts, trial reminders, or billing-support notifications.
+
+Rules:
+- RevenueCat should be the entitlement source of truth for B2C mobile subscriptions unless the project explicitly chooses a different architecture.
+- Stripe may process web payments, but web payment success must be mapped into RevenueCat entitlement or backend access before launch-ready.
+- App Store/Google Play product setup, web billing, pricing, taxes, subscription terms, and live checkout are founder-only gates.
+- Use sandbox/Test Store first; do not publish production purchase links or live prices until validation passes and the founder approves.
+- RevenueCat, Stripe, tax, and store-account features can be paid/account-gated. Use `paid-tool-routing.md` before replacing provider setup with local mocks or free-tier planning, and never call mocks live entitlement proof.
+
+## Resend Email Routing
+
+Purpose: set up outbound, lifecycle, broadcast, and optional inbound email without damaging domain reputation or creating compliance gaps.
+
+Use `resend-email-ops.md` before:
+- Resend domain creation or DNS changes
+- transactional email send wrappers
+- waitlist confirmations, welcome messages, trial reminders, payment recovery, receipts, support confirmations, or admin alerts
+- Contacts, Topics, Segments, Broadcasts, or Automations
+- unsubscribe/preference handling
+- Resend webhooks, inbound receiving, or attachment processing
+
+Rules:
+- Prefer a verified sending subdomain over the root domain.
+- Keep Resend API keys server-side only; never use `NEXT_PUBLIC_` or browser bundles.
+- Prefer sending-access/domain-scoped keys for runtime senders.
+- Use idempotency keys for retryable transactional sends.
+- Verify webhooks with the raw request body and store `svix-id` to handle duplicates.
+- Add unsubscribe/preference handling for lifecycle and marketing email.
+- Treat inbound MX changes as founder-gated when they could affect existing mailboxes or Cloudflare Email Routing.
+- Resend account/domain features can be paid/account-gated. Use `paid-tool-routing.md` before replacing Resend with local email previews, logs, Gmail, Cloudflare Email Routing, or another provider.
+
+## PostHog Analytics And Attribution Routing
+
+Purpose: make analytics, attribution, and launch learning visible before implementation and then validate the first real events once a repo exists.
+
+Use `analytics-attribution.md` before:
+- PostHog setup or SDK installation
+- event catalogs, funnels, dashboards, or PostHog project decisions
+- landing/waitlist/referral analytics
+- onboarding attribution questions
+- paywall, trial, closing-offer, or RevenueCat/Stripe event naming
+- feature flags, experiments, session replay, surveys, or data pipelines
+- Fastlane/social campaign UTM conventions
+- builder prompts that ask another agent to implement events
+
+Delegate:
+- `setup-posthog` only after the product repo exists and can receive an event scaffold.
+- `setup-posthog` handles initial project/setup validation; this launch skill owns the upfront `ANALYTICS.md` and `analytics-plan.html`.
+- Use current PostHog docs or Context7/web docs for stack-specific SDK details because PostHog SDK options, defaults, and product docs change.
+
+Default stack:
+- PostHog primary for product analytics, web analytics, feature flags, funnels, session replay when explicitly enabled, surveys, and experiments.
+- RevenueCat as subscription entitlement truth and subscription event source.
+- Stripe as web payment truth when direct checkout exists.
+- GA4/ad-network tooling only when paid ads, Google attribution, or platform reporting require it.
+- Sentry for errors/crashes, not product analytics.
+
+Rules:
+- Create `ANALYTICS.md` and a founder-visible `analytics-plan.html` before implementation.
+- Track waitlist, referral, pricing-section, app-store CTA, onboarding steps, attribution answer, demo video, personalized plan, review prompt eligibility/request, paywall view/dismissal, closing offer, activation, subscription lifecycle, restore, refund, email lifecycle, and Fastlane campaign events when relevant.
+- Combine technical attribution with self-reported attribution; UTMs alone miss word-of-mouth, creator, AI-search, and social discovery.
+- Use one analytics wrapper per surface; do not scatter vendor SDK calls throughout app code.
+- Validate at least one real event in the dashboard before saying analytics is live.
+- Do not enable replay, surveys, ad identifiers, or sensitive event properties without privacy/store-disclosure mapping.
+- PostHog paid/account features can affect replay, surveys, experiments, retention, and data pipelines. Use `paid-tool-routing.md` before replacing them with static plans or local event logs.
+
+## Compound Engineering And Agent Orchestration
+
+Purpose: turn the launch package into production-ready software without losing product, design, analytics, entitlement, or testing truth.
+
+Use `engineering-orchestration.md` before:
+- actual app, backend, or web-funnel implementation
+- builder/Rork/Codex/Claude handoff prompts that will create app code
+- `AGENTS.md`, `CLAUDE.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, or `PRODUCTION_READINESS.md`
+- deciding whether to use product brainstorm, planning, parallel agents, or worktrees
+- declaring beta, store-submission, or production readiness
+
+Delegate:
+- `ce-brainstorm` after AppKittie/XPOZ/Firecrawl research when product shape, onboarding, paywall, core loop, activation, or scope still has multiple defensible directions.
+- `ce-plan` when launch docs are stable enough to become an implementation plan.
+- `ce-work` for bounded execution from a concrete plan.
+- `ce-worktree` for isolated parallel engineering lanes, PR review, or keeping a dirty main checkout safe.
+- `ce-code-review` before treating non-trivial implementation as complete.
+- `ce-test-browser` for web funnels, checkout, policy pages, support flows, dashboards, and responsive browser checks.
+- `ce-test-xcode` for iOS build/test verification where applicable.
+- `ce-proof` or `ce-demo-reel` when the founder/reviewer needs a visual proof artifact.
+- MobAI MCP or the local `using-mobai-cli` skill for serialized mobile-device E2E and store screenshot capture.
+
+Parallel rules:
+- Parallelize research, static audits, independent docs, isolated frontend/backend units, fixtures, and test-writing only after mapping each unit to create/modify/test files.
+- If two lanes touch the same file, migration state, simulator/device, git staging, release action, or final readiness decision, run them serially.
+- The orchestrator owns staging, commits, merges, project-wide suites, MobAI device ownership, production-readiness judgment, and final ship/hold decisions.
+- Instruct parallel subagents not to run project-wide suites, stage files, commit, merge, publish, submit, schedule content, or mutate shared credentials.
+- After parallel work returns, compare modified files, resolve collisions, run focused tests, then run integration/E2E checks.
+
+Record in `ENGINEERING_PLAN.md`:
+- product brainstorm source or skip rationale
+- requirements trace to `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, and `STORE_CONSOLE.md`
+- implementation units, repo-relative paths, serial dependencies, worktree needs, and safe parallel lanes
+- frontend, backend, database, analytics, revenue, email, privacy, store-console, app-integrity, permission, and state-machine impacts
+- test scenarios, MobAI E2E scenarios, backend/provider verification, release gates, and blockers
+
+Record in `PRODUCTION_READINESS.md`:
+- build/typecheck/lint/test commands and outcomes for every touched repo
+- browser/mobile E2E evidence, including MobAI steps and screenshots where relevant
+- backend/database/provider proof for frontend actions, RevenueCat/Stripe entitlements, PostHog events, Resend sends/webhooks, and account deletion/support paths when in scope
+- release-build/staging-build proof that mocks are disabled and secrets are not bundled
+- remaining blockers and founder-only gates
+
+Rules:
+- `AGENTS.md` is mandatory for real app builds and builder handoffs; `CLAUDE.md` should point back to it instead of duplicating product truth.
+- Unit tests are not enough for production readiness.
+- MobAI screenshot proof is not backend proof; pair device actions with database/provider/dashboard evidence.
+- Do not use generated builders from a prompt alone. Include repo-local instructions and artifacts so later agents can continue without reconstructing the launch logic.
+
+## Founder-Only Gates
+
+Always ask before:
+- switching from an intended paid/account-gated tool to a free fallback
+- buying a domain
+- changing DNS or MX records that affect receiving mail
+- changing billing, subscriptions, pricing, or spend
+- using credentials or secrets not already available
+- creating paid cloud resources beyond normal free-tier/dev usage
+- publishing or materially changing privacy policy, terms, EULA, subscription terms, data deletion commitments, legal, medical, financial, or endorsement claims
+- sending partner/creator emails
+- sending marketing/broadcast email to real users
+- connecting social accounts, changing social profiles, scheduling posts, canceling posts, deleting content, or posting publicly through Fastlane or another social scheduler
+- force-pushing, deleting repos, dropping tables, or destructive cleanup
+- final App Store submission, launch, merge, or ship/hold calls
+
+Self-resolve:
+- category framing when evidence is clear
+- brand/design direction within a locked brief
+- document organization
+- landing stack among low-risk viable options
+- sequencing of non-destructive work
+
+## Privacy And Terms Research
+
+Use `privacy-terms.md` before drafting public policy pages or store disclosures. Always refresh official sources because privacy, subscription, and platform requirements change.
+
+Minimum research set:
+- Apple App Privacy Details and App Store Connect EULA guidance for iOS launches
+- Google Play User Data and Data safety requirements for Android launches
+- FTC privacy/security guidance, and COPPA guidance if children or teens may be involved
+- California CCPA/CPRA and CalOPPA guidance when serving U.S. consumers
+- EU GDPR transparency guidance when offering to EU/EEA users
+- current subscription/negative-option rules when free trials, renewals, or recurring billing exist
+- vendor docs for analytics, ads, AI, payments, crash reporting, backend, email, and push providers
+
+Evidence to gather:
+- SDK/package list
+- app permissions and platform privacy manifests
+- backend schema/tables/buckets
+- analytics event catalog
+- payment/subscription provider behavior
+- AI provider data-use settings
+- support/email tooling
+- ad pixels and attribution tooling
+- data retention/deletion implementation
+
+Do not use generic legal-policy generators as source truth. They can help with wording only after the actual data inventory and official requirements are known.
+
+## Cloudflare Email Routing
+
+Use when a launch domain needs working inbound email aliases for support, privacy, security, press, or founder contact.
+
+Important:
+- Dashboard routing rules can appear active while the zone-level Email Routing status is still disabled or DNS records are not configured.
+- Cloudflare Email Routing custom addresses are inbound forwarding addresses. Do not assume they can send outbound mail as the domain.
+- Cloudflare requires destination address verification before a route can receive mail.
+- A custom address should have one current destination rule unless a Worker handles multi-destination routing.
+
+Setup:
+- create or verify destination address
+- create rules for `support@domain`, `privacy@domain`, and any `hello@domain`, `security@domain`, or founder alias
+- click the Email Routing connect/enable flow and add the required `MX` and `TXT` records
+- keep catch-all disabled/drop unless the founder explicitly wants a monitored catch-all
+- send test emails from an external account and verify receipt
+- record whether outbound send-as is covered by Gmail/Workspace, Cloudflare Email Service, Resend/Postmark/Mailgun, or another provider
+
+Record:
+- alias, destination, purpose, status, last test timestamp, and where the address is published
+- DNS status and dashboard status
+- outbound sending gap, if any
+
+Founder gates:
+- ask before deleting existing `MX` records or migrating mail providers
+- ask before publishing a founder personal alias
+- ask before enabling catch-all forwarding
+
+## Landing Funnel Verification
+
+Local:
+- install dependencies
+- run typecheck/lint/build
+- run local dev server
+- test desktop and mobile responsive views
+- test waitlist form success and error states
+- test referral URL preservation
+- verify no secrets appear in public bundles
+
+Deploy:
+- deploy preview
+- deploy production
+- bind custom domain
+- confirm cert/DNS status
+- HTTP check preview and canonical domain
+- verify security headers on `GET`
+- verify `robots.txt`, `sitemap.xml`, `llms.txt`, schema, OG image
+- submit a test signup against production or staging
+- verify analytics events arrive
+- remove or mark test data before public launch
+
+Useful checks:
+```bash
+curl -I https://example.com
+curl -s https://example.com/robots.txt
+curl -s https://example.com/llms.txt
+curl -s https://example.com/sitemap.xml
+```
+
+## Cloudflare/Supabase Waitlist Pattern
+
+Use when the launch needs a simple, measurable waitlist and referral loop.
+
+Pattern:
+- browser posts email/referral/source to a server endpoint
+- server rate-limits and validates input
+- server calls a Supabase RPC or equivalent backend function
+- database function creates/refetches waitlist row, generates referral code, increments referrer if valid
+- frontend reveals share link and position
+- leaderboard masks emails and never exposes PII
+
+Security posture:
+- RLS on
+- direct table access denied to anonymous clients
+- anonymous callers use narrow RPC functions only
+- SECURITY DEFINER functions lock `search_path`
+- extension functions schema-qualified
+- service keys stay server-side only
+- rate limits exist before public traffic
+
+## Audit Prompt Pattern
+
+For any public funnel, generate a reusable `AUDIT_PROMPT.md` with:
+- what the site is supposed to do
+- current live URLs
+- stack
+- brand rules
+- specific audit dimensions and output format
+- "do not recommend" constraints
+- validation URLs/tools
+
+The prompt is part of launch quality. It lets the founder send the site to another model or engineer for a focused review without re-explaining the business.

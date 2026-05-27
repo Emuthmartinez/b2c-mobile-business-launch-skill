@@ -1,0 +1,218 @@
+# Engineering Orchestration And Production Readiness
+
+Use this before building the actual app, coordinating frontend/backend work, writing `AGENTS.md` or `CLAUDE.md`, creating `TECH_SPEC.md` or `ENGINEERING_PLAN.md`, dispatching subagents, using Compound Engineering skills, or declaring production readiness.
+
+The goal is to turn the launch package into shippable software without losing strategy, design, analytics, entitlement, or testing truth.
+
+## Contents
+
+- 1. Compound Engineering Routing
+- 2. Product Brainstorm Checkpoint
+- 3. Agent Entrypoints
+- 3b. App-Local Agent Roster
+- 4. Parallel Agent Orchestration
+- 5. `ENGINEERING_PLAN.md` Requirements
+- 6. End-To-End Production Readiness
+- 7. MobAI, XcodeBuildMCP, And Device Testing
+- 8. Done Rules
+
+## 1. Compound Engineering Routing
+
+Prefer Compound Engineering skills for engineering-heavy work when available:
+
+- `ce-brainstorm`: use after research when product shape, user behavior, scope boundaries, or success criteria are still ambiguous.
+- `ce-plan`: use when research/spec/design/analytics docs are ready and the app needs an implementation plan.
+- `ce-work`: use to execute a concrete plan or bounded implementation prompt.
+- `ce-worktree`: use for isolated parallel feature lanes, PR review, or when the current checkout must stay clean.
+- `ce-code-review`: use when implementation should be reviewed against requirements and autofixed when possible.
+- `ce-test-browser`: use for web/local browser verification.
+- `ce-test-xcode`: use for iOS build/test verification when applicable.
+- `ce-proof` or `ce-demo-reel`: use when a visual or behavioral proof artifact helps the founder or reviewer inspect what shipped.
+
+Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive.
+
+## 2. Product Brainstorm Checkpoint
+
+After research and before engineering specs are actioned, decide whether the product is ready for implementation planning.
+
+Use `ce-brainstorm` when:
+- AppKittie/XPOZ/Firecrawl findings reveal competing wedges.
+- V1/V2/V3 boundaries are still disputed.
+- onboarding, paywall, core loop, or activation can reasonably take multiple product shapes.
+- user roles, data ownership, or success criteria are unclear.
+- the agent would otherwise invent product behavior inside an engineering plan.
+
+Outputs from the brainstorm should become the product requirements source for `ce-plan`. Preserve product intent, actors, key flows, acceptance examples, scope boundaries, and explicit non-goals.
+
+If the research already makes the product direction obvious, skip the brainstorm and go directly to `ce-plan`.
+
+## 3. Agent Entrypoints
+
+Every real app build or builder handoff should create or update `AGENTS.md`.
+
+`AGENTS.md` must include:
+- 60-second product brief
+- repo map and first files to read
+- source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`
+- V1 scope, V2/V3 scope, and banned scope
+- design-system and HTML proof rules
+- analytics and attribution rules
+- RevenueCat/Stripe entitlement rules when monetized
+- privacy/legal/store disclosure constraints
+- Compound Engineering routing: when to use `ce-brainstorm`, `ce-plan`, `ce-work`, worktrees, subagents, and review
+- MobAI/device-testing rules and serialized device ownership
+- paid-tool routing and confirmed XcodeBuildMCP fallback rules
+- backend/frontend E2E proof requirements
+- common mistakes and launch blockers
+- exact verification commands or scripts when known
+
+`CLAUDE.md` should exist when Claude Code or a builder expects it. Keep it short:
+- point to `AGENTS.md` as canonical
+- list Claude-specific skills/plugins/tools if useful
+- avoid duplicating product truth that will drift
+
+Do not let generated builders rely on a prompt only. Durable repo-local instructions are part of the launch package.
+
+### 3b. App-Local Agent Roster
+
+Every real app build or builder handoff should include `APP_AGENTS.md` and a tiny `agents/` directory so future work can continue without reinventing responsibilities.
+
+Required roles:
+- orchestrator: owns canonical docs, sequencing, subagent routing, file-overlap checks, integration, git/release coordination, and production-readiness proof
+- marketing guru: owns ASO, GEO/SEO, Fastlane, UGC, reviews, launch calendar, claims, attribution learning, and channel experiments
+- engineering leader: owns architecture, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider/backend/frontend proof, observability, tests, and readiness gates
+- product leader: owns ICP, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
+- design guru: owns `DESIGN.md`, `design.md`, HTML visual proofs, accessibility, screenshots, icons, motion, and Higgsfield asset fit
+- customer success: owns support/privacy/delete/refund/restore paths, FAQ/help, lifecycle copy, review responses, and feedback triage
+
+Keep each role prompt short: mission, canonical docs to read first, responsibilities, forbidden actions, founder-only gates, and required output shape. Role agents review and propose by default. They may implement only when the orchestrator assigns an isolated unit with a file-overlap check and verification plan.
+
+## 4. Parallel Agent Orchestration
+
+Use parallel agents for independent research, audits, static investigation, and implementation units that pass a safety check.
+
+Good parallel lanes:
+- AppKittie competitor/review pass, XPOZ social-language pass, Firecrawl web pass
+- privacy/data inventory, ASO metadata, analytics catalog, and design audit when files do not overlap
+- independent skill-definition audits for attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness coverage
+- frontend and backend implementation in separate repos or isolated worktrees
+- test-writing or fixture-building units with non-overlapping files
+- screenshot planning, store-console copy, and launch calendar drafting
+
+Do not parallelize:
+- edits to the same files
+- migrations plus backend code that depend on the migration state unless sequenced
+- device automation on the same simulator/device
+- git staging, commits, merges, or releases
+- final production-readiness decision
+
+Parallel safety check:
+- Map every candidate unit to create/modify/test files.
+- If two units touch the same file, run them serially.
+- Use specialist subagents to audit against the skill definition before declaring completeness, especially for attribution, monetization, store-console, privacy, email, and E2E readiness.
+- For parallel implementation in one repo, the orchestrator owns staging, commits, and full test suites.
+- Instruct parallel subagents not to run project-wide suites, stage files, or commit.
+- After parallel work returns, compare actual modified files, resolve collisions, run focused tests, then run integration/E2E suites.
+
+Use `ce-worktree` when parallel engineering lanes need isolation. Prefer meaningful branch/worktree names such as `feat/onboarding-analytics` or `fix/revenuecat-entitlement-sync`.
+
+MobAI is serialized: one orchestrator owns the device flow, while other agents may inspect code, prepare fixtures, or analyze logs in parallel. If MobAI is unavailable, use `paid-tool-routing.md` before substituting XcodeBuildMCP or any free device/simulator fallback.
+
+## 5. `ENGINEERING_PLAN.md` Requirements
+
+Before `ce-work` or a generated builder starts, produce `ENGINEERING_PLAN.md` through `ce-plan` or an equivalent implementation-plan doc.
+
+The plan must include:
+- requirements trace to launch docs and `LAUNCH_TRACE.md` IDs
+- `TECH_SPEC.md` pointer or inline technical contracts when data/API/state/integration behavior is in scope
+- implementation units with repo-relative file paths
+- frontend, backend, database, analytics, revenue, email, and store-console impacts
+- feature flags or rollout controls
+- migration and data-backfill plan when needed
+- auth/session, permission, app integrity, API/RPC/webhook, and state-machine impacts when relevant
+- test scenarios for happy path, edge cases, error paths, and integration paths
+- MobAI/device-test scenarios for mobile user journeys, plus XcodeBuildMCP scenarios when it is the approved Apple-platform fallback
+- backend verification scenarios showing real test data persisted or projected correctly
+- production-readiness gates and known blockers
+
+Do not put unsupported product behavior into `ENGINEERING_PLAN.md`. Send unresolved product questions back to `ce-brainstorm` or make explicit assumptions.
+
+## 6. End-To-End Production Readiness
+
+Do not mark an app build production-ready from unit tests alone.
+
+Required proof, adjusted to the product:
+- build/typecheck/lint pass for every touched repo
+- unit tests for pure logic and edge cases
+- integration tests for app-to-backend, provider callbacks, database writes, entitlement projection, email sends, and analytics wrappers
+- browser E2E for web funnels, checkout, privacy/terms pages, support flows, and dashboards where applicable
+- MobAI E2E for mobile onboarding, attribution, paywall, restore, activation, settings, account deletion, and screenshot-critical flows; if MobAI is unavailable and the founder approves, XcodeBuildMCP Apple-platform proof with explicit limitations
+- backend proof that frontend actions create the expected records/events in the real test backend, database, Firestore/Supabase/Postgres, RevenueCat, Stripe, Resend, or PostHog target
+- app integrity, rate-limit, idempotency, and abuse-path proof when paid access, user accounts, sensitive data, or backend mutation are in scope
+- release-build or staging-build verification that mocks are disabled, production flags are sane, and secrets are not bundled
+- rollback or kill-switch plan for risky features
+
+Record proof in `PRODUCTION_READINESS.md` or the repo's existing release/readiness artifact:
+- command run
+- environment
+- account/fixture used
+- evidence path or dashboard link
+- expected result
+- actual result
+- blocker or follow-up
+
+Attribution-specific production-readiness proof is mandatory when onboarding, signup, or waitlist exists:
+- the user sees the attribution screen early in the flow
+- the stored source is a stable key, not display copy
+- `other` captures sanitized free text or a documented follow-up value
+- PostHog receives `attribution_source_selected`
+- PostHog person properties include `self_reported_source`
+- backend/profile storage contains the source once identity exists
+- anonymous attribution is stitched to the identified user after signup/login
+
+## 7. MobAI, XcodeBuildMCP, And Device Testing
+
+Use MobAI MCP when available for advanced multi-step device automation. Use the local `using-mobai-cli` skill when only CLI access is available or the environment is unfamiliar.
+
+MobAI is a paid third-party tool. If it is unavailable, do not silently switch to a free route. Load `paid-tool-routing.md`, ask the founder, and continue only after they confirm MobAI access, provide exports/screenshots, or approve a fallback.
+
+Use XcodeBuildMCP after confirmation for Apple-platform build/run/test/UI automation/screenshots/logs/video:
+- load `xcodebuildmcp-testing.md`
+- use MCP tools when exposed, otherwise the `xcodebuildmcp-cli` skill and CLI
+- run `session_show_defaults` before first MCP build/run/test in a session
+- use one-shot build/run tools when defaults are configured
+- record Apple-only scope and any missing Android/MobAI coverage
+
+Device loop:
+- observe UI tree before acting
+- prefer accessibility IDs
+- act
+- wait for stable UI
+- observe again
+- capture screenshots only after the state is verified
+
+For store screenshots, keep raw captures separate from composed assets. For E2E readiness, pair each MobAI action sequence with backend/provider verification:
+- onboarding answer appears in profile/backend state
+- attribution answer appears in analytics/person properties
+- purchase or restore activates entitlement in app and RevenueCat/backend
+- support/privacy/delete action reaches the intended backend/email route
+- lifecycle email/webhook appears in provider logs when expected
+
+If device access is blocked, mark production readiness as blocked for that flow. Do not replace live-device proof with screenshots or unit tests. If XcodeBuildMCP is the approved fallback, write the exact simulator/device, OS, workflow, and limitation into `PRODUCTION_READINESS.md`.
+
+## 8. Done Rules
+
+Engineering-heavy work is done only when:
+- `AGENTS.md` exists and points to canonical docs.
+- `CLAUDE.md` exists when Claude/builders need compatibility guidance.
+- `APP_AGENTS.md` and the six-file `agents/` roster exist for real app builds or handoffs.
+- `LAUNCH_TRACE.md` exists or equivalent trace rows are embedded in `RESEARCH.md`.
+- `TECH_SPEC.md` exists when data/API/state/platform contracts are non-trivial.
+- `ENGINEERING_PLAN.md` exists when actual implementation is in scope.
+- Compound Engineering or equivalent workflow produced product requirements, implementation plan, execution, review, and proof for non-trivial app work.
+- Parallel agents were used where safe and serialized where required.
+- Specialist audit agents or equivalent independent review checked the build against attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness requirements where in scope.
+- frontend, backend, analytics, revenue, email, and mobile-device paths were tested end to end where in scope.
+- MobAI proof, or founder-confirmed XcodeBuildMCP Apple-platform proof, is paired with backend/provider verification where app flows mutate state.
+- production-readiness evidence is written down.
+- remaining blockers are explicit founder-only gates, access gaps, platform review waits, or external service issues.

@@ -1,0 +1,8 @@
+interface:
+  display_name: "B2C Mobile Launch"
+  short_description: "Launch, submit, and market B2C apps"
+  brand_color: "#FF6F5C"
+  default_prompt: "Use $b2c-mobile-business-launch to turn this app idea into a launch-ready, store-submittable, and marketing-ready business package."
+
+policy:
+  allow_implicit_invocation: true
