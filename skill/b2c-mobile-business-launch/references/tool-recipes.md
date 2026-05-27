@@ -12,7 +12,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 - Higgsfield Visual And Motion Production
 - Name And Keyword Collision
 - ASO Skill Routing
-- MobAI And XcodeBuildMCP Store Screenshot Capture
+- MobAI Toolbelt, Recorders, And XcodeBuildMCP Capture
 - UGC Creator Engine Routing
 - Fastlane Organic Growth Routing
 - GEO/SEO Skill Routing
@@ -235,15 +235,18 @@ Fallback:
 - If the ASO skills are installed but not discoverable in the current runtime, search local skill/plugin directories for the skill name and read its `SKILL.md`.
 - If no ASO skill pack is installed, use `paid-tool-routing.md` before replacing paid ASO tooling with AppKittie, public App Store/Play Console research, manual keyword sheets, and the same outputs: context, keyword map, metadata variants, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, launch calendar, and post-launch monitoring loop.
 
-## MobAI And XcodeBuildMCP Store Screenshot Capture
+## MobAI Toolbelt, Recorders, And XcodeBuildMCP Capture
 
-Purpose: capture truthful app UI for App Store and Google Play screenshots, then compose final assets with the design system.
+Purpose: capture truthful app UI for App Store and Google Play screenshots, record polished demo videos, create app-preview/social proof, and compose final assets with the design system.
+
+Always load `mobai-toolbelt.md` before MobAI device automation, recorder skills, app previews, bug-repro recordings, mobile harness work, or MobAI-adjacent build/test tooling. Refresh the MobAI org and relevant repo docs before installing or naming commands.
 
 Use when:
 - a local iOS or Android build exists
 - store screenshots need real app state
 - review/rejection work depends on what a reviewer sees
 - screenshot copy or layout must be verified on actual device sizes
+- launch, store, Fastlane, UGC, support, or investor materials need a polished app-flow video
 
 Preferred routing:
 - Use the MobAI MCP tools when exposed in the current runtime.
@@ -261,6 +264,14 @@ MobAI CLI route:
 - `mobai screenshot --full --path ./screenshots/raw --name <platform-device-slot>`
 - use `mobai record` for screen recordings when product-demo clips are needed and the current CLI supports it
 
+Recorder-skill route:
+- For iOS or Android app demos, use `https://github.com/MobAI-App/mobile-recorder-skill` after refreshing current `README.md`, `install.md`, and `skills/mobile-recorder/SKILL.md`.
+- For macOS or web demos, use `https://github.com/MobAI-App/desktop-recorder-skill` after refreshing current `README.md`, `install.md`, and `skills/desktop-recorder/SKILL.md`.
+- Mobile recorder produces a reproducible `.mob` choreography, native device recording, tap ripples, finger overlay, phone bezel/background, zoom, variable speed, captions, final mp4, and upload copy.
+- Desktop recorder produces a reproducible `screenplay.json`, native recording, click ripples, cursor sprite, captions, zoom, variable speed, final mp4, and upload copy.
+- Follow the upstream golden rule: explore -> script/screenplay -> dry-run -> record -> edit/export. Never improvise during the final recording.
+- Create `DEMO_VIDEO.md` for launch demo videos and link `.mob` or `screenplay.json`, raw captures, final exports, captions, and upload copy.
+
 Confirmed free fallback:
 - MobAI is a paid third-party tool. If MobAI is unavailable, load `paid-tool-routing.md` and ask before using XcodeBuildMCP as the Apple-platform fallback.
 - After confirmation, load `xcodebuildmcp-testing.md` for iOS/iPadOS/macOS/tvOS/watchOS/visionOS build, run, UI automation, screenshot, video, and log workflows.
@@ -271,6 +282,7 @@ Record in `SCREENSHOTS.md`:
 - platform, device model/class, OS, app build, locale, theme, account fixture, and data fixture
 - screen path and selector path used to reach it
 - raw capture path
+- demo choreography path: `.mob` or `screenplay.json` when recording video
 - design-system frame/composition path
 - final upload path and dimensions
 - Apple display well or Google device class satisfied

@@ -15,6 +15,7 @@ This is the launch operating system: research, positioning, design system, secre
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
 | Store Ops | App Store Connect and Google Play copy-paste packets, privacy answers, screenshots, review notes, and ASC CLI routing |
+| Demo Media | MobAI mobile/desktop recorder routing, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
 
 ## Non-Negotiables
@@ -26,6 +27,7 @@ This is the launch operating system: research, positioning, design system, secre
 - Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
 - Store and legal work must become founder-facing copy-paste packets with exact console fields, blocked approvals, and current docs basis.
 - XcodeBuildMCP and Doppler setup must refresh official docs plus local CLI/tool help before commands or readiness proof.
+- MobAI demo videos must use current recorder-skill docs and deterministic choreography: explore, script/screenplay, dry-run, record, edit, export.
 
 ## Resend Starter Templates
 

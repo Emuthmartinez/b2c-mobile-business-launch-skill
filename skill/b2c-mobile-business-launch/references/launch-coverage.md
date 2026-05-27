@@ -40,7 +40,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Support/reputation | support inbox, refund path, review responses, help docs, incident escalation | email routing, support tool |
 | QA/beta/release | TestFlight/internal testing, smoke tests, device matrix, rollback/kill switch | store consoles, test skills, MobAI, XcodeBuildMCP fallback |
 | Security/abuse | RLS/auth rules, rate limits, secrets, PII minimization, admin access, bot defenses | repo audit, Supabase/Cloudflare |
-| Organic social growth | UGC fit/90-day creator plan, Fastlane workspace, connected accounts, campaign angles, media inputs, schedule, QA, analytics loop | UGC playbook, Fastlane AI, MobAI, XcodeBuildMCP fallback, Higgsfield, PostHog |
+| Organic social growth | UGC fit/90-day creator plan, Fastlane workspace, connected accounts, campaign angles, media inputs, polished demo videos, schedule, QA, analytics loop | UGC playbook, Fastlane AI, MobAI recorder skills, XcodeBuildMCP fallback, Higgsfield, PostHog |
 | Post-launch loop | weekly ASO, reviews, rankings, conversion, retention, revenue, competitor deltas | AppKittie, ASO skills, RevenueCat, PostHog |
 
 ## Must-Have For Any Real Launch
@@ -69,6 +69,7 @@ Required unless explicitly marked not applicable:
 - release health: crash/error monitoring or a documented no-Sentry reason
 - support path for account deletion, refunds, restore purchases, and billing issues
 - UGC/Fastlane or equivalent post-launch organic content engine when the launch depends on social distribution, marked deferred if not yet needed
+- `DEMO_VIDEO.md` or equivalent when launch/store/social/support work needs app-flow demo videos, with MobAI recorder or desktop recorder artifacts linked
 
 ## Optional But High-Leverage
 
@@ -82,6 +83,7 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 - Compound Engineering `ce-proof` or `ce-demo-reel` artifacts for founder/reviewer inspection of shipped app behavior
 - Higgsfield-generated mascot, app icon, demo video, screenshot art, ad creative, and animation clips constrained by `DESIGN.md`
 - MobAI-backed screenshot capture matrix for real app screens before final store compositions
+- MobAI `mobile-recorder-skill` or `desktop-recorder-skill` for polished reproducible app-flow demos: `.mob` or `screenplay.json`, raw capture, edited export, captions, and upload copy
 - XcodeBuildMCP-backed Apple screenshot/test/video fallback after founder confirmation when MobAI is unavailable
 - UGC Day 0 experiment with 3-5 creators, founder-written scripts, creator contracts, payment model, disclosure rules, tracker, and stop/scale thresholds
 - Fastlane workspace setup with connected social accounts, Blitz angles/preferences, MobAI/Higgsfield media inputs, sanitized API logs, and a 30-day organic content plan
@@ -114,6 +116,7 @@ Flag these aggressively:
 - App-local agents/subagents are used as uncoordinated implementers instead of scoped reviewers or isolated workers under an orchestrator.
 - Parallel subagents were launched without a file-overlap check, worktree isolation, or an orchestrator owning git, integration, and full test suites.
 - MobAI/device automation ran in parallel on the same simulator/device or produced screenshots without backend/provider verification.
+- Demo video was recorded by improvising during capture instead of using recorder-skill choreography/screenplay, dry-run, raw capture, final export, captions, and rerenderable artifacts.
 - XcodeBuildMCP was used as a MobAI fallback without founder confirmation, or Android coverage was implied even though XcodeBuildMCP is Apple-only.
 - XcodeBuildMCP commands, MCP tool names, setup snippets, privacy settings, or screenshot/test proof were copied from stale local skills without checking official docs and `xcodebuildmcp --help`/tool listings.
 - Engineering was declared done from unit/widget tests only; no frontend-to-backend, provider, entitlement, analytics, email, or database proof exists.

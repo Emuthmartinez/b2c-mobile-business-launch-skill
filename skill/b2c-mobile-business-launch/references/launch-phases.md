@@ -463,6 +463,7 @@ Do:
 - Create `FASTLANE_OPS.md` and the `fastlane/` campaign directory.
 - Build campaign brief, prompts, angles, Blitz preferences, UTM convention, and 30-day cadence from the launch docs.
 - Use MobAI full-quality screenshots and screen recordings plus Higgsfield design-system visuals as approved media inputs.
+- For polished app-flow demo videos, load `mobai-toolbelt.md` and route to MobAI `mobile-recorder-skill` for iOS/Android or `desktop-recorder-skill` for macOS/web. Save `.mob` or `screenplay.json`, raw capture, final export, captions, and upload copy in `DEMO_VIDEO.md`.
 - Use confirmed XcodeBuildMCP Apple-platform screenshots/recordings only when MobAI fallback was approved and limitations are recorded.
 - Generate content, QA it against brand/legal/store claims, and prepare a schedule.
 - Schedule or post only after explicit approval.

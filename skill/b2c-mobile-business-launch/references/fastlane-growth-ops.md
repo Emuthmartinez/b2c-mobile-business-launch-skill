@@ -190,18 +190,23 @@ Preference rules:
 Use real app media before generic generated visuals:
 - MobAI full-quality screenshots for still UI proof
 - MobAI screen recordings for actual flows and app demos
+- MobAI `mobile-recorder-skill` for polished iOS/Android app-flow videos with `.mob` choreography, tap ripples, finger overlay, phone bezel/background, zoom, variable speed, captions, final mp4, and upload copy
+- MobAI `desktop-recorder-skill` for polished macOS/web app-flow videos with `screenplay.json`, click ripples, cursor sprite, captions, zoom, variable speed, final mp4, and upload copy
 - XcodeBuildMCP screenshots, videos, and logs when the founder confirmed the Apple-platform fallback from MobAI
 - app preview clips and store screenshots from `SCREENSHOTS.md`
 - Higgsfield assets for supporting characters, backgrounds, hooks, and motion when constrained by `DESIGN.md`
 - founder/UGC clips only when the founder approves identity use
 
 MobAI capture rules:
+- load `mobai-toolbelt.md` before recorder-skill or device recording work
 - use latest MobAI docs and CLI help before capture
+- refresh the MobAI GitHub org and selected recorder repo before install or command syntax
 - prefer `npx @mobai-app/cli@latest` or a verified global install
 - use `mobai observe --include ui_tree` before interaction
 - use `mobai screenshot --full --path <dir> --name <name>` for production PNG screenshots
 - use `mobai record` for product-demo clips when supported by the current CLI
 - record device, OS, build, locale, theme, fixture, capture path, and proof constraints
+- record `DEMO_VIDEO.md` with choreography/screenplay, raw capture, final export, captions, upload copy, and rerender path when using recorder skills
 
 XcodeBuildMCP fallback:
 - use only after `paid-tool-routing.md` confirmation

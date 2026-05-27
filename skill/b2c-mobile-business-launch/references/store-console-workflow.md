@@ -389,9 +389,11 @@ Use:
 - `DESIGN.md` for visual rules
 - `design.html` or screenshot HTML for framed concepts
 - MobAI for real app screenshots from simulator/device
+- MobAI `mobile-recorder-skill` for polished iOS/Android app-preview or launch demo videos when video assets are in scope
 - XcodeBuildMCP for Apple-platform screenshots, videos, logs, and UI automation only after the founder confirms fallback from MobAI
 - Higgsfield for supporting visual assets only after the real UI is clear
 - `SCREENSHOTS.md` for final slot table
+- `DEMO_VIDEO.md` for app-preview/demo-video choreography, raw capture, edited export, captions, and upload copy
 
 ### MobAI Capture
 
@@ -412,6 +414,13 @@ MobAI CLI route:
 - navigate with stable selectors, preferring accessibility IDs
 - `mobai wait --stable --timeout-ms 3000`
 - `mobai screenshot --full --path ./screenshots/raw --name <slot-name>`
+
+MobAI recorder route:
+- Load `mobai-toolbelt.md` before recording polished demo or app-preview videos.
+- Refresh `https://github.com/MobAI-App/mobile-recorder-skill` before install or command syntax.
+- Follow upstream flow: explore -> `.mob` choreography -> dry-run -> native record -> edit/export.
+- Save `.mob`, raw video, final video, captions, upload copy, target device, fixture, duration, dimensions, and rerender instructions.
+- Use `DESIGN.md` for phone bezel/background, captions, thumbnail/frame treatment, and upload copy voice.
 
 ### XcodeBuildMCP Fallback
 
