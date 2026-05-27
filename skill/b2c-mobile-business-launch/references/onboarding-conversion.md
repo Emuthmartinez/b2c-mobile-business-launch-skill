@@ -2,7 +2,7 @@
 
 Use this before designing onboarding, quizzes, personalization, attribution capture, mascot guidance, demo videos, review prompts, paywall timing, closing offers, trials, or first-session activation.
 
-Load `paid-tool-routing.md` before replacing Higgsfield, MobAI, XcodeBuildMCP-approved fallback, RevenueCat experiments, PostHog experiments/surveys/replay, or any paid/account-gated onboarding tool with a free/manual route.
+Load `paid-tool-routing.md` before replacing Higgsfield, MobAI, XcodeBuildMCP-approved fallback, RevenueCat experiments, PostHog experiments/surveys/replay, or any paid/account-gated onboarding tool with a free/manual route. Load `remotion-content-assets.md` before using Remotion for onboarding demo clips, animated explainers, app-preview cuts, social hook clips, or local rendered assets.
 
 ## Contents
 
@@ -41,7 +41,7 @@ Recommended Refero searches when access is available:
 - target user state before onboarding and desired state after onboarding
 - screen-by-screen sequence with purpose, question/copy, state, visual asset, animation, analytics event, and skip/back rules
 - mascot/guide behavior if used: personality, reactions, emotion states, source assets, Higgsfield model/tool, and accessibility fallback
-- demo-video plan: clip length, aha moment, source UI, visual treatment, no-audio fallback, and where it appears
+- demo-video plan: clip length, aha moment, source UI, visual treatment, no-audio fallback, Higgsfield or Remotion route, and where it appears
 - data collection matrix: question, answer options, personalization use, attribution use, lifecycle-message use, privacy/legal note, and whether it is required
 - attribution question: "How did you hear about us?" options, UTM/referrer capture, and free-text/other handling
 - attribution source mapping to `ANALYTICS.md`: stored key, display label, PostHog person property, event property, lifecycle-message use, and privacy note
@@ -54,7 +54,7 @@ Recommended Refero searches when access is available:
 
 Create `onboarding.html` or include an onboarding section in `design.html`:
 - render every onboarding screen at mobile dimensions
-- include mascot states, data question UI, demo-video placeholder or clip, plan summary, paywall, closing offer, review prompt placeholder, loading/error/offline states, and post-paywall activation
+- include mascot states, data question UI, demo-video placeholder or clip, Remotion-rendered asset placeholder when selected, plan summary, paywall, closing offer, review prompt placeholder, loading/error/offline states, and post-paywall activation
 - use CSS variables from `DESIGN.md`
 - include reduced-motion behavior and no-video fallback
 

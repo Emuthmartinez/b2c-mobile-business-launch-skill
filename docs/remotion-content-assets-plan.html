@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Remotion Content Assets Integration Plan</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172022;
+        --muted: #536264;
+        --line: #d8e0dd;
+        --paper: #fbfaf6;
+        --panel: #ffffff;
+        --green: #0f6b55;
+        --gold: #a66b00;
+        --blue: #235f8f;
+        --red: #9a3412;
+        --shadow: 0 18px 44px rgba(23, 32, 34, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(135deg, rgba(15, 107, 85, 0.08), transparent 38%),
+          linear-gradient(315deg, rgba(166, 107, 0, 0.1), transparent 42%),
+          var(--paper);
+        font-family:
+          ui-serif,
+          Georgia,
+          "Times New Roman",
+          serif;
+        line-height: 1.55;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 56px;
+      }
+
+      header {
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 22px;
+        margin-bottom: 28px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.08;
+        margin: 0;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 920px;
+        font-size: clamp(2.45rem, 7vw, 5.7rem);
+        font-weight: 800;
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 3.4vw, 2.7rem);
+        margin-bottom: 14px;
+      }
+
+      h3 {
+        font-size: 1.12rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 10px;
+      }
+
+      p {
+        margin: 0 0 14px;
+      }
+
+      a {
+        color: var(--blue);
+      }
+
+      code {
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: #f4f7f5;
+        padding: 0.08rem 0.28rem;
+        font-family:
+          "SFMono-Regular",
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        font-size: 0.92em;
+      }
+
+      pre {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #0f1718;
+        color: #f6f1e7;
+        padding: 16px;
+      }
+
+      pre code {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+      }
+
+      ul,
+      ol {
+        padding-left: 1.25rem;
+        margin: 0 0 12px;
+      }
+
+      li + li {
+        margin-top: 6px;
+      }
+
+      section {
+        margin-top: 30px;
+      }
+
+      .dek {
+        max-width: 860px;
+        color: var(--muted);
+        font-size: 1.18rem;
+        margin-top: 16px;
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+        font-family:
+          "SFMono-Regular",
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        font-size: 0.84rem;
+      }
+
+      .pill {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        padding: 6px 10px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+      }
+
+      .panel {
+        grid-column: span 12;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: var(--shadow);
+        padding: 18px;
+      }
+
+      .half {
+        grid-column: span 6;
+      }
+
+      .third {
+        grid-column: span 4;
+      }
+
+      .callout {
+        border-left: 5px solid var(--green);
+        background: rgba(15, 107, 85, 0.08);
+        padding: 16px 18px;
+      }
+
+      .warning {
+        border-left-color: var(--gold);
+        background: rgba(166, 107, 0, 0.1);
+      }
+
+      .risk {
+        border-left-color: var(--red);
+        background: rgba(154, 52, 18, 0.08);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: var(--panel);
+        border: 1px solid var(--line);
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 10px 12px;
+        vertical-align: top;
+        text-align: left;
+      }
+
+      th {
+        font-family:
+          "SFMono-Regular",
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: #eef4f0;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .step {
+        border-top: 1px solid var(--line);
+        padding-top: 16px;
+        margin-top: 16px;
+      }
+
+      .step:first-child {
+        border-top: 0;
+        padding-top: 0;
+        margin-top: 0;
+      }
+
+      .status {
+        display: inline-block;
+        border: 1px solid currentColor;
+        border-radius: 999px;
+        color: var(--green);
+        padding: 2px 8px;
+        font-family:
+          "SFMono-Regular",
+          Consolas,
+          "Liberation Mono",
+          monospace;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          width: min(100% - 22px, 1120px);
+          padding-top: 24px;
+        }
+
+        .half,
+        .third {
+          grid-column: span 12;
+        }
+
+        table {
+          display: block;
+          overflow-x: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Remotion Content Assets Integration Plan</h1>
+        <p class="dek">
+          Plan to add a deterministic, lower-cost content asset lane to the
+          <code>b2c-mobile-business-launch</code> skill for cases where
+          Higgsfield is not approved, not desired, or not the best tool for the
+          job.
+        </p>
+        <div class="meta">
+          <span class="pill">Prepared: 2026-05-27</span>
+          <span class="pill">Repo: b2c-mobile-business-launch-skill</span>
+          <span class="pill">Status: plan only</span>
+        </div>
+      </header>
+
+      <section class="grid">
+        <div class="panel half">
+          <h2>Decision</h2>
+          <p>
+            Add Remotion as a first-class content-production route, not merely
+            a weak fallback. Higgsfield remains the premium generative path for
+            mascots, AI visuals, presenter-style ads, image-to-video, and
+            photoreal concepting. Remotion becomes the preferred path for
+            assets that should be code-generated from product truth:
+            screenshots, UI recordings, brand tokens, copy variants, data, and
+            repeatable campaign formats.
+          </p>
+        </div>
+
+        <div class="panel half">
+          <h2>Why Now</h2>
+          <p>
+            The current skill already warns against silently downgrading
+            Higgsfield to hand-authored assets. The missing piece is a credible
+            local production system that future agents can scaffold, render,
+            audit, and rerun. Remotion fits because it uses React, CSS, SVG,
+            Canvas, WebGL, code, and reusable composition primitives to create
+            real video and image outputs.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Source Basis</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Plan Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a href="https://github.com/remotion-dev/remotion">remotion-dev/remotion</a>
+              </td>
+              <td>
+                Confirms Remotion is a React framework for programmatic video,
+                with current docs and API references linked from the repo.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="https://raw.githubusercontent.com/remotion-dev/remotion/main/LICENSE.md">Remotion license</a>
+              </td>
+              <td>
+                Adds a license gate: free use depends on entity type and size,
+                while larger for-profit organizations need a company license.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="https://github.com/remotion-dev/skills">remotion-dev/skills</a>
+              </td>
+              <td>
+                Provides the upstream Remotion agent skill and rule map for
+                compositions, assets, timing, text measurement, parameters,
+                captions, audio, and videos.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Context7 lookup for <code>/remotion-dev/remotion</code> and
+                <code>/remotion-dev/skills</code>
+              </td>
+              <td>
+                Confirms current examples for <code>create-video</code>,
+                <code>remotion render</code>, <code>remotion still</code>,
+                <code>&lt;Composition&gt;</code>, <code>&lt;Still&gt;</code>,
+                static assets, and parametrized props.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="grid">
+        <div class="panel third">
+          <h2>Use Higgsfield</h2>
+          <ul>
+            <li>Net-new AI images, mascots, app icons, and style exploration.</li>
+            <li>Presenter, avatar, image-to-video, or UGC ad generation.</li>
+            <li>Photoreal lifestyle or campaign visuals where source UI is insufficient.</li>
+            <li>Virality prediction or marketing-studio workflows are explicitly desired.</li>
+          </ul>
+        </div>
+
+        <div class="panel third">
+          <h2>Use Remotion</h2>
+          <ul>
+            <li>App preview clips, screen-recording edits, and product demo loops.</li>
+            <li>Store screenshots, social posts, ad variants, and carousels from real UI.</li>
+            <li>Founder-led TikTok/Reels/Shorts overlays, captions, and hook variants.</li>
+            <li>Batch-rendered assets tied to <code>DESIGN.md</code> tokens and copy data.</li>
+          </ul>
+        </div>
+
+        <div class="panel third">
+          <h2>Do Not Use Either</h2>
+          <ul>
+            <li>No truthful product UI, owned media, or licensed public asset source exists.</li>
+            <li>The asset would imply unsupported app behavior, price, endorsement, or result.</li>
+            <li>The target is public posting or paid spend without founder approval.</li>
+            <li>Remotion license eligibility is unclear for a larger commercial entity.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Implementation Phases</h2>
+        <div class="panel">
+          <div class="step">
+            <h3>1. Add The Skill Reference</h3>
+            <p>
+              Create <code>skill/b2c-mobile-business-launch/references/remotion-content-assets.md</code>.
+              It should define triggers, source inputs, license routing, setup,
+              composition standards, render commands, QA checks, output storage,
+              and founder-only gates.
+            </p>
+            <p>
+              It should also include a compact map to the upstream Remotion skill
+              rules: <code>compositions.md</code>, <code>assets.md</code>,
+              <code>parameters.md</code>, <code>timing.md</code>,
+              <code>text-animations.md</code>, <code>measuring-text.md</code>,
+              <code>images.md</code>, <code>videos.md</code>,
+              <code>audio.md</code>, <code>subtitles.md</code>, and
+              <code>ffmpeg.md</code>.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>2. Wire The Reference Into Existing Routes</h3>
+            <ul>
+              <li>
+                Update <code>SKILL.md</code> body items for visual system,
+                store ops, UGC/Fastlane, tool recipes, and deliverable standards.
+              </li>
+              <li>
+                Avoid frontmatter bloat unless necessary; the description has a
+                validator-enforced character ceiling.
+              </li>
+              <li>
+                Update <code>paid-tool-routing.md</code> so Higgsfield's fallback
+                column names Remotion after founder approval and labels Remotion
+                as license-check-required, not always free.
+              </li>
+              <li>
+                Update <code>tool-recipes.md</code> with a new Remotion section
+                next to Higgsfield, including docs-refresh requirements and CLI
+                examples.
+              </li>
+              <li>
+                Update <code>ugc-creator-engine.md</code>,
+                <code>app-store-listing-prep.md</code>,
+                <code>onboarding-conversion.md</code>, and
+                <code>artifact-contracts.md</code> where content assets already
+                appear.
+              </li>
+            </ul>
+          </div>
+
+          <div class="step">
+            <h3>3. Add A Content Asset Contract</h3>
+            <p>
+              Add <code>CONTENT_ASSETS.md</code>, <code>content-assets.html</code>,
+              and a small manifest contract to the artifact map. The contract
+              should make assets inspectable before launch work depends on them.
+            </p>
+            <pre><code>{
+  "asset_id": "tiktok-hook-01",
+  "surface": "tiktok_reels_shorts",
+  "route": "remotion",
+  "composition_id": "VerticalHookDemo",
+  "dimensions": "1080x1920",
+  "duration_seconds": 12,
+  "inputs": ["screenshots/raw/onboarding.png", "DESIGN.md", "copy/hooks.json"],
+  "outputs": ["content-assets/out/tiktok-hook-01.mp4"],
+  "truth_constraints": ["real app UI visible", "no unsupported claims"],
+  "render_proof": "npm run render:content -- --id tiktok-hook-01",
+  "status": "draft"
+}</code></pre>
+          </div>
+
+          <div class="step">
+            <h3>4. Decide The Remotion Project Shape</h3>
+            <p>
+              Do not bundle Remotion dependencies inside this skill. Instead,
+              have the skill scaffold a launch-repo-local Remotion workspace only
+              when a launch needs content rendering.
+            </p>
+            <pre><code>content-assets/
+  CONTENT_ASSETS.md
+  content-assets.html
+  manifest.json
+  copy/
+  inputs/
+  remotion/
+    package.json
+    remotion.config.ts
+    src/
+    public/
+  out/</code></pre>
+            <p>
+              This keeps the skill lightweight while making rendered assets live
+              next to the launch package they belong to.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>5. Add Templates Without Vendoring The Whole Upstream</h3>
+            <p>
+              Add templates for <code>CONTENT_ASSETS.md</code>,
+              <code>content-assets.html</code>, <code>manifest.json</code>, and a
+              minimal Remotion starter README. Do not copy the entire
+              <code>remotion-dev/skills</code> repo into this skill. Instead,
+              reference the installed <code>remotion-best-practices</code> skill
+              when available and require a docs refresh when generating Remotion
+              code.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>6. Add Validator And LaunchBench Coverage</h3>
+            <ul>
+              <li>
+                Add <code>scripts/check-content-assets.ts</code> to inspect
+                route, fallback approval, license notes, manifest outputs,
+                render proof, source inputs, and public-claim constraints.
+              </li>
+              <li>
+                Add the validator to <code>package.json</code>,
+                <code>run-launchbench.ts</code>, and
+                <code>run-validator-fixtures.ts</code>.
+              </li>
+              <li>
+                Add LaunchBench scenarios:
+                <code>higgsfield-remotion-fallback-unapproved.yaml</code>,
+                <code>remotion-license-unchecked.yaml</code>, and
+                <code>remotion-assets-thin.yaml</code>.
+              </li>
+              <li>
+                Keep video rendering out of deterministic validators by default;
+                validate manifest evidence, commands, and file presence. Actual
+                render smoke tests belong in the target launch repo.
+              </li>
+            </ul>
+          </div>
+
+          <div class="step">
+            <h3>7. Package, Sync, And Prove</h3>
+            <p>
+              After implementation, run the full existing audit and package checks
+              before syncing the installed skill copy:
+            </p>
+            <pre><code>cd skill/b2c-mobile-business-launch
+npm run audit
+npm run launchbench
+npm run test:validators
+npm pack --dry-run --json</code></pre>
+            <p>
+              Then sync <code>~/.codex/skills/b2c-mobile-business-launch</code>
+              and verify the linked Claude/Agents paths if the user wants the
+              runtime copy updated.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Concrete File Plan</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>SKILL.md</code></td>
+              <td>
+                Add Remotion routing to visual, store, demo-video, UGC, and
+                deliverable sections while keeping paid-tool approval rules intact.
+              </td>
+            </tr>
+            <tr>
+              <td><code>references/remotion-content-assets.md</code></td>
+              <td>
+                New core reference for local content asset production, Remotion
+                docs refresh, license check, project structure, renders, QA, and
+                public-use gates.
+              </td>
+            </tr>
+            <tr>
+              <td><code>references/paid-tool-routing.md</code></td>
+              <td>
+                Extend Higgsfield fallback with Remotion, first-party assets,
+                local recordings, and license notes.
+              </td>
+            </tr>
+            <tr>
+              <td><code>references/tool-recipes.md</code></td>
+              <td>
+                Add Remotion commands and source-truth rules:
+                <code>npx create-video@latest --yes --blank --no-tailwind</code>,
+                <code>npx remotion studio</code>,
+                <code>npx remotion render</code>, and
+                <code>npx remotion still</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>references/artifact-contracts.md</code></td>
+              <td>
+                Add <code>CONTENT_ASSETS.md</code>,
+                <code>content-assets.html</code>,
+                <code>content-assets/manifest.json</code>, and
+                <code>content-assets/remotion/</code> to the canonical map.
+              </td>
+            </tr>
+            <tr>
+              <td><code>templates/PROJECT_STATE.yaml</code></td>
+              <td>
+                Add <code>lanes.content_assets</code> and
+                <code>tools.remotion</code> with route, docs checked date,
+                license check, preflight, validation, and fallback fields.
+              </td>
+            </tr>
+            <tr>
+              <td><code>templates/content-assets/</code></td>
+              <td>
+                Add starting templates for <code>CONTENT_ASSETS.md</code>,
+                <code>content-assets.html</code>, <code>manifest.json</code>,
+                and a Remotion starter README.
+              </td>
+            </tr>
+            <tr>
+              <td><code>scripts/check-content-assets.ts</code></td>
+              <td>
+                Validate the new contract without requiring heavy render
+                dependencies in the skill package.
+              </td>
+            </tr>
+            <tr>
+              <td><code>evals/launchbench/*.yaml</code></td>
+              <td>
+                Add scenarios for unapproved Higgsfield fallback, unchecked
+                Remotion license, and thin/claim-risk content asset packets.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="grid">
+        <div class="panel half">
+          <h2>Render Standards</h2>
+          <ul>
+            <li>Vertical social: <code>1080x1920</code>, 30fps, 6-20 seconds.</li>
+            <li>Square ad/social: <code>1080x1080</code>, 30fps or still PNG.</li>
+            <li>Store/app-preview: platform-specific dimensions and truthful app UI.</li>
+            <li>Still checks: render a representative frame with <code>remotion still</code>.</li>
+            <li>Text checks: use Remotion text-measurement guidance for long copy and localization.</li>
+          </ul>
+        </div>
+
+        <div class="panel half">
+          <h2>QA Standards</h2>
+          <ul>
+            <li>Real product UI remains visible when the asset claims to show the app.</li>
+            <li>Claims, price, trial, legal, and store language match canonical docs.</li>
+            <li>Captions and silent playback work for social clips.</li>
+            <li>Final assets have render commands, input sources, and output paths.</li>
+            <li>Fallback limitations are recorded when Remotion replaces Higgsfield.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="callout warning">
+        <h2>License And Spend Gate</h2>
+        <p>
+          Remotion is lower-cost and often free, but not universally free. The
+          integration should require agents to record eligibility or approval
+          before commercial use when the entity size is unknown. Buying a
+          Remotion company license, using paid rendering infrastructure, or
+          publishing/scheduling the produced assets remains founder-approved.
+        </p>
+      </section>
+
+      <section class="callout risk">
+        <h2>Failure Modes To Block</h2>
+        <ul>
+          <li>Agent treats "Higgsfield unavailable" as automatic permission to use Remotion.</li>
+          <li>Remotion output is presented as equivalent to AI-generated campaign creative.</li>
+          <li>Store screenshot or app-preview asset shows mock UI as if it were production.</li>
+          <li>Video/post claims drift from <code>APP_STORE_LISTING.md</code>, <code>REVENUE_OPS.md</code>, or legal docs.</li>
+          <li>Rendered assets lack reproducible source inputs, command proof, or output paths.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Acceptance Criteria</h2>
+        <div class="panel">
+          <ol>
+            <li>
+              A future agent can decide Higgsfield vs Remotion vs no-production
+              using a clear route matrix and founder-gate policy.
+            </li>
+            <li>
+              The launch package can include <code>CONTENT_ASSETS.md</code>,
+              <code>content-assets.html</code>, and a manifest that proves how
+              each image or video was produced.
+            </li>
+            <li>
+              Remotion outputs are tied to <code>DESIGN.md</code>,
+              truthful app UI, owned or licensed assets, and public-claim checks.
+            </li>
+            <li>
+              LaunchBench catches unapproved Higgsfield fallback, unchecked
+              Remotion license/commercial use, and thin content asset packets.
+            </li>
+            <li>
+              <code>npm run audit</code>, <code>npm run launchbench</code>,
+              <code>npm run test:validators</code>, and package dry-run pass.
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <h2>Recommended First Implementation PR</h2>
+        <div class="panel">
+          <p>
+            Keep the first PR intentionally bounded:
+          </p>
+          <ol>
+            <li>Add <code>references/remotion-content-assets.md</code>.</li>
+            <li>Patch route mentions in <code>SKILL.md</code>,
+              <code>paid-tool-routing.md</code>, and
+              <code>tool-recipes.md</code>.</li>
+            <li>Add <code>CONTENT_ASSETS.md</code> and manifest templates.</li>
+            <li>Add one validator and one LaunchBench scenario.</li>
+            <li>Run the existing audit suite and package dry-run.</li>
+          </ol>
+          <p>
+            Defer full Remotion starter scaffolding until the reference and
+            validator contract are agreed. That avoids importing a large toolchain
+            before the skill's routing behavior is locked.
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

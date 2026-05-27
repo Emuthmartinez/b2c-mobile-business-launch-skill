@@ -29,6 +29,7 @@ export const requiredLanes = [
   "traceability",
   "product",
   "design",
+  "content_assets",
   "analytics_attribution",
   "onboarding",
   "revenue",

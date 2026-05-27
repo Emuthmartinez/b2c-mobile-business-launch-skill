@@ -148,8 +148,10 @@ Screenshots and previews should start from real app UI. When marketing compositi
 - use MobAI for real iOS/Android captures when available
 - use XcodeBuildMCP only after founder-approved fallback from MobAI for Apple-platform capture
 - use Higgsfield for high-quality supporting visuals, mascots, backgrounds, icons, thumbnails, CPP/event artwork, and campaign imagery when the asset is not just a screenshot
+- use Remotion after `remotion-content-assets.md` when screenshots, previews, CPP/event media, or social/store variants should be code-rendered from real app UI, brand tokens, copy, captions, and local media
 - keep generated assets consistent with the design system and label reference art separately from production upload files
-- verify generated marketing assets do not imply unsupported features, endorsements, offers, medical/financial outcomes, urgency, or unavailable UI
+- verify generated or rendered marketing assets do not imply unsupported features, endorsements, offers, medical/financial outcomes, urgency, or unavailable UI
+- record route, source inputs, license status, render proof, output paths, and founder approval gates in `CONTENT_ASSETS.md` when Higgsfield, Remotion, or edited media are used
 
 ## Automation Boundaries
 
@@ -171,5 +173,5 @@ Do not call the App Store listing ready unless:
 - screenshots/previews have real app UI, final dimensions, locale/device targets, and upload status
 - custom product pages, In-App Events, and ASA/marketing routing are either planned with proof or explicitly not needed
 - localization strategy is documented with target markets and proof status
-- Higgsfield or generated assets are tied to `DESIGN.md` and separated from raw UI proof
+- Higgsfield, Remotion, or generated assets are tied to `DESIGN.md`, recorded in `CONTENT_ASSETS.md` when used, and separated from raw UI proof
 - `STORE_CONSOLE.md` and HTML packet show what the founder must click, paste, approve, or leave blocked

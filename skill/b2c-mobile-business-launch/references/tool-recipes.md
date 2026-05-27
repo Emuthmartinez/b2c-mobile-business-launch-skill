@@ -11,6 +11,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 - Firecrawl Web Intelligence
 - Refero UX Pattern Research
 - Higgsfield Visual And Motion Production
+- Remotion Content Asset Production
 - Name And Keyword Collision
 - ASO Skill Routing
 - MobAI Toolbelt, Recorders, And XcodeBuildMCP Capture
@@ -215,7 +216,7 @@ Purpose: produce launch visuals, mockups, icons, mascots, animations, demo video
 Use after `DESIGN.md` exists or after a provisional design direction is explicitly labeled `draft`.
 
 Access:
-- Higgsfield is a paid/account-gated visual production path. If unavailable, ask before using local HTML/CSS/SVG/canvas, founder-owned assets, public-domain assets, or real app screenshots as the free fallback.
+- Higgsfield is a paid/account-gated visual production path. If unavailable, ask before using Remotion, local HTML/CSS/SVG/canvas, founder-owned assets, public-domain assets, or real app screenshots as the free fallback.
 
 Local skill routing:
 - `higgsfield-product-photoshoot` for product/brand images, hero banners, lifestyle scenes, Pinterest pins, social carousels, and static ad creative packs.
@@ -236,6 +237,50 @@ Rules:
 - Label assets as `direction`, `draft`, or `production`.
 - Do not present generated screenshots as real app functionality. Store screenshots must show truthful app UI and avoid unsupported claims, prices, or features.
 - For animations, write the storyboard and reduced-motion fallback before generation, then verify the clip in layout.
+
+## Remotion Content Asset Production
+
+Purpose: create reproducible videos, stills, screenshot frames, app previews, UGC overlays, captions, and ad/social variants from real product UI, brand tokens, copy, and source media.
+
+Use when:
+- the founder does not want to pay for Higgsfield or approves a lower-cost local route
+- a code-rendered template is better than a one-off generated visual
+- assets must be batch-rendered across hooks, CTAs, locales, dimensions, or campaign variants
+- real app screenshots/recordings need framing, captions, motion, or store/social formatting
+
+Access and license:
+- Load `paid-tool-routing.md` before replacing Higgsfield with Remotion.
+- Load `remotion-content-assets.md` before scaffolding a Remotion project or claiming rendered assets are ready.
+- Refresh current Remotion docs and license before setup, CLI flags, commercial-use guidance, or renderer API examples.
+- Record license eligibility or founder approval in `CONTENT_ASSETS.md` or `TOOL_DECISIONS.md`.
+
+Recommended setup in the launch repo, not inside this skill package:
+
+```bash
+mkdir -p content-assets
+cd content-assets
+npx create-video@latest --yes --blank --no-tailwind remotion
+cd remotion
+npx remotion studio
+```
+
+Common commands:
+
+```bash
+npx remotion compositions
+npx remotion still <composition-id> --scale=0.25 --frame=30 --output ../out/frame30.png
+npx remotion render <composition-id> --output ../out/video.mp4
+npx remotion still <still-id> --output ../out/still.png
+```
+
+Rules:
+- Use the `remotion-best-practices` skill when available.
+- Prefer `<Composition>` and `<Still>` entries with typed props and Zod schemas for variable copy or dimensions.
+- Put local images, video, audio, and captions in the Remotion `public/` folder and reference them with `staticFile()`.
+- Use frame-based animation APIs such as `useCurrentFrame()`, `interpolate()`, `spring()`, and `Sequence`; do not rely on CSS animations for render-critical motion.
+- Keep real app UI visible when the asset claims to show the app.
+- Record source inputs, render commands, output paths, dimensions, duration, route decision, license status, and claim checks in `CONTENT_ASSETS.md` and `content-assets/manifest.json`.
+- Do not publish, schedule, upload store assets, run paid campaigns, or pay for rendering infrastructure without founder approval.
 
 ## Name And Keyword Collision
 

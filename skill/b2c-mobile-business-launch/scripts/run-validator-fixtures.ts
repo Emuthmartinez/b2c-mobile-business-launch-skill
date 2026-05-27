@@ -145,6 +145,61 @@ function writeCompleteSecurity(root: string): void {
   writeFileSync(path.join(root, "security-review.html"), "<!doctype html><html><body>Security review board</body></html>", "utf8");
 }
 
+function writeCompleteContentAssets(root: string): void {
+  mkdirSync(path.join(root, "content-assets"), { recursive: true });
+  writeFileSync(
+    path.join(root, "content-assets", "CONTENT_ASSETS.md"),
+    [
+      "# Content Assets",
+      "Route Matrix",
+      "Higgsfield is the intended paid visual route for net-new AI imagery. If Higgsfield is unavailable, stop for founder approval before Remotion fallback.",
+      "Remotion is approved for local rendered product-demo assets from real app UI.",
+      "Founder approval is required before public posting, store upload, paid generation, paid render infrastructure, or scheduling.",
+      "License status: Remotion license eligibility for commercial use is checked or founder-approved before production output.",
+      "Source Inputs: screenshots/raw/onboarding.png, DESIGN.md, content-assets/copy/hooks.json, owned or licensed media.",
+      "Composition Manifest: content-assets/manifest.json records asset IDs, composition IDs, dimensions, inputs, outputs, truth constraints, approvals, render proof, and license status.",
+      "Render Commands: cd content-assets/remotion && npx remotion render VerticalHookDemo --output ../out/vertical-hook-demo.mp4.",
+      "Claim Review: real app UI remains visible, no unsupported pricing, endorsement, medical, financial, urgency, scarcity, or unavailable UI claims.",
+      "Output Registry: vertical-hook-demo -> content-assets/out/vertical-hook-demo.mp4.",
+      "Public Use Gates: founder approval required before posting, store upload, paid ads, or creator distribution.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "content-assets", "content-assets.html"),
+    "<!doctype html><html><body>Content asset route and output proof board</body></html>",
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "content-assets", "manifest.json"),
+    JSON.stringify(
+      {
+        schema_version: "1",
+        assets: [
+          {
+            asset_id: "vertical-hook-demo",
+            surface: "tiktok_reels_shorts",
+            route: "remotion",
+            status: "draft",
+            composition_id: "VerticalHookDemo",
+            dimensions: "1080x1920",
+            duration_seconds: 12,
+            inputs: ["screenshots/raw/onboarding.png", "DESIGN.md", "content-assets/copy/hooks.json"],
+            outputs: ["content-assets/out/vertical-hook-demo.mp4"],
+            truth_constraints: ["real app UI remains visible", "no unsupported claims"],
+            approvals: ["founder approval before public posting", "fallback approval before replacing Higgsfield"],
+            render_proof: "cd content-assets/remotion && npx remotion render VerticalHookDemo --output ../out/vertical-hook-demo.mp4",
+            license_status: "Remotion license status checked before commercial use",
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+    "utf8",
+  );
+}
+
 function runFixture(label: string, root: string, script: string, expectedCode: number, expectedText?: string, extraArgs: string[] = []): void {
   const result = spawnSync(tsxBin, [path.join("scripts", script), "--root", root, ...extraArgs], {
     cwd: skillRoot,
@@ -167,10 +222,12 @@ try {
   writeCompleteAppleSigning(clean);
   writeCompleteStoreConsole(clean);
   writeCompleteSecurity(clean);
+  writeCompleteContentAssets(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
   runFixture("complete security release packet passes", clean, "check-security-release.ts", 0);
+  runFixture("complete content assets packet passes", clean, "check-content-assets.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
@@ -490,6 +547,102 @@ try {
     "utf8",
   );
   runFixture("Refero fallback without founder approval fails", uxFallbackUnapproved, "check-ux-patterns.ts", 1, "ux_patterns.refero_fallback_unapproved");
+
+  const contentFallbackUnapproved = makeFixture("content-fallback-unapproved");
+  mkdirSync(path.join(contentFallbackUnapproved, "content-assets"), { recursive: true });
+  writeFileSync(
+    path.join(contentFallbackUnapproved, "content-assets", "CONTENT_ASSETS.md"),
+    [
+      "# Content Assets",
+      "Route Matrix",
+      "Higgsfield unavailable, using Remotion fallback.",
+      "Remotion",
+      "License status: Remotion license status checked before commercial use.",
+      "Source Inputs",
+      "Composition Manifest",
+      "Render Commands",
+      "Claim Review",
+      "Output Registry",
+      "Public Use Gates",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("Higgsfield content fallback without founder approval fails", contentFallbackUnapproved, "check-content-assets.ts", 1, "content_assets.higgsfield_fallback_unapproved");
+
+  const remotionLicenseUnchecked = makeFixture("remotion-license-unchecked");
+  mkdirSync(path.join(remotionLicenseUnchecked, "content-assets"), { recursive: true });
+  writeFileSync(
+    path.join(remotionLicenseUnchecked, "content-assets", "CONTENT_ASSETS.md"),
+    [
+      "# Content Assets",
+      "Route Matrix",
+      "Higgsfield",
+      "Remotion",
+      "Founder approval recorded for Remotion fallback.",
+      "License status: unchecked.",
+      "Source Inputs",
+      "Composition Manifest",
+      "Render Commands",
+      "Claim Review",
+      "Output Registry",
+      "Public Use Gates",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(remotionLicenseUnchecked, "content-assets", "manifest.json"),
+    JSON.stringify(
+      {
+        assets: [
+          {
+            asset_id: "license-thin",
+            surface: "ad",
+            route: "remotion",
+            status: "draft",
+            composition_id: "Ad",
+            dimensions: "1080x1080",
+            inputs: ["DESIGN.md"],
+            outputs: ["content-assets/out/ad.mp4"],
+            truth_constraints: ["real app UI visible"],
+            approvals: ["founder approval before public use"],
+            render_proof: "npx remotion render Ad --output ../out/ad.mp4",
+            license_status: "unchecked",
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+    "utf8",
+  );
+  runFixture("Remotion asset without license status fails", remotionLicenseUnchecked, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.license_status.unchecked");
+
+  const thinContentManifest = makeFixture("content-manifest-thin");
+  mkdirSync(path.join(thinContentManifest, "content-assets"), { recursive: true });
+  writeFileSync(
+    path.join(thinContentManifest, "content-assets", "CONTENT_ASSETS.md"),
+    [
+      "# Content Assets",
+      "Route Matrix",
+      "Higgsfield",
+      "Remotion",
+      "Founder approval recorded for fallback.",
+      "License status: Remotion license status checked before commercial use.",
+      "Source Inputs",
+      "Composition Manifest",
+      "Render Commands",
+      "Claim Review",
+      "Output Registry",
+      "Public Use Gates",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(thinContentManifest, "content-assets", "manifest.json"),
+    JSON.stringify({ assets: [{ asset_id: "thin", route: "remotion", status: "draft" }] }, null, 2),
+    "utf8",
+  );
+  runFixture("thin Remotion content manifest fails", thinContentManifest, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.surface.missing");
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

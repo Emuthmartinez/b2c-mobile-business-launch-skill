@@ -68,6 +68,13 @@ lanes:
       - "design.html"
       - "ux-patterns.html"
     blockers: []
+  content_assets:
+    status: "partial"
+    evidence:
+      - "content-assets/CONTENT_ASSETS.md"
+      - "content-assets/content-assets.html"
+      - "content-assets/manifest.json"
+    blockers: []
   analytics_attribution:
     status: "partial"
     evidence:
@@ -241,6 +248,14 @@ tools:
     preflight: "Confirm domain, DNS, email routing, Pages/Workers, and secrets."
     validation: "HTTPS, DNS, headers, routes, and email aliases verified."
     fallback: "Existing registrar/host after founder approval."
+  remotion:
+    route: "optional_local_render_tool"
+    docs_checked_at: ""
+    required_secrets: []
+    license_status: "Check current Remotion license before commercial use; record eligibility or founder approval."
+    preflight: "Confirm Higgsfield fallback approval if applicable, source asset rights, real app UI inputs, target surfaces, and whether a launch-local content-assets/remotion project is needed."
+    validation: "CONTENT_ASSETS.md, content-assets.html, manifest.json, render command proof, source inputs, and output paths are recorded; representative still or render is checked before public use."
+    fallback: "Use Higgsfield, raw screenshots, founder-owned media, local recordings, HTML/CSS/SVG/canvas, or public-domain assets only after the route is approved and limitations are recorded."
 proof:
   launch_cockpit: "launch-cockpit.html"
   launchbench:

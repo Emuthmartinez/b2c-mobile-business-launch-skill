@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -61,6 +61,8 @@ LEGAL_REVIEW.md           # founder/legal decisions, risk flags, source URLs, re
 STORE_CONSOLE.md          # copy-paste App Store Connect and Google Play Console packet with click paths and blockers
 store-console.html        # rendered founder-facing mock console grouped by ASC/Play page
 SCREENSHOTS.md            # device capture, composition, dimensions, locale, and upload matrix
+CONTENT_ASSETS.md         # Higgsfield/Remotion/source-media route, source inputs, manifest, render proof, license status, and content QA
+content-assets.html       # founder-facing media route and output proof board
 STORE_OPS.md              # optional review, email-routing, console status, and post-launch growth state when submission is active
 UGC_PLAYBOOK.md           # creator-led organic growth fit, 90-day Day 0 plan, budget, creator ops, scripts, tracking, stop/scale rules
 FASTLANE_OPS.md           # Fastlane workspace, connections, content engine, schedule, and analytics loop
@@ -68,6 +70,7 @@ OUTREACH.md               # endorsement/partner drafts when relevant
 brand.html                # optional rendered brand book
 landing/                  # optional pre-launch funnel
 screenshots/              # raw MobAI/device captures, compositions, and final store upload assets
+content-assets/           # Remotion/local media workspace, manifest, copy inputs, render inputs, and rendered outputs
 fastlane/                 # campaign brief, prompts, angles, preferences, sanitized API logs, runs, schedules, metrics
 ugc/                      # creator list, briefs, scripts, tracker, weekly review, rights/disclosure notes
 assets/                   # visual references, screenshot mockups, production assets embedded into HTML proofs
@@ -106,13 +109,16 @@ rork-ready/
   STORE_CONSOLE.md
   APP_STORE_LISTING.md
   APPLE_SIGNING.md
+  CONTENT_ASSETS.md
   app-store-listing.html
   app-privacy-questionnaire.html
+  content-assets.html
   store-console.html
   SCREENSHOTS.md
   UGC_PLAYBOOK.md
   FASTLANE_OPS.md
   docs/
+  content-assets/
   ugc/
   fastlane/
   agents/
@@ -182,7 +188,7 @@ Must include:
 - one marketing guru role for ASO, GEO/SEO, Fastlane, UGC, attribution learning, reviews, launch calendar, claims, and channel experiments
 - one engineering leader role for `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, frontend/backend/provider integration, test strategy, observability, and production-readiness evidence
 - one product leader role for ICP, problem framing, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
-- one design guru role for `DESIGN.md`, `design.md`, `design.html`, visual QA, accessibility, screenshots, icons, motion, and Higgsfield asset use
+- one design guru role for `DESIGN.md`, `design.md`, `design.html`, `CONTENT_ASSETS.md`, visual QA, accessibility, screenshots, icons, motion, Higgsfield asset use, and Remotion rendered content
 - one customer success role for support email, help/FAQ, privacy/delete/refund/restore paths, review responses, lifecycle copy, and feedback triage
 - one security architect role for `SECURITY.md`, security tool routing, threat model, platform hardening, app integrity, abuse controls, scanner/review evidence, accepted risks, and incident response
 - each role's inputs, outputs, forbidden actions, and when to ask the founder
@@ -555,7 +561,7 @@ Must include:
 - data collection matrix: question, answer options, personalization use, attribution use, lifecycle-message use, privacy/legal note, and required/optional status
 - attribution question and answer taxonomy with stable stored keys, display labels, `other` free text, analytics event properties, PostHog person properties, backend/profile fields, and anonymous-to-identified reconciliation
 - mascot/guide plan with Higgsfield source assets, emotion states, and accessibility fallback when used
-- demo-video plan, including aha moment, duration, source UI, captions/no-audio fallback, and Higgsfield generation/scoring path when used
+- demo-video plan, including aha moment, duration, source UI, captions/no-audio fallback, and Higgsfield generation/scoring path or Remotion render path when used
 - review prompt trigger, native platform API, cooldown, compliance notes, and fallback when the prompt is not shown
 - hard/soft paywall decision, paywall placement, RevenueCat offering/experiment, restore path, and product package matrix
 - closing-offer or reverse-trial behavior after paywall dismissal, if used
@@ -575,7 +581,7 @@ Must include:
 - all onboarding screens at mobile dimensions
 - mascot states, question UI, personalized plan, demo video placeholder/clip, review prompt placeholder, paywall, closing offer, loading/error/offline states, and post-paywall activation
 - CSS variables from `DESIGN.md`
-- embedded Higgsfield assets or local references with `direction`, `draft`, or `production` labels
+- embedded Higgsfield assets, Remotion outputs, or local references with `direction`, `draft`, or `production` labels
 - reduced-motion and no-video fallback notes
 
 Acceptance:
@@ -620,7 +626,7 @@ Must include:
 - custom product page plan or explicit not-needed status, including audience/channel, keyword set, screenshots/previews, deep link, campaign, measurement, and approval state
 - In-App Event plan or explicit not-needed status, including purpose/badge, copy, media, schedule, deep link, IAP-required flag, localization, and approval state
 - localization matrix: markets, locales, metadata, keywords, screenshots, privacy/support URLs, and review/proof owner
-- Higgsfield/design-system route for supporting App Store marketing art that is not just raw screenshots
+- Higgsfield/Remotion/design-system route for supporting App Store marketing art that is not just raw screenshots
 - founder-only gates for privacy publish, product/pricing changes, screenshot upload, CPP/event submission, localization upload, and final submission
 
 Acceptance:
@@ -638,7 +644,7 @@ Must include:
 - privacy status with pointer to `app-privacy-questionnaire.html`
 - RevenueCat/Stripe/web funnel product matrix
 - custom product page and In-App Event plan status
-- screenshot/app-preview matrix and Higgsfield/design-system asset route
+- screenshot/app-preview matrix and Higgsfield/Remotion/design-system asset route
 
 ## `app-privacy-questionnaire.html`
 
@@ -729,6 +735,28 @@ Acceptance:
 - Every final screenshot can be traced to a real app screen or an explicitly approved mock state.
 - Final dimensions match current Apple or Google requirements.
 - Raw captures are preserved separately from composed upload assets.
+
+## `CONTENT_ASSETS.md`, `content-assets.html`, And `content-assets/manifest.json`
+
+Use when Higgsfield, Remotion, local recordings, edited media, app previews, social clips, store screenshot frames, UGC overlays, ad variants, or campaign assets are in scope.
+
+Must include:
+- route matrix: Higgsfield, Remotion, raw screenshots, founder-owned media, public-domain assets, blocked, deferred, or not needed
+- paid-tool and fallback approvals, especially when Remotion replaces an intended Higgsfield path
+- Remotion license status or founder approval before commercial output
+- source input inventory: screenshots, recordings, `DESIGN.md`, copy files, audio, captions, logos, and rights notes
+- composition manifest with asset ID, surface, route, status, composition ID, dimensions, duration, inputs, outputs, truth constraints, approvals, render proof, and license status
+- render commands for Remotion previews, stills, and videos when Remotion is selected
+- claim review against `APP_STORE_LISTING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`, onboarding/paywall copy, and store policy constraints
+- output registry with target surface, local path, QA state, and next gate
+- public use gates for posting, scheduling, paid campaigns, creator distribution, paid generation, paid rendering, store upload, and final launch use
+
+Acceptance:
+- A future agent can rerender or regenerate the asset from recorded inputs and commands.
+- Remotion output is not treated as equivalent to Higgsfield AI-generated creative.
+- Generated or mock UI is not presented as real app functionality.
+- Real app UI remains truthful and visible when the asset claims to show the product.
+- Public, paid, or store-bound use is blocked until founder approvals are recorded.
 
 ## `UGC_PLAYBOOK.md`
 

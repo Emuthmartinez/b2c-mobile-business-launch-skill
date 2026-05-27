@@ -170,10 +170,13 @@ Before filming:
 
 Use Higgsfield only for supporting visuals, mascots, backgrounds, hooks, or motion after `DESIGN.md` exists. Do not use generated visuals as a substitute for truthful app UI in store screenshots or product claims.
 
+Use Remotion when founder-led or creator-led content needs repeatable local variants: product-demo loops, hook overlays, captions, cutdowns, screenshot motion, before/after frames, or app-preview clips. Load `remotion-content-assets.md` first, record Remotion license status, keep real app UI visible, and add each rendered output to `CONTENT_ASSETS.md` and `content-assets/manifest.json`. Remotion is especially useful before Fastlane because the same composition can render many hook, CTA, locale, and dimension variants without paying for net-new generative media.
+
 ## Outputs
 
 Create these when UGC is in scope:
 - `UGC_PLAYBOOK.md`: fit decision, 90-day plan, budget, creator profile, sourcing channel, contract checklist, payment model, stop/scale rules
+- `CONTENT_ASSETS.md`: Remotion/Higgsfield/raw-media route, source inputs, license status, render proof, and output registry when rendered or generated media supports the UGC lane
 - `ugc/creator-list.csv`: creators, platform, handle, geography, personal followers, notes, outreach status
 - `ugc/script-bank.md`: format IDs, hooks, scripts, CTA notes, product insertion notes
 - `ugc/tracker.csv` or sheet link: posts, metrics, payouts, format results

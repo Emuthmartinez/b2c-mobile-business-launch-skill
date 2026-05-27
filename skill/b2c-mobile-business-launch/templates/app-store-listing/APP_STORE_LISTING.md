@@ -63,14 +63,15 @@ Founder approval required before creating live products, changing prices, changi
 
 | Slot | Device well | Locale | Headline | Source screen | Supporting asset | Tool | Final path | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | iPhone 6.9 | en-US | Pending | onboarding/value | optional Higgsfield background | MobAI or fallback | `screenshots/final/` | blocked |
-| 2 | iPhone 6.9 | en-US | Pending | core feature | optional Higgsfield visual | MobAI or fallback | `screenshots/final/` | blocked |
-| 3 | iPhone 6.9 | en-US | Pending | paywall/result | optional Higgsfield visual | MobAI or fallback | `screenshots/final/` | blocked |
+| 1 | iPhone 6.9 | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
+| 2 | iPhone 6.9 | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
+| 3 | iPhone 6.9 | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
 
 Rules:
 - Real app UI capture is the proof layer.
 - Higgsfield may create supporting visuals, icons, backgrounds, mascots, CPP/event media, or thumbnails only when tied to `DESIGN.md`.
-- Generated visuals must not imply unsupported features, claims, prices, or endorsements.
+- Remotion may render screenshot frames, app previews, captioned demo clips, CPP/event variants, or social/store cuts from real UI only after `CONTENT_ASSETS.md` records route approval, license status, source inputs, render proof, and output paths.
+- Generated or rendered visuals must not imply unsupported features, claims, prices, or endorsements.
 
 ## Custom Product Pages
 

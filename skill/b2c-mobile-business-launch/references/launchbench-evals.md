@@ -13,6 +13,8 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - RevenueCat products exist but entitlement grant, restore, webhook, or backend projection is unproven
 - Resend templates ignore `DESIGN.md`, unsubscribe rules, sender-domain proof, or support reply paths
 - a new API key/env var appears but `SECRETS.md`, Doppler, CI injection, or public/server-only classification is not updated
+- Higgsfield is unavailable and the agent silently uses Remotion or local media without founder-approved fallback routing
+- Remotion content assets are marked ready without license status, source inputs, manifest entries, render proof, or claim review
 
 ## Harness Shape
 

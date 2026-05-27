@@ -6,7 +6,7 @@
 
 - Product: `SPEC.md`, `LAUNCH_TRACE.md`, `RESEARCH.md`
 - State: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
-- Design: `DESIGN.md`, `design.md`, `design.html`
+- Design: `DESIGN.md`, `design.md`, `design.html`, `CONTENT_ASSETS.md`, `content-assets.html`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
 - Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
 - Engineering: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
@@ -18,7 +18,7 @@
 - `agents/engineering-leader.md`: architecture, implementation, backend/frontend/provider proof, Apple signing/release gates, tests, and readiness.
 - `agents/security-architect.md`: threat model, security tool routing, platform hardening, app integrity, abuse controls, accepted risks, and incident response.
 - `agents/product-leader.md`: ICP, scope, onboarding, activation, retention, roadmap, and traceability.
-- `agents/design-guru.md`: design system, HTML visual proofs, screenshots, accessibility, icons, motion, and Higgsfield fit.
+- `agents/design-guru.md`: design system, HTML visual proofs, screenshots, accessibility, icons, motion, Higgsfield fit, and Remotion content assets.
 - `agents/customer-success.md`: support, FAQ, privacy/delete/refund/restore, lifecycle copy, reviews, and feedback triage.
 
 ## Operating Rules
@@ -34,7 +34,7 @@
 
 - Product: scope, onboarding, activation, and retention match evidence.
 - Marketing: ASO, store console, claims, UGC/Fastlane, GEO/SEO, and attribution channels are ready.
-- Design: HTML proofs match `DESIGN.md`, no mobile clipping/overlap, screenshots are device-backed.
+- Design: HTML proofs match `DESIGN.md`, no mobile clipping/overlap, screenshots are device-backed, and generated/rendered content assets are traceable in `CONTENT_ASSETS.md`.
 - Engineering: app, backend, revenue, email, analytics, provider, Apple signing/release, and device paths are verified.
 - Secrets: new env vars, webhook secrets, provider keys, CI/deploy secrets, and store credentials are listed in `SECRETS.md` and injected through Doppler or the approved provider.
 - Security: `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool route, platform hardening, app integrity, revenue/webhook abuse controls, supply-chain checks, Sentry/release health, public reporting route, and accepted risks are current.

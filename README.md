@@ -31,12 +31,12 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
 | Security | `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool routing, OWASP MASVS/ASVS basis, platform hardening, app integrity, abuse controls, scanner/review proof, and accepted risks |
-| Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, screenshot systems, and audit gates |
+| Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, Remotion content assets, screenshot systems, and audit gates |
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
 | Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
-| Demo Media | MobAI mobile/desktop recorder routing, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
+| Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
 | Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, security, and launch state |
 
@@ -49,6 +49,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 - Security is a release lane: `SECURITY.md`, `security-review.html`, threat model, security tool routing, mobile/backend/revenue hardening, scanner/review proof, incident response, and accepted risks.
 - Attribution is a data contract, not a screen: stable keys, `other` free text, PostHog person properties, backend persistence, anonymous-to-identified reconciliation, and proof.
 - Visual work must produce tokenized design docs and rendered HTML proofs, not prose-only direction.
+- Content assets route through `CONTENT_ASSETS.md`; Higgsfield fallbacks, Remotion license status, source inputs, render proof, and public-use gates must be explicit.
 - Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
 - Apple distribution readiness must be proven through `APPLE_SIGNING.md`; a simulator build alone is not enough.
 - Launch-readiness claims should run LaunchBench or deterministic validators where available.
@@ -63,6 +64,7 @@ npm run validate:launch-state -- --root /path/to/app
 npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
+npm run check:content-assets -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
@@ -87,6 +89,7 @@ The scripts are intentionally simple:
 - `check-attribution-contract.ts` blocks launch-ready attribution unless event, person property, backend persistence, stable keys, `other`, reconciliation, and proof are represented.
 - `check-secret-routing.ts` checks `SECRETS.md`, names-only secret routing, forbidden local secret files, and raw secret patterns.
 - `check-security-release.ts` checks `SECURITY.md`, security-review routing, OWASP/platform basis, mobile hardening, entitlement/webhook abuse controls, privacy/analytics/email controls, supply-chain checks, incident response, and accepted risks.
+- `check-content-assets.ts` checks `CONTENT_ASSETS.md`, Remotion/Higgsfield route decisions, fallback approval, license status, source inputs, render proof, claim review, and manifest shape.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
@@ -136,6 +139,7 @@ skill/
     scripts/
     templates/
       PROJECT_STATE.yaml
+      content-assets/
       app-agent-roster/
       resend/
       SECURITY.md

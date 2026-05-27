@@ -1,0 +1,33 @@
+{
+  "schema_version": "1",
+  "assets": [
+    {
+      "asset_id": "vertical-hook-demo",
+      "surface": "tiktok_reels_shorts",
+      "route": "remotion",
+      "status": "draft",
+      "composition_id": "VerticalHookDemo",
+      "dimensions": "1080x1920",
+      "duration_seconds": 12,
+      "inputs": [
+        "screenshots/raw/onboarding.png",
+        "DESIGN.md",
+        "content-assets/copy/hooks.json"
+      ],
+      "outputs": [
+        "content-assets/out/vertical-hook-demo.mp4"
+      ],
+      "truth_constraints": [
+        "real app UI remains visible",
+        "no unsupported claims",
+        "mock UI is not presented as production UI"
+      ],
+      "approvals": [
+        "fallback approval required before replacing Higgsfield",
+        "founder approval required before public posting or store upload"
+      ],
+      "render_proof": "cd content-assets/remotion && npx remotion render VerticalHookDemo --output ../out/vertical-hook-demo.mp4",
+      "license_status": "Remotion license status must be checked before commercial use"
+    }
+  ]
+}
