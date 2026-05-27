@@ -1,6 +1,6 @@
 # {{APP_NAME}} Secrets
 
-Raw secret values must not be committed, pasted into docs, or included in screenshots/logs. Record names, locations, owners, and verification only.
+No raw secrets: raw secret values must not be committed, pasted into docs, or included in screenshots/logs. Record names, locations, owners, and verification only.
 
 ## Provider
 

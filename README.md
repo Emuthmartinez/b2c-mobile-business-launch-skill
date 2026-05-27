@@ -52,6 +52,7 @@ npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
+npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
 npm run launchbench
 ```
@@ -71,6 +72,7 @@ The scripts are intentionally simple:
 - `check-secret-routing.ts` checks `SECRETS.md`, names-only secret routing, forbidden local secret files, and raw secret patterns.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
+- `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
 - `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/`.
 
@@ -107,6 +109,7 @@ skill/
   b2c-mobile-business-launch/
     SKILL.md
     package.json
+    tsconfig.json
     agents/openai.yaml
     evals/launchbench/
     references/
@@ -122,11 +125,7 @@ skill/
 
 ```bash
 npm install
-npm exec tsc -- --noEmit
-npm run launchbench
-npm run validate:launch-state -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
-npm run render:launch-cockpit -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html
-npm run validate:skill
+npm run audit
 ```
 
 This skill is intentionally guardrail-heavy. Its job is to prevent launch drift across research, design, build, revenue, legal, store, email, growth, and verification surfaces.

@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { existsSync } from "node:fs";
+import path from "node:path";
 import {
   asArray,
   asString,
@@ -47,6 +49,35 @@ if (state) {
     if (status === "blocked" && blockers.length === 0) {
       issues.push(issue("error", `${lanePath}.blocked_without_blocker`, `${lanePath} is blocked but has no blocker.`, "PROJECT_STATE.yaml"));
     }
+    if ((status === "deferred" || status === "not_needed") && blockers.length === 0 && evidence.length === 0) {
+      issues.push(
+        issue(
+          "error",
+          `${lanePath}.${status}_without_reason`,
+          `${lanePath} is ${status} but has no evidence or blocker/reason explaining why.`,
+          "PROJECT_STATE.yaml",
+        ),
+      );
+    }
+    if (status === "done") {
+      for (const evidenceItem of evidence) {
+        const evidencePath = asString(evidenceItem);
+        if (!evidencePath || /^[a-z]+:/i.test(evidencePath) || evidencePath.startsWith("#")) {
+          continue;
+        }
+        const localEvidencePath = path.join(args.root, evidencePath);
+        if ((evidencePath.includes("/") || evidencePath.includes(".")) && !existsSync(localEvidencePath)) {
+          issues.push(
+            issue(
+              "error",
+              `${lanePath}.done_evidence_missing`,
+              `${lanePath} is done but local evidence path does not exist: ${evidencePath}.`,
+              "PROJECT_STATE.yaml",
+            ),
+          );
+        }
+      }
+    }
   }
 
   const tools = getPath(state, "tools");
@@ -87,4 +118,3 @@ if (state) {
 }
 
 reportAndExit("PROJECT_STATE validation", issues);
-

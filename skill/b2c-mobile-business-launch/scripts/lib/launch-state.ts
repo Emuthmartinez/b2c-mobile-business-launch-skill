@@ -197,6 +197,33 @@ export function collectFiles(root: string, extensions: Set<string>, maxFiles = 5
   return files;
 }
 
+export function collectAllFiles(root: string, maxFiles = 10000): string[] {
+  const files: string[] = [];
+
+  function visit(directory: string): void {
+    if (files.length >= maxFiles) {
+      return;
+    }
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      if (ignoredDirs.has(entry.name)) {
+        continue;
+      }
+      const fullPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        visit(fullPath);
+      } else if (entry.isFile()) {
+        files.push(fullPath);
+      }
+    }
+  }
+
+  if (existsSync(root) && statSync(root).isDirectory()) {
+    visit(root);
+  }
+
+  return files;
+}
+
 export function findText(root: string, needles: string[], extensions = new Set([".md", ".ts", ".tsx", ".js", ".jsx", ".swift", ".kt", ".java", ".dart", ".yaml", ".yml", ".html"])): Map<string, string[]> {
   const found = new Map<string, string[]>();
   for (const file of collectFiles(root, extensions)) {
@@ -233,4 +260,3 @@ export function reportAndExit(title: string, issues: Issue[]): void {
 export function writeText(filePath: string, contents: string): void {
   writeFileSync(filePath, contents, "utf8");
 }
-

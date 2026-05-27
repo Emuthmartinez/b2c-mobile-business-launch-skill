@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
 import path from "node:path";
 import {
   asArray,
   asString,
+  collectAllFiles,
   collectFiles,
   getPath,
   issue,
@@ -47,9 +47,30 @@ if (state) {
   }
 }
 
-for (const forbidden of [".env", ".env.local", "service-account.json"]) {
-  if (existsSync(path.join(args.root, forbidden))) {
-    issues.push(issue("error", `secrets.forbidden_file.${forbidden}`, `${forbidden} should not be committed or treated as a launch artifact. Route secrets through Doppler or the approved provider.`, forbidden));
+const forbiddenFilePatterns = [
+  /^\.env$/,
+  /^\.env\..*\.local$/,
+  /^\.env\.local$/,
+  /^service-account.*\.json$/i,
+  /^.*serviceAccount.*\.json$/,
+  /^.*\.p8$/,
+  /^.*\.p12$/,
+  /^.*\.mobileprovision$/,
+  /^.*\.pem$/,
+];
+
+for (const file of collectAllFiles(args.root, 10000)) {
+  const relative = path.relative(args.root, file);
+  const basename = path.basename(file);
+  if (forbiddenFilePatterns.some((pattern) => pattern.test(basename))) {
+    issues.push(
+      issue(
+        "error",
+        `secrets.forbidden_file.${basename}`,
+        `${relative} should not be committed or treated as a launch artifact. Route secrets through Doppler or the approved provider.`,
+        relative,
+      ),
+    );
   }
 }
 
