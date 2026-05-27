@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "validate:skill": "uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py .",
     "validate:launch-state": "tsx scripts/validate-project-state.ts",
     "check:attribution": "tsx scripts/check-attribution-contract.ts",
     "check:apple-signing": "tsx scripts/check-apple-signing-packet.ts",
@@ -14,7 +15,7 @@
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run audit:links && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -4,6 +4,17 @@ Use this before adding API keys, tokens, OAuth credentials, webhook signing secr
 
 Default to Doppler when the founder has not selected another secret manager. Load `paid-tool-routing.md` before replacing Doppler or another paid/account-gated secret manager with Apple Keychain, platform secrets, local `.env`, or manual exports.
 
+## Contents
+
+- Live Documentation Gate
+- Required Artifacts
+- Secret Discovery Loop
+- Classification
+- Doppler Workflow
+- Alternatives And Fallbacks
+- Production Readiness Gates
+- Common Failure Modes
+
 ## Live Documentation Gate
 
 Refresh current provider docs before installing, configuring, writing commands, creating service tokens, wiring CI/deploy injection, or calling a Doppler setup complete. Prefer Doppler's official docs and `https://docs.doppler.com/llms.txt` over local examples, memory, old transcripts, or prior agent output.

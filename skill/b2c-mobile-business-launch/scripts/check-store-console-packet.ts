@@ -9,8 +9,29 @@ const issues = [...loaded.issues];
 const state = loaded.state;
 const markdownPath = "STORE_CONSOLE.md";
 const htmlPath = "store-console.html";
+const appListingPath = "APP_STORE_LISTING.md";
+const appListingHtmlPath = "app-store-listing.html";
+const appPrivacyQuestionnairePath = "app-privacy-questionnaire.html";
 const markdown = readText(args.root, markdownPath);
 const htmlExists = existsSync(path.join(args.root, htmlPath));
+
+function firstExistingText(candidates: string[]): { relativePath: string; text: string } | undefined {
+  for (const candidate of candidates) {
+    const text = readText(args.root, candidate);
+    if (text) {
+      return { relativePath: candidate, text };
+    }
+  }
+  return undefined;
+}
+
+function existsAny(candidates: string[]): string | undefined {
+  return candidates.find((candidate) => existsSync(path.join(args.root, candidate)));
+}
+
+const appListingMarkdown = firstExistingText([appListingPath, `app-store-listing/${appListingPath}`]);
+const appListingHtml = existsAny([appListingHtmlPath, `app-store-listing/${appListingHtmlPath}`]);
+const appPrivacyQuestionnaire = existsAny([appPrivacyQuestionnairePath, `app-store-listing/${appPrivacyQuestionnairePath}`]);
 
 function collisionFallbackLines(markdownText: string): string[] {
   return markdownText
@@ -24,6 +45,32 @@ function hasFounderStopGuard(line: string): boolean {
     return false;
   }
   return /(founder approval|founder-approved|stop|do not continue|do not retry|must not retry|requires approval|ask the founder|confirm with the founder)/i.test(line);
+}
+
+function missingPhraseCode(prefix: string, phrase: string): string {
+  return `${prefix}.${phrase.replaceAll(" ", "_").toLowerCase()}.missing`;
+}
+
+function requirePhrases(text: string, phrases: string[], prefix: string, file: string): void {
+  for (const phrase of phrases) {
+    if (!text.toLowerCase().includes(phrase.toLowerCase())) {
+      issues.push(issue("error", missingPhraseCode(prefix, phrase), `${file} should include ${phrase}.`, file));
+    }
+  }
+}
+
+function checkUnresolvedStoreLines(text: string, file: string, terms: string[]): void {
+  for (const line of text.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || /^(if|when|before|after)\b/i.test(trimmed)) {
+      continue;
+    }
+    const mentionsStoreTerm = terms.some((term) => trimmed.toLowerCase().includes(term.toLowerCase()));
+    const unresolved = /\b(TODO|TBD|unknown|missing|not configured|not set|placeholder|fill in|to fill|pending|blocked|N\/A)\b/i.test(trimmed);
+    if (mentionsStoreTerm && unresolved) {
+      issues.push(issue("error", "store_console.placeholder_or_unknown", `Store packet contains unresolved placeholder state: "${trimmed}"`, file));
+    }
+  }
 }
 
 const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
@@ -66,11 +113,7 @@ if (!markdown) {
     requiredPhrases.push("Google Play", "Data safety", "package name");
   }
 
-  for (const phrase of requiredPhrases) {
-    if (!markdown.toLowerCase().includes(phrase.toLowerCase())) {
-      issues.push(issue("error", `store_console.${phrase.replaceAll(" ", "_").toLowerCase()}.missing`, `STORE_CONSOLE.md should include ${phrase}.`, markdownPath));
-    }
-  }
+  requirePhrases(markdown, requiredPhrases, "store_console", markdownPath);
 
   for (const line of collisionFallbackLines(markdown)) {
     if (!hasFounderStopGuard(line)) {
@@ -106,21 +149,39 @@ if (!markdown) {
     "bundle ID",
     "package name",
   ];
-  for (const line of markdown.split(/\r?\n/)) {
-    const trimmed = line.trim();
-    if (!trimmed || /^(if|when|before|after)\b/i.test(trimmed)) {
-      continue;
-    }
-    const mentionsStoreTerm = guardedTerms.some((term) => trimmed.toLowerCase().includes(term.toLowerCase()));
-    const unresolved = /\b(TODO|TBD|unknown|missing|not configured|not set|placeholder|fill in|to fill|N\/A)\b/i.test(trimmed);
-    if (mentionsStoreTerm && unresolved) {
-      issues.push(issue("error", "store_console.placeholder_or_unknown", `Store console packet contains unresolved placeholder state: "${trimmed}"`, markdownPath));
-    }
-  }
+  checkUnresolvedStoreLines(markdown, markdownPath, guardedTerms);
 }
 
 if (!htmlExists) {
   issues.push(issue("warning", "store_console.html_missing", "store-console.html should render the copy-paste console packet for the founder.", htmlPath));
+}
+
+if (hasIos) {
+  if (!appListingMarkdown) {
+    issues.push(issue("error", "store_console.app_store_listing.markdown_missing", "APP_STORE_LISTING.md is required for iOS listing, privacy, pricing, localization, and App Store marketing prep.", appListingPath));
+  } else {
+    const appListingRequiredPhrases = [
+      "App Privacy",
+      "pricing",
+      "localization",
+      "custom product page",
+      "In-App Event",
+      "Higgsfield",
+      "founder approval",
+    ];
+    if (revenueInScope) {
+      appListingRequiredPhrases.push("RevenueCat", "subscription");
+    }
+    requirePhrases(appListingMarkdown.text, appListingRequiredPhrases, "app_store_listing", appListingMarkdown.relativePath);
+    checkUnresolvedStoreLines(appListingMarkdown.text, appListingMarkdown.relativePath, appListingRequiredPhrases);
+  }
+
+  if (!appListingHtml) {
+    issues.push(issue("error", "store_console.app_store_listing.html_missing", "app-store-listing.html should render the iOS listing packet as a copy-paste founder surface.", appListingHtmlPath));
+  }
+  if (!appPrivacyQuestionnaire) {
+    issues.push(issue("error", "store_console.app_privacy_questionnaire.html_missing", "app-privacy-questionnaire.html should render the interactive Apple App Privacy worksheet.", appPrivacyQuestionnairePath));
+  }
 }
 
 reportAndExit("Store console packet check", issues);

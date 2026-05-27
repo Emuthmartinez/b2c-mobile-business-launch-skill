@@ -4,6 +4,18 @@ Use this before preparing Apple App Store listing fields, App Privacy answers, s
 
 This is the bridge between marketing and engineering. The listing packet must be persuasive, policy-aligned, tied to real App Store Connect state, and synchronized with RevenueCat, Stripe/web funnels, analytics, legal pages, screenshots, and the product build.
 
+## Contents
+
+- Current Sources To Refresh
+- Required Outputs
+- Listing Packet Shape
+- Interactive App Privacy Worksheet
+- Pricing, RevenueCat, And Web Funnel Alignment
+- ASO, In-App Events, Custom Product Pages, And Localization
+- Visual And Asset Rules
+- Automation Boundaries
+- Done Definition
+
 ## Current Sources To Refresh
 
 Refresh official docs before final packets or commands:

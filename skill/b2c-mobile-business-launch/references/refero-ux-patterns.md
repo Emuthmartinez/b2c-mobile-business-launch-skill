@@ -4,6 +4,17 @@ Use this before designing or auditing web/mobile screens, onboarding, signup, pe
 
 Refero should improve pattern quality without replacing this skill's conversion doctrine. The onboarding playbook in `onboarding-conversion.md` remains the default unless a named experiment is approved.
 
+## Contents
+
+- Source Basis
+- Paid-Tool Routing
+- Refero Research Workflow
+- Default Query Pack
+- Baseline Pattern Pack
+- UX Pattern Artifact Contract
+- Flow Quality Gates
+- Common Failures
+
 ## Source Basis
 
 Refresh these current docs before writing setup instructions or tool calls:

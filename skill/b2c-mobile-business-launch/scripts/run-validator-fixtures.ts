@@ -104,6 +104,17 @@ function writeCompleteStoreConsole(root: string): void {
     "utf8",
   );
   writeFileSync(path.join(root, "store-console.html"), "<!doctype html><html><body>Store console packet</body></html>", "utf8");
+  writeFileSync(
+    path.join(root, "APP_STORE_LISTING.md"),
+    [
+      "# App Store Listing",
+      "App Privacy answers are derived from data inventory and third-party partners.",
+      "Pricing, RevenueCat entitlement mapping, subscription setup, localization, custom product page strategy, In-App Event planning, and Higgsfield-backed marketing assets are ready for founder approval.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(root, "app-store-listing.html"), "<!doctype html><html><body>App Store listing packet</body></html>", "utf8");
+  writeFileSync(path.join(root, "app-privacy-questionnaire.html"), "<!doctype html><html><body>App Privacy questionnaire</body></html>", "utf8");
 }
 
 function runFixture(label: string, root: string, script: string, expectedCode: number, expectedText?: string, extraArgs: string[] = []): void {
@@ -303,7 +314,45 @@ try {
     "utf8",
   );
   writeFileSync(path.join(iosOnlyStore, "store-console.html"), "<!doctype html><html><body>iOS store packet</body></html>", "utf8");
+  writeFileSync(
+    path.join(iosOnlyStore, "APP_STORE_LISTING.md"),
+    [
+      "# App Store Listing",
+      "App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, and founder approval are documented.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(iosOnlyStore, "app-store-listing.html"), "<!doctype html><html><body>iOS listing packet</body></html>", "utf8");
+  writeFileSync(path.join(iosOnlyStore, "app-privacy-questionnaire.html"), "<!doctype html><html><body>iOS privacy questionnaire</body></html>", "utf8");
   runFixture("iOS-only store packet does not require Google Play fields", iosOnlyStore, "check-store-console-packet.ts", 0);
+
+  const missingListingArtifacts = makeFixture("store-missing-listing-artifacts");
+  rmSync(path.join(missingListingArtifacts, "app-store-listing"), { recursive: true, force: true });
+  writeFileSync(
+    path.join(missingListingArtifacts, "STORE_CONSOLE.md"),
+    [
+      "# Store Console",
+      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
+      "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
+      "If the app name is already in use, stop for founder approval before using any fallback name.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(missingListingArtifacts, "store-console.html"), "<!doctype html><html><body>Store console only</body></html>", "utf8");
+  runFixture("iOS store packet without App Store listing artifacts fails", missingListingArtifacts, "check-store-console-packet.ts", 1, "store_console.app_store_listing.markdown_missing");
+
+  const unresolvedListing = makeFixture("store-unresolved-listing");
+  writeCompleteStoreConsole(unresolvedListing);
+  writeFileSync(
+    path.join(unresolvedListing, "APP_STORE_LISTING.md"),
+    [
+      "# App Store Listing",
+      "App Privacy answers are Pending.",
+      "Pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, and founder approval are documented.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("iOS App Store listing packet with unresolved placeholders fails", unresolvedListing, "check-store-console-packet.ts", 1, "store_console.placeholder_or_unknown");
 
   const thinAscMarketing = makeFixture("thin-asc-marketing");
   writeFileSync(
