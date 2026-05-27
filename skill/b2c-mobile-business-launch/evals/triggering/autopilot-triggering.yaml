@@ -1,0 +1,74 @@
+id: autopilot-triggering
+title: Natural-language trigger and hands-off run contract
+source_basis:
+  - "Anthropic Complete Guide to Building Skills for Claude: frontmatter is always loaded and should include what the skill does plus when to use it."
+  - "Anthropic testing guidance: test obvious triggers, paraphrased triggers, and unrelated non-triggers."
+description_contract:
+  max_chars: 1024
+  required_terms:
+    - "Use when"
+    - "Trigger on natural requests"
+    - "launch this app"
+    - "turn this transcript into a business"
+    - "set up the business side"
+    - "TestFlight/App Store Connect"
+    - "RevenueCat/Stripe/PostHog/Resend"
+    - "end-to-end launch autopilot"
+    - "Do not use"
+    - "narrow one-off code fixes"
+    - "generic legal copy"
+    - "B2B/internal tools"
+body_contract:
+  required_terms:
+    - "Autopilot Run Contract"
+    - "keep running the launch workflow"
+    - "without asking the user to re-invoke this skill"
+    - "Load the next needed reference yourself"
+    - "update `PROJECT_STATE.yaml`"
+    - "render `launch-cockpit.html`"
+    - "run the relevant validators"
+    - "Do not stop with instructions"
+    - "Only pause for founder-only gates"
+    - "credentials, secrets, account access"
+    - "final submission/release decisions"
+should_trigger:
+  - id: transcript-to-business
+    prompt: "Take this transcript and turn it into a business I can launch."
+    description_terms:
+      - "transcript"
+      - "business"
+      - "launch"
+  - id: half-built-app-launch
+    prompt: "I have a half-built B2C app. Get it to launch readiness and tell me only when you hit a real blocker."
+    description_terms:
+      - "half-built app"
+      - "launch"
+      - "B2C mobile app"
+  - id: ios-testflight-revenuecat
+    prompt: "Get this iOS app ready for TestFlight, App Store Connect, RevenueCat, Stripe, PostHog, and Resend."
+    description_terms:
+      - "TestFlight/App Store Connect"
+      - "RevenueCat/Stripe/PostHog/Resend"
+  - id: store-submission
+    prompt: "Prepare the App Store and Google Play submission, screenshots, privacy answers, pricing, and review notes."
+    description_terms:
+      - "App Store/Google Play submission"
+      - "privacy/terms"
+  - id: launch-package
+    prompt: "Create the whole launch package for this consumer mobile app from the repo."
+    description_terms:
+      - "create a launch package"
+      - "early repo"
+should_not_trigger:
+  - id: one-off-code-fix
+    prompt: "Fix this one SwiftUI layout bug."
+    negative_terms:
+      - "narrow one-off code fixes"
+  - id: generic-policy-copy
+    prompt: "Write a generic privacy policy paragraph for a blog post."
+    negative_terms:
+      - "generic legal copy"
+  - id: unrelated-internal-tool
+    prompt: "Build an internal B2B admin dashboard for employee approvals."
+    negative_terms:
+      - "B2B/internal tools"

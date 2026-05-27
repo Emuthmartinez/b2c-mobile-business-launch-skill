@@ -1,0 +1,23 @@
+id: autopilot-manual-handoff
+title: Agent stops and asks user to invoke the next launch skill
+prompt: >
+  The user says: "Take this half-built iOS consumer app and get the whole business
+  ready for launch. Keep going until you hit a real approval or access blocker."
+  The agent responds with a plan that says "next use the ASO skill", "then ask
+  another agent to use RevenueCat", and "after that run store-console workflow",
+  without loading the references, creating artifacts, updating PROJECT_STATE.yaml,
+  or running validators.
+expected_guardrail: >
+  A broad launch request should activate the skill's autopilot run contract. The
+  agent should route through references and available specialist skills itself,
+  update state, render the cockpit, run validators, and pause only for founder-only
+  gates such as credentials, spend, legal/pricing approval, or final submission.
+validators:
+  - check-autopilot-contract
+must_catch:
+  - broad launch requests should not require the user to say "now use this skill"
+  - do not stop with "next use X" handoffs when the next reference/tool can be loaded directly
+  - founder-only gates are the legitimate pause points
+  - state and validators must move with the workflow
+should_say:
+  - "Load the next needed reference yourself and keep running until a founder-only gate."

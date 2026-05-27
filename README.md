@@ -13,6 +13,16 @@ The skill now has two layers:
 
 That means future agents do not just "remember" the launch process. They can inspect state, render a founder-facing cockpit, run checks, and keep known failure modes visible as failure cards.
 
+## Autopilot Usage
+
+Give one broad launch request and let the skill run. Good prompts look like:
+
+- "Take this transcript and turn it into a business I can launch."
+- "I have a half-built B2C app; get it launch-ready and stop only for real approval or access blockers."
+- "Get this iOS app ready for TestFlight, App Store Connect, RevenueCat, PostHog, Resend, and launch."
+
+The skill should not require repeated "now use this skill" prompts. Once activated, it routes itself through the right references, tools, artifacts, and validators, then pauses only for founder-only gates such as credentials, spend, legal/pricing approval, public posting, destructive actions, or final submission/release.
+
 ## What It Produces
 
 | Lane | Output |
@@ -53,6 +63,7 @@ npm run check:secrets -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
+npm run check:autopilot
 npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
 npm run launchbench
@@ -75,6 +86,7 @@ The scripts are intentionally simple:
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
+- `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
 - `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/` and runs deterministic validator fixtures.

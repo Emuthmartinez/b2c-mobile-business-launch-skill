@@ -1,6 +1,6 @@
 ---
 name: b2c-mobile-business-launch
-description: Use when launching or preparing to launch a B2C mobile app business from an idea, transcript, spec, or early repo. Covers PROJECT_STATE.yaml, launch-cockpit.html, LaunchBench checks, research, paid-tool fallback routing, Doppler/secret management, traceability, Refero UX pattern research and fallback pattern packs, PostHog analytics and attribution, DESIGN.md and HTML proofs, onboarding/paywalls, ASO/store-console packets, Apple signing, App Store listing prep, App Store Connect setup, App Store Connect CLI, MobAI or XcodeBuildMCP testing, RevenueCat/Stripe, privacy/terms, Resend, GEO/SEO, UGC, Fastlane AI, funnels, technical specs, APP_AGENTS.md, and builder handoff. Use for launch packages, store submission prep, pre-launch funnels, UGC/social growth, or post-launch marketing; not narrow one-off code fixes.
+description: "Use when the user wants to launch, prepare, submit, market, or operationalize a B2C mobile app business from an idea, transcript, spec, early repo, or half-built app. Trigger on natural requests like 'launch this app', 'turn this transcript into a business', 'set up the business side', 'get this iOS app ready for TestFlight/App Store Connect', 'prepare App Store/Google Play submission', 'set up RevenueCat/Stripe/PostHog/Resend', or 'create a launch package'. Runs the end-to-end launch autopilot: PROJECT_STATE.yaml, research, paid-tool routing, Doppler secrets, analytics/attribution, DESIGN.md/HTML proofs, onboarding/paywalls, ASO/store ops, Apple signing/ASC/Play, RevenueCat/Stripe, privacy/terms, Resend, GEO/SEO, UGC/Fastlane, MobAI/XcodeBuildMCP testing, APP_AGENTS.md, production readiness, and LaunchBench. Do not use for narrow one-off code fixes, generic legal copy, or unrelated B2B/internal tools."
 metadata:
   short-description: Launch a B2C mobile app business end to end
 ---
@@ -10,6 +10,14 @@ metadata:
 This skill turns an app idea into a launchable business package: evidence, positioning, design, ASO, implementation handoff, pre-launch funnel, analytics, and verification. It should also leave a machine-readable `PROJECT_STATE.yaml`, founder-visible `launch-cockpit.html`, and LaunchBench/validator proof for known failure modes.
 
 The model pattern is evidence-first: AppKittie/category economics first, social-language research second, canonical docs third, then a builder-ready bundle and a live waitlist or purchase funnel. Keep the workflow generic; do not copy names, prices, tokens, domains, or credentials from prior launches unless the current project explicitly owns them.
+
+## Autopilot Run Contract
+
+When this skill activates from a broad launch, business-prep, app-submission, or app-build request, keep running the launch workflow without asking the user to re-invoke this skill or another reference. Load the next needed reference yourself, create or update the artifact, update `PROJECT_STATE.yaml`, render `launch-cockpit.html` when state changes, and run the relevant validators before claiming readiness.
+
+Do not stop with instructions like "now use the ASO skill", "next ask an agent to use RevenueCat", or "you should run the store-console workflow." Route to those references and tools directly. If another specialist skill is available and relevant, use it as part of the same task; if it is unavailable, record the blocked or founder-approved fallback route.
+
+Only pause for founder-only gates: credentials, secrets, account access, paid signups or spend, legal approval, pricing approval, domain purchases, public posting/scheduling, destructive actions, or final submission/release decisions. When paused, leave the lane state, blocker, proof, and exact next action in `PROJECT_STATE.yaml` and `launch-cockpit.html`.
 
 ## Start Here
 

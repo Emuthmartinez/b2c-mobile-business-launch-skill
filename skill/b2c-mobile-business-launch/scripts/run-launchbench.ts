@@ -17,6 +17,7 @@ const knownValidators = new Set([
   "check-store-console-packet",
   "check-secret-routing",
   "check-ux-patterns",
+  "check-autopilot-contract",
   "render-launch-cockpit",
 ]);
 
