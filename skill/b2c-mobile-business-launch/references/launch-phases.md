@@ -232,6 +232,7 @@ Goal: produce the operational plan for App Store launch and first acquisition te
 Do:
 - Load `analytics-attribution.md` before defining App Store CTAs, Apple Search Ads, Google Play listing experiments, creator/referral codes, post-launch metrics, or attribution dashboards.
 - Load `aso-store-ops.md` and create or refresh `app-marketing-context.md` before writing listing copy.
+- Load `apple-signing-release.md` before Apple Developer account triage, Team ID, bundle ID/App ID, App Store Connect app record, Xcode signing, certificates/profiles, archive/export/upload, TestFlight, physical-device signing, or distribution-readiness claims.
 - Load `store-console-workflow.md` before App Store Connect, Google Play Console, privacy labels/Data safety, screenshot capture/upload, reviewer notes, or founder-facing console handoff work.
 - Use specialist ASO skills when available: app marketing context, keyword research, metadata optimization, screenshot optimization, ASO audit, launch planning, Apple Search Ads, localization, reviews/ratings, subscriptions, analytics, and competitor tracking.
 - Write App Store metadata: name, subtitle, promotional text, keyword field, description, what's-new copy, categories, localization posture.
@@ -239,6 +240,7 @@ Do:
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
 - Create Apple Search Ads campaign groups: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics.
 - Verify store-console readiness with a copy-paste packet: categories, age rating, pricing/IAP/subscriptions, review notes, demo credentials, export compliance, privacy labels, privacy manifests/required-reason APIs, account deletion, screenshot slot requirements, and build/review status.
+- Verify Apple distribution readiness separately from simulator builds: Developer Program membership, role, agreements, Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, capabilities/entitlements, Apple Development versus Apple Distribution signing path, archive/export/upload, and TestFlight processing.
 - Add Google Play branch when Android is in scope: Data safety, privacy policy, account deletion web link, feature graphic, screenshots, short/long description, content rating, testing track, and store listing experiments.
 - Define launch calendar from pre-launch through 6 weeks post-launch.
 - Define monetization metrics and intervention thresholds: trial starts, Day 0 cancels, trial conversion, yearly mix, refund/dispute signals.
@@ -250,6 +252,7 @@ Outputs:
 - `LAUNCH.md`
 - updated `ANALYTICS.md` attribution and store-source events
 - `STORE_CONSOLE.md`
+- `APPLE_SIGNING.md` when Apple distribution, TestFlight, physical-device signing, or first upload readiness is in scope
 - `store-console.html`
 - `SCREENSHOTS.md`
 - `PRIVACY.md`, `TERMS.md`, and `LEGAL_REVIEW.md` when public collection, accounts, subscriptions, app-store submission, or sensitive data are in scope
@@ -262,6 +265,7 @@ Outputs:
 
 Acceptance:
 - App Store Connect can be filled from the doc without new copywriting.
+- Apple upload readiness is not inferred from simulator success; `APPLE_SIGNING.md` proves distribution prerequisites or names the exact blocker.
 - The founder can follow exact App Store Connect/Google Play click paths and copy values from `store-console.html`.
 - Screenshot files are mapped from raw MobAI/device capture to final upload asset by platform, device well, locale, slot, and dimensions.
 - Store-console blockers are known before submission, not discovered during review.

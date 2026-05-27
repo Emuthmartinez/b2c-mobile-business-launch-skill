@@ -6,7 +6,7 @@ This is an orchestration reference. Prefer specialist ASO skills and live store 
 
 For founder-facing App Store Connect or Google Play Console work, load `store-console-workflow.md` too. ASO decides what to say; the store-console workflow decides exactly where the user clicks, what they paste, which privacy answers are selected, and which screenshots/assets satisfy each upload well.
 
-Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
+Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
 
 ## Contents
 

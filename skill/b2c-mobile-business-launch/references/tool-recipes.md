@@ -482,7 +482,7 @@ Parallel rules:
 
 Record in `ENGINEERING_PLAN.md`:
 - product brainstorm source or skip rationale
-- requirements trace to `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, and `STORE_CONSOLE.md`
+- requirements trace to `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, and `STORE_CONSOLE.md`
 - implementation units, repo-relative paths, serial dependencies, worktree needs, and safe parallel lanes
 - frontend, backend, database, analytics, revenue, email, privacy, store-console, app-integrity, permission, and state-machine impacts
 - test scenarios, MobAI E2E scenarios, backend/provider verification, release gates, and blockers

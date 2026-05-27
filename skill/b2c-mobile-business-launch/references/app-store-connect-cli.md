@@ -10,6 +10,7 @@ The goal is to reduce App Store Connect clicking while preserving founder contro
 - When To Use
 - Skill Pack Routing
 - CLI Routing
+- First-Time Signing And App Record Triage
 - Safe Automation Boundaries
 - Store Packet Integration
 - Evidence Requirements
@@ -21,6 +22,7 @@ Refresh these before running or writing commands:
 - App Store Connect CLI skills: `https://github.com/rorkai/app-store-connect-cli-skills`
 - App Store Connect CLI: `https://github.com/rorkai/App-Store-Connect-CLI`
 - Official Apple App Store Connect docs referenced in `store-console-workflow.md`
+- Official Apple signing/account docs referenced in `apple-signing-release.md`
 
 As of the May 2026 GitHub README, the CLI is a scriptable, JSON-first App Store Connect API tool for TestFlight, builds, submissions, signing, analytics, screenshots, subscriptions, and related workflows. The skills repo is a community-maintained, unofficial agent-skill pack and is not affiliated with Apple.
 
@@ -31,6 +33,7 @@ Use the CLI route when:
 - app IDs, build IDs, version IDs, localizations, TestFlight groups, or screenshot localization IDs need deterministic resolution
 - metadata, localizations, keywords, screenshots, or review status need repeatable audit/apply flows
 - TestFlight distribution, build upload, or release readiness must be preflighted
+- Apple Developer account, bundle ID/App ID, app record, signing, certificate/profile, or first upload state needs deterministic inspection
 - RevenueCat catalog/subscription mapping needs reconciliation against ASC products
 
 Still create `STORE_CONSOLE.md` and `store-console.html`. The CLI can automate or verify pieces, but the founder-facing copy-paste packet remains the durable handoff.
@@ -95,6 +98,38 @@ asc workflow run --dry-run testflight_beta VERSION:1.2.3
 ```
 
 Use `--dry-run` and read commands first. Do not use `--confirm`, `--submit`, pricing changes, screenshot replacement, metadata apply, TestFlight external distribution, or release actions without explicit founder approval.
+
+## First-Time Signing And App Record Triage
+
+Load `apple-signing-release.md` before this section. The common first-time failure is that the app builds in the simulator but cannot be uploaded because account/app-record/signing prerequisites are missing.
+
+Run non-mutating checks first:
+
+```bash
+asc auth status --validate --output json
+asc auth doctor
+asc apps list --output json --pretty
+security find-identity -v -p codesigning
+xcodebuild -showBuildSettings -scheme MyApp -configuration Release | rg 'PRODUCT_BUNDLE_IDENTIFIER|DEVELOPMENT_TEAM|CODE_SIGN_STYLE|CODE_SIGN_IDENTITY|PROVISIONING_PROFILE_SPECIFIER|CURRENT_PROJECT_VERSION|MARKETING_VERSION'
+```
+
+If App Store Connect API tools are exposed, check both resources before creating anything:
+
+```text
+GET /v1/apps?filter[bundleId]=<bundle-id>&limit=10
+GET /v1/bundleIds?filter[identifier]=<bundle-id>&limit=10
+```
+
+Interpretation rules:
+
+- `asc auth status` with no credentials means CLI automation is blocked until the founder authenticates or approves an API-key route through `SECRETS.md`.
+- An interactive `asc apps create` prompt that fails with EOF is an auth/input blocker, not a reason to retry blindly.
+- No bundle ID and no app record means create the explicit App ID/bundle identifier first, then create the app record, after founder approval.
+- Blank `DEVELOPMENT_TEAM` means project signing is not attached to an Apple team.
+- Only `Apple Development` identities means local development can work, but App Store/TestFlight distribution still needs Xcode automatic signing/cloud-managed distribution signing or an Apple Distribution certificate/profile.
+- `Bundle ID` and `SKU` should be treated as sticky identity. Do not create production records against placeholder naming.
+
+Record all findings in `APPLE_SIGNING.md` and mirror app-record blockers in `STORE_CONSOLE.md`.
 
 ## Safe Automation Boundaries
 

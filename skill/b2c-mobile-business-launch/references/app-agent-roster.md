@@ -27,7 +27,7 @@ The app-local roster is not a replacement for `AGENTS.md`, `TECH_SPEC.md`, `DESI
 
 - Orchestrator owns sequencing, source truth, subagent routing, file-overlap checks, integration, git/release coordination, and final production-readiness proof.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
-- Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, observability, tests, and readiness gates.
+- Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, Apple signing/release gates, observability, tests, and readiness gates.
 - Product leader owns ICP, scope, onboarding, activation, retention, roadmap, and evidence-to-product traceability.
 - Design guru owns the design system, HTML visual proofs, screenshots, icons, motion, accessibility, and Higgsfield asset fit.
 - Customer success owns support, FAQ/help, privacy/delete/refund/restore paths, lifecycle copy, review responses, and feedback triage.
@@ -39,7 +39,7 @@ For non-trivial launches, use the roster to run independent review lanes before 
 - Product leader reviews `SPEC.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, and activation/retention assumptions.
 - Marketing guru reviews `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, and attribution-channel learning.
 - Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
-- Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, analytics/revenue/email/backend contracts, and test coverage.
+- Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, analytics/revenue/email/backend contracts, signing/release readiness, and test coverage.
 - Customer success reviews `PRIVACY.md`, `TERMS.md`, support routes, refund/restore/delete paths, lifecycle email, FAQ, and review-response readiness.
 - Engineering leader and orchestrator review `SECRETS.md` for each new secret, new env vars, Doppler/provider routing, `doppler run --` command wrappers, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only coverage, and public-bundle safety.
 - Orchestrator merges findings, resolves conflicts, updates source-of-truth docs, and records proof or blockers in `PRODUCTION_READINESS.md`.

@@ -4,6 +4,8 @@ Use this when iOS, iPadOS, macOS, tvOS, watchOS, or visionOS build/test/run/UI a
 
 XcodeBuildMCP is not a full MobAI replacement. It is excellent for Apple simulator/device workflows, Xcode builds, tests, screenshots, UI automation, logs, debugging, and video capture. It does not cover Android device automation.
 
+For Apple distribution, TestFlight, physical-device signing, archives, exports, or uploads, load `apple-signing-release.md` too. XcodeBuildMCP simulator proof does not by itself prove App Store signing readiness.
+
 ## Contents
 
 - Current Sources To Refresh
@@ -222,6 +224,7 @@ Do not flatten these into "Xcode is broken". Record the exact doctor finding and
 - command/tool names and outcomes
 - logs, screenshots, videos, UI snapshots, and test result paths
 - backend/provider proof paired to app actions
+- Apple signing proof when distribution is in scope: Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, signing style, local signing identity class, provisioning strategy, archive/export/upload/TestFlight status, and any `APPLE_SIGNING.md` blocker
 - telemetry decision
 - remaining blocked flows
 

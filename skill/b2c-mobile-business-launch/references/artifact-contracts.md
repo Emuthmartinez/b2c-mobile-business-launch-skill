@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -42,6 +42,7 @@ design.html               # rendered visual system, components, and screen proof
 ONBOARDING.md             # onboarding, personalization, review prompt, paywall timing, and activation contract
 onboarding.html           # rendered onboarding/paywall/review/offer flow proof
 LAUNCH.md                 # ASO, screenshots, ads, launch sequence, metrics
+APPLE_SIGNING.md          # Apple Developer account, Team ID, bundle ID/App ID, signing, archive/export/upload, and TestFlight gates
 EMAIL_OPS.md              # Resend/domain/lifecycle/broadcast/webhook/inbound email operations
 REVENUE_OPS.md            # RevenueCat, Stripe, store products, web funnels, entitlements, and purchase validation
 GEO_SEO.md                # public-site GEO/SEO, AI crawler, schema, llms.txt, and citability state
@@ -88,6 +89,7 @@ rork-ready/
   ONBOARDING.md
   onboarding.html
   STORE_CONSOLE.md
+  APPLE_SIGNING.md
   store-console.html
   SCREENSHOTS.md
   UGC_PLAYBOOK.md
@@ -533,6 +535,7 @@ Use when a founder or agent must create, fill, submit, or audit App Store Connec
 Must include:
 - official docs checked with URLs and dates
 - App Store Connect field table grouped by exact console page and click path
+- Apple app-record and signing status or pointer to `APPLE_SIGNING.md`: Developer Program membership, Team ID, bundle ID/App ID, app record, `DEVELOPMENT_TEAM`, signing strategy, archive/export/upload/TestFlight blocker
 - ASC CLI route when used: commands, dry-run/applied status, JSON output paths, resolved IDs, and founder-gated mutations
 - Google Play Console field table grouped by exact console page and click path
 - field limits, character/byte counts, paste-ready values, source artifact, evidence, and status
@@ -544,8 +547,29 @@ Must include:
 
 Acceptance:
 - A founder can open ASC or Play Console and fill every known field without asking where it goes.
+- Simulator build success is not presented as upload readiness unless `APPLE_SIGNING.md` proves distribution signing and app-record prerequisites.
 - Apple App Privacy and Google Data safety answers trace to actual data flows, not generic legal copy.
 - Any unknown console item is marked `blocked` with the exact data/access needed.
+
+## `APPLE_SIGNING.md`
+
+Use when Apple distribution, TestFlight, physical-device signing, archive/export/upload, or first-time App Store setup is in scope.
+
+Must include:
+- official Apple docs checked with URLs and dates
+- Apple Developer Program membership, account type, role, Team ID, seller/developer name, and agreement status
+- project/workspace, schemes, app targets, extension targets, bundle IDs, `DEVELOPMENT_TEAM`, signing style, version, build, Info.plist, privacy manifest, and entitlements
+- local signing identity inventory without secret values, including whether only `Apple Development` exists or an Apple Distribution/cloud/CI path is available
+- explicit App ID/bundle identifier, App Store Connect app record, SKU, primary locale, app Apple ID, capabilities, and provisioning profile status
+- selected signing strategy: Xcode automatic/cloud-managed, manual local, CI/cloud signing, or blocked
+- archive/export/upload/TestFlight status and evidence paths
+- secret-management route for ASC API keys, `.p8`, `.p12`, provisioning profiles, passwords, CI signing material, and webhook/store credentials
+- founder-only gates for enrollment/payment, app record creation, bundle ID/SKU/name, certificates/profiles, capabilities, upload, external TestFlight, and final submission
+
+Acceptance:
+- A future agent can tell exactly why the app can or cannot be uploaded.
+- `Bundle ID` and `SKU` are treated as sticky identity, not temporary labels.
+- App Store distribution readiness is never inferred from simulator build success alone.
 
 ## `store-console.html`
 

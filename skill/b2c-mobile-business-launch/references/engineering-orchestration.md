@@ -53,7 +53,7 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 `AGENTS.md` must include:
 - 60-second product brief
 - repo map and first files to read
-- source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`
+- source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
 - V1 scope, V2/V3 scope, and banned scope
 - design-system and HTML proof rules
 - analytics and attribution rules
@@ -81,7 +81,7 @@ Every real app build or builder handoff should include `APP_AGENTS.md` and a tin
 Required roles:
 - orchestrator: owns canonical docs, sequencing, subagent routing, file-overlap checks, integration, git/release coordination, and production-readiness proof
 - marketing guru: owns ASO, GEO/SEO, Fastlane, UGC, reviews, launch calendar, claims, attribution learning, and channel experiments
-- engineering leader: owns architecture, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider/backend/frontend proof, observability, tests, and readiness gates
+- engineering leader: owns architecture, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider/backend/frontend proof, Apple signing/release gates, observability, tests, and readiness gates
 - product leader: owns ICP, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
 - design guru: owns `DESIGN.md`, `design.md`, HTML visual proofs, accessibility, screenshots, icons, motion, and Higgsfield asset fit
 - customer success: owns support/privacy/delete/refund/restore paths, FAQ/help, lifecycle copy, review responses, and feedback triage

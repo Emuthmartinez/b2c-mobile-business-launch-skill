@@ -7,6 +7,7 @@ Use this reference before any brand, UI, screenshot, landing-page, paywall, onbo
 - Source Tooling
 - Routing Order
 - Required Artifacts
+- Naming Contract
 - Higgsfield Production Routing
 - HTML Implementation Rules
 - Design Gates
@@ -74,6 +75,17 @@ Create a rendered proof that uses the design system, not a separate visual langu
 - source notes for image/model/reference inputs and any license or permission caveats
 
 All visual artifacts created by this skill should appear in HTML. This includes brand books, asset boards, icon directions, mascot sheets, onboarding storyboards, screenshot frames, paywall explorations, landing sections, and app-screen mocks.
+
+## Naming Contract
+
+Keep both names unless the project already has a strong conflicting convention:
+
+- `DESIGN.md` is the canonical design-system source of truth. It stores tokens, component rules, rationale, and implementation notes.
+- lowercase `design.md` is the screen implementation spec. It maps flows, states, copy, analytics hooks, and HTML proof paths back to `DESIGN.md`.
+
+Renaming either file usually does not break the running app by itself, but it does break launch-package convention unless all skill references, app-local agents, `AGENTS.md`, `CLAUDE.md`, builder prompts, validators, and handoff docs are updated together.
+
+Do not merge them unless the launch is tiny and no builder handoff is expected. If a target repo already uses `DESIGN_SYSTEM.md`, make it an appendix that explicitly defers token truth to `DESIGN.md`.
 
 ## Higgsfield Production Routing
 

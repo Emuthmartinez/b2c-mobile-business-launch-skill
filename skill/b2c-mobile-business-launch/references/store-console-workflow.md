@@ -1,6 +1,6 @@
 # Store Console Workflow And User Handoff
 
-Use this before App Store Connect or Google Play Console setup, store submission, privacy labels, Data safety, screenshot capture, screenshot upload, app review notes, or founder-facing store-console guidance.
+Use this before App Store Connect or Google Play Console setup, Apple app-record setup, store submission, privacy labels, Data safety, screenshot capture, screenshot upload, app review notes, or founder-facing store-console guidance.
 
 The goal is to produce a console-ready packet that tells the user exactly where to click, what to paste, what still needs their approval, and what was verified.
 
@@ -11,6 +11,7 @@ The goal is to produce a console-ready packet that tells the user exactly where 
 - Store Console Packet Shape
 - App Store Connect Packet
 - App Store Connect CLI Route
+- Apple Signing And First Upload Route
 - Google Play Packet
 - Screenshot And Device Workflow
 - HTML Mock Requirements
@@ -34,6 +35,14 @@ Apple:
 - Accessibility Nutrition Labels overview: `https://developer.apple.com/help/app-store-connect/manage-app-accessibility/overview-of-accessibility-nutrition-labels/`
 - Manage Accessibility Nutrition Labels: `https://developer.apple.com/help/app-store-connect/manage-app-accessibility/manage-accessibility-nutrition-labels`
 - Submit an app: `https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app`
+- Apple Developer Program enrollment: `https://developer.apple.com/programs/enroll/`
+- Register an App ID: `https://developer.apple.com/help/account/identifiers/register-an-app-id/`
+- Certificates overview: `https://developer.apple.com/help/account/certificates/certificates-overview/`
+- Cloud-managed certificates: `https://developer.apple.com/help/account/certificates/cloud-managed-certificates/`
+- App Store Connect provisioning profile: `https://developer.apple.com/help/account/provisioning-profiles/create-an-app-store-provisioning-profile/`
+- Xcode distribution preparation: `https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution`
+- Xcode beta/release distribution: `https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases`
+- Load `apple-signing-release.md` before Apple Developer enrollment, Team ID, bundle ID/App ID, signing, capabilities, certificates, provisioning profiles, archive/export/upload, TestFlight, or distribution-readiness claims.
 
 ASC CLI:
 - Rork App Store Connect CLI skills: `https://github.com/rorkai/app-store-connect-cli-skills`
@@ -56,6 +65,7 @@ Google Play:
 Create these when a store submission is in scope:
 
 - `STORE_CONSOLE.md`: agent-readable source of truth for App Store Connect and Google Play Console fields, click paths, blockers, and evidence.
+- `APPLE_SIGNING.md`: required for Apple distribution, TestFlight, physical-device signing, or first upload readiness; include account/team, bundle ID/App ID, app record, signing, capabilities, certificates/profiles, archive/export/upload state, and founder gates.
 - `store-console.html`: founder-facing mock console with copy buttons or clearly copyable fields grouped by exact ASC/Play Console page.
 - `SCREENSHOTS.md`: screenshot capture, composition, dimensions, device targets, locale, proof constraints, upload status, and source image paths.
 - `screenshots/`: final upload assets plus raw MobAI/device captures and intermediate compositions.
@@ -123,6 +133,14 @@ Founder gates:
 - final app name
 - developer name/trade name
 - bundle ID if not already created
+
+Before creating the record, load `apple-signing-release.md` and confirm:
+- Apple Developer Program membership and Account Holder/Admin/App Manager role are sufficient.
+- latest Apple agreements are signed.
+- the bundle ID is final enough to become platform identity.
+- the SKU is final because it cannot be changed after the app is added.
+- the Xcode target bundle identifier matches the ASC bundle ID.
+- distribution signing strategy is known or explicitly blocked.
 
 ### App Information
 
@@ -269,6 +287,30 @@ Founder approval required:
 - manual App Store Connect pages still required
 
 Use `paid-tool-routing.md` if the CLI or skill pack is unavailable. The founder may prefer installing or authorizing the CLI over receiving a manual-only packet.
+
+## Apple Signing And First Upload Route
+
+Use `apple-signing-release.md` when the app needs TestFlight, App Store upload, physical-device signing, or first-time Apple setup.
+
+`STORE_CONSOLE.md` must distinguish these states:
+- `simulator-build-ok`: local simulator build can compile/run, but distribution signing may still be missing.
+- `apple-account-ready`: Apple Developer Program membership, role, Team ID, seller/developer name, and agreements are confirmed.
+- `bundle-id-ready`: explicit App ID/bundle identifier exists and matches the Xcode target.
+- `app-record-ready`: App Store Connect app record exists with app name, platform, bundle ID, SKU, primary language, and user access.
+- `signing-ready`: distribution signing path is chosen and verified through Xcode automatic signing, cloud-managed certificates, manual certificate/profile, or CI/cloud signing.
+- `archive-ready`: Release archive succeeds.
+- `upload-ready`: archive/export/upload is complete or blocked by a named account/signing/app-record issue.
+
+For first-time builders, show founder-facing instructions for:
+- joining Apple Developer Program, including individual versus organization seller-name implications
+- signing agreements in App Store Connect
+- adding the Apple Account to Xcode or approving a CI/cloud signing route
+- choosing final bundle ID and SKU before creating store records
+- resolving blank `DEVELOPMENT_TEAM`
+- creating or selecting the App Store Connect app record
+- understanding why an `Apple Development` identity is not enough by itself for App Store distribution
+
+Do not call the launch "TestFlight-ready" from a simulator build alone.
 
 ## Google Play Packet
 

@@ -39,7 +39,7 @@ Research finding: what we learned
 Product decision: what changes in SPEC.md or ONBOARDING.md
 Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, or HTML proofs
 Build contract: screen/component/API/data/state/task that must exist
-Analytics/revenue/privacy/store impact: event, entitlement, data disclosure, screenshot, console field, or legal note
+Analytics/revenue/privacy/store impact: event, entitlement, data disclosure, screenshot, console field, signing/release gate, or legal note
 Verification: test, MobAI path, backend/provider proof, browser proof, dashboard check, or founder approval
 Status: planned | implemented | verified | blocked | rejected
 ```
@@ -122,7 +122,7 @@ Acceptance:
 Before sending to Rork, Claude, Codex, or another builder:
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
-- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
+- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
 - `TECH_SPEC.md` exists when data/API/integration/state behavior is non-trivial
 - `ENGINEERING_PLAN.md` references trace IDs and breaks work into implementation units
 - `AGENTS.md` points builders to trace, design, analytics, technical contracts, and readiness gates
