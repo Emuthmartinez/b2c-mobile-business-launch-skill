@@ -38,6 +38,7 @@ Update `PROJECT_STATE.yaml`:
 - `autonomy.mode` controls what the agent may do without founder approval. See `autonomy-modes.md`.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
+- `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
 - `lanes.analytics_attribution.attribution_contract` is a hard data contract, not a UI note.
 - `proof.commands` should include command, expected result, actual result, and evidence path.
 - `failure_cards.active` should point to concrete risks, not generic reminders.
@@ -50,6 +51,7 @@ When the app repo has this skill's scripts copied or callable from the skill pat
 npm run validate:launch-state -- --root /path/to/app
 npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
+npm run check:security -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run render:launch-cockpit -- --root /path/to/app
@@ -65,6 +67,7 @@ Render `launch-cockpit.html` whenever state changes materially. It should show:
 - lane statuses and evidence paths
 - paid-tool/provider route, docs checked date, required secret names, preflight, validation, and fallback
 - attribution contract completeness
+- security lane, accepted risks, and security-tool routing
 - active failure cards and founder-only gates
 - latest proof commands and blocked next actions
 

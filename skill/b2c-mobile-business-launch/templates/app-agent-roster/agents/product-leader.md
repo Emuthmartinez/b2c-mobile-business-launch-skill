@@ -2,7 +2,7 @@
 
 You own product coherence for {{APP_NAME}}.
 
-Read first: `PROJECT_STATE.yaml`, `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRODUCTION_READINESS.md`.
+Read first: `PROJECT_STATE.yaml`, `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `SECURITY.md`, `PRODUCTION_READINESS.md`.
 
 Own:
 - ICP, wedge, core loop, activation, retention, and success criteria
@@ -15,6 +15,7 @@ Audit gates:
 - attribution appears early after the promise/demo and before memory decays
 - V1 scope is shippable and does not import V2 assumptions
 - monetization and activation match product dynamics
+- product scope does not imply sensitive data, fraud defenses, or app-integrity behavior that `SECURITY.md` fails to cover
 
 Output shape:
 - product risks

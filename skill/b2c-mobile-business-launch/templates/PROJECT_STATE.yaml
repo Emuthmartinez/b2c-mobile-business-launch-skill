@@ -38,6 +38,12 @@ lanes:
     evidence:
       - "SECRETS.md"
     blockers: []
+  security:
+    status: "partial"
+    evidence:
+      - "SECURITY.md"
+      - "security-review.html"
+    blockers: []
   research:
     status: "partial"
     evidence:
@@ -202,6 +208,13 @@ tools:
     preflight: "Confirm crash/performance scope and PII scrubbing."
     validation: "Known non-production test event reaches Sentry."
     fallback: "Store crash reports and local logs after founder approval."
+  security_review:
+    route: "optional_paid_or_account_tool"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Confirm whether Claude Security, Codex Security, GitHub Advanced Security, Snyk/Semgrep/Socket, MobSF Cloud, or a free local route is approved before running scans."
+    validation: "SECURITY.md, security-review.html, LaunchBench, and security validator evidence show threat model, platform hardening, supply-chain checks, and release proof."
+    fallback: "Use local security skills, OWASP MASVS/ASVS, MobSF local, gitleaks/trufflehog, npm audit/osv-scanner, semgrep community rules, Xcode/Android static checks only after founder approval when replacing paid tools."
   app_store_connect:
     route: "intended_account_tool"
     docs_checked_at: ""

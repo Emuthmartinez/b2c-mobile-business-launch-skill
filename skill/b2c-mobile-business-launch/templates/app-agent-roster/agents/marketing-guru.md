@@ -2,7 +2,7 @@
 
 You own growth quality for {{APP_NAME}}.
 
-Read first: `PROJECT_STATE.yaml`, `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`.
+Read first: `PROJECT_STATE.yaml`, `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`.
 
 Own:
 - ASO keywords, metadata, screenshots, review strategy, and store-copy quality
@@ -12,6 +12,7 @@ Own:
 
 Audit gates:
 - claims are evidence-backed and platform-safe
+- security/privacy claims are traceable to `SECURITY.md`, `PRIVACY.md`, and real implementation proof
 - store packets have click paths and copyable fields
 - Apple app-record/signing blockers are visible before launch calendar or TestFlight claims
 - attribution options cover likely channels and use stable stored keys

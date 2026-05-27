@@ -11,12 +11,14 @@ Use these phases as a reusable playbook. Skip phases that are already complete, 
 - Phase 1b: Analytics And Attribution Blueprint
 - Phase 1c: Product Brainstorm Checkpoint
 - Phase 1d: Launch Trace And Build Contracts
+- Phase 1e: Security Architecture
 - Phase 2: Brand, Design, And Visual System
 - Phase 3: ASO, Store Ops, And Launch Dossier
 - Phase 3b: Revenue And Monetization Ops
 - Phase 4: Pre-Launch Funnel
 - Phase 5: Builder/Rork/Agent Handoff
 - Phase 5b: Engineering Orchestration And Production Readiness
+- Phase 5c: Security Release Gate
 - Phase 6: Post-Launch UGC/Fastlane Growth Engine
 
 ## Phase 0: Orientation And Scaffold
@@ -220,6 +222,34 @@ Acceptance:
 - A builder can identify what must be implemented and how it will be verified without rereading every research source.
 - Data/API/state behavior is precise enough that the implementation plan does not invent backend contracts.
 
+## Phase 1e: Security Architecture
+
+Goal: define the app's security posture before builders lock architecture, providers, webhooks, app integrity, and app-store disclosures.
+
+Do:
+- Load `security-release-hardening.md`.
+- Refresh current OWASP MASVS/MASTG, OWASP ASVS, Apple, Android, Sentry, Claude Security, Codex Security, and MobSF docs as relevant.
+- Decide whether Claude Security, Codex Security, GitHub Advanced Security, Snyk, Semgrep, Socket, MobSF Cloud, commercial app-integrity tools, or local/free fallbacks are intended. Record founder approval, blocked state, or fallback approval before running a replacement route.
+- Create `SECURITY.md` from the app's real surfaces: mobile platforms, backend/API, revenue, attribution, email, public funnel, app signing, store operations, support, privacy, and analytics.
+- Define assets, trust boundaries, attacker capabilities, abuse paths, mitigations, accepted risks, and non-capabilities.
+- Decide mobile hardening: iOS Keychain, ATS, DeviceCheck/App Attest, entitlements/deep links; Android Keystore, Network Security Config, Play Integrity, exported components/deep links.
+- Map abuse controls for RevenueCat, Stripe, restore purchases, promo grants, webhooks, idempotency, rate limits, RLS/authz, support entitlement grants, and account deletion.
+- Render `security-review.html` so the founder sees the security lane, open risks, tool routing, and approval gates.
+- Update `PROJECT_STATE.yaml` `lanes.security`, `tools.security_review`, active failure cards, and `launch-cockpit.html`.
+
+Outputs:
+- `SECURITY.md`
+- `security-review.html`
+- updated `PROJECT_STATE.yaml`
+- optional public `.well-known/security.txt` or equivalent security contact route when public users, accounts, payments, user content, or sensitive data are in scope
+- updated `TECH_SPEC.md`, `SECRETS.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, and `PRODUCTION_READINESS.md` pointers where security decisions affect implementation or disclosures
+
+Acceptance:
+- A builder knows which security controls are required, deferred, blocked, or not applicable.
+- Security tool fallbacks are founder-approved or blocked, not silently downgraded.
+- Revenue, webhooks, backend authz, app integrity, analytics privacy, email/domain security, and incident response are considered before launch readiness.
+- Open risks have owner, reason, revisit date or expiry, and compensating control.
+
 ## Phase 2: Brand, Design, And Visual System
 
 Goal: lock the brand enough for builders, designers, screenshots, and landing pages to stay consistent.
@@ -417,7 +447,7 @@ Do:
 - Use `launch-coverage.md` before moving from docs to implementation or submission.
 - Create an `AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, Compound Engineering routing, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
 - Include `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator instructions in the first-read docs.
-- Create `APP_AGENTS.md` and the six-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, product, design, and customer-success specialist entrypoints.
+- Create `APP_AGENTS.md` and the seven-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, security, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
 - Add a tool-specific `CLAUDE.md`, `CURSOR.md`, or equivalent only as a pointer/addendum.
 - Include `LAUNCH_TRACE.md` so builders can follow evidence-to-product-to-design-to-build decisions.
@@ -503,6 +533,34 @@ Acceptance:
 - MobAI device proof exists for critical mobile flows, or confirmed XcodeBuildMCP Apple-platform proof exists with limitations, or the blocker is explicit.
 - Remaining gaps are founder-only gates, external access waits, or platform review waits.
 - `PROJECT_STATE.yaml` and `launch-cockpit.html` match the proof and blockers in `PRODUCTION_READINESS.md`.
+
+## Phase 5c: Security Release Gate
+
+Goal: prove security readiness before beta, TestFlight, store submission, public launch, or production-readiness claims.
+
+Do:
+- Load `security-release-hardening.md`.
+- Run `npm run check:security -- --root .` or the installed-skill equivalent.
+- Run `npm run check:secrets -- --root .` and any stack-native dependency/secret/static checks available.
+- If founder approved paid/account-gated tooling, run or route Claude Security, Codex Security, GitHub Advanced Security, Snyk, Semgrep, Socket, MobSF Cloud, or commercial app-integrity checks and attach result paths.
+- If fallback was founder-approved, run local alternatives such as MobSF Docker, gitleaks/trufflehog, Semgrep community rules, `npm audit`, `osv-scanner`, Xcode static analyzer, Android lint, or manual OWASP MASVS/ASVS checks.
+- Verify release-specific controls: app signing, no server-only secrets in public/mobile bundles, webhook signatures, idempotency, rate limits, RLS/authz, entitlement restore, account deletion, support-grant audit log, PII scrubbing, Sentry release health, and security contact route.
+- Resolve findings or record accepted risks with owner, reason, expiry/revisit date, compensating control, and founder approval.
+- Update `SECURITY.md`, `security-review.html`, `PRODUCTION_READINESS.md`, `PROJECT_STATE.yaml`, and active failure cards.
+
+Outputs:
+- security validator output summary
+- scan/review result paths or blocked-route proof
+- updated `SECURITY.md`
+- updated `security-review.html`
+- updated `PRODUCTION_READINESS.md`
+- active/resolved failure cards
+
+Acceptance:
+- Security readiness is tied to artifacts and command/tool evidence, not a verbal assurance.
+- Paid security tooling is used, blocked, or founder-approved for fallback.
+- Release blockers are visible in `PROJECT_STATE.yaml` and `launch-cockpit.html`.
+- Accepted risks are explicit and do not hide known gaps.
 
 ## Phase 6: Post-Launch UGC/Fastlane Growth Engine
 

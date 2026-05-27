@@ -1,6 +1,6 @@
 # Launch Flow Traceability And Build Contracts
 
-Use this for any multi-phase B2C app launch, especially before moving from research to brand/design or from design to implementation. The goal is to keep evidence, product decisions, visual decisions, build specs, and verification tied together.
+Use this for any multi-phase B2C app launch, especially before moving from research to brand/design or from design to implementation. The goal is to keep evidence, product decisions, visual decisions, security posture, build specs, and verification tied together.
 
 Create `PROJECT_STATE.yaml` first for phase/lane/provider/proof state. Create `LAUNCH_TRACE.md` when the launch has more than one serious artifact. Create `TECH_SPEC.md` when actual app/backend/web implementation is in scope and data, API, state, permissions, integrations, or platform behavior need to be precise.
 
@@ -22,7 +22,7 @@ Every major launch decision should answer:
 - Which paid/account-gated tool or confirmed fallback produced the evidence?
 - What product behavior does it create or reject?
 - What brand/design expression carries it?
-- What analytics, revenue, privacy, ASO, or legal surface does it affect?
+- What analytics, security, revenue, privacy, ASO, or legal surface does it affect?
 - What must a builder implement?
 - How will we prove it works?
 
@@ -54,7 +54,7 @@ Research finding: what we learned
 Product decision: what changes in SPEC.md or ONBOARDING.md
 Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, or HTML proofs
 Build contract: screen/component/API/data/state/task that must exist
-Analytics/revenue/privacy/store impact: event, entitlement, data disclosure, screenshot, console field, signing/release gate, or legal note
+Analytics/security/revenue/privacy/store impact: event, entitlement, threat/abuse control, data disclosure, screenshot, console field, signing/release gate, or legal note
 Verification: test, MobAI path, backend/provider proof, browser proof, dashboard check, or founder approval
 Status: planned | implemented | verified | blocked | rejected
 ```
@@ -99,7 +99,7 @@ Pass only when:
 - paywall and pricing surfaces match `REVENUE_OPS.md`, `TERMS.md`, store products, and analytics events
 - account deletion, privacy choices, restore purchases, support, and settings paths are specified
 - `TECH_SPEC.md` or `ENGINEERING_PLAN.md` contains data/API/state contracts for every non-static flow
-- failure cards are created for any unresolved attribution, revenue, store, privacy, email, or secret-routing risk
+- failure cards are created for any unresolved attribution, security, revenue, store, privacy, email, or secret-routing risk
 
 ### Build To Proof
 
@@ -143,7 +143,7 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
-- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
+- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `SECURITY.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
 - `TECH_SPEC.md` exists when data/API/integration/state behavior is non-trivial
 - `ENGINEERING_PLAN.md` references trace IDs and breaks work into implementation units
 - `AGENTS.md` points builders to trace, design, analytics, technical contracts, and readiness gates

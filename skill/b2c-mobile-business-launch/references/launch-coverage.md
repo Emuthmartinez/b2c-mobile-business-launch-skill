@@ -19,6 +19,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Project state/cockpit | `PROJECT_STATE.yaml` phase/mode/lanes/providers/proof/failure cards, rendered `launch-cockpit.html`, validator status | `project-state.md`, `autonomy-modes.md`, bundled TS scripts |
 | Paid-tool routing | intended paid/account-gated tools, founder confirmation, selected fallback or blocked state, limitations | `TOOL_DECISIONS.md`, `paid-tool-routing.md` |
 | Secrets/config | Doppler or approved provider, `SECRETS.md`, command wrappers, CI/deploy injection, secret scan, public/server-only classification | Doppler CLI, `SECRETS.md`, platform secret stores |
+| Security architecture/release | `SECURITY.md`, `security-review.html`, threat model, OWASP MASVS/ASVS basis, paid-security-tool routing, mobile hardening, entitlement/webhook abuse controls, supply-chain checks, monitoring, incident response, accepted risks | `security-release-hardening.md`, local security skills, Sentry skills, MobSF, platform docs |
 | Market/category selection | category economics, competitor map, revenue/download ranges, winning wedge | AppKittie, ASO skills |
 | Social/user language | pain language, creator formats, objections, screenshots/posts summarized | XPOZ, reviews, web search |
 | Competitor web intelligence | competitor landing pages, pricing, funnels, claims, policies, changelog | Firecrawl map/scrape/crawl/extract |
@@ -41,7 +42,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Lifecycle messaging | transactional email, push, onboarding nudges, trial/renewal/win-back, unsubscribe rules | Resend, provider docs, PostHog/Customer.io/Loops/FCM/APNs |
 | Support/reputation | support inbox, refund path, review responses, help docs, incident escalation | email routing, support tool |
 | QA/beta/release | TestFlight/internal testing, smoke tests, device matrix, rollback/kill switch | store consoles, test skills, MobAI, XcodeBuildMCP fallback |
-| Security/abuse | RLS/auth rules, rate limits, secrets, PII minimization, admin access, bot defenses | repo audit, Supabase/Cloudflare |
+| Security/abuse | RLS/auth rules, rate limits, secrets, PII minimization, admin access, bot defenses, app integrity, security contact route | `SECURITY.md`, `security-review.html`, security validator, repo audit, Supabase/Cloudflare |
 | Organic social growth | UGC fit/90-day creator plan, Fastlane workspace, connected accounts, campaign angles, media inputs, polished demo videos, schedule, QA, analytics loop | UGC playbook, Fastlane AI, MobAI recorder skills, XcodeBuildMCP fallback, Higgsfield, PostHog |
 | Post-launch loop | weekly ASO, reviews, rankings, conversion, retention, revenue, competitor deltas | AppKittie, ASO skills, RevenueCat, PostHog |
 | LaunchBench/failure cards | known failure scenarios checked, active cards tracked, deterministic validators run where available | `launchbench-evals.md`, `failure-cards.md`, `PROJECT_STATE.yaml`, bundled TS scripts |
@@ -53,6 +54,7 @@ Required unless explicitly marked not applicable:
 - research-backed spec and category choice
 - paid/account-gated tool decisions recorded before free fallbacks are used
 - `SECRETS.md` when any API key, token, OAuth credential, webhook signing secret, store credential, service-account file, CI/deploy env var, or `.env` file is needed; default to Doppler unless the founder approves another provider
+- `SECURITY.md` and `security-review.html` when building, submitting, or launching an app with accounts, payments, backend state, email, analytics, public web surfaces, or store distribution; include threat model, platform hardening, abuse controls, monitoring, incident response, accepted risks, and paid-security-tool routing
 - `LAUNCH_TRACE.md` or equivalent trace section for any multi-artifact launch, so research decisions flow into product, brand/design, build, analytics, revenue, privacy, store, and verification work
 - product brainstorm checkpoint after research and before engineering plans when multiple product shapes remain viable
 - canonical `DESIGN.md` and rendered HTML visual proof when visual design, screenshots, or landing UI are in scope
@@ -73,6 +75,7 @@ Required unless explicitly marked not applicable:
 - live domain checks: HTTP 200, HTTPS, metadata, security headers, robots/sitemap/`llms.txt`, schema where public site exists
 - release health: crash/error monitoring or a documented no-Sentry reason
 - support path for account deletion, refunds, restore purchases, and billing issues
+- security validator/scanner/review proof or a founder-approved blocked route before the app is called beta/store/production ready
 - UGC/Fastlane or equivalent post-launch organic content engine when the launch depends on social distribution, marked deferred if not yet needed
 - `DEMO_VIDEO.md` or equivalent when launch/store/social/support work needs app-flow demo videos, with MobAI recorder or desktop recorder artifacts linked
 - LaunchBench or deterministic validator evidence for known failure modes before a launch is described as complete
@@ -111,6 +114,10 @@ Flag these aggressively:
 - A known miss happened again but no LaunchBench scenario, validator, or failure card was added.
 - A paid/account-gated tool is missing in the runtime and the agent silently starts the free fallback without founder confirmation.
 - Doppler or the approved secret provider is not selected before API keys, webhook secrets, CI/deploy env vars, service-account files, or local `.env` files appear.
+- Security is treated as a general vibe instead of a lane with `SECURITY.md`, `security-review.html`, threat model, tool routing, release proof, and accepted risks.
+- Claude Security, Codex Security, GitHub Advanced Security, Snyk, Semgrep, Socket, MobSF Cloud, or commercial app-integrity tools are skipped without founder-approved fallback routing.
+- `SECURITY.md` lacks OWASP MASVS/ASVS source basis, platform-specific iOS/Android hardening, revenue/webhook abuse controls, supply-chain checks, monitoring, incident response, or accepted-risk ownership.
+- Public accounts, payments, user content, or sensitive data exist but no `security@domain`, `.well-known/security.txt`, or equivalent vulnerability-reporting route is planned.
 - Doppler setup, service-token, or CI/live secret instructions were copied from memory without refreshing current official docs and local CLI help.
 - A new secret-bearing variable appears in code, CI, mobile build config, provider setup, or docs without a matching `SECRETS.md` entry.
 - Secret-bearing commands run from a developer shell but are not documented through `doppler run --` or the approved provider wrapper.

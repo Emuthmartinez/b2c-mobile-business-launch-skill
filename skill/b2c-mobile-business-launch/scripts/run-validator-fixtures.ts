@@ -117,6 +117,34 @@ function writeCompleteStoreConsole(root: string): void {
   writeFileSync(path.join(root, "app-privacy-questionnaire.html"), "<!doctype html><html><body>App Privacy questionnaire</body></html>", "utf8");
 }
 
+function writeCompleteSecurity(root: string): void {
+  writeFileSync(
+    path.join(root, "SECURITY.md"),
+    [
+      "# Security Release Plan",
+      "Source Basis: OWASP MASVS, OWASP ASVS, Apple Platform Security, Android security best practices, Claude Security, Codex Security, MobSF, Doppler, Sentry, and local security skills.",
+      "Security Review Tool Routing: paid or account-gated scanners require founder approval before any free fallback is used.",
+      "Claude Security, Codex Security, GitHub Advanced Security, Snyk, Semgrep, Socket, and MobSF Cloud are optional paid or account-gated routes.",
+      "Free fallback: security-threat-model, security-best-practices, MobSF local, gitleaks, trufflehog, npm audit, osv-scanner, and semgrep community rules.",
+      "Threat Model: Assets, Trust Boundaries, Attacker Capabilities, and abuse paths cover account, attribution, API, revenue, support, and store release flows.",
+      "Data Classification separates public copy, user personal data, purchase data, Secrets, signing material, and CI credentials.",
+      "Mobile Hardening: iOS uses Keychain, App Transport Security, App Attest, DeviceCheck, entitlements, and APPLE_SIGNING.md release proof. Android uses Android Keystore, Network Security Config, and Play Integrity.",
+      "Authentication and Authorization are backend-owned; client checks are not access control.",
+      "Backend and API controls include validation, rate limits, idempotency, webhook signature verification, RLS, audit logging, and admin least privilege.",
+      "Revenue, Entitlements, RevenueCat, Stripe, restore, webhook, and idempotency controls prevent entitlement spoofing and replay.",
+      "Privacy and Analytics cover PostHog, session replay, PII, PII scrubbing, self-reported attribution, privacy disclosures, and data deletion alignment.",
+      "Email and Domain Security cover SPF, DKIM, DMARC, unsubscribe, Resend, support, privacy, security aliases, security.txt, and security headers.",
+      "Supply Chain covers SDK inventory, dependency review, lockfiles, secret scan, build scripts, signing material, and no raw secrets.",
+      "Monitoring and Incident Response cover Sentry, release health, alerts, support escalation, rollback, and vulnerability disclosure.",
+      "Release Proof requires check:security, check:secrets, mobile proof, webhook proof, scanner or blocked-route evidence, and security-review.html.",
+      "Accepted Risks list owner, reason, expiry, compensating control, evidence, and founder approval.",
+      "Founder Approval gates paid scanners, hosted security tools, repo connections, public disclosure routes, and blocking App Attest, DeviceCheck, or Play Integrity enforcement.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(root, "security-review.html"), "<!doctype html><html><body>Security review board</body></html>", "utf8");
+}
+
 function runFixture(label: string, root: string, script: string, expectedCode: number, expectedText?: string, extraArgs: string[] = []): void {
   const result = spawnSync(tsxBin, [path.join("scripts", script), "--root", root, ...extraArgs], {
     cwd: skillRoot,
@@ -138,9 +166,11 @@ try {
   writeCompleteAttribution(clean);
   writeCompleteAppleSigning(clean);
   writeCompleteStoreConsole(clean);
+  writeCompleteSecurity(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
+  runFixture("complete security release packet passes", clean, "check-security-release.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
@@ -254,6 +284,43 @@ try {
   mkdirSync(path.join(missingSecretEntry, "src"), { recursive: true });
   writeFileSync(path.join(missingSecretEntry, "src", "email.ts"), "export const resendKey = process.env.RESEND_API_KEY;\n", "utf8");
   runFixture("code secret reference missing from state and secrets doc fails", missingSecretEntry, "check-secret-routing.ts", 1, "secrets.RESEND_API_KEY.unrouted");
+
+  const missingSecurity = makeFixture("missing-security");
+  rmSync(path.join(missingSecurity, "SECURITY.md"), { force: true });
+  runFixture("missing security packet fails", missingSecurity, "check-security-release.ts", 1, "security.markdown_missing");
+
+  const thinSecurity = makeFixture("thin-security");
+  writeFileSync(
+    path.join(thinSecurity, "SECURITY.md"),
+    [
+      "# Security",
+      "We will be secure.",
+      "Sentry is planned.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("thin security packet fails", thinSecurity, "check-security-release.ts", 1, "security.source_basis.missing");
+
+  const unresolvedSecurity = makeFixture("unresolved-security");
+  writeCompleteSecurity(unresolvedSecurity);
+  writeFileSync(
+    path.join(unresolvedSecurity, "SECURITY.md"),
+    [
+      "# Security Release Plan",
+      "Source Basis: OWASP MASVS, OWASP ASVS, Apple Platform Security, Android security best practices, Claude Security, Codex Security, MobSF, Doppler, Sentry.",
+      "Security Review Tool Routing: free fallback requires founder approval.",
+      "Threat Model: Assets, Trust Boundaries, Attacker Capabilities, and Data Classification are present.",
+      "Mobile Hardening: Keychain, App Transport Security, App Attest, DeviceCheck, entitlements, APPLE_SIGNING.md, Android Keystore, Network Security Config, and Play Integrity are listed.",
+      "Authentication and Authorization protect Backend and API routes. Secrets use Doppler.",
+      "Revenue, Entitlements, RevenueCat, Stripe, restore, webhook, and idempotency are covered.",
+      "Privacy and Analytics include PostHog, session replay, PII, PII scrubbing, and self-reported attribution.",
+      "Email security includes SPF, DKIM, DMARC, unsubscribe, and Resend. Public web uses security.txt and security headers.",
+      "Supply Chain, Monitoring, Incident Response, Release Proof, Accepted Risks, Founder Approval, Sentry, release health, and MobSF are covered.",
+      "App Attest is pending.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("security packet with unresolved platform gate fails", unresolvedSecurity, "check-security-release.ts", 1, "security.placeholder_or_unknown");
 
   const simulatorOnly = makeFixture("simulator-only");
   writeFileSync(

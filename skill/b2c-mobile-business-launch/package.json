@@ -11,12 +11,13 @@
     "check:store-console": "tsx scripts/check-store-console-packet.ts",
     "check:ux-patterns": "tsx scripts/check-ux-patterns.ts",
     "check:secrets": "tsx scripts/check-secret-routing.ts",
+    "check:security": "tsx scripts/check-security-release.ts",
     "check:autopilot": "tsx scripts/check-autopilot-contract.ts",
     "audit:links": "tsx scripts/audit-skill-links.ts --skill-root .",
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

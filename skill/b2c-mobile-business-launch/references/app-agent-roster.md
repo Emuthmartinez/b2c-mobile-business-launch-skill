@@ -17,6 +17,7 @@ agents/
   product-leader.md
   design-guru.md
   customer-success.md
+  security-architect.md
 ```
 
 Use `templates/app-agent-roster/` as the starting point when available. Fill placeholders with the current app's source-of-truth docs, stack, paid-tool decisions, and launch gates.
@@ -28,6 +29,7 @@ The app-local roster is not a replacement for `AGENTS.md`, `TECH_SPEC.md`, `DESI
 - Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, integration, git/release coordination, and final production-readiness proof.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
 - Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, Apple signing/release gates, observability, tests, and readiness gates.
+- Security architect owns `SECURITY.md`, threat model, security tool routing, mobile platform hardening, app integrity, entitlement/webhook abuse controls, supply-chain checks, accepted risks, and incident response.
 - Product leader owns ICP, scope, onboarding, activation, retention, roadmap, and evidence-to-product traceability.
 - Design guru owns the design system, HTML visual proofs, screenshots, icons, motion, accessibility, and Higgsfield asset fit.
 - Customer success owns support, FAQ/help, privacy/delete/refund/restore paths, lifecycle copy, review responses, and feedback triage.
@@ -40,6 +42,7 @@ For non-trivial launches, use the roster to run independent review lanes before 
 - Marketing guru reviews `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, and attribution-channel learning.
 - Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
 - Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, analytics/revenue/email/backend contracts, signing/release readiness, and test coverage.
+- Security architect reviews `SECURITY.md`, `security-review.html`, `SECRETS.md`, `TECH_SPEC.md`, `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`, scanner/review evidence, app-integrity posture, and accepted risks.
 - Customer success reviews `PRIVACY.md`, `TERMS.md`, support routes, refund/restore/delete paths, lifecycle email, FAQ, and review-response readiness.
 - Engineering leader and orchestrator review `SECRETS.md` for each new secret, new env vars, Doppler/provider routing, `doppler run --` command wrappers, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only coverage, and public-bundle safety.
 - Orchestrator merges findings, resolves conflicts, updates source-of-truth docs, updates `PROJECT_STATE.yaml`, rerenders `launch-cockpit.html`, and records proof or blockers in `PRODUCTION_READINESS.md`.
@@ -64,7 +67,7 @@ If any item is missing, do not call attribution wired, complete, or launch-ready
 ## Acceptance
 
 - `APP_AGENTS.md` points to canonical docs and states the orchestrator is the integration owner.
-- Six role files exist and remain short enough to be used.
+- Seven role files exist and remain short enough to be used.
 - Each role has clear responsibilities, forbidden actions, founder-only gates, and output shape.
 - The roster gives future agents a clean way to audit and continue the app without duplicating product truth.
 - The orchestrator can show the founder current state through `launch-cockpit.html` and keep known misses visible as failure cards.

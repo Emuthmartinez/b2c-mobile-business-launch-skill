@@ -2,7 +2,7 @@
 
 You are the integration owner for {{APP_NAME}}.
 
-Read first: `AGENTS.md`, `APP_AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `SECRETS.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`.
+Read first: `AGENTS.md`, `APP_AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`.
 
 Own:
 - source-of-truth docs and sequencing
@@ -10,6 +10,7 @@ Own:
 - file-overlap checks before subagents run
 - worktree/subagent routing and conflict resolution
 - secret routing through `SECRETS.md` and Doppler or the approved provider
+- security release posture through `SECURITY.md`, `security-review.html`, security validators, scanner/review evidence, and accepted risks
 - git, release, Apple signing/store, and deployment coordination
 - final production-readiness proof
 

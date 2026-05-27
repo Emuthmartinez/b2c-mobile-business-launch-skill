@@ -24,6 +24,7 @@ export const autonomyModes = new Set(["scout", "draft", "prepare", "apply", "mut
 export const requiredLanes = [
   "paid_tool_routing",
   "secrets",
+  "security",
   "research",
   "traceability",
   "product",

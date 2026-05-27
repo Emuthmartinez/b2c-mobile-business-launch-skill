@@ -108,6 +108,7 @@ Required roles:
 - orchestrator: owns canonical docs, `PROJECT_STATE.yaml`, `launch-cockpit.html`, failure cards, sequencing, subagent routing, file-overlap checks, integration, git/release coordination, and production-readiness proof
 - marketing guru: owns ASO, GEO/SEO, Fastlane, UGC, reviews, launch calendar, claims, attribution learning, and channel experiments
 - engineering leader: owns architecture, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider/backend/frontend proof, Apple signing/release gates, observability, tests, and readiness gates
+- security architect: owns `SECURITY.md`, threat model, security tool routing, platform hardening, app integrity, entitlement/webhook abuse controls, scanner/review proof, accepted risks, and incident response
 - product leader: owns ICP, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
 - design guru: owns `DESIGN.md`, `design.md`, HTML visual proofs, accessibility, screenshots, icons, motion, and Higgsfield asset fit
 - customer success: owns support/privacy/delete/refund/restore paths, FAQ/help, lifecycle copy, review responses, and feedback triage
@@ -121,7 +122,7 @@ Use parallel agents for independent research, audits, static investigation, and 
 Good parallel lanes:
 - AppKittie competitor/review pass, XPOZ social-language pass, Firecrawl web pass
 - privacy/data inventory, ASO metadata, analytics catalog, and design audit when files do not overlap
-- independent skill-definition audits for attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness coverage
+- independent skill-definition audits for attribution, onboarding, analytics, revenue, store, privacy, security, design, and production-readiness coverage
 - frontend and backend implementation in separate repos or isolated worktrees
 - test-writing or fixture-building units with non-overlapping files
 - screenshot planning, store-console copy, and launch calendar drafting
@@ -260,7 +261,7 @@ Engineering-heavy work is done only when:
 - `AGENTS.md` exists and points to canonical docs.
 - `PROJECT_STATE.yaml` exists, is current, and `launch-cockpit.html` has been rendered when the launch has multiple lanes.
 - `CLAUDE.md` exists when Claude/builders need compatibility guidance.
-- `APP_AGENTS.md` and the six-file `agents/` roster exist for real app builds or handoffs.
+- `APP_AGENTS.md` and the seven-file `agents/` roster exist for real app builds or handoffs, including `security-architect.md`.
 - `LAUNCH_TRACE.md` exists or equivalent trace rows are embedded in `RESEARCH.md`.
 - `TECH_SPEC.md` exists when data/API/state/platform contracts are non-trivial.
 - `ENGINEERING_PLAN.md` exists when actual implementation is in scope.

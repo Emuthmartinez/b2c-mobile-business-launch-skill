@@ -27,6 +27,8 @@ Use these as defaults and specialize them to the current app.
 | --- | --- | --- |
 | `doppler-docs-stale` | Doppler setup or service-token instructions rely on memory | Refresh official docs and local CLI help, then update `SECRETS.md` with docs/version basis |
 | `secret-routing-missing` | new env var/key/webhook secret appears without `SECRETS.md` update | classify public/server-only, provider location, command wrapper, CI injection, and rotation note |
+| `security-release-lane-missing` | launch-ready claim exists without `SECURITY.md`, threat model, scanner/review route, platform hardening, incident response, and accepted-risk proof | create `SECURITY.md`, render `security-review.html`, route paid/free security tools, run `check:security`, attach scanner/review proof or founder-approved blocked route |
+| `security-tool-fallback-unapproved` | Claude Security, Codex Security, GitHub Advanced Security, Snyk/Semgrep/Socket, MobSF Cloud, or commercial app-integrity route is replaced by a free route without approval | stop, record route in `TOOL_DECISIONS.md` and `PROJECT_STATE.yaml`, ask for access/approval, then run the approved route |
 | `posthog-person-property-missing` | attribution only emits event | set person property, backend/profile persistence, anonymous-to-identified reconciliation, and proof |
 | `revenuecat-entitlement-unproven` | products/offering exist but app access is not validated | sandbox purchase/restore proves entitlement in app, RevenueCat, and backend/profile |
 | `stripe-webhook-unproven` | Stripe checkout exists without webhook/idempotency proof | verify webhook signature, idempotency, entitlement projection, and failure recovery |

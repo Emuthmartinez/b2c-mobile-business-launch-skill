@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -25,6 +25,8 @@ PROJECT_STATE.yaml        # compact machine-readable phase, autonomy, lane, prov
 launch-cockpit.html       # rendered founder-visible dashboard over PROJECT_STATE.yaml
 TOOL_DECISIONS.md         # paid/account-gated tool access, confirmed fallbacks, limitations, and blocked routes
 SECRETS.md                # Doppler or approved secret-provider inventory, command map, CI/deploy routing, and proof notes
+SECURITY.md               # threat model, security tool routing, mobile/backend/revenue/email hardening, monitoring, accepted risks, release proof
+security-review.html      # rendered founder-facing security release board
 doppler.yaml              # optional non-secret Doppler project/config hints
 .env.example              # optional names-only local environment schema
 ANALYTICS.md              # upfront measurement, attribution, event catalog, funnels, dashboards, and QA gates
@@ -70,7 +72,7 @@ fastlane/                 # campaign brief, prompts, angles, preferences, saniti
 ugc/                      # creator list, briefs, scripts, tracker, weekly review, rights/disclosure notes
 assets/                   # visual references, screenshot mockups, production assets embedded into HTML proofs
 AUDIT_PROMPT.md           # independent audit brief for public funnel or app
-agents/                   # simple role prompts/configs: orchestrator, marketing, engineering, product, design, customer success
+agents/                   # simple role prompts/configs: orchestrator, marketing, engineering, security, product, design, customer success
 ```
 
 When handing to Rork or another generated-app builder, duplicate the needed subset into:
@@ -85,6 +87,8 @@ rork-ready/
   launch-cockpit.html
   TOOL_DECISIONS.md
   SECRETS.md
+  SECURITY.md
+  security-review.html
   ANALYTICS.md
   analytics-plan.html
   LAUNCH_TRACE.md
@@ -151,6 +155,7 @@ Must include:
 - V1 scope, V2/V3 scope, and banned scope
 - analytics rules
 - secret-management rules: `SECRETS.md`, Doppler or approved provider, `.env.example` names only, no raw secret values in docs/logs/proofs, and `doppler run --` or approved wrapper for secret-bearing commands
+- security rules: `SECURITY.md`, `security-review.html`, threat model, security tool routing, OWASP MASVS/ASVS basis, mobile platform hardening, app-integrity decision, entitlement/webhook abuse controls, supply-chain checks, monitoring/incident response, accepted risks, and `check:security`
 - Compound Engineering routing, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
 - app-local agent roster pointer to `APP_AGENTS.md` and `agents/`, including orchestrator ownership and specialist audit roles
 - MobAI/device testing rules and serialized device ownership
@@ -179,6 +184,7 @@ Must include:
 - one product leader role for ICP, problem framing, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
 - one design guru role for `DESIGN.md`, `design.md`, `design.html`, visual QA, accessibility, screenshots, icons, motion, and Higgsfield asset use
 - one customer success role for support email, help/FAQ, privacy/delete/refund/restore paths, review responses, lifecycle copy, and feedback triage
+- one security architect role for `SECURITY.md`, security tool routing, threat model, platform hardening, app integrity, abuse controls, scanner/review evidence, accepted risks, and incident response
 - each role's inputs, outputs, forbidden actions, and when to ask the founder
 - a note that role agents review and propose by default; implementation requires orchestrator assignment, file-overlap check, and integration proof
 
@@ -189,11 +195,12 @@ Minimum `agents/` files:
 - `agents/product-leader.md`
 - `agents/design-guru.md`
 - `agents/customer-success.md`
+- `agents/security-architect.md`
 
 Acceptance:
 - `APP_AGENTS.md` points each role to canonical docs instead of duplicating them.
 - The orchestrator can launch parallel audits against the skill definition without letting specialists stage, commit, release, or edit overlapping files independently.
-- Product, design, marketing, engineering, and support follow-up work has a named owner after bootstrap.
+- Product, design, marketing, engineering, security, and support follow-up work has a named owner after bootstrap.
 
 ## `TOOL_DECISIONS.md`
 
@@ -242,6 +249,38 @@ Acceptance:
 - Public client config is separated from server-only secrets.
 - Production secret injection is different from local personal login.
 - `PROJECT_STATE.yaml` and `launch-cockpit.html` show names-only secret requirements and provider status without exposing values.
+
+## `SECURITY.md` And `security-review.html`
+
+Use when a launch includes mobile code, backend state, public web surfaces, accounts, payments, email, analytics, store submission, or any provider that mutates user state.
+
+Must include:
+- source basis: current OWASP MASVS/MASTG, OWASP ASVS, Apple, Android, Sentry, Claude Security, Codex Security, MobSF, and scanner docs used where relevant
+- security review tool routing: intended paid/account-gated routes, founder approval or blocked state, selected free fallback, and limitations
+- threat model: assets, trust boundaries, attacker capabilities, abuse paths, mitigations, and non-capabilities
+- data classification: public, user personal data, purchase data, secrets/signing material, logging and retention rules
+- mobile hardening: iOS Keychain, App Transport Security, App Attest/DeviceCheck, entitlements/deep links; Android Keystore, Network Security Config, Play Integrity, exported components/deep links
+- authentication and authorization, including anonymous/authenticated/subscriber/admin/deleted states
+- backend/API controls: validation, authz/RLS, rate limits, idempotency, webhook signature verification, retries, admin access, and audit logs
+- revenue/entitlement abuse controls for RevenueCat, Stripe, app-store purchases, restores, refunds, promo grants, and support-granted entitlements
+- privacy/analytics controls: PostHog, session replay/surveys, PII scrubbing, attribution free text, Sentry, store disclosures, and data deletion
+- email/domain controls: Resend, SPF, DKIM, DMARC, unsubscribe/preference handling, inbound/reply, webhook signing, support/privacy/security aliases, and `security.txt` when public users are in scope
+- supply-chain and build controls: dependency review, SDK inventory, lockfiles, generated-code review, secret scans, CI, signing material, and no raw secrets
+- monitoring and incident response: release health, alerts, rollback/kill switch, support escalation, store crash reports, public reporting route
+- accepted risks: owner, reason, expiry or revisit date, compensating control, evidence, and founder approval where required
+- release proof: validator/scanner/review outputs or blocked-route evidence
+
+Rules:
+- Do not call security done from prose alone.
+- Do not silently replace Claude Security, Codex Security, GitHub Advanced Security, Snyk/Semgrep/Socket, MobSF Cloud, or commercial app-integrity tools with free fallbacks.
+- Do not enforce App Attest, DeviceCheck, or Play Integrity in a blocking way until telemetry and founder approval support the rollout.
+- `security-review.html` should render the plan and open risks for founder review, using the app's design system when available.
+
+Acceptance:
+- A future agent can identify security-critical flows and tests without re-threat-modeling the whole app.
+- Store privacy answers, `PRIVACY.md`, `ANALYTICS.md`, `TECH_SPEC.md`, `REVENUE_OPS.md`, and `PRODUCTION_READINESS.md` agree with `SECURITY.md`.
+- `npm run check:security -- --root .` passes or produces named blockers/failure cards.
+- Remaining risks are explicit instead of hidden inside launch-readiness language.
 
 ## `LAUNCH_TRACE.md`
 
@@ -361,6 +400,7 @@ Must include:
 - self-reported attribution proof when onboarding/signup/waitlist exists: early screen, stable stored key, `other` free text, PostHog person property, backend/profile write, and anonymous-to-identified stitching
 - Resend/email/webhook proof when lifecycle or transactional email is in scope
 - Sentry/crash/release-health status or a documented no-Sentry reason
+- security release proof: `SECURITY.md`, `security-review.html`, `check:security` output, scanner/security-review evidence or founder-approved blocked route, app-integrity decision, accepted risks, and incident-response route
 - release-build or staging-build proof that mocks are disabled and secrets are not bundled
 - secret-management proof: `SECRETS.md` coverage, Doppler/provider setup, `doppler run --` or approved command wrapper, CI/deploy injection, secret scan, and public-bundle check
 - remaining blockers and founder-only gates
