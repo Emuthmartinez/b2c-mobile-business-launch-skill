@@ -41,6 +41,8 @@ Also refresh:
 
 Record the docs checked date and command basis in `APPLE_SIGNING.md`, `STORE_CONSOLE.md`, or `PRODUCTION_READINESS.md`.
 
+Also update `PROJECT_STATE.yaml` with Apple provider state: docs checked date, Apple Developer membership, Team ID, bundle ID/App ID, app record, signing strategy, certificate/profile status, archive/export/upload/TestFlight status, founder-only gates, and active failure cards such as `apple-signing-simulator-only` or `asc-name-fallback-unapproved`.
+
 ## Naming And Identifier Contract
 
 Separate flexible names from platform identity:
@@ -75,6 +77,7 @@ For first-time builders:
 - If they need a business or brand seller name, confirm whether an organization account exists or needs D-U-N-S and legal authority setup.
 - If agreements are unsigned in App Store Connect, the app record and uploads can be blocked even when credentials work.
 - If ASC CLI auth prompts interactively and the agent is non-interactive, record the blocker and ask the founder to authenticate or provide the approved API-key path through the secret-management flow.
+- Keep the autonomy mode at `prepare` until the founder approves app-record, bundle ID, signing, or upload mutations; use `mutate` or `ship` only for the approved scope.
 
 ## App Record Creation Preflight
 
@@ -129,6 +132,7 @@ Name-collision handling:
 - First check whether the name is already used by another app in the same account/localization. If so, the founder can rename the existing app version or remove the old app record if appropriate.
 - If another developer is using the name and the founder has trademark rights, record the Apple support/trademark claim route instead of choosing a weaker name in the moment.
 - If the founder approves a fallback, update `BRAND.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, screenshots, website metadata, RevenueCat/store-product notes, and ASO keywords so the public name does not drift.
+- Add or resolve the `asc-name-fallback-unapproved` failure card in `PROJECT_STATE.yaml` before continuing.
 
 `STORE_CONSOLE.md` should include a filled app-record table before creation:
 
@@ -318,6 +322,7 @@ Create `APPLE_SIGNING.md` whenever Apple distribution is in scope. It should inc
 - exact founder-only gates
 - command/tool evidence and output paths
 - secret-management route for signing/API material
+- matching `PROJECT_STATE.yaml` `apple_signing` lane status, provider state, and active/resolved failure cards
 
 Update:
 
@@ -325,6 +330,9 @@ Update:
 - `PRODUCTION_READINESS.md` with archive/export/upload proof or blocker
 - `SECRETS.md` for ASC API keys, Transporter/API issuer IDs, `.p8`, `.p12`, provisioning profiles, CI signing secrets, webhooks, and store credentials
 - `REVENUE_OPS.md` when App Store products or RevenueCat mappings depend on the app record/bundle ID
+- `launch-cockpit.html` after signing or app-record state changes
+
+Run `npm run check:apple-signing -- --root .` or the installed-skill equivalent when the artifact exists and the repo uses the bundled validators.
 
 ## Common Failure Modes
 
@@ -339,3 +347,4 @@ Update:
 - Committing `.p8`, `.p12`, provisioning profiles, export passwords, or App Store Connect API credentials.
 - Renaming the bundle ID after RevenueCat, push, OAuth redirects, associated domains, app groups, or App Store products already depend on it.
 - App privacy, export compliance, age rating, screenshots, review notes, accessibility labels, or subscription products are incomplete even though the binary uploaded.
+- `PROJECT_STATE.yaml` says Apple signing is done while archive/export/upload/TestFlight proof is still missing or blocked.

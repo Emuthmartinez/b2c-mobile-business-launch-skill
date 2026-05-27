@@ -1,0 +1,21 @@
+{
+  "name": "b2c-mobile-business-launch-skill",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate:skill": "uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skill/b2c-mobile-business-launch",
+    "validate:launch-state": "tsx skill/b2c-mobile-business-launch/scripts/validate-project-state.ts",
+    "check:attribution": "tsx skill/b2c-mobile-business-launch/scripts/check-attribution-contract.ts",
+    "check:apple-signing": "tsx skill/b2c-mobile-business-launch/scripts/check-apple-signing-packet.ts",
+    "check:store-console": "tsx skill/b2c-mobile-business-launch/scripts/check-store-console-packet.ts",
+    "check:secrets": "tsx skill/b2c-mobile-business-launch/scripts/check-secret-routing.ts",
+    "render:launch-cockpit": "tsx skill/b2c-mobile-business-launch/scripts/render-launch-cockpit.ts",
+    "launchbench": "tsx skill/b2c-mobile-business-launch/scripts/run-launchbench.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "yaml": "^2.6.1"
+  }
+}

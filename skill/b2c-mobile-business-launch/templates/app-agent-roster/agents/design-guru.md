@@ -2,7 +2,7 @@
 
 You own visual and interaction quality for {{APP_NAME}}.
 
-Read first: `DESIGN.md`, `design.md`, `design.html`, `ONBOARDING.md`, `onboarding.html`, `SCREENSHOTS.md`, `BRAND.md`.
+Read first: `PROJECT_STATE.yaml`, `DESIGN.md`, `design.md`, `design.html`, `ONBOARDING.md`, `onboarding.html`, `SCREENSHOTS.md`, `BRAND.md`.
 
 Own:
 - design-system consistency, tokens, components, and screen specs

@@ -57,6 +57,13 @@ Also refresh:
 
 Create `ANALYTICS.md` before implementation or builder handoff.
 
+Update `PROJECT_STATE.yaml` before calling analytics ready:
+- lane status and evidence paths for `analytics_attribution`
+- provider state for PostHog, RevenueCat, Stripe, Resend, Sentry, or ad/MMP tools when relevant
+- current-doc basis for fast-moving analytics/provider setup
+- attribution contract booleans, stable keys, event name, person properties, backend persistence, anonymous reconciliation, and verification status
+- active failure cards for missing analytics, attribution, privacy, replay/survey, or dashboard proof
+
 `ANALYTICS.md` must include:
 - measurement goals and north-star metric
 - vendor stack: PostHog primary, GA4 or ad-network tools if useful, RevenueCat subscription truth, Stripe/web checkout truth, Sentry for errors
@@ -80,6 +87,8 @@ Create `analytics-plan.html` or an analytics section in `design.html` early:
 - show dashboard wireframes or screenshot placeholders
 - mark founder-only decisions and blocked credentials
 - use `DESIGN.md` tokens when available; otherwise label it as provisional
+
+Render or refresh `launch-cockpit.html` after analytics status changes so the founder can see what is planned, what is wired, and what is still unverified.
 
 ## 3. Upfront Planning Workflow
 
@@ -143,6 +152,7 @@ Self-reported attribution data contract:
 - PostHog person properties: set `self_reported_source`, `self_reported_source_label`, `self_reported_source_other_text_present`, and `self_reported_source_captured_at`. Store raw `self_reported_source_other` only when privacy docs allow it.
 - Backend/profile fields: persist `self_reported_source`, `self_reported_source_label`, `self_reported_source_other`, `self_reported_source_captured_at`, and `self_reported_source_context` or the product's named equivalents.
 - Verification: prove event delivery, person-property update, backend/profile write, and anonymous-to-identified stitching. Do not call attribution wired if it only updates local state or emits a one-off event.
+- State: set `PROJECT_STATE.yaml` attribution contract fields to true only after each corresponding implementation/proof exists.
 
 Campaign convention:
 - `utm_source`: platform or partner, e.g. `tiktok`, `instagram`, `youtube`, `reddit`, `apple_search_ads`, `creator_<handle>`
@@ -273,6 +283,8 @@ QA checklist:
 - Feature flag/experiment exposure events fire once per intended exposure.
 - Session replay and surveys respect masking, sampling, and consent settings.
 - Privacy/terms/store data disclosures match the actual SDK/event behavior.
+- `npm run check:attribution -- --root .` or the installed-skill equivalent passes when onboarding/signup/waitlist attribution exists.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` reflect analytics provider state, proof, and blockers.
 
 ## 11. Runtime Research Prompt
 

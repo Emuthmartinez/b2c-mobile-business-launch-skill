@@ -5,12 +5,12 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
-- Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
+- Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
 
 ## Canonical File Map
@@ -21,6 +21,8 @@ Use this structure when the business is still pre-build or being handed to a bui
 AGENTS.md                 # agent entrypoint and canonical operating instructions
 CLAUDE.md                 # optional tool-specific addendum that points back to AGENTS.md
 APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
+PROJECT_STATE.yaml        # compact machine-readable phase, autonomy, lane, provider, proof, blocker, and failure-card state
+launch-cockpit.html       # rendered founder-visible dashboard over PROJECT_STATE.yaml
 TOOL_DECISIONS.md         # paid/account-gated tool access, confirmed fallbacks, limitations, and blocked routes
 SECRETS.md                # Doppler or approved secret-provider inventory, command map, CI/deploy routing, and proof notes
 doppler.yaml              # optional non-secret Doppler project/config hints
@@ -31,6 +33,8 @@ LAUNCH_TRACE.md           # evidence-to-product-to-brand/design-to-build-to-proo
 TECH_SPEC.md              # data/API/state/permission/integration contracts when actual implementation is in scope
 ENGINEERING_PLAN.md       # Compound Engineering plan or implementation plan when actual app build is in scope
 PRODUCTION_READINESS.md   # end-to-end proof across frontend, backend, mobile device, providers, and release gates
+LAUNCHBENCH.md            # optional eval/check history for known launch-grade failure modes
+FAILURE_CARDS.md          # optional expanded failure cards for recurring or unresolved launch risks
 PROMPTS.md                # sequenced builder/Rork prompts
 RESEARCH.md               # AppKittie, XPOZ, Firecrawl, review, keyword, and competitor evidence
 SPEC.md                   # research-grounded product spec
@@ -74,6 +78,8 @@ rork-ready/
   AGENTS.md
   CLAUDE.md
   APP_AGENTS.md
+  PROJECT_STATE.yaml
+  launch-cockpit.html
   TOOL_DECISIONS.md
   SECRETS.md
   ANALYTICS.md
@@ -82,6 +88,8 @@ rork-ready/
   TECH_SPEC.md
   ENGINEERING_PLAN.md
   PRODUCTION_READINESS.md
+  LAUNCHBENCH.md
+  FAILURE_CARDS.md
   PROMPTS.md
   DESIGN.md
   design.md
@@ -101,11 +109,34 @@ rork-ready/
   assets/
 ```
 
+## `PROJECT_STATE.yaml` And `launch-cockpit.html`
+
+Use `PROJECT_STATE.yaml` for every multi-lane launch, continuation, builder handoff, or launch-readiness audit. It is the compact state contract for agents and validators; `launch-cockpit.html` is the founder-facing rendering of the same information.
+
+Must include:
+- project name, slug, owner, phase, platforms, bundle/package IDs, public URLs, and source-truth pointers
+- autonomy mode, latest founder approval, and founder-only gates
+- lane statuses with evidence paths and blockers
+- paid/account-gated tool routes and provider setup state
+- required secret names only, never values
+- provider preflight, validation, fallback, docs checked date, and CLI/version basis when relevant
+- analytics attribution contract completeness
+- proof commands and evidence paths
+- active and resolved failure cards
+- LaunchBench or validator run history when available
+
+Acceptance:
+- A future agent can tell which lane is blocked, partial, done, deferred, or not needed without rereading every artifact.
+- The founder can open `launch-cockpit.html` and see what is proven, what is blocked, and what needs approval.
+- No raw secrets, passwords, private keys, credential file contents, or real-looking placeholder values appear in the state or cockpit.
+- State changes when provider setup, signing, analytics, revenue, email, store, or proof changes.
+
 ## `AGENTS.md`
 
 Must include:
 - 60-second project brief
 - source-of-truth file map
+- `PROJECT_STATE.yaml`, `launch-cockpit.html`, LaunchBench/failure-card rules, and the current autonomy mode contract
 - `LAUNCH_TRACE.md` and `TECH_SPEC.md` when they exist
 - brand voice rules and banned/owned words
 - `DESIGN.md` and HTML visual-proof enforcement rules
@@ -129,13 +160,14 @@ Acceptance:
 - Implementation rules are specific to the stack.
 - A future engineering agent knows when to use parallel agents and when to serialize MobAI, git, migrations, releases, or shared-file edits.
 - A future app-management agent knows which local role prompt owns product, marketing, engineering, design, or customer-success follow-up.
+- A future agent updates `PROJECT_STATE.yaml` before claiming completion or crossing a launch phase.
 
 ## `APP_AGENTS.md` And `agents/`
 
 Use for real app builds, generated-app handoffs, or post-launch management packages. Keep these lightweight; they are role entrypoints, not a second product spec.
 
 Must include:
-- one orchestrator role that owns source-of-truth docs, sequencing, worktree/subagent safety, integration, git/release coordination, and `PRODUCTION_READINESS.md`
+- one orchestrator role that owns source-of-truth docs, `PROJECT_STATE.yaml`, `launch-cockpit.html`, failure cards, sequencing, worktree/subagent safety, integration, git/release coordination, and `PRODUCTION_READINESS.md`
 - one marketing guru role for ASO, GEO/SEO, Fastlane, UGC, attribution learning, reviews, launch calendar, claims, and channel experiments
 - one engineering leader role for `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, frontend/backend/provider integration, test strategy, observability, and production-readiness evidence
 - one product leader role for ICP, problem framing, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
@@ -189,6 +221,7 @@ Must include:
 - new-secret routing log for secrets discovered during implementation
 - founder-only actions and blocked secrets
 - proof notes that record location and command evidence, never raw values
+- matching `PROJECT_STATE.yaml` provider entries with required secret names, docs checked date, preflight, validation, and fallback limitations
 
 Rules:
 - Commit `SECRETS.md`, optional `doppler.yaml`, and optional `.env.example` with names only.
@@ -202,6 +235,7 @@ Acceptance:
 - No raw secret values appear in docs, commits, screenshots, logs, or readiness proof.
 - Public client config is separated from server-only secrets.
 - Production secret injection is different from local personal login.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` show names-only secret requirements and provider status without exposing values.
 
 ## `LAUNCH_TRACE.md`
 
@@ -794,6 +828,27 @@ Must include:
 - open legal questions for founder/counsel
 - publish blockers
 - approval status and approver
+
+## `LAUNCHBENCH.md` And `FAILURE_CARDS.md`
+
+Use when the launch is complex, the skill has been updated, or a repeated miss needs to become a reusable guardrail.
+
+`LAUNCHBENCH.md` must include:
+- scenarios run, date, runner, app repo/path, and skill version/commit if known
+- deterministic validators run and command output summary
+- scenario prompts or pointers to `evals/launchbench/*.yaml`
+- expected failures caught and unexpected misses
+- resulting failure cards or skill updates
+
+`FAILURE_CARDS.md` must include, when not fully captured in `PROJECT_STATE.yaml`:
+- card ID, severity, owner, status, detected date, affected lane, evidence, impact, next action, validator, and resolution proof
+- founder-only decisions related to the card
+- downstream docs that must update before the card closes
+
+Acceptance:
+- Known regressions become scenarios, validators, or active failure cards.
+- Launch-readiness claims cite validator or LaunchBench proof where practical.
+- Failure cards close only with evidence, not "noted" language.
 
 ## `PROMPTS.md`
 

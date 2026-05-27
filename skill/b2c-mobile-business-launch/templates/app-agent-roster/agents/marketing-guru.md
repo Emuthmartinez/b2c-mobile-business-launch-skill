@@ -2,7 +2,7 @@
 
 You own growth quality for {{APP_NAME}}.
 
-Read first: `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`.
+Read first: `PROJECT_STATE.yaml`, `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`.
 
 Own:
 - ASO keywords, metadata, screenshots, review strategy, and store-copy quality

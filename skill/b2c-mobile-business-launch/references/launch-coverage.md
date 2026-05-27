@@ -16,6 +16,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 
 | Lane | Required Evidence | Primary Tools |
 | --- | --- | --- |
+| Project state/cockpit | `PROJECT_STATE.yaml` phase/mode/lanes/providers/proof/failure cards, rendered `launch-cockpit.html`, validator status | `project-state.md`, `autonomy-modes.md`, bundled TS scripts |
 | Paid-tool routing | intended paid/account-gated tools, founder confirmation, selected fallback or blocked state, limitations | `TOOL_DECISIONS.md`, `paid-tool-routing.md` |
 | Secrets/config | Doppler or approved provider, `SECRETS.md`, command wrappers, CI/deploy injection, secret scan, public/server-only classification | Doppler CLI, `SECRETS.md`, platform secret stores |
 | Market/category selection | category economics, competitor map, revenue/download ranges, winning wedge | AppKittie, ASO skills |
@@ -43,10 +44,12 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Security/abuse | RLS/auth rules, rate limits, secrets, PII minimization, admin access, bot defenses | repo audit, Supabase/Cloudflare |
 | Organic social growth | UGC fit/90-day creator plan, Fastlane workspace, connected accounts, campaign angles, media inputs, polished demo videos, schedule, QA, analytics loop | UGC playbook, Fastlane AI, MobAI recorder skills, XcodeBuildMCP fallback, Higgsfield, PostHog |
 | Post-launch loop | weekly ASO, reviews, rankings, conversion, retention, revenue, competitor deltas | AppKittie, ASO skills, RevenueCat, PostHog |
+| LaunchBench/failure cards | known failure scenarios checked, active cards tracked, deterministic validators run where available | `launchbench-evals.md`, `failure-cards.md`, `PROJECT_STATE.yaml`, bundled TS scripts |
 
 ## Must-Have For Any Real Launch
 
 Required unless explicitly marked not applicable:
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` for multi-lane launches, handoffs, continuations, or readiness audits; current phase, autonomy mode, lane status, provider state, proof, blockers, and active failure cards must be visible
 - research-backed spec and category choice
 - paid/account-gated tool decisions recorded before free fallbacks are used
 - `SECRETS.md` when any API key, token, OAuth credential, webhook signing secret, store credential, service-account file, CI/deploy env var, or `.env` file is needed; default to Doppler unless the founder approves another provider
@@ -72,6 +75,7 @@ Required unless explicitly marked not applicable:
 - support path for account deletion, refunds, restore purchases, and billing issues
 - UGC/Fastlane or equivalent post-launch organic content engine when the launch depends on social distribution, marked deferred if not yet needed
 - `DEMO_VIDEO.md` or equivalent when launch/store/social/support work needs app-flow demo videos, with MobAI recorder or desktop recorder artifacts linked
+- LaunchBench or deterministic validator evidence for known failure modes before a launch is described as complete
 
 ## Optional But High-Leverage
 
@@ -82,6 +86,7 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 - RevenueCat Web Purchase Links or Web Funnels for direct web acquisition
 - PostHog feature flags/experiments or RevenueCat experiments for paywall, onboarding, offer, referral, lifecycle, and landing variants
 - safe parallel agents/worktrees for independent research, static audits, frontend/backend units, fixtures, and test lanes, with the orchestrator owning integration, git, and full suites
+- `launch-cockpit.html` refreshed after each material provider, store, analytics, revenue, email, or readiness change
 - Compound Engineering `ce-proof` or `ce-demo-reel` artifacts for founder/reviewer inspection of shipped app behavior
 - Higgsfield-generated mascot, app icon, demo video, screenshot art, ad creative, and animation clips constrained by `DESIGN.md`
 - MobAI-backed screenshot capture matrix for real app screens before final store compositions
@@ -100,6 +105,10 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 ## Common Missing Pieces
 
 Flag these aggressively:
+- `PROJECT_STATE.yaml` is missing, stale, or inconsistent with actual docs/provider state.
+- `launch-cockpit.html` is missing, so the founder cannot see lane status, blockers, proof, or approval gates in one place.
+- Autonomy mode is not recorded, and the agent mutates provider/store/public state without a named approval scope.
+- A known miss happened again but no LaunchBench scenario, validator, or failure card was added.
 - A paid/account-gated tool is missing in the runtime and the agent silently starts the free fallback without founder confirmation.
 - Doppler or the approved secret provider is not selected before API keys, webhook secrets, CI/deploy env vars, service-account files, or local `.env` files appear.
 - Doppler setup, service-token, or CI/live secret instructions were copied from memory without refreshing current official docs and local CLI help.

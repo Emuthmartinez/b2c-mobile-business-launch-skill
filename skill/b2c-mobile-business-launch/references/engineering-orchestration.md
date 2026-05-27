@@ -7,14 +7,16 @@ The goal is to turn the launch package into shippable software without losing st
 ## Contents
 
 - 1. Compound Engineering Routing
-- 2. Product Brainstorm Checkpoint
-- 3. Agent Entrypoints
-- 3b. App-Local Agent Roster
-- 4. Parallel Agent Orchestration
-- 5. `ENGINEERING_PLAN.md` Requirements
-- 6. End-To-End Production Readiness
-- 7. MobAI, XcodeBuildMCP, And Device Testing
-- 8. Done Rules
+- 2. Autonomy And Project State
+- 3. Product Brainstorm Checkpoint
+- 4. Agent Entrypoints
+- 4b. App-Local Agent Roster
+- 5. Parallel Agent Orchestration
+- 6. `ENGINEERING_PLAN.md` Requirements
+- 7. End-To-End Production Readiness
+- 8. MobAI, XcodeBuildMCP, And Device Testing
+- 9. LaunchBench And Failure Cards
+- 10. Done Rules
 
 ## 1. Compound Engineering Routing
 
@@ -31,7 +33,29 @@ Prefer Compound Engineering skills for engineering-heavy work when available:
 
 Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive.
 
-## 2. Product Brainstorm Checkpoint
+## 2. Autonomy And Project State
+
+Before implementation starts, create or refresh `PROJECT_STATE.yaml` and choose an autonomy mode:
+
+- `scout`: read/research only
+- `draft`: local docs and mocks
+- `prepare`: setup plans and preflight packets
+- `apply`: repo edits and tests
+- `mutate`: founder-approved provider/API/CLI mutations
+- `ship`: founder-approved release, submission, or public posting
+
+Implementation work normally runs in `apply`. Provider/store/social mutations require `mutate` or `ship` with a named founder approval scope.
+
+The orchestrator owns state updates:
+- lane status and blockers
+- provider docs checked date, preflight, validation, fallback, and required secret names
+- proof commands and evidence paths
+- active failure cards
+- LaunchBench/validator runs
+
+Render `launch-cockpit.html` after material changes so the founder can inspect state without reading every doc.
+
+## 3. Product Brainstorm Checkpoint
 
 After research and before engineering specs are actioned, decide whether the product is ready for implementation planning.
 
@@ -46,7 +70,7 @@ Outputs from the brainstorm should become the product requirements source for `c
 
 If the research already makes the product direction obvious, skip the brainstorm and go directly to `ce-plan`.
 
-## 3. Agent Entrypoints
+## 4. Agent Entrypoints
 
 Every real app build or builder handoff should create or update `AGENTS.md`.
 
@@ -54,6 +78,7 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 - 60-second product brief
 - repo map and first files to read
 - source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
+- `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and autonomy mode
 - V1 scope, V2/V3 scope, and banned scope
 - design-system and HTML proof rules
 - analytics and attribution rules
@@ -66,6 +91,7 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 - backend/frontend E2E proof requirements
 - common mistakes and launch blockers
 - exact verification commands or scripts when known
+- bundled validator/LaunchBench commands when copied into or callable from the repo
 
 `CLAUDE.md` should exist when Claude Code or a builder expects it. Keep it short:
 - point to `AGENTS.md` as canonical
@@ -74,12 +100,12 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 
 Do not let generated builders rely on a prompt only. Durable repo-local instructions are part of the launch package.
 
-### 3b. App-Local Agent Roster
+### 4b. App-Local Agent Roster
 
 Every real app build or builder handoff should include `APP_AGENTS.md` and a tiny `agents/` directory so future work can continue without reinventing responsibilities.
 
 Required roles:
-- orchestrator: owns canonical docs, sequencing, subagent routing, file-overlap checks, integration, git/release coordination, and production-readiness proof
+- orchestrator: owns canonical docs, `PROJECT_STATE.yaml`, `launch-cockpit.html`, failure cards, sequencing, subagent routing, file-overlap checks, integration, git/release coordination, and production-readiness proof
 - marketing guru: owns ASO, GEO/SEO, Fastlane, UGC, reviews, launch calendar, claims, attribution learning, and channel experiments
 - engineering leader: owns architecture, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider/backend/frontend proof, Apple signing/release gates, observability, tests, and readiness gates
 - product leader: owns ICP, V1/V2/V3 scope, onboarding, activation, retention loops, and evidence-to-product traceability
@@ -88,7 +114,7 @@ Required roles:
 
 Keep each role prompt short: mission, canonical docs to read first, responsibilities, forbidden actions, founder-only gates, and required output shape. Role agents review and propose by default. They may implement only when the orchestrator assigns an isolated unit with a file-overlap check and verification plan.
 
-## 4. Parallel Agent Orchestration
+## 5. Parallel Agent Orchestration
 
 Use parallel agents for independent research, audits, static investigation, and implementation units that pass a safety check.
 
@@ -111,6 +137,7 @@ Parallel safety check:
 - Map every candidate unit to create/modify/test files.
 - If two units touch the same file, run them serially.
 - Use specialist subagents to audit against the skill definition before declaring completeness, especially for attribution, monetization, store-console, privacy, email, and E2E readiness.
+- Use one orchestrator to reconcile `PROJECT_STATE.yaml` and failure cards after parallel work; specialists should not independently mark lanes done.
 - For parallel implementation in one repo, the orchestrator owns staging, commits, and full test suites.
 - Instruct parallel subagents not to run project-wide suites, stage files, or commit.
 - After parallel work returns, compare actual modified files, resolve collisions, run focused tests, then run integration/E2E suites.
@@ -119,12 +146,13 @@ Use `ce-worktree` when parallel engineering lanes need isolation. Prefer meaning
 
 MobAI is serialized: one orchestrator owns the device flow, while other agents may inspect code, prepare fixtures, or analyze logs in parallel. If MobAI is unavailable, use `paid-tool-routing.md` before substituting XcodeBuildMCP or any free device/simulator fallback.
 
-## 5. `ENGINEERING_PLAN.md` Requirements
+## 6. `ENGINEERING_PLAN.md` Requirements
 
 Before `ce-work` or a generated builder starts, produce `ENGINEERING_PLAN.md` through `ce-plan` or an equivalent implementation-plan doc.
 
 The plan must include:
 - requirements trace to launch docs and `LAUNCH_TRACE.md` IDs
+- `PROJECT_STATE.yaml` phase, autonomy mode, active blockers, and failure cards that constrain implementation
 - `TECH_SPEC.md` pointer or inline technical contracts when data/API/state/integration behavior is in scope
 - implementation units with repo-relative file paths
 - frontend, backend, database, analytics, revenue, email, and store-console impacts
@@ -136,10 +164,11 @@ The plan must include:
 - MobAI/device-test scenarios for mobile user journeys, plus XcodeBuildMCP scenarios when it is the approved Apple-platform fallback
 - backend verification scenarios showing real test data persisted or projected correctly
 - production-readiness gates and known blockers
+- validator and LaunchBench checks that must pass before done
 
 Do not put unsupported product behavior into `ENGINEERING_PLAN.md`. Send unresolved product questions back to `ce-brainstorm` or make explicit assumptions.
 
-## 6. End-To-End Production Readiness
+## 7. End-To-End Production Readiness
 
 Do not mark an app build production-ready from unit tests alone.
 
@@ -154,6 +183,8 @@ Required proof, adjusted to the product:
 - release-build or staging-build verification that mocks are disabled, production flags are sane, and secrets are not bundled
 - secret-management verification: `SECRETS.md` covers all secret-bearing services, commands use `doppler run --` or the approved provider wrapper, CI/deploy injects secrets from the selected provider, and public bundles contain no server secrets
 - rollback or kill-switch plan for risky features
+- `PROJECT_STATE.yaml` updated with final lane statuses, proof, and unresolved founder-only gates
+- `launch-cockpit.html` rendered from current state
 
 Record proof in `PRODUCTION_READINESS.md` or the repo's existing release/readiness artifact:
 - command run
@@ -173,7 +204,7 @@ Attribution-specific production-readiness proof is mandatory when onboarding, si
 - backend/profile storage contains the source once identity exists
 - anonymous attribution is stitched to the identified user after signup/login
 
-## 7. MobAI, XcodeBuildMCP, And Device Testing
+## 8. MobAI, XcodeBuildMCP, And Device Testing
 
 Use MobAI MCP when available for advanced multi-step device automation. Use the local `using-mobai-cli` skill when only CLI access is available or the environment is unfamiliar.
 
@@ -205,10 +236,29 @@ For store screenshots, keep raw captures separate from composed assets. For E2E 
 
 If device access is blocked, mark production readiness as blocked for that flow. Do not replace live-device proof with screenshots or unit tests. If XcodeBuildMCP is the approved fallback, write the exact simulator/device, OS, workflow, and limitation into `PRODUCTION_READINESS.md`.
 
-## 8. Done Rules
+## 9. LaunchBench And Failure Cards
+
+Run deterministic validators where the app repo has the required artifacts or code paths:
+
+```bash
+npm run validate:launch-state -- --root .
+npm run check:attribution -- --root .
+npm run check:secrets -- --root .
+npm run check:apple-signing -- --root .
+npm run check:store-console -- --root .
+npm run render:launch-cockpit -- --root .
+npm run launchbench
+```
+
+If the scripts are available only from the installed skill, call them with `tsx` and pass the app repo as `--root`.
+
+Use failure cards when a validator fails, a subagent finds a launch-grade gap, a provider mutation is blocked, or a known miss reappears. Cards should include severity, owner, evidence, impact, next action, validator, and closure proof. Keep active cards in `PROJECT_STATE.yaml`; use `FAILURE_CARDS.md` only when more detail is useful.
+
+## 10. Done Rules
 
 Engineering-heavy work is done only when:
 - `AGENTS.md` exists and points to canonical docs.
+- `PROJECT_STATE.yaml` exists, is current, and `launch-cockpit.html` has been rendered when the launch has multiple lanes.
 - `CLAUDE.md` exists when Claude/builders need compatibility guidance.
 - `APP_AGENTS.md` and the six-file `agents/` roster exist for real app builds or handoffs.
 - `LAUNCH_TRACE.md` exists or equivalent trace rows are embedded in `RESEARCH.md`.
@@ -221,4 +271,5 @@ Engineering-heavy work is done only when:
 - frontend, backend, analytics, revenue, email, and mobile-device paths were tested end to end where in scope.
 - MobAI proof, or founder-confirmed XcodeBuildMCP Apple-platform proof, is paired with backend/provider verification where app flows mutate state.
 - production-readiness evidence is written down.
+- deterministic validators or LaunchBench scenarios were run where applicable, and active failure cards are explicit.
 - remaining blockers are explicit founder-only gates, access gaps, platform review waits, or external service issues.

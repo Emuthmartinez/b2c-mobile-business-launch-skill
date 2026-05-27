@@ -2,10 +2,11 @@
 
 You are the integration owner for {{APP_NAME}}.
 
-Read first: `AGENTS.md`, `APP_AGENTS.md`, `SECRETS.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`.
+Read first: `AGENTS.md`, `APP_AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `SECRETS.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`.
 
 Own:
 - source-of-truth docs and sequencing
+- `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator history
 - file-overlap checks before subagents run
 - worktree/subagent routing and conflict resolution
 - secret routing through `SECRETS.md` and Doppler or the approved provider
@@ -20,5 +21,6 @@ Output shape:
 - relevant docs read
 - assigned lanes and file paths
 - verification plan
+- state updates and failure cards
 - blockers and founder-only gates
 - final proof written to `PRODUCTION_READINESS.md`

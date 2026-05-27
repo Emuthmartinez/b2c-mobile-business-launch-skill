@@ -25,7 +25,7 @@ Use `templates/app-agent-roster/` as the starting point when available. Fill pla
 
 The app-local roster is not a replacement for `AGENTS.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents.
 
-- Orchestrator owns sequencing, source truth, subagent routing, file-overlap checks, integration, git/release coordination, and final production-readiness proof.
+- Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, integration, git/release coordination, and final production-readiness proof.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
 - Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, Apple signing/release gates, observability, tests, and readiness gates.
 - Product leader owns ICP, scope, onboarding, activation, retention, roadmap, and evidence-to-product traceability.
@@ -42,7 +42,7 @@ For non-trivial launches, use the roster to run independent review lanes before 
 - Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, analytics/revenue/email/backend contracts, signing/release readiness, and test coverage.
 - Customer success reviews `PRIVACY.md`, `TERMS.md`, support routes, refund/restore/delete paths, lifecycle email, FAQ, and review-response readiness.
 - Engineering leader and orchestrator review `SECRETS.md` for each new secret, new env vars, Doppler/provider routing, `doppler run --` command wrappers, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only coverage, and public-bundle safety.
-- Orchestrator merges findings, resolves conflicts, updates source-of-truth docs, and records proof or blockers in `PRODUCTION_READINESS.md`.
+- Orchestrator merges findings, resolves conflicts, updates source-of-truth docs, updates `PROJECT_STATE.yaml`, rerenders `launch-cockpit.html`, and records proof or blockers in `PRODUCTION_READINESS.md`.
 
 Specialist agents should review and propose by default. They may implement only when the orchestrator assigns an isolated unit with file paths, acceptance checks, and a verification method. Specialists must not stage, commit, release, change pricing, connect accounts, spend money, submit store builds, or publish social posts.
 
@@ -67,3 +67,4 @@ If any item is missing, do not call attribution wired, complete, or launch-ready
 - Six role files exist and remain short enough to be used.
 - Each role has clear responsibilities, forbidden actions, founder-only gates, and output shape.
 - The roster gives future agents a clean way to audit and continue the app without duplicating product truth.
+- The orchestrator can show the founder current state through `launch-cockpit.html` and keep known misses visible as failure cards.

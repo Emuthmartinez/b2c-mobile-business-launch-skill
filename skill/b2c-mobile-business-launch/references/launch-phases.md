@@ -5,6 +5,7 @@ Use these phases as a reusable playbook. Skip phases that are already complete, 
 ## Contents
 
 - Phase 0: Orientation And Scaffold
+- Phase 0a: Project State And Autonomy
 - Phase 0b: Tool Access And Fallback Decisions
 - Phase 1: Research-Backed Spec
 - Phase 1b: Analytics And Attribution Blueprint
@@ -25,14 +26,44 @@ Goal: know what business, repo, artifacts, and constraints are real.
 Do:
 - Inspect the provided transcript/spec/repo and list existing artifacts.
 - Identify current phase, business name, target platform, monetization model, data/backend assumptions, and launch surface.
+- Load `project-state.md` and `autonomy-modes.md`.
+- Create or refresh `PROJECT_STATE.yaml` from `templates/PROJECT_STATE.yaml`, set the current autonomy mode, and record lane status honestly.
+- Render `launch-cockpit.html` once the first state pass exists.
 - Create tasks/checkpoints for the engagement; block later phases on the right prior outputs.
 - Decide whether to create one canonical repo bundle, a separate landing repo, or a product-build handoff bundle.
 
 Outputs:
+- `PROJECT_STATE.yaml`
+- `launch-cockpit.html`
 - concise phase plan
 - source-of-truth file map
 - open founder decisions list
 - blocker list for access, money, domains, credentials, or destructive actions
+
+Acceptance:
+- A future agent can identify phase, autonomy mode, evidence, blockers, and founder-only gates without reading the entire repo.
+- The founder has a rendered cockpit for current state before provider/store/revenue/legal work begins.
+
+## Phase 0a: Project State And Autonomy
+
+Goal: make the launch inspectable and bounded before the agent starts executing.
+
+Do:
+- Load `project-state.md`, `autonomy-modes.md`, `provider-state-recipes.md`, `launchbench-evals.md`, and `failure-cards.md` only as needed.
+- Set `autonomy.mode` to the least-powerful useful mode: usually `scout`, `draft`, `prepare`, or `apply`.
+- Copy `templates/PROJECT_STATE.yaml` if no state file exists.
+- Fill phase, platform, bundle/package IDs when known, source-truth files, lane statuses, tool/provider routes, required secret names, founder-only gates, proof commands, and active failure cards.
+- Render `launch-cockpit.html` after the first meaningful state pass.
+
+Outputs:
+- `PROJECT_STATE.yaml`
+- `launch-cockpit.html`
+- active failure cards in state, and `FAILURE_CARDS.md` only when a larger card log is useful
+
+Acceptance:
+- State never contains raw secret values.
+- `launch-cockpit.html` can be opened by the founder to see blockers, proof, and approval gates.
+- Provider/store/social mutations remain blocked unless autonomy mode and founder approval allow them.
 
 ## Phase 0b: Tool Access And Fallback Decisions
 
@@ -44,6 +75,7 @@ Do:
 - Check current runtime access, local installs, user-provided exports, screenshots, PDFs, CSVs, API keys, and account sessions.
 - Ask before replacing any paid/account-gated tool with a free fallback.
 - Record selected routes, limitations, and blocked access in `TOOL_DECISIONS.md` or the relevant ops doc.
+- Update `PROJECT_STATE.yaml` provider/tool routes and rerender `launch-cockpit.html` after material tool decisions.
 
 Outputs:
 - `TOOL_DECISIONS.md` when more than one tool decision affects the launch
@@ -61,6 +93,7 @@ Goal: prevent secret sprawl before service setup, CI, deploys, webhooks, and pro
 
 Do:
 - Load `secrets-management.md`.
+- Load `provider-state-recipes.md`.
 - Default to Doppler unless the founder selected a different secret manager.
 - If Doppler is selected, check `doppler --version`, current auth status, and whether `doppler.yaml` exists without printing secret values.
 - Create `SECRETS.md` from the template before adding provider keys.
@@ -68,6 +101,7 @@ Do:
 - Add `.env.example` names only when the repo needs a local schema.
 - Add or verify `.gitignore` blocks local env files, service-account JSON, app-store private keys, signing material, and downloaded credentials.
 - Record founder-only secret/account actions and blocked values.
+- Update `PROJECT_STATE.yaml` provider entries with docs checked date, required secret names, preflight, validation, fallback, and blocked secret state.
 
 Outputs:
 - `SECRETS.md`
@@ -81,6 +115,7 @@ Acceptance:
 - Secret-bearing commands have a `doppler run --` or approved provider wrapper.
 - A future agent can tell which secrets are public client config, server-only, webhook signing secrets, store credentials, CI/deploy secrets, or local operator credentials.
 - No raw values are written into docs, commits, screenshots, logs, or proof artifacts.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` expose names-only secret requirements and provider status without values.
 
 ## Phase 1: Research-Backed Spec
 
@@ -96,6 +131,7 @@ Do:
 - Run keyword and name collision checks before locking a name, subtitle, or ASO angle.
 - Convert findings into a revised product spec, with evidence cited inline or in an appendix.
 - Separate identity from storefront when needed: e.g. list where users search, position against the category if that is the wedge.
+- Update `PROJECT_STATE.yaml` research/product/traceability lane statuses and active failure cards when evidence gaps remain.
 
 Outputs:
 - `SPEC.md` with positioning, category strategy, competitor threat model, core loop, onboarding, monetization, roadmap, metrics, risks, and decisions
@@ -165,6 +201,7 @@ Goal: make the handoff from research to brand/design to implementation explicit 
 
 Do:
 - Load `flow-traceability.md`.
+- Refresh `PROJECT_STATE.yaml` before creating trace rows so status reflects the current phase and blockers.
 - Create or update `LAUNCH_TRACE.md` unless the launch is tiny enough for a clearly labeled trace section in `RESEARCH.md`.
 - Assign stable trace IDs for major research findings, product decisions, claims, onboarding questions, paywall choices, data collection, store-console answers, and build-critical flows.
 - Map each trace row to affected docs: `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
@@ -176,6 +213,7 @@ Outputs:
 - `TECH_SPEC.md` when implementation complexity justifies it
 - updated source docs with trace IDs or source pointers
 - build-ready/deferred decision and blocker list
+- updated `PROJECT_STATE.yaml` and `launch-cockpit.html` when trace/build-contract status changes
 
 Acceptance:
 - Every major brand, design, onboarding, revenue, privacy, store, and build decision can be traced to evidence or a founder-only decision.
@@ -369,9 +407,11 @@ Goal: package the business so another agent or builder can ship the app without 
 Do:
 - Load `flow-traceability.md` before writing builder prompts, `AGENTS.md`, or implementation specs.
 - Load `engineering-orchestration.md` before writing `AGENTS.md`, `CLAUDE.md`, `PROMPTS.md`, or any implementation prompt.
+- Load `project-state.md`, `autonomy-modes.md`, `launchbench-evals.md`, and `failure-cards.md` before the handoff is considered complete.
 - Load `app-agent-roster.md` before writing `APP_AGENTS.md`, app-local `agents/`, or specialist audit prompts.
 - Use `launch-coverage.md` before moving from docs to implementation or submission.
 - Create an `AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, Compound Engineering routing, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
+- Include `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator instructions in the first-read docs.
 - Create `APP_AGENTS.md` and the six-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
 - Add a tool-specific `CLAUDE.md`, `CURSOR.md`, or equivalent only as a pointer/addendum.
@@ -388,6 +428,8 @@ Do:
 
 Outputs:
 - launch coverage table or explicit deferred-lane list
+- `PROJECT_STATE.yaml`
+- `launch-cockpit.html`
 - `AGENTS.md`
 - `CLAUDE.md` when Claude/Rork/builder compatibility requires it
 - `APP_AGENTS.md`
@@ -399,6 +441,8 @@ Outputs:
 - `TOOL_DECISIONS.md` when paid/account-gated tools or fallbacks affect the launch
 - `ENGINEERING_PLAN.md` when implementation is in scope
 - `PRODUCTION_READINESS.md` checklist/template when implementation is in scope
+- `LAUNCHBENCH.md` or recorded validator/LaunchBench state when checks have run
+- `FAILURE_CARDS.md` when active risks need more detail than `PROJECT_STATE.yaml`
 - `PROMPTS.md`
 - `ONBOARDING.md` and `onboarding.html` when in scope
 - `UGC_PLAYBOOK.md` and `ugc/` artifacts when in scope
@@ -414,6 +458,7 @@ Acceptance:
 - V2 features and banned components cannot accidentally creep into V1.
 - Analytics events are required at the moment each screen/flow is built.
 - Builder prompts route heavy work through Compound Engineering and require real frontend/backend/MobAI proof, not only code generation.
+- Launch state, cockpit, and failure cards are current at handoff time.
 
 ## Phase 5b: Engineering Orchestration And Production Readiness
 
@@ -423,6 +468,7 @@ Do:
 - Load `flow-traceability.md` and require `ENGINEERING_PLAN.md` to reference trace IDs for build-critical work.
 - Load `engineering-orchestration.md`.
 - Load `secrets-management.md` before writing code, tests, or deploy configs that introduce environment variables or credentials.
+- Load `project-state.md`, `launchbench-evals.md`, and `failure-cards.md` before declaring any lane done.
 - Use `ce-brainstorm` first if product behavior is still ambiguous after research.
 - Use `ce-plan` or an equivalent plan to create implementation units with repo-relative paths, dependencies, test scenarios, and verification.
 - Use `TECH_SPEC.md` as the source for data models, API contracts, state machines, permission behavior, provider integrations, app integrity, remote config, and fixtures when it exists.
@@ -437,11 +483,13 @@ Do:
 - Use `ce-code-review`, `ce-test-browser`, `ce-test-xcode`, `ce-proof`, or `ce-demo-reel` when available and appropriate.
 - Use `xcodebuildmcp-testing.md` only after the founder confirms it as the Apple-platform fallback from MobAI, or when XcodeBuildMCP is the explicitly chosen Apple build/test route.
 - Record all verification and blockers in `PRODUCTION_READINESS.md`.
+- Run deterministic validators or LaunchBench checks where available, update failure cards, update `PROJECT_STATE.yaml`, and rerender `launch-cockpit.html`.
 
 Outputs:
 - implemented app/backend/web changes
 - updated `AGENTS.md`, `CLAUDE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md`
 - test artifacts, MobAI screenshots/recordings, provider/dashboard proof, and PR/release notes where applicable
+- validator/LaunchBench output summary and active/resolved failure cards
 
 Acceptance:
 - Unit tests, integration tests, browser/mobile E2E, and provider/backend proof cover the launch-critical paths.
@@ -449,6 +497,7 @@ Acceptance:
 - Frontend actions are proven against backend/provider state when a backend/provider is in scope.
 - MobAI device proof exists for critical mobile flows, or confirmed XcodeBuildMCP Apple-platform proof exists with limitations, or the blocker is explicit.
 - Remaining gaps are founder-only gates, external access waits, or platform review waits.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` match the proof and blockers in `PRODUCTION_READINESS.md`.
 
 ## Phase 6: Post-Launch UGC/Fastlane Growth Engine
 

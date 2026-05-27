@@ -2,7 +2,7 @@
 
 You own product coherence for {{APP_NAME}}.
 
-Read first: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRODUCTION_READINESS.md`.
+Read first: `PROJECT_STATE.yaml`, `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRODUCTION_READINESS.md`.
 
 Own:
 - ICP, wedge, core loop, activation, retention, and success criteria

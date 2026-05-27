@@ -1,6 +1,6 @@
 # Secrets Management
 
-Use this before adding API keys, tokens, OAuth credentials, webhook signing secrets, service-account files, store credentials, CI/deploy environment variables, `.env` files, or secret-bearing provider setup.
+Use this before adding API keys, tokens, OAuth credentials, webhook signing secrets, service-account files, store credentials, CI/deploy environment variables, `.env` files, or secret-bearing provider setup. Load `provider-state-recipes.md` when the secret belongs to a third-party service setup.
 
 Default to Doppler when the founder has not selected another secret manager. Load `paid-tool-routing.md` before replacing Doppler or another paid/account-gated secret manager with Apple Keychain, platform secrets, local `.env`, or manual exports.
 
@@ -24,6 +24,8 @@ Record in `SECRETS.md`:
 - command differences between live docs, local CLI help, this skill, or old project docs
 - live-environment auth model: service token, provider integration, OIDC, or platform-native secret store
 
+Also record the matching provider state in `PROJECT_STATE.yaml`: docs checked date, required secret names, preflight, validation command/proof, fallback limitation, and blocked founder actions.
+
 If current official docs or CLI help cannot be reached, mark setup as `blocked: docs refresh needed` or `provisional: docs unavailable`. Do not invent install, login, service-token, or deploy commands from memory.
 
 ## Required Artifacts
@@ -40,6 +42,7 @@ Create or update `SECRETS.md` whenever any service in the launch needs a secret 
 - new-secret routing log: what introduced the secret, where it was stored, which docs/tests were updated, and who owns it
 - blocked founder actions: secrets or account steps the agent cannot complete
 - proof notes: secret-manager location and command evidence, never raw values
+- corresponding `PROJECT_STATE.yaml` provider status for every material provider
 
 Recommended repo files:
 - `SECRETS.md`: committed, names and locations only
@@ -57,7 +60,8 @@ When a new secret appears during research, setup, or implementation:
 3. Route it to Doppler or the founder-approved provider before running commands that require it.
 4. Update `.env.example` with the name only when the repo needs a local schema.
 5. Update `AGENTS.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider ops docs, and `PRODUCTION_READINESS.md` if behavior or verification changes.
-6. Run or record a secret scan before handoff.
+6. Update `PROJECT_STATE.yaml` and rerender `launch-cockpit.html`.
+7. Run or record a secret scan before handoff.
 
 Do not leave new secrets as ad hoc shell exports, pasted chat values, committed `.env` values, screenshots, raw logs, or untracked setup steps.
 
@@ -122,6 +126,7 @@ Before beta, store submission, or production launch:
 - Frontend bundles expose only documented public client config.
 - Release/staging builds prove mocks are disabled and secrets are not bundled.
 - Rotation/revocation notes exist for live keys, webhook secrets, social/Fastlane keys, store credentials, and deploy tokens.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` show provider status and required secret names without exposing values.
 
 ## Common Failure Modes
 
@@ -133,3 +138,4 @@ Flag these aggressively:
 - a public `NEXT_PUBLIC_`, `PUBLIC_`, `EXPO_PUBLIC_`, or mobile plist value contains a server secret
 - service-account JSON, `.p8`, `.p12`, provisioning files, SSH keys, or OAuth refresh tokens are committed
 - CI/deploy works only from a developer shell because the agent forgot launch-time environment differs from interactive shell
+- `PROJECT_STATE.yaml` says provider setup is done even though `SECRETS.md`, CI injection, or command wrappers are missing

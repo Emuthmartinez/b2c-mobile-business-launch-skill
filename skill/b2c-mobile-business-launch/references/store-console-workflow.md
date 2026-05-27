@@ -64,16 +64,20 @@ Google Play:
 
 Create these when a store submission is in scope:
 
+- `PROJECT_STATE.yaml`: `store_console`, `apple_signing`, privacy/legal, revenue, screenshot, and provider/tool state with active failure cards.
 - `STORE_CONSOLE.md`: agent-readable source of truth for App Store Connect and Google Play Console fields, click paths, blockers, and evidence.
 - `APPLE_SIGNING.md`: required for Apple distribution, TestFlight, physical-device signing, or first upload readiness; include account/team, bundle ID/App ID, app record, signing, capabilities, certificates/profiles, archive/export/upload state, and founder gates.
 - `store-console.html`: founder-facing mock console with copy buttons or clearly copyable fields grouped by exact ASC/Play Console page.
 - `SCREENSHOTS.md`: screenshot capture, composition, dimensions, device targets, locale, proof constraints, upload status, and source image paths.
 - `screenshots/`: final upload assets plus raw MobAI/device captures and intermediate compositions.
 - `TOOL_DECISIONS.md` or an embedded tool-decision section when ASC CLI, paid ASO tools, MobAI, XcodeBuildMCP fallback, Higgsfield, or paid screenshot/creator tooling affects the packet.
+- `launch-cockpit.html`: rendered state so the founder can see which console pages are ready, blocked, or founder-approval gated.
 
 Small launches can merge `SCREENSHOTS.md` into `STORE_CONSOLE.md`, but keep `store-console.html` as the human-facing copy-paste surface.
 
 Each output must state the documentation refresh date. If current docs cannot be reached, mark the packet `blocked: docs refresh needed` instead of relying on old console memory.
+
+Run `npm run check:store-console -- --root .` or the installed-skill equivalent when the packet exists and the repo uses bundled validators.
 
 ## Store Console Packet Shape
 
@@ -145,6 +149,7 @@ Before creating the record, load `apple-signing-release.md` and confirm:
 - distribution signing strategy is known or explicitly blocked.
 - the name-collision plan is explicit; do not silently accept CLI fallback names like `<Name> - app`.
 - the founder understands whether they are using Full Access or Limited Access and why.
+- `PROJECT_STATE.yaml` and `launch-cockpit.html` reflect app-record readiness, blockers, and founder-only gates.
 
 ### App Information
 

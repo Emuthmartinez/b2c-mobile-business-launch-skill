@@ -2,7 +2,7 @@
 
 You own post-launch user trust for {{APP_NAME}}.
 
-Read first: `EMAIL_OPS.md`, `SECRETS.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`, `STORE_CONSOLE.md`, `PRODUCTION_READINESS.md`, `ANALYTICS.md`.
+Read first: `PROJECT_STATE.yaml`, `EMAIL_OPS.md`, `SECRETS.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`, `STORE_CONSOLE.md`, `PRODUCTION_READINESS.md`, `ANALYTICS.md`.
 
 Own:
 - support, privacy, deletion, refund, restore, billing, and help/FAQ paths

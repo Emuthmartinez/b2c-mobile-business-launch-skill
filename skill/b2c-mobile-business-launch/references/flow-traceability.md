@@ -2,16 +2,17 @@
 
 Use this for any multi-phase B2C app launch, especially before moving from research to brand/design or from design to implementation. The goal is to keep evidence, product decisions, visual decisions, build specs, and verification tied together.
 
-Create `LAUNCH_TRACE.md` when the launch has more than one serious artifact. Create `TECH_SPEC.md` when actual app/backend/web implementation is in scope and data, API, state, permissions, integrations, or platform behavior need to be precise.
+Create `PROJECT_STATE.yaml` first for phase/lane/provider/proof state. Create `LAUNCH_TRACE.md` when the launch has more than one serious artifact. Create `TECH_SPEC.md` when actual app/backend/web implementation is in scope and data, API, state, permissions, integrations, or platform behavior need to be precise.
 
 ## Contents
 
 - 1. Traceability Rule
-- 2. `LAUNCH_TRACE.md`
-- 3. Flow Gates
-- 4. `TECH_SPEC.md`
-- 5. Build-Ready Checklist
-- 6. Common Failures
+- 2. `PROJECT_STATE.yaml`
+- 3. `LAUNCH_TRACE.md`
+- 4. Flow Gates
+- 5. `TECH_SPEC.md`
+- 6. Build-Ready Checklist
+- 7. Common Failures
 
 ## 1. Traceability Rule
 
@@ -27,7 +28,21 @@ Every major launch decision should answer:
 
 Do not move a claim, screen, onboarding question, paywall behavior, pricing statement, data collection, or store-console answer forward unless it has a trace row or a clearly documented founder-only decision.
 
-## 2. `LAUNCH_TRACE.md`
+## 2. `PROJECT_STATE.yaml`
+
+Use `PROJECT_STATE.yaml` as the current-state index over trace work:
+
+- phase and autonomy mode
+- lane statuses, evidence paths, and blockers
+- provider routes, docs checked date, preflight, validation, fallback, and required secret names
+- active failure cards and LaunchBench/validator proof
+- founder-only gates and approval state
+
+Update it before crossing any flow gate. Render `launch-cockpit.html` when the founder needs to inspect state or when a provider/store/revenue/legal/readiness change materially changes launch risk.
+
+`PROJECT_STATE.yaml` does not replace `LAUNCH_TRACE.md`. State tells the agent where the launch stands; trace explains why each decision exists.
+
+## 3. `LAUNCH_TRACE.md`
 
 Use this compact table shape:
 
@@ -55,7 +70,7 @@ Required sections:
 
 Small launches can keep this inside `RESEARCH.md`, but the section must be easy to find and must be copied into builder handoffs.
 
-## 3. Flow Gates
+## 4. Flow Gates
 
 ### Research To Spec
 
@@ -64,6 +79,7 @@ Pass only when:
 - unsupported claims are removed or marked founder-only/legal-review
 - each core feature has a reason: demand, differentiation, monetization, retention, compliance, or operational need
 - open product alternatives are resolved through `ce-brainstorm` or documented as explicit assumptions
+- `PROJECT_STATE.yaml` marks research, paid-tool routing, and traceability status honestly
 
 ### Spec To Brand And Design
 
@@ -73,6 +89,7 @@ Pass only when:
 - each public claim has an evidence/proof constraint
 - `DESIGN.md`, `design.md`, `design.html`, and `onboarding.html` cite the trace IDs they express
 - accessibility and localization constraints are visible before screenshots or implementation prompts
+- `launch-cockpit.html` shows the design lane as partial until `DESIGN.md`, `design.md`, and HTML proofs exist
 
 ### Design To Build
 
@@ -82,6 +99,7 @@ Pass only when:
 - paywall and pricing surfaces match `REVENUE_OPS.md`, `TERMS.md`, store products, and analytics events
 - account deletion, privacy choices, restore purchases, support, and settings paths are specified
 - `TECH_SPEC.md` or `ENGINEERING_PLAN.md` contains data/API/state contracts for every non-static flow
+- failure cards are created for any unresolved attribution, revenue, store, privacy, email, or secret-routing risk
 
 ### Build To Proof
 
@@ -90,8 +108,9 @@ Pass only when:
 - MobAI or browser E2E covers critical user paths
 - analytics, entitlement, email, deletion, restore, and support paths are verified where in scope
 - `PRODUCTION_READINESS.md` records command outputs, fixtures, evidence paths, blockers, and founder-only gates
+- deterministic validators or LaunchBench scenarios run where they exist, with results recorded in `PROJECT_STATE.yaml`
 
-## 4. `TECH_SPEC.md`
+## 5. `TECH_SPEC.md`
 
 Create this when the app has backend APIs, database/storage, auth, subscriptions, email, analytics, AI, push, account deletion, or non-trivial platform behavior.
 
@@ -117,9 +136,11 @@ Acceptance:
 - backend/provider truth can be tested from a real frontend or device action
 - privacy/store disclosures can be traced to actual data and SDK behavior
 
-## 5. Build-Ready Checklist
+## 6. Build-Ready Checklist
 
 Before sending to Rork, Claude, Codex, or another builder:
+- `PROJECT_STATE.yaml` exists and matches current artifacts
+- `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
 - `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
@@ -127,9 +148,13 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `ENGINEERING_PLAN.md` references trace IDs and breaks work into implementation units
 - `AGENTS.md` points builders to trace, design, analytics, technical contracts, and readiness gates
 - `PRODUCTION_READINESS.md` defines the proof expected before launch-ready is claimed
+- active failure cards are assigned, blocked, or resolved with evidence
 
-## 6. Common Failures
+## 7. Common Failures
 
+- State says a lane is done, but the artifact/provider/dashboard/proof does not exist.
+- State is not updated after provider setup, app-record creation, signing changes, secret changes, revenue setup, or store-console work.
+- A failure card is marked resolved without command, provider, dashboard, or founder-approval evidence.
 - Research exists, but design and copy do not cite the evidence that shaped them.
 - `design.md` lists screens, but no data model or API contract explains how they work.
 - Analytics events are named, but no screen/API owner emits them.

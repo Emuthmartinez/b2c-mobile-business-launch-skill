@@ -1,0 +1,241 @@
+schema_version: "1"
+updated_at: "YYYY-MM-DD"
+project:
+  name: "App Name"
+  slug: "app-name"
+  owner: "Founder or team"
+  phase: "phase_0_orient"
+  platforms:
+    - ios
+  bundle_ids:
+    ios: "com.example.app"
+    android: ""
+  public_urls:
+    landing: ""
+    privacy: ""
+    terms: ""
+  source_truth:
+    transcript: ""
+    repo: ""
+    current_docs:
+      - "SPEC.md"
+autonomy:
+  mode: "prepare"
+  last_founder_approval: ""
+  founder_only_gates:
+    - "paid tool signups or spend"
+    - "credentials, secrets, and account access"
+    - "App Store or Google Play submission"
+    - "public posting or scheduling"
+lanes:
+  paid_tool_routing:
+    status: "partial"
+    evidence:
+      - "TOOL_DECISIONS.md"
+    blockers: []
+  secrets:
+    status: "partial"
+    evidence:
+      - "SECRETS.md"
+    blockers: []
+  research:
+    status: "partial"
+    evidence:
+      - "RESEARCH.md"
+    blockers: []
+  traceability:
+    status: "partial"
+    evidence:
+      - "LAUNCH_TRACE.md"
+    blockers: []
+  product:
+    status: "partial"
+    evidence:
+      - "SPEC.md"
+    blockers: []
+  design:
+    status: "partial"
+    evidence:
+      - "DESIGN.md"
+      - "design.md"
+      - "design.html"
+    blockers: []
+  analytics_attribution:
+    status: "partial"
+    evidence:
+      - "ANALYTICS.md"
+      - "analytics-plan.html"
+    blockers: []
+    attribution_contract:
+      screen_early: false
+      stable_source_keys:
+        - "friend"
+        - "x_twitter"
+        - "tiktok"
+        - "instagram"
+        - "youtube"
+        - "app_store_search"
+        - "google_play_search"
+        - "creator"
+        - "ai_search"
+        - "other"
+      other_free_text: false
+      event_name: "attribution_source_selected"
+      person_properties:
+        - "self_reported_source"
+        - "self_reported_source_label"
+      backend_persistence: false
+      anonymous_reconciliation: false
+      verified: false
+  onboarding:
+    status: "partial"
+    evidence:
+      - "ONBOARDING.md"
+      - "onboarding.html"
+    blockers: []
+  revenue:
+    status: "partial"
+    evidence:
+      - "REVENUE_OPS.md"
+    blockers: []
+  store_console:
+    status: "partial"
+    evidence:
+      - "STORE_CONSOLE.md"
+      - "store-console.html"
+    blockers: []
+  apple_signing:
+    status: "partial"
+    evidence:
+      - "APPLE_SIGNING.md"
+    blockers: []
+  privacy_legal:
+    status: "partial"
+    evidence:
+      - "PRIVACY.md"
+      - "TERMS.md"
+    blockers: []
+  email:
+    status: "partial"
+    evidence:
+      - "EMAIL_OPS.md"
+    blockers: []
+  engineering:
+    status: "partial"
+    evidence:
+      - "TECH_SPEC.md"
+      - "ENGINEERING_PLAN.md"
+      - "PRODUCTION_READINESS.md"
+    blockers: []
+  growth:
+    status: "partial"
+    evidence:
+      - "UGC_PLAYBOOK.md"
+      - "FASTLANE_OPS.md"
+    blockers: []
+tools:
+  doppler:
+    route: "intended_paid_or_account_tool"
+    docs_checked_at: ""
+    cli_version: ""
+    required_secrets:
+      - "DOPPLER_TOKEN"
+    preflight: "Confirm project/config naming before creating service tokens."
+    validation: "doppler run -- printenv APP_ENV"
+    fallback: "Apple Keychain, platform secrets, or names-only .env after founder approval."
+  posthog:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "POSTHOG_PROJECT_API_KEY"
+      - "POSTHOG_PERSONAL_API_KEY"
+    preflight: "Confirm product analytics region, replay/survey posture, and privacy disclosures."
+    validation: "Verify event plus person property in PostHog."
+    fallback: "Local event log or open-source analytics only after founder approval."
+  revenuecat:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "REVENUECAT_PUBLIC_IOS_KEY"
+      - "REVENUECAT_SECRET_API_KEY"
+      - "REVENUECAT_WEBHOOK_SECRET"
+    preflight: "Confirm entitlement, offering, store products, and sandbox account."
+    validation: "Sandbox purchase grants entitlement in app and backend/profile."
+    fallback: "StoreKit/TestFlight sandbox notes only after founder approval."
+  stripe:
+    route: "optional_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "STRIPE_SECRET_KEY"
+      - "STRIPE_WEBHOOK_SECRET"
+    preflight: "Confirm whether web checkout or web funnels are in scope."
+    validation: "Checkout or webhook event projects entitlement correctly."
+    fallback: "Defer web checkout and use app-store purchase only after founder approval."
+  resend:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "RESEND_API_KEY"
+      - "RESEND_WEBHOOK_SECRET"
+    preflight: "Confirm sender domain, reply-to, unsubscribe, and support aliases."
+    validation: "Send test email and verify webhook or provider log."
+    fallback: "Cloudflare routing plus manual Gmail responses after founder approval."
+  sentry:
+    route: "optional_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "SENTRY_DSN"
+      - "SENTRY_AUTH_TOKEN"
+    preflight: "Confirm crash/performance scope and PII scrubbing."
+    validation: "Known non-production test event reaches Sentry."
+    fallback: "Store crash reports and local logs after founder approval."
+  app_store_connect:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "ASC_KEY_ID"
+      - "ASC_ISSUER_ID"
+      - "ASC_PRIVATE_KEY"
+    preflight: "Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, and founder approval before app-record mutation."
+    validation: "Bundle ID and app record exist; archive/export/upload path is known."
+    fallback: "Manual ASC click-path packet after founder approval."
+  google_play:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"
+    preflight: "Confirm developer account, package name, app content declarations, data safety, and tester track."
+    validation: "Internal testing release or blocked reason recorded."
+    fallback: "Manual Play Console packet after founder approval."
+  cloudflare:
+    route: "optional_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "CLOUDFLARE_API_TOKEN"
+    preflight: "Confirm domain, DNS, email routing, Pages/Workers, and secrets."
+    validation: "HTTPS, DNS, headers, routes, and email aliases verified."
+    fallback: "Existing registrar/host after founder approval."
+proof:
+  launch_cockpit: "launch-cockpit.html"
+  launchbench:
+    last_run: ""
+    scenarios_passed: []
+    scenarios_failed: []
+  commands:
+    - command: ""
+      expected: ""
+      actual: ""
+      evidence: ""
+open_questions:
+  - owner: "founder"
+    question: "What decisions still require founder approval?"
+    blocks:
+      - "store submission"
+failure_cards:
+  active:
+    - id: "doppler-docs-stale"
+      severity: "medium"
+      owner: "orchestrator"
+      status: "open"
+      next_action: "Refresh official docs and local CLI help before writing setup commands."
+  resolved: []
