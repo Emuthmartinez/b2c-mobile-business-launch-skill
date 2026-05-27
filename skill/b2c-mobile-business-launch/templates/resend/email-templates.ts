@@ -22,6 +22,45 @@ export type LaunchEmail = {
   idempotencyKeyHint: string;
 };
 
+export type LaunchEmailDesignSystem = {
+  source: string;
+  colors: {
+    canvas: string;
+    surface: string;
+    border: string;
+    text: string;
+    mutedText: string;
+    accent: string;
+    accentText: string;
+    link: string;
+    footerText: string;
+  };
+  typography: {
+    bodyFontFamily: string;
+    headingFontFamily: string;
+    bodySize: string;
+    bodyLineHeight: string;
+    headingSize: string;
+    headingLineHeight: string;
+    footerSize: string;
+  };
+  radius: {
+    card: string;
+    button: string;
+  };
+  spacing: {
+    pagePadding: string;
+    cardPadding: string;
+    logoGap: string;
+    buttonMargin: string;
+    footerPadding: string;
+  };
+  email: {
+    maxWidth: string;
+    logoHeight: string;
+  };
+};
+
 export type LaunchEmailBrand = {
   appName: string;
   appUrl: string;
@@ -32,6 +71,7 @@ export type LaunchEmailBrand = {
   mailingAddress?: string;
   preferencesUrl?: string;
   unsubscribeUrl?: string;
+  designSystem: LaunchEmailDesignSystem;
 };
 
 type BaseInput = {
@@ -88,7 +128,65 @@ export type AccountDeletionConfirmedInput = BaseInput & {
   restartUrl?: string;
 };
 
-const defaultColor = '#111827';
+type ResolvedEmailDesign = {
+  canvas: string;
+  surface: string;
+  border: string;
+  text: string;
+  mutedText: string;
+  accent: string;
+  accentText: string;
+  link: string;
+  footerText: string;
+  bodyFontFamily: string;
+  headingFontFamily: string;
+  bodySize: string;
+  bodyLineHeight: string;
+  headingSize: string;
+  headingLineHeight: string;
+  footerSize: string;
+  cardRadius: string;
+  buttonRadius: string;
+  pagePadding: string;
+  cardPadding: string;
+  logoGap: string;
+  buttonMargin: string;
+  footerPadding: string;
+  maxWidth: string;
+  logoHeight: string;
+};
+
+function resolveDesignSystem(brand: LaunchEmailBrand): ResolvedEmailDesign {
+  const design = brand.designSystem;
+
+  return {
+    canvas: design?.colors?.canvas ?? '#f6f7f9',
+    surface: design?.colors?.surface ?? '#ffffff',
+    border: design?.colors?.border ?? '#e5e7eb',
+    text: design?.colors?.text ?? '#111827',
+    mutedText: design?.colors?.mutedText ?? '#374151',
+    accent: design?.colors?.accent ?? brand.primaryColor ?? '#111827',
+    accentText: design?.colors?.accentText ?? '#ffffff',
+    link: design?.colors?.link ?? design?.colors?.accent ?? brand.primaryColor ?? '#111827',
+    footerText: design?.colors?.footerText ?? '#6b7280',
+    bodyFontFamily: design?.typography?.bodyFontFamily ?? 'Arial, sans-serif',
+    headingFontFamily: design?.typography?.headingFontFamily ?? design?.typography?.bodyFontFamily ?? 'Arial, sans-serif',
+    bodySize: design?.typography?.bodySize ?? '15px',
+    bodyLineHeight: design?.typography?.bodyLineHeight ?? '1.6',
+    headingSize: design?.typography?.headingSize ?? '24px',
+    headingLineHeight: design?.typography?.headingLineHeight ?? '1.2',
+    footerSize: design?.typography?.footerSize ?? '12px',
+    cardRadius: design?.radius?.card ?? '12px',
+    buttonRadius: design?.radius?.button ?? '8px',
+    pagePadding: design?.spacing?.pagePadding ?? '32px 16px',
+    cardPadding: design?.spacing?.cardPadding ?? '28px',
+    logoGap: design?.spacing?.logoGap ?? '24px',
+    buttonMargin: design?.spacing?.buttonMargin ?? '28px 0',
+    footerPadding: design?.spacing?.footerPadding ?? '18px 4px',
+    maxWidth: design?.email?.maxWidth ?? '560px',
+    logoHeight: design?.email?.logoHeight ?? '36px',
+  };
+}
 
 function escapeHtml(value: string): string {
   return value
@@ -121,10 +219,11 @@ function oneClickUnsubscribeHeaders(unsubscribeUrl?: string): Record<string, str
 }
 
 function button(label: string, href: string, brand: LaunchEmailBrand): string {
-  const color = escapeHtml(brand.primaryColor ?? defaultColor);
+  const design = resolveDesignSystem(brand);
+
   return `
-    <p style="margin:28px 0;">
-      <a href="${escapeHtml(href)}" style="background:${color};border-radius:8px;color:#ffffff;display:inline-block;font-family:Arial,sans-serif;font-size:15px;font-weight:700;line-height:44px;padding:0 18px;text-decoration:none;">
+    <p style="margin:${escapeHtml(design.buttonMargin)};">
+      <a href="${escapeHtml(href)}" style="background:${escapeHtml(design.accent)};border-radius:${escapeHtml(design.buttonRadius)};color:${escapeHtml(design.accentText)};display:inline-block;font-family:${escapeHtml(design.bodyFontFamily)};font-size:${escapeHtml(design.bodySize)};font-weight:700;line-height:44px;padding:0 18px;text-decoration:none;">
         ${escapeHtml(label)}
       </a>
     </p>
@@ -139,14 +238,16 @@ function renderLayout(input: {
   category: LaunchEmailCategory;
 }): string {
   const { brand, preview, title, bodyHtml, category } = input;
+  const design = resolveDesignSystem(brand);
   const brandName = escapeHtml(brand.fromName ?? brand.appName);
   const footerParts = [
     `Sent by ${brandName}.`,
-    `Need help? Email <a href="mailto:${escapeHtml(brand.supportEmail)}" style="color:#374151;">${escapeHtml(brand.supportEmail)}</a>.`,
+    `Need help? Email <a href="mailto:${escapeHtml(brand.supportEmail)}" style="color:${escapeHtml(design.link)};">${escapeHtml(brand.supportEmail)}</a>.`,
     brand.preferencesUrl && category !== 'transactional'
-      ? `<a href="${escapeHtml(brand.preferencesUrl)}" style="color:#374151;">Manage email preferences</a>.`
+      ? `<a href="${escapeHtml(brand.preferencesUrl)}" style="color:${escapeHtml(design.link)};">Manage email preferences</a>.`
       : undefined,
     brand.mailingAddress ? escapeHtml(brand.mailingAddress) : undefined,
+    brand.designSystem?.source ? `Email styling derived from ${escapeHtml(brand.designSystem.source)}.` : undefined,
   ].filter(Boolean);
 
   return `<!doctype html>
@@ -157,21 +258,21 @@ function renderLayout(input: {
     <title>${escapeHtml(title)}</title>
     <meta name="x-preview" content="${escapeHtml(preview)}">
   </head>
-  <body style="background:#f6f7f9;margin:0;padding:0;">
+  <body style="background:${escapeHtml(design.canvas)};margin:0;padding:0;">
     <div style="display:none;max-height:0;overflow:hidden;">${escapeHtml(preview)}</div>
-    <main style="font-family:Arial,sans-serif;margin:0 auto;max-width:560px;padding:32px 16px;">
-      <section style="background:#ffffff;border:1px solid #e5e7eb;border-radius:12px;padding:28px;">
+    <main style="font-family:${escapeHtml(design.bodyFontFamily)};margin:0 auto;max-width:${escapeHtml(design.maxWidth)};padding:${escapeHtml(design.pagePadding)};">
+      <section style="background:${escapeHtml(design.surface)};border:1px solid ${escapeHtml(design.border)};border-radius:${escapeHtml(design.cardRadius)};padding:${escapeHtml(design.cardPadding)};">
         ${
           brand.logoUrl
-            ? `<img alt="${brandName}" src="${escapeHtml(brand.logoUrl)}" style="display:block;height:36px;margin:0 0 24px;width:auto;">`
-            : `<p style="color:#111827;font-size:16px;font-weight:700;margin:0 0 24px;">${brandName}</p>`
+            ? `<img alt="${brandName}" src="${escapeHtml(brand.logoUrl)}" style="display:block;height:${escapeHtml(design.logoHeight)};margin:0 0 ${escapeHtml(design.logoGap)};width:auto;">`
+            : `<p style="color:${escapeHtml(design.text)};font-family:${escapeHtml(design.headingFontFamily)};font-size:16px;font-weight:700;margin:0 0 ${escapeHtml(design.logoGap)};">${brandName}</p>`
         }
-        <h1 style="color:#111827;font-size:24px;line-height:1.2;margin:0 0 16px;">${escapeHtml(title)}</h1>
-        <div style="color:#374151;font-size:15px;line-height:1.6;">
+        <h1 style="color:${escapeHtml(design.text)};font-family:${escapeHtml(design.headingFontFamily)};font-size:${escapeHtml(design.headingSize)};line-height:${escapeHtml(design.headingLineHeight)};margin:0 0 16px;">${escapeHtml(title)}</h1>
+        <div style="color:${escapeHtml(design.mutedText)};font-family:${escapeHtml(design.bodyFontFamily)};font-size:${escapeHtml(design.bodySize)};line-height:${escapeHtml(design.bodyLineHeight)};">
           ${bodyHtml}
         </div>
       </section>
-      <footer style="color:#6b7280;font-family:Arial,sans-serif;font-size:12px;line-height:1.5;padding:18px 4px;">
+      <footer style="color:${escapeHtml(design.footerText)};font-family:${escapeHtml(design.bodyFontFamily)};font-size:${escapeHtml(design.footerSize)};line-height:1.5;padding:${escapeHtml(design.footerPadding)};">
         ${footerParts.map((part) => `<p style="margin:0 0 6px;">${part}</p>`).join('')}
       </footer>
     </main>
@@ -216,6 +317,7 @@ function launchEmail(input: {
 export function waitlistConfirmationEmail(input: WaitlistConfirmationInput): LaunchEmail {
   const appName = input.brand.appName;
   const title = `You are on the ${appName} waitlist`;
+  const design = resolveDesignSystem(input.brand);
   const referral = input.referralUrl
     ? `Share your invite link here: ${input.referralUrl}`
     : undefined;
@@ -231,7 +333,7 @@ export function waitlistConfirmationEmail(input: WaitlistConfirmationInput): Lau
       <p>${escapeHtml(greeting(input.recipientName))}</p>
       <p>Your spot is saved. We will send the next update when early access opens.</p>
       ${input.nextStepUrl ? button('See what is next', input.nextStepUrl, input.brand) : ''}
-      ${input.referralUrl ? `<p>Your invite link: <a href="${escapeHtml(input.referralUrl)}" style="color:#111827;">${escapeHtml(input.referralUrl)}</a></p>` : ''}
+      ${input.referralUrl ? `<p>Your invite link: <a href="${escapeHtml(input.referralUrl)}" style="color:${escapeHtml(design.link)};">${escapeHtml(input.referralUrl)}</a></p>` : ''}
     `,
     text: lineBreakText([
       greeting(input.recipientName),

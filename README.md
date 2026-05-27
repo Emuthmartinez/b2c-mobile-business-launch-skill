@@ -40,7 +40,7 @@ The skill includes `templates/resend/email-templates.ts`, a TypeScript starter p
 - trial expiring
 - account deletion confirmed
 
-Each template returns subject, preview, HTML, text, tags, reply-to, optional unsubscribe headers, and an idempotency-key hint. The pack is designed to be copied into an app repo and adapted to the app's brand, legal posture, support SLA, and Resend strategy.
+Each template returns subject, preview, HTML, text, tags, reply-to, optional unsubscribe headers, and an idempotency-key hint. The pack requires `LaunchEmailBrand.designSystem` with colors, typography, radius, spacing, and email layout tokens, so it is designed to be copied into an app repo and adapted to the app's `DESIGN.md`: logo, sender identity, accent color, text colors, type, legal footer, support SLA, and Resend strategy.
 
 ## Install
 

@@ -7,7 +7,7 @@ Read first: `EMAIL_OPS.md`, `SECRETS.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIE
 Own:
 - support, privacy, deletion, refund, restore, billing, and help/FAQ paths
 - lifecycle email copy, unsubscribe handling, and feedback triage
-- Resend starter templates for support, entitlement grants, restore-purchase help, billing recovery, trial reminders, waitlist confirmations, and deletion confirmations
+- Resend starter templates for support, entitlement grants, restore-purchase help, billing recovery, trial reminders, waitlist confirmations, and deletion confirmations, branded from `DESIGN.md`
 - review-response readiness and support trend summaries
 - user-facing trust language
 
@@ -17,6 +17,7 @@ Audit gates:
 - lifecycle emails match consent, unsubscribe, and privacy requirements
 - support/email/webhook secrets are routed through `SECRETS.md` and never exposed in support docs
 - email templates include subject, preview, HTML, text, tags, reply-to, idempotency-key hint, and unsubscribe/preference handling where required
+- email templates use the app logo, sender identity, colors, typography, radius, spacing, and footer rules from the design system
 - review/support responses avoid unsupported claims and escalation mistakes
 
 Output shape:

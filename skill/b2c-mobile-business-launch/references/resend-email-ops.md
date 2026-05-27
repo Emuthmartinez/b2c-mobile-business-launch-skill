@@ -150,6 +150,7 @@ Choose one template strategy:
 
 Every template needs:
 - subject, preview text where supported, HTML, plain text, sender, reply-to, purpose, owner
+- brand fields and required email-safe design tokens derived from `DESIGN.md`: logo, app name, accent color, text colors, surface/border colors, typography, radius, spacing, max width, logo height, and footer rules
 - mobile-safe layout and accessible links/buttons
 - unsubscribe/preference link for non-transactional messages
 - legal footer where marketing or lifecycle messaging requires it
@@ -256,7 +257,7 @@ Before public traffic:
 
 ## Starter Template Pack
 
-Use `templates/resend/email-templates.ts` as the out-of-the-box pack for B2C app launches. Copy it into the product repo when Resend is selected, then adapt brand copy, links, legal footer, and support SLAs.
+Use `templates/resend/email-templates.ts` as the out-of-the-box pack for B2C app launches. Copy it into the product repo when Resend is selected, then adapt brand copy, links, legal footer, support SLAs, and `LaunchEmailBrand.designSystem` from the project's canonical `DESIGN.md`.
 
 Included templates:
 - `waitlistConfirmationEmail` - confirms waitlist signup and optional referral link.
@@ -269,6 +270,8 @@ Included templates:
 - `accountDeletionConfirmedEmail` - confirms privacy/account deletion completion.
 
 Rules:
+- Do not ship generic-looking email. `LaunchEmailBrand.designSystem` is required and must be populated from the business design system before production sends. Set `designSystem.source` to `DESIGN.md` or the project-specific design artifact used, and fill every required token group: `colors`, `typography`, `radius`, `spacing`, and `email`.
+- Use email-safe interpretations of design tokens: hex colors, web-safe or hosted font stacks, conservative radii, fixed max width, accessible contrast, and inline styles.
 - Treat the pack as starter implementation, not legal copy. Match `PRIVACY.md`, `TERMS.md`, subscription disclosures, and app-store billing rules before production.
 - For `entitlementGrantedEmail`, verify the RevenueCat grant in dashboard/API proof first. Do not imply that a granted entitlement changes billing, cancels a subscription, creates a paid subscription, or issues a refund.
 - For lifecycle or marketing-like messages, include preference/unsubscribe links and one-click unsubscribe headers when bulk-sender rules apply.
