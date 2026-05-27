@@ -9,12 +9,14 @@ Load `paid-tool-routing.md` before replacing Resend account/domain features, bro
 - Current Sources To Refresh
 - Required Artifact
 - Setup Process
+- Starter Template Pack
 - Verification Checklist
 
 ## Current Sources To Refresh
 
 Refresh these docs before implementation because email deliverability, bulk-sender requirements, and Resend features change:
 - Resend docs index: `https://resend.com/docs`
+- Resend AI docs index: `https://resend.com/docs/llms.txt`
 - Next.js TypeScript quickstart: `https://resend.com/docs/send-with-nextjs`
 - Send Email API: `https://resend.com/docs/api-reference/emails`
 - Idempotency keys: `https://resend.com/docs/dashboard/emails/idempotency-keys`
@@ -30,6 +32,7 @@ Refresh these docs before implementation because email deliverability, bulk-send
 - Automations: `https://resend.com/docs/dashboard/automations/introduction`
 - Transactional unsubscribe headers: `https://resend.com/docs/dashboard/emails/add-unsubscribe-to-transactional-emails`
 - Receiving/inbound email: `https://resend.com/docs/dashboard/receiving/introduction`, `https://resend.com/docs/dashboard/receiving/custom-domains`
+- RevenueCat customer entitlements and API docs when support emails mention granted entitlements: `https://www.revenuecat.com/docs/dashboard-and-metrics/customer-history/active-entitlements`, `https://www.revenuecat.com/docs/api-v2`
 
 ## Required Artifact
 
@@ -143,6 +146,7 @@ Choose one template strategy:
 - React Email/TSX templates in the product repo.
 - Resend hosted Templates for Automations and non-developer editing.
 - Simple inline HTML/text only for tiny early-stage transactional messages.
+- Starter TypeScript templates from `templates/resend/email-templates.ts` when the app needs common support, lifecycle, billing, entitlement, waitlist, or privacy messages quickly.
 
 Every template needs:
 - subject, preview text where supported, HTML, plain text, sender, reply-to, purpose, owner
@@ -150,6 +154,7 @@ Every template needs:
 - unsubscribe/preference link for non-transactional messages
 - legal footer where marketing or lifecycle messaging requires it
 - test recipient and test-send record
+- tags and idempotency-key strategy for retry-prone messages
 
 ### 6. Contacts, Topics, Segments, Broadcasts
 
@@ -248,6 +253,28 @@ Before public traffic:
 - Suppress or stop sending to bounced, complained, deleted, or unsubscribed contacts.
 - Check headers on test emails for SPF, DKIM, and DMARC pass.
 - Monitor Resend Emails, Logs, Webhooks, Contacts, Broadcasts, Automation Runs, and Exports as needed.
+
+## Starter Template Pack
+
+Use `templates/resend/email-templates.ts` as the out-of-the-box pack for B2C app launches. Copy it into the product repo when Resend is selected, then adapt brand copy, links, legal footer, and support SLAs.
+
+Included templates:
+- `waitlistConfirmationEmail` - confirms waitlist signup and optional referral link.
+- `supportRequestReceivedEmail` - acknowledges inbound support and sets response expectations.
+- `supportReplyEmail` - wraps human or agent-assisted support replies.
+- `entitlementGrantedEmail` - tells a user that beta/support access was granted.
+- `restorePurchasesHelpEmail` - helps users recover app-store or web purchase access.
+- `paymentFailedEmail` - sends secure billing-recovery instructions.
+- `trialExpiringEmail` - warns before trial conversion or access change.
+- `accountDeletionConfirmedEmail` - confirms privacy/account deletion completion.
+
+Rules:
+- Treat the pack as starter implementation, not legal copy. Match `PRIVACY.md`, `TERMS.md`, subscription disclosures, and app-store billing rules before production.
+- For `entitlementGrantedEmail`, verify the RevenueCat grant in dashboard/API proof first. Do not imply that a granted entitlement changes billing, cancels a subscription, creates a paid subscription, or issues a refund.
+- For lifecycle or marketing-like messages, include preference/unsubscribe links and one-click unsubscribe headers when bulk-sender rules apply.
+- For support and account-access messages, keep replies transactional unless marketing or upsell copy is added.
+- Keep API keys and webhook secrets server-only through `SECRETS.md`; never generate sends from browser code.
+- Use Resend tags and idempotency keys for waitlist, support, billing, entitlement, privacy, and lifecycle emails that might be retried.
 
 ## Verification Checklist
 

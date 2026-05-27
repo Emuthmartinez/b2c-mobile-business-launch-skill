@@ -1,35 +1,59 @@
 # B2C Mobile Business Launch Skill
 
-A reusable Codex/Claude skill for turning a B2C mobile app idea, transcript, early repo, or half-built app into a launch-ready business package.
+A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript, early repo, or half-built app into a launch-ready business package.
 
-It is built for the full path: research, positioning, design system, secrets, analytics, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
+This is the launch operating system: research, positioning, design system, secrets, analytics, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
 
-## What This Skill Forces
+## What It Produces
 
-- Research flows into product, brand, design, implementation specs, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
-- Visual work produces `DESIGN.md`, lowercase `design.md`, and rendered HTML proofs instead of prose-only design direction.
-- Analytics and PostHog attribution are planned upfront with founder-visible `analytics-plan.html`.
-- Secrets are routed through `SECRETS.md`, Doppler by default, live Doppler documentation checks, `doppler run --` command wrappers, names-only `.env.example`, CI/deploy injection, and production service-token/provider-integration gates.
-- Self-reported attribution is a data contract, not a screen: early prompt, stable source keys, `other` free text, PostHog person properties, backend/profile persistence, anonymous-to-identified reconciliation, and live proof.
-- Store ops produce copy-paste App Store Connect and Google Play packets, privacy answers, screenshot matrices, and founder-only gate lists.
-- Paid third-party tooling has explicit fallback routing; agents must ask before silently downgrading to free/manual paths.
-- App handoffs include `APP_AGENTS.md` plus simple app-local role prompts for orchestrator, marketing, engineering, product, design, and customer success.
+| Lane | Output |
+| --- | --- |
+| Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
+| Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
+| Design | `DESIGN.md`, lowercase `design.md`, HTML visual proofs, Higgsfield visual guidance, screenshot systems, and audit gates |
+| Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
+| Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
+| Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
+| Store Ops | App Store Connect and Google Play copy-paste packets, privacy answers, screenshots, review notes, and ASC CLI routing |
+| Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
 
-## Included Skill Areas
+## Non-Negotiables
 
-- AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, and competitive research
-- Google `design.md`, Impeccable/Taste/Layers-inspired design gates, HTML visual proofs, and Higgsfield visual/motion workflows
-- Onboarding conversion, mascot/demo guidance, review prompts, hard/soft paywalls, closing offers, and trial strategy
-- PostHog analytics, attribution, identity stitching, dashboards, experiments, session replay, surveys, and privacy mapping
-- Doppler-first secret management, provider-neutral fallbacks, CI/deploy injection, service tokens, new-secret routing, and bundle-safety checks
-- RevenueCat, Stripe, app-store products, web funnels, entitlements, webhooks, restore, refund, and subscription proof
-- App Store Connect, Google Play Console, ASC CLI routing, screenshots, privacy labels, data safety, and review notes
-- Resend setup, sender DNS, transactional email, lifecycle automations, broadcasts, contacts/topics, webhooks, inbound, and unsubscribe handling
-- MobAI with XcodeBuildMCP fallback, device screenshots, E2E proof, backend/provider verification, and production readiness
-- Live documentation gates for Doppler and XcodeBuildMCP, including official-doc URLs, CLI/help snapshots, docs-vs-local mismatch notes, and proof artifacts
-- Fastlane AI and UGC creator-engine planning for post-launch organic growth
+- Research must flow into product, brand, design, implementation, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
+- Secrets route through `SECRETS.md`, Doppler by default, live Doppler documentation checks, `doppler run --`, names-only `.env.example`, and production service-token/provider-integration gates.
+- Attribution is a data contract, not a screen: stable keys, `other` free text, PostHog person properties, backend persistence, anonymous-to-identified reconciliation, and proof.
+- Visual work must produce tokenized design docs and rendered HTML proofs, not prose-only direction.
+- Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
+- Store and legal work must become founder-facing copy-paste packets with exact console fields, blocked approvals, and current docs basis.
+- XcodeBuildMCP and Doppler setup must refresh official docs plus local CLI/tool help before commands or readiness proof.
 
-## Repo Layout
+## Resend Starter Templates
+
+The skill includes `templates/resend/email-templates.ts`, a TypeScript starter pack for common B2C app email tasks:
+
+- waitlist confirmation
+- support request received
+- support reply
+- entitlement granted
+- restore purchases help
+- payment failed
+- trial expiring
+- account deletion confirmed
+
+Each template returns subject, preview, HTML, text, tags, reply-to, optional unsubscribe headers, and an idempotency-key hint. The pack is designed to be copied into an app repo and adapted to the app's brand, legal posture, support SLA, and Resend strategy.
+
+## Install
+
+Clone the repo, then link the skill into the runtimes you use:
+
+```bash
+mkdir -p ~/.codex/skills ~/.claude/skills ~/.agents/skills
+ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.codex/skills/b2c-mobile-business-launch
+ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.claude/skills/b2c-mobile-business-launch
+ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.agents/skills/b2c-mobile-business-launch
+```
+
+## Layout
 
 ```text
 skill/
@@ -37,37 +61,15 @@ skill/
     SKILL.md
     references/
     templates/
+      app-agent-roster/
+      resend/
+      secrets/
 ```
 
-`skill/b2c-mobile-business-launch/SKILL.md` is the actual installable skill. The README lives outside the skill folder so the skill stays clean.
-
-## Local Install
-
-Codex:
-
-```bash
-mkdir -p ~/.codex/skills
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.codex/skills/b2c-mobile-business-launch
-```
-
-Claude:
-
-```bash
-mkdir -p ~/.claude/skills
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.claude/skills/b2c-mobile-business-launch
-```
-
-Shared agent skills:
-
-```bash
-mkdir -p ~/.agents/skills
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.agents/skills/b2c-mobile-business-launch
-```
-
-## Validation
+## Validate
 
 ```bash
 uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skill/b2c-mobile-business-launch
 ```
 
-The skill is intentionally documentation-heavy because its job is to prevent launch drift across research, design, build, revenue, legal, store, and marketing surfaces.
+This skill is intentionally guardrail-heavy. Its job is to prevent launch drift across research, design, build, revenue, legal, store, email, growth, and verification surfaces.
