@@ -1,5 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill-runtime",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,6 +11,7 @@
     "check:secrets": "tsx scripts/check-secret-routing.ts",
     "audit:links": "tsx scripts/audit-skill-links.ts --skill-root .",
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
+    "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
     "audit": "npm exec tsc -- --noEmit && npm run audit:links && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
   },

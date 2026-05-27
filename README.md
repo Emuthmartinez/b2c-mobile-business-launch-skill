@@ -8,7 +8,7 @@ This is a launch operating system for consumer apps: research, positioning, desi
 
 The skill now has two layers:
 
-- Human-readable launch playbooks in `references/`.
+- Human-readable launch playbooks in `skill/b2c-mobile-business-launch/references/`.
 - Machine-checkable launch state and validators through `PROJECT_STATE.yaml`, `launch-cockpit.html`, LaunchBench scenarios, and TypeScript scripts.
 
 That means future agents do not just "remember" the launch process. They can inspect state, render a founder-facing cockpit, run checks, and keep known failure modes visible as failure cards.
@@ -55,6 +55,7 @@ npm run check:store-console -- --root /path/to/app
 npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
 npm run launchbench
+npm run test:validators
 ```
 
 When running from an installed skill instead of this repo:
@@ -74,11 +75,12 @@ The scripts are intentionally simple:
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
-- `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/`.
+- `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/` and runs deterministic validator fixtures.
+- `run-validator-fixtures.ts` exercises positive and negative fixtures so validator false negatives become audit failures.
 
 ## Resend Starter Templates
 
-The skill includes `templates/resend/email-templates.ts`, a TypeScript starter pack for common B2C app email tasks:
+The skill includes `skill/b2c-mobile-business-launch/templates/resend/email-templates.ts`, a TypeScript starter pack for common B2C app email tasks:
 
 - waitlist confirmation
 - support request received

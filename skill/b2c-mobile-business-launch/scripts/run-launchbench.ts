@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 import { asArray, asString, isRecord, issue, reportAndExit } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
+const skillRoot = path.resolve(scriptDir, "..");
 const scenarioDir = path.resolve(scriptDir, "../evals/launchbench");
 const issues = [];
 const knownValidators = new Set([
@@ -60,3 +62,15 @@ if (!existsSync(scenarioDir)) {
 
 reportAndExit("LaunchBench scenario validation", issues);
 
+if (issues.some((item) => item.severity === "error")) {
+  process.exitCode = 1;
+} else {
+  const fixtureRunner = path.join(scriptDir, "run-validator-fixtures.ts");
+  const tsxBin = path.join(skillRoot, "node_modules/.bin/tsx");
+  const result = spawnSync(tsxBin, [fixtureRunner], { cwd: skillRoot, encoding: "utf8" });
+  process.stdout.write(result.stdout);
+  process.stderr.write(result.stderr);
+  if (result.status !== 0) {
+    process.exitCode = result.status ?? 1;
+  }
+}

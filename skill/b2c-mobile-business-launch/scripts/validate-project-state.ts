@@ -24,6 +24,10 @@ const state = loaded.state;
 if (state) {
   requireString(state, "schema_version", issues);
   requireString(state, "updated_at", issues);
+  const updatedAt = asString(getPath(state, "updated_at"));
+  if (updatedAt && !/^\d{4}-\d{2}-\d{2}(?:T[\d:.+-]+Z?)?$/.test(updatedAt)) {
+    issues.push(issue("error", "updated_at.placeholder", "updated_at must be a concrete ISO date, not a placeholder.", "PROJECT_STATE.yaml"));
+  }
   requireString(state, "project.name", issues);
   requireString(state, "project.slug", issues);
   requireString(state, "project.phase", issues);
@@ -41,15 +45,27 @@ if (state) {
     }
     requireStatus(state, `${lanePath}.status`, issues);
     const evidence = asArray(getPath(state, `${lanePath}.evidence`));
+    const nonEmptyEvidence = evidence.filter((item) => typeof item === "string" ? item.trim().length > 0 : Boolean(item));
+    for (const [index, evidenceItem] of evidence.entries()) {
+      if (typeof evidenceItem === "string" && evidenceItem.trim().length === 0) {
+        issues.push(issue("error", `${lanePath}.evidence.${index}.blank`, `${lanePath}.evidence entries must not be blank.`, "PROJECT_STATE.yaml"));
+      }
+    }
     const status = asString(getPath(state, `${lanePath}.status`));
-    if (status === "done" && evidence.length === 0) {
+    if (status === "done" && nonEmptyEvidence.length === 0) {
       issues.push(issue("error", `${lanePath}.done_without_evidence`, `${lanePath} cannot be done without evidence paths.`, "PROJECT_STATE.yaml"));
     }
     const blockers = asArray(getPath(state, `${lanePath}.blockers`));
-    if (status === "blocked" && blockers.length === 0) {
+    const nonEmptyBlockers = blockers.filter((item) => typeof item === "string" ? item.trim().length > 0 : Boolean(item));
+    for (const [index, blocker] of blockers.entries()) {
+      if (typeof blocker === "string" && blocker.trim().length === 0) {
+        issues.push(issue("error", `${lanePath}.blockers.${index}.blank`, `${lanePath}.blockers entries must not be blank.`, "PROJECT_STATE.yaml"));
+      }
+    }
+    if (status === "blocked" && nonEmptyBlockers.length === 0) {
       issues.push(issue("error", `${lanePath}.blocked_without_blocker`, `${lanePath} is blocked but has no blocker.`, "PROJECT_STATE.yaml"));
     }
-    if ((status === "deferred" || status === "not_needed") && blockers.length === 0 && evidence.length === 0) {
+    if ((status === "deferred" || status === "not_needed") && nonEmptyBlockers.length === 0 && nonEmptyEvidence.length === 0) {
       issues.push(
         issue(
           "error",

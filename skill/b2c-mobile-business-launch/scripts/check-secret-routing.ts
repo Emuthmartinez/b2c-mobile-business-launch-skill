@@ -17,7 +17,7 @@ const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
 const issues = [...loaded.issues];
 const state = loaded.state;
-const secretsPath = "SECRETS.md";
+const secretsPath = readText(args.root, "SECRETS.md") ? "SECRETS.md" : "secrets/SECRETS.md";
 const secretsText = readText(args.root, secretsPath);
 
 if (!secretsText) {
@@ -47,6 +47,28 @@ if (state) {
   }
 }
 
+const requiredSecretNames = new Set<string>();
+if (state) {
+  const tools = getPath(state, "tools");
+  if (tools && typeof tools === "object" && !Array.isArray(tools)) {
+    for (const value of Object.values(tools)) {
+      if (!value || typeof value !== "object" || Array.isArray(value)) {
+        continue;
+      }
+      for (const secretName of asArray((value as Record<string, unknown>).required_secrets)) {
+        const normalized = asString(secretName);
+        if (normalized?.trim()) {
+          requiredSecretNames.add(normalized.trim());
+        }
+      }
+    }
+  }
+}
+
+for (const secretName of secretsText?.match(/\b[A-Z][A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|DSN|PRIVATE_KEY|ISSUER_ID|KEY_ID)\b/g) ?? []) {
+  requiredSecretNames.add(secretName);
+}
+
 const forbiddenFilePatterns = [
   /^\.env$/,
   /^\.env\..*\.local$/,
@@ -74,15 +96,32 @@ for (const file of collectAllFiles(args.root, 10000)) {
   }
 }
 
-const secretLike = /(sk_live_[A-Za-z0-9]{12,}|rk_live_[A-Za-z0-9]{12,}|ghp_[A-Za-z0-9]{20,}|-----BEGIN (PRIVATE|RSA|EC) PRIVATE KEY-----)/;
-for (const file of collectFiles(args.root, new Set([".md", ".yaml", ".yml", ".json", ".ts", ".tsx", ".js", ".jsx"]), 2000)) {
+const secretLike = /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{12,}|whsec_[A-Za-z0-9]{12,}|ghp_[A-Za-z0-9]{20,}|-----BEGIN (PRIVATE|RSA|EC) PRIVATE KEY-----/;
+const textFileExtensions = new Set([".md", ".yaml", ".yml", ".json", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".swift", ".kt", ".dart", ".plist", ".example", ".txt"]);
+const envReference = /\b[A-Z][A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|DSN|PRIVATE_KEY|ISSUER_ID|KEY_ID)\b/g;
+for (const file of collectFiles(args.root, textFileExtensions, 5000)) {
   const relative = path.relative(args.root, file);
-  if (relative.includes("node_modules")) {
+  if (relative.includes("node_modules") || relative.endsWith("package-lock.json")) {
     continue;
   }
   const text = readText(args.root, relative);
   if (text && secretLike.test(text)) {
     issues.push(issue("error", "secrets.raw_secret_pattern", `Potential raw secret pattern found in ${relative}.`, relative));
+  }
+  if (text && relative !== "PROJECT_STATE.yaml" && relative !== secretsPath) {
+    const seenInFile = new Set(text.match(envReference) ?? []);
+    for (const secretName of seenInFile) {
+      if (!requiredSecretNames.has(secretName)) {
+        issues.push(
+          issue(
+            "error",
+            `secrets.${secretName}.unrouted`,
+            `${secretName} appears in ${relative} but is not listed in PROJECT_STATE.yaml tools.required_secrets or ${secretsPath}.`,
+            relative,
+          ),
+        );
+      }
+    }
   }
 }
 

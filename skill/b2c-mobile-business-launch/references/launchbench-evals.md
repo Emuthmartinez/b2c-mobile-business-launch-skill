@@ -30,9 +30,10 @@ Run:
 
 ```bash
 npm run launchbench
+npm run test:validators
 ```
 
-The bundled harness validates scenario structure and maps scenarios to deterministic validators. It is not a full LLM judge. For live agent behavior, use these scenarios as prompts for a fresh agent or subagent and compare the answer to `must_catch` and `should_say`.
+The bundled LaunchBench harness validates scenario structure, maps scenarios to deterministic validators, and runs the validator-fixture harness for positive and negative launch-state examples. Neither is a full LLM judge. For live agent behavior, use these scenarios as prompts for a fresh agent or subagent and compare the answer to `must_catch` and `should_say`.
 
 ## Independent Audit Use
 
