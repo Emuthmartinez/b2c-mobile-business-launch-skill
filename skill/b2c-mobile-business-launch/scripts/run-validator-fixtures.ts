@@ -132,6 +132,7 @@ try {
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
+  runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
   runFixture("template secret docs pass from bundled template path", path.join(skillRoot, "templates"), "check-secret-routing.ts", 0);
   const cockpitPath = path.join(clean, "launch-cockpit.html");
   runFixture("launch cockpit renders", clean, "render-launch-cockpit.ts", 0, undefined, ["--out", cockpitPath]);
@@ -213,7 +214,7 @@ try {
   missingContract["anonymous_reconciliation"] = true;
   missingContract["verified"] = true;
   writeState(attributionMissingImplementation, attributionMissingState);
-  runFixture("done attribution without implementation text fails", attributionMissingImplementation, "check-attribution-contract.ts", 1, "attribution.text.attribution_source_selected.not_found");
+  runFixture("done attribution without implementation text fails", attributionMissingImplementation, "check-attribution-contract.ts", 1, "attribution.text.self_reported_source.not_found");
 
   const attributionNotNeeded = makeFixture("attribution-not-needed");
   const attributionNotNeededState = readState(attributionNotNeeded);
@@ -341,6 +342,24 @@ try {
   );
   writeFileSync(path.join(phraseOnlyStore, "store-console.html"), "<!doctype html><html><body>Store packet</body></html>", "utf8");
   runFixture("store packet with placeholders and unapproved fallback fails", phraseOnlyStore, "check-store-console-packet.ts", 1, "store_console.unapproved_name_fallback");
+
+  const uxFallbackUnapproved = makeFixture("ux-fallback-unapproved");
+  writeFileSync(
+    path.join(uxFallbackUnapproved, "UX_PATTERNS.md"),
+    [
+      "# UX Patterns",
+      "Refero Route",
+      "Refero unavailable, using free baseline route.",
+      "Pattern Inventory",
+      "Flow Map",
+      "State Matrix",
+      "Bug Traps",
+      "Onboarding Playbook",
+      "Do not copy one app directly.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("Refero fallback without founder approval fails", uxFallbackUnapproved, "check-ux-patterns.ts", 1, "ux_patterns.refero_fallback_unapproved");
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

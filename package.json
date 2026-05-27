@@ -9,12 +9,13 @@
     "check:attribution": "tsx skill/b2c-mobile-business-launch/scripts/check-attribution-contract.ts",
     "check:apple-signing": "tsx skill/b2c-mobile-business-launch/scripts/check-apple-signing-packet.ts",
     "check:store-console": "tsx skill/b2c-mobile-business-launch/scripts/check-store-console-packet.ts",
+    "check:ux-patterns": "tsx skill/b2c-mobile-business-launch/scripts/check-ux-patterns.ts",
     "check:secrets": "tsx skill/b2c-mobile-business-launch/scripts/check-secret-routing.ts",
     "audit:links": "tsx skill/b2c-mobile-business-launch/scripts/audit-skill-links.ts --skill-root skill/b2c-mobile-business-launch",
     "render:launch-cockpit": "tsx skill/b2c-mobile-business-launch/scripts/render-launch-cockpit.ts",
     "test:validators": "tsx skill/b2c-mobile-business-launch/scripts/run-validator-fixtures.ts",
     "launchbench": "tsx skill/b2c-mobile-business-launch/scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run launchbench && npm run validate:launch-state -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run launchbench && npm run validate:launch-state -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -21,6 +21,7 @@ Refresh current platform and monetization sources before locking a flow:
 - Apple ratings and reviews: `https://developer.apple.com/app-store/ratings-and-reviews/`
 - Apple App Review Guidelines: `https://developer.apple.com/app-store/review/guidelines/`
 - Google Play In-App Reviews API: `https://developer.android.com/guide/playcore/in-app-review`
+- Refero MCP docs and tools when researching current shipped onboarding, paywall, upgrade, cancellation, restore, and permissions flows: `https://doc.refero.design/llms.txt`
 - User-provided Cesar Alvarez onboarding teardown links when the task references that research thread
 
 ## Required Artifacts
@@ -28,6 +29,13 @@ Refresh current platform and monetization sources before locking a flow:
 Load `analytics-attribution.md` before locking onboarding event names, attribution-source options, paywall variants, or the dashboard plan. Onboarding should implement the approved analytics catalog, not invent events while building screens.
 
 Create or update `ONBOARDING.md` when an app has more than one setup screen, asks personalization questions, uses a mascot/demo, has a paywall, or relies on first-session conversion.
+
+Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, compliant review prompt timing, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
+
+Recommended Refero searches when access is available:
+- `refero_search_flows`: `signup onboarding`, `subscription onboarding paywall`, `permission request onboarding`, `subscription cancellation with retention offer`, `restore purchases`
+- `refero_search_screens`: `ios onboarding progress question`, `ios paywall annual weekly lifetime`, `ios restore purchases settings`, `web pricing annual monthly toggle`
+- `refero_get_flow` for 2-4 strongest flows, then summarize step count, friction, recovery, and system response in `UX_PATTERNS.md`
 
 `ONBOARDING.md` must include:
 - target user state before onboarding and desired state after onboarding

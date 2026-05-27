@@ -58,7 +58,9 @@ lanes:
     evidence:
       - "DESIGN.md"
       - "design.md"
+      - "UX_PATTERNS.md"
       - "design.html"
+      - "ux-patterns.html"
     blockers: []
   analytics_attribution:
     status: "partial"
@@ -152,6 +154,14 @@ tools:
     preflight: "Confirm product analytics region, replay/survey posture, and privacy disclosures."
     validation: "Verify event plus person property in PostHog."
     fallback: "Local event log or open-source analytics only after founder approval."
+  refero:
+    route: "optional_paid_or_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "REFERO_API_TOKEN"
+    preflight: "Confirm Refero Pro access, OAuth or bearer-token route, query budget, and whether fallback UX pattern pack is founder-approved."
+    validation: "UX_PATTERNS.md records selected styles/screens/flows or approved fallback; ux-patterns.html renders pattern inventory and state matrix."
+    fallback: "Bundled templates/ux-patterns pattern pack, founder-provided references, or public UX libraries only after founder approval."
   revenuecat:
     route: "intended_account_tool"
     docs_checked_at: ""

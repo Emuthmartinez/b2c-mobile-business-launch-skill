@@ -9,6 +9,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 - Doppler And Secret Routing
 - Social-Language Research
 - Firecrawl Web Intelligence
+- Refero UX Pattern Research
 - Higgsfield Visual And Motion Production
 - Name And Keyword Collision
 - ASO Skill Routing
@@ -31,7 +32,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 
 Before using a free fallback for any paid or account-gated tool, load `paid-tool-routing.md` and ask the founder to confirm the route. Missing runtime access is not evidence that the founder lacks the paid tool or does not want to use it.
 
-Paid/account-gated lanes in this skill include AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane AI, paid ASO/MMP/ad tools, Sideshift or creator marketplaces, and paid/account features of RevenueCat, Stripe, PostHog, and Resend.
+Paid/account-gated lanes in this skill include AppKittie, XPOZ, Firecrawl, Refero, Higgsfield, MobAI, Fastlane AI, paid ASO/MMP/ad tools, Sideshift or creator marketplaces, and paid/account features of RevenueCat, Stripe, PostHog, and Resend.
 
 Record the selected route in `TOOL_DECISIONS.md` or the relevant ops doc:
 - paid tool used
@@ -168,6 +169,44 @@ Rules:
 - Respect robots, login walls, paywalls, and terms. Do not bypass access controls.
 - Use Firecrawl for public web evidence, not for App Store intelligence where AppKittie/ASO tools are stronger.
 - Do not rely on Firecrawl metadata extraction alone for schema/security checks; verify important items directly on the live page when launching.
+
+## Refero UX Pattern Research
+
+Purpose: ground web and mobile UX decisions in shipped product screens, styles, and flows before building app screens, onboarding, paywalls, web funnels, settings, support, and legal/account flows.
+
+Current docs basis to refresh at runtime:
+- docs index: `https://doc.refero.design/llms.txt`
+- MCP server URL: `https://api.refero.design/mcp`
+- Getting Started, Tools, Data Model, Examples, and Refero Skill pages
+
+Access:
+- Refero is a paid/account-gated design research path. Current docs say Refero Pro is required for MCP use and auth can be OAuth or an Authorization Bearer token.
+- If Refero is not available in the runtime, load `paid-tool-routing.md` and ask before using the bundled baseline pattern pack, public inspiration galleries, Page Flows/UI Sources-style public references, app-store screenshots, or founder-provided examples.
+
+Use the current MCP tool names:
+- `refero_search_styles` for visual direction, typography, surfaces, spacing, and design-system inspiration.
+- `refero_get_style` for full design guidance after choosing style candidates.
+- `refero_search_screens` with `platform: "web"` or `platform: "ios"` for concrete UI patterns, components, copy hierarchy, and state handling.
+- `refero_get_screen` for detailed screen metadata.
+- `refero_get_similar_screens` to expand from one strong reference.
+- `refero_get_screen_image` only when metadata is not enough and visual inspection is required.
+- `refero_search_flows` with `platform: "web"` or `platform: "ios"` for onboarding, signup, checkout, cancellation, upgrade, account deletion, password reset, permissions, and settings changes.
+- `refero_get_flow` for full journey logic, step goals, actions, system responses, and related queries.
+- Current Refero docs list `web` and `ios` for screen/flow platform filters. For Android launches, use Refero iOS/mobile findings only as journey evidence, then adapt to Android-native controls, permissions, billing, and device screenshots before marking Android UX ready.
+
+Research packet:
+- 3-5 styles for the brand/design direction, with one primary and 1-2 secondary influences.
+- 5-10 screens for each critical surface family: onboarding, paywall, pricing, restore, settings/account, support/privacy, empty/error/offline, referral/share, search/filter.
+- 2-4 flows for each critical journey: onboarding, purchase/upgrade, cancellation/retention, restore purchases, account deletion, password reset or login recovery, and permission requests when applicable.
+- A `UX_PATTERNS.md` source ledger with query, platform, selected records, observed pattern, adopted decision, rejected decisions, and caveats.
+- A `ux-patterns.html` or `design.html` section rendering pattern inventory, flow maps, state matrix, and bug traps.
+
+Rules:
+- Use Refero as research ingredients, not a template library to copy.
+- Preserve the onboarding conversion playbook unless the user explicitly approves a named experiment.
+- Do not commit paid Refero screenshots unless licensing/permission is clear; summarize metadata and link source records instead.
+- Pair Refero findings with product trace rows, analytics events, accessibility checks, and implementation state matrices.
+- Record free fallback approval and limitations in `TOOL_DECISIONS.md` when Refero is unavailable.
 
 ## Higgsfield Visual And Motion Production
 

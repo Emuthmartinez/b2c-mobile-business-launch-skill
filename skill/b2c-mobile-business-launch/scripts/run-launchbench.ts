@@ -16,6 +16,7 @@ const knownValidators = new Set([
   "check-apple-signing-packet",
   "check-store-console-packet",
   "check-secret-routing",
+  "check-ux-patterns",
   "render-launch-cockpit",
 ]);
 

@@ -20,7 +20,7 @@ That means future agents do not just "remember" the launch process. They can ins
 | State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, autonomy mode, lane statuses, provider state, proof, and failure cards |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
-| Design | `DESIGN.md`, lowercase `design.md`, HTML visual proofs, Higgsfield visual guidance, screenshot systems, and audit gates |
+| Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, screenshot systems, and audit gates |
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
@@ -52,6 +52,7 @@ npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
+npm run check:ux-patterns -- --root /path/to/app
 npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
 npm run launchbench
@@ -73,6 +74,7 @@ The scripts are intentionally simple:
 - `check-secret-routing.ts` checks `SECRETS.md`, names-only secret routing, forbidden local secret files, and raw secret patterns.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
+- `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
 - `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/` and runs deterministic validator fixtures.
