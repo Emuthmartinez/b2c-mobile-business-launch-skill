@@ -163,7 +163,7 @@ Record proof in `PRODUCTION_READINESS.md` or the repo's existing release/readine
 
 Attribution-specific production-readiness proof is mandatory when onboarding, signup, or waitlist exists:
 - the user sees the attribution screen early in the flow
-- the stored source is a stable key, not display copy
+- the stored source is a stable stored key, not display copy
 - `other` captures sanitized free text or a documented follow-up value
 - PostHog receives `attribution_source_selected`
 - PostHog person properties include `self_reported_source`

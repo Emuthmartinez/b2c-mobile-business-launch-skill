@@ -132,7 +132,7 @@ Technical attribution:
 Self-reported attribution:
 - Ask "How did you hear about us?" in onboarding or signup while memory is fresh.
 - Include options for friend/referral, TikTok, Instagram, YouTube, X/Twitter, Reddit, search, App Store/Google Play search, creator/influencer, newsletter/email, article/blog, podcast, ad, and other/free text.
-- Store a stable source key as a first-touch user property and event property on `attribution_source_selected`.
+- Store a stable stored key as a first-touch user property and event property on `attribution_source_selected`.
 - Keep source keys stable; display labels may change through aliases, but stored keys must not.
 - Persist the source to the backend profile, account, waitlist, or Supabase profile record when identity exists.
 - Reconcile anonymous attribution into the identified PostHog person and backend profile after signup/login.

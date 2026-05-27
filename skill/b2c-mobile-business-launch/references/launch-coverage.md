@@ -58,7 +58,7 @@ Required unless explicitly marked not applicable:
 - public privacy and terms pages when collecting data or payments
 - support and privacy contact routes tested from external sender
 - upfront analytics/attribution plan rendered for the founder, plus event catalog and at least one verified event when implementation exists
-- self-reported attribution data contract when onboarding/signup/waitlist exists: early visible screen, stable source keys, `other` free text, analytics event, PostHog person property, backend/profile persistence, and anonymous-to-identified reconciliation
+- self-reported attribution data contract when onboarding/signup/waitlist exists: early visible screen, stable source keys, `other` free text, `attribution_source_selected`, PostHog person property, backend/profile persistence, and anonymous-to-identified reconciliation
 - Resend or equivalent email path verified when the launch sends confirmation, lifecycle, marketing, billing, support, or admin email
 - App Store/Play product and privacy disclosure mapping when submitting
 - copy-paste App Store Connect/Google Play packet with exact click paths, field values, privacy answers, screenshot upload matrix, and founder-only gates when submitting
