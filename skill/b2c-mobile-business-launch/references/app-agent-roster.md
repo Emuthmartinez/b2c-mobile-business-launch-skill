@@ -41,6 +41,7 @@ For non-trivial launches, use the roster to run independent review lanes before 
 - Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
 - Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, analytics/revenue/email/backend contracts, and test coverage.
 - Customer success reviews `PRIVACY.md`, `TERMS.md`, support routes, refund/restore/delete paths, lifecycle email, FAQ, and review-response readiness.
+- Engineering leader and orchestrator review `SECRETS.md` for each new secret, new env vars, Doppler/provider routing, `doppler run --` command wrappers, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only coverage, and public-bundle safety.
 - Orchestrator merges findings, resolves conflicts, updates source-of-truth docs, and records proof or blockers in `PRODUCTION_READINESS.md`.
 
 Specialist agents should review and propose by default. They may implement only when the orchestrator assigns an isolated unit with file paths, acceptance checks, and a verification method. Specialists must not stage, commit, release, change pricing, connect accounts, spend money, submit store builds, or publish social posts.

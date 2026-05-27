@@ -58,6 +58,7 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 - design-system and HTML proof rules
 - analytics and attribution rules
 - RevenueCat/Stripe entitlement rules when monetized
+- secret-management rules: `SECRETS.md`, Doppler or approved provider, `doppler run --` wrappers, service token/provider-integration plan, CI/deploy injection, and no raw secrets in docs/logs/proofs
 - privacy/legal/store disclosure constraints
 - Compound Engineering routing: when to use `ce-brainstorm`, `ce-plan`, `ce-work`, worktrees, subagents, and review
 - MobAI/device-testing rules and serialized device ownership
@@ -127,6 +128,7 @@ The plan must include:
 - `TECH_SPEC.md` pointer or inline technical contracts when data/API/state/integration behavior is in scope
 - implementation units with repo-relative file paths
 - frontend, backend, database, analytics, revenue, email, and store-console impacts
+- secret impacts: new secret or env var, secret class, Doppler/provider routing, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only updates, and bundle-safety checks
 - feature flags or rollout controls
 - migration and data-backfill plan when needed
 - auth/session, permission, app integrity, API/RPC/webhook, and state-machine impacts when relevant
@@ -150,6 +152,7 @@ Required proof, adjusted to the product:
 - backend proof that frontend actions create the expected records/events in the real test backend, database, Firestore/Supabase/Postgres, RevenueCat, Stripe, Resend, or PostHog target
 - app integrity, rate-limit, idempotency, and abuse-path proof when paid access, user accounts, sensitive data, or backend mutation are in scope
 - release-build or staging-build verification that mocks are disabled, production flags are sane, and secrets are not bundled
+- secret-management verification: `SECRETS.md` covers all secret-bearing services, commands use `doppler run --` or the approved provider wrapper, CI/deploy injects secrets from the selected provider, and public bundles contain no server secrets
 - rollback or kill-switch plan for risky features
 
 Record proof in `PRODUCTION_READINESS.md` or the repo's existing release/readiness artifact:
@@ -209,6 +212,7 @@ Engineering-heavy work is done only when:
 - `LAUNCH_TRACE.md` exists or equivalent trace rows are embedded in `RESEARCH.md`.
 - `TECH_SPEC.md` exists when data/API/state/platform contracts are non-trivial.
 - `ENGINEERING_PLAN.md` exists when actual implementation is in scope.
+- `SECRETS.md` exists when any API key, token, webhook secret, service-account file, CI/deploy secret, store credential, or local env file is in scope.
 - Compound Engineering or equivalent workflow produced product requirements, implementation plan, execution, review, and proof for non-trivial app work.
 - Parallel agents were used where safe and serialized where required.
 - Specialist audit agents or equivalent independent review checked the build against attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness requirements where in scope.

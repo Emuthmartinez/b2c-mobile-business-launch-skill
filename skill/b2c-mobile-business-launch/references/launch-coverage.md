@@ -17,6 +17,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Lane | Required Evidence | Primary Tools |
 | --- | --- | --- |
 | Paid-tool routing | intended paid/account-gated tools, founder confirmation, selected fallback or blocked state, limitations | `TOOL_DECISIONS.md`, `paid-tool-routing.md` |
+| Secrets/config | Doppler or approved provider, `SECRETS.md`, command wrappers, CI/deploy injection, secret scan, public/server-only classification | Doppler CLI, `SECRETS.md`, platform secret stores |
 | Market/category selection | category economics, competitor map, revenue/download ranges, winning wedge | AppKittie, ASO skills |
 | Social/user language | pain language, creator formats, objections, screenshots/posts summarized | XPOZ, reviews, web search |
 | Competitor web intelligence | competitor landing pages, pricing, funnels, claims, policies, changelog | Firecrawl map/scrape/crawl/extract |
@@ -47,6 +48,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 Required unless explicitly marked not applicable:
 - research-backed spec and category choice
 - paid/account-gated tool decisions recorded before free fallbacks are used
+- `SECRETS.md` when any API key, token, OAuth credential, webhook signing secret, store credential, service-account file, CI/deploy env var, or `.env` file is needed; default to Doppler unless the founder approves another provider
 - `LAUNCH_TRACE.md` or equivalent trace section for any multi-artifact launch, so research decisions flow into product, brand/design, build, analytics, revenue, privacy, store, and verification work
 - product brainstorm checkpoint after research and before engineering plans when multiple product shapes remain viable
 - canonical `DESIGN.md` and rendered HTML visual proof when visual design, screenshots, or landing UI are in scope
@@ -95,6 +97,12 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 
 Flag these aggressively:
 - A paid/account-gated tool is missing in the runtime and the agent silently starts the free fallback without founder confirmation.
+- Doppler or the approved secret provider is not selected before API keys, webhook secrets, CI/deploy env vars, service-account files, or local `.env` files appear.
+- A new secret-bearing variable appears in code, CI, mobile build config, provider setup, or docs without a matching `SECRETS.md` entry.
+- Secret-bearing commands run from a developer shell but are not documented through `doppler run --` or the approved provider wrapper.
+- Production uses a personal Doppler/CLI token instead of a service token, provider integration, OIDC, or platform-native secret store.
+- `.env.example` contains real-looking values, or `.env`, service-account JSON, `.p8`, `.p12`, OAuth refresh tokens, provisioning files, or raw keys are committed.
+- A public client variable such as `NEXT_PUBLIC_*`, `PUBLIC_*`, or `EXPO_PUBLIC_*` contains a server secret.
 - AppKittie was used for category only, not competitor reviews, screenshots, ads, creator signals, or keyword batches.
 - XPOZ was skipped, so copy is based on founder language instead of market/user language.
 - Firecrawl was not used to inspect competitor landing pages, pricing, policy pages, or funnel claims.

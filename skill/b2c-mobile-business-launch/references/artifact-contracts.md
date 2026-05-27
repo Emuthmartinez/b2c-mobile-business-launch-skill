@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -22,6 +22,9 @@ AGENTS.md                 # agent entrypoint and canonical operating instruction
 CLAUDE.md                 # optional tool-specific addendum that points back to AGENTS.md
 APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
 TOOL_DECISIONS.md         # paid/account-gated tool access, confirmed fallbacks, limitations, and blocked routes
+SECRETS.md                # Doppler or approved secret-provider inventory, command map, CI/deploy routing, and proof notes
+doppler.yaml              # optional non-secret Doppler project/config hints
+.env.example              # optional names-only local environment schema
 ANALYTICS.md              # upfront measurement, attribution, event catalog, funnels, dashboards, and QA gates
 analytics-plan.html       # founder-visible rendered analytics/attribution plan and dashboard wireframes
 LAUNCH_TRACE.md           # evidence-to-product-to-brand/design-to-build-to-proof traceability matrix
@@ -71,6 +74,7 @@ rork-ready/
   CLAUDE.md
   APP_AGENTS.md
   TOOL_DECISIONS.md
+  SECRETS.md
   ANALYTICS.md
   analytics-plan.html
   LAUNCH_TRACE.md
@@ -107,6 +111,7 @@ Must include:
 - architecture conventions
 - V1 scope, V2/V3 scope, and banned scope
 - analytics rules
+- secret-management rules: `SECRETS.md`, Doppler or approved provider, `.env.example` names only, no raw secret values in docs/logs/proofs, and `doppler run --` or approved wrapper for secret-bearing commands
 - Compound Engineering routing, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
 - app-local agent roster pointer to `APP_AGENTS.md` and `agents/`, including orchestrator ownership and specialist audit roles
 - MobAI/device testing rules and serialized device ownership
@@ -169,6 +174,33 @@ Acceptance:
 - A future agent can tell whether AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, paid ASO/MMP tools, creator marketplaces, RevenueCat, Stripe, PostHog, Resend, App Store Connect, or Google Play access was used, blocked, or intentionally bypassed.
 - Founder-only spend, account, credential, posting, and submission decisions are explicit.
 
+## `SECRETS.md`
+
+Use whenever the launch uses API keys, tokens, OAuth credentials, webhook signing secrets, service-account files, app-store credentials, CI/deploy environment variables, mobile build secrets, local `.env` files, or provider CLIs.
+
+Must include:
+- selected provider: Doppler by default, or founder-approved alternative such as Apple Keychain, GitHub Actions secrets, Cloudflare/Vercel/Supabase secrets, Xcode Cloud secrets, or local `.env` fallback
+- secret inventory: name, service, class, environment, runtime surface, public/server-only status, location, owner, rotation note, and status
+- Doppler project/config map or alternate provider location for local, staging, and production
+- command map for local dev, tests, builds, deploys, migrations, webhook replay, store automation, and support scripts
+- CI/deploy map for `DOPPLER_TOKEN`, service tokens, provider integrations, OIDC, or platform-native secret injection
+- new-secret routing log for secrets discovered during implementation
+- founder-only actions and blocked secrets
+- proof notes that record location and command evidence, never raw values
+
+Rules:
+- Commit `SECRETS.md`, optional `doppler.yaml`, and optional `.env.example` with names only.
+- Do not commit `.env`, `.env.local`, service-account JSON, `.p8`, `.p12`, provisioning files, OAuth refresh tokens, raw API keys, or downloaded credential files.
+- Use `doppler run -- <command>` for local secret-bearing commands when Doppler is selected.
+- Use Doppler service tokens, provider integrations, OIDC, or platform-native secrets for CI/live environments; do not use personal or local CLI tokens in production.
+- When a new secret, `process.env`, `import.meta.env`, mobile build setting, webhook secret, provider key, or CI secret appears, update `SECRETS.md` before calling the work complete.
+
+Acceptance:
+- A future agent can run secret-bearing commands without asking where values live.
+- No raw secret values appear in docs, commits, screenshots, logs, or readiness proof.
+- Public client config is separated from server-only secrets.
+- Production secret injection is different from local personal login.
+
 ## `LAUNCH_TRACE.md`
 
 Use for any multi-artifact launch so the chain from research to implementation does not drift.
@@ -199,6 +231,7 @@ Must include:
 - state machines: onboarding, account, entitlement, subscription, restore, deletion, support, lifecycle messaging, offline/cache
 - permissions/platform capabilities and just-in-time prompts
 - integration contracts for analytics, revenue, email, crash, backend, push, AI, Fastlane, store notifications, and support tools
+- secret contract: environment variable names, public/server-only classification, secret-provider location, runtime injection path, and rotation/proof requirements
 - app integrity/abuse decision: Apple App Attest/DeviceCheck, Google Play Integrity, bot/rate-limit protections, replay/idempotency protection when in scope
 - remote config, feature flags, kill switches, staged/phased rollout controls, and test fixtures
 
@@ -261,6 +294,7 @@ Must include:
 - implementation units with repo-relative paths
 - safe parallelization map: independent units, serial dependencies, shared files, and worktree needs
 - frontend, backend, database, analytics, revenue, email, privacy, and store-console impacts
+- secret impacts: new/changed env vars, Doppler/provider routing, `.env.example` updates, CI/deploy injection, and bundle-safety checks
 - test scenarios for each unit
 - MobAI/device E2E scenarios
 - backend/provider verification scenarios
@@ -286,6 +320,7 @@ Must include:
 - Resend/email/webhook proof when lifecycle or transactional email is in scope
 - Sentry/crash/release-health status or a documented no-Sentry reason
 - release-build or staging-build proof that mocks are disabled and secrets are not bundled
+- secret-management proof: `SECRETS.md` coverage, Doppler/provider setup, `doppler run --` or approved command wrapper, CI/deploy injection, secret scan, and public-bundle check
 - remaining blockers and founder-only gates
 
 Acceptance:
@@ -579,7 +614,7 @@ Must include:
 - email purpose map: auth, waitlist, welcome, onboarding nudges, trial/renewal, payment recovery, receipts, support, broadcasts, admin alerts
 - sender map: from, reply-to, domain/subdomain, owner, purpose, unsubscribe requirement, and environment
 - Resend domain/DNS state: SPF, DKIM, DMARC, region, custom return path, tracking subdomain, and verification timestamps
-- API key inventory: permission, domain scope, environment variable, deploy target, rotation date, and owner
+- API key inventory routed through `SECRETS.md`: permission, domain scope, environment variable, deploy target, rotation date, and owner
 - templates and code paths: server-only wrapper, React Email/hosted template path, tags, idempotency-key strategy, retry/logging behavior
 - webhook plan: endpoint, event list, signing secret storage, raw-body verification, `svix-id` duplicate handling, storage/log path, and replay test
 - audience/lifecycle plan: Contacts, properties, Segments, Topics, Broadcasts, Automations, unsubscribe/preference behavior, and contact deletion behavior
@@ -601,7 +636,7 @@ Must include:
 - founder-approved pricing: monthly, annual, lifetime, trial, intro offer, renewal price, refund/cancellation posture, supported countries, and approval date
 - product matrix: App Store product IDs, Play product/base plan IDs, RevenueCat product IDs, Stripe product/price IDs, entitlement, offering, package, duration, price, currency, intro/trial status
 - RevenueCat setup: project/app IDs, public SDK key locations, store/web configs, products, `premium` entitlement, `default` offering, packages, server notifications, webhooks, and environment status
-- Stripe setup: account mode, Checkout/Payment Links/Customer Portal/Billing choice, tax posture, products/prices, webhook events, customer portal URL/path, branding/support settings, and live/sandbox status
+- Stripe setup: account mode, Checkout/Payment Links/Customer Portal/Billing choice, tax posture, products/prices, webhook events, customer portal URL/path, branding/support settings, live/sandbox status, and secret routing through `SECRETS.md`
 - web funnel setup: RevenueCat Web Purchase Link, Web Funnel, Web SDK, Stripe Checkout/Payment Link, success/cancel URLs, redemption links, deep links, QR/desktop fallback, campaign parameters, and sandbox/production URL separation
 - identity map: app UID, RevenueCat App User ID, Stripe customer ID, store transaction ID, email, anonymous redemption ID, and support lookup path
 - validation log: sandbox/Test Store purchase, restore purchases, cancellation/expiration, failed payment, web purchase, redemption, webhook delivery, entitlement active in app, analytics event received

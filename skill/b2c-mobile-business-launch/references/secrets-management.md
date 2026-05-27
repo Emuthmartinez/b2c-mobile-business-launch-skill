@@ -1,0 +1,119 @@
+# Secrets Management
+
+Use this before adding API keys, tokens, OAuth credentials, webhook signing secrets, service-account files, store credentials, CI/deploy environment variables, `.env` files, or secret-bearing provider setup.
+
+Default to Doppler when the founder has not selected another secret manager. Load `paid-tool-routing.md` before replacing Doppler or another paid/account-gated secret manager with Apple Keychain, platform secrets, local `.env`, or manual exports.
+
+## Sources To Refresh
+
+Refresh current provider docs before locking commands:
+- Doppler CLI install: `https://docs.doppler.com/docs/install-cli`
+- Doppler CLI guide: `https://docs.doppler.com/docs/cli`
+- Doppler secrets setup guide: `https://docs.doppler.com/docs/secrets-setup-guide`
+- Doppler service tokens: `https://docs.doppler.com/docs/service-tokens`
+- Target deploy provider docs for secrets: Cloudflare, Vercel, Netlify, Supabase, GitHub Actions, EAS, Xcode Cloud, Firebase, or app-store provider docs as applicable
+
+## Required Artifacts
+
+Create or update `SECRETS.md` whenever any service in the launch needs a secret or environment variable.
+
+`SECRETS.md` must include:
+- selected secret provider: Doppler by default, or founder-approved alternative
+- secret inventory: variable name, service, class, environment, runtime surface, public/server-only status, owner, rotation note, and status
+- Doppler project/config map or alternate provider location for each environment
+- command map: local dev, tests, build, deploy, migrations, webhook replay, store/CLI automation, and support scripts
+- CI/deploy map: where staging and production secrets are injected
+- new-secret routing log: what introduced the secret, where it was stored, which docs/tests were updated, and who owns it
+- blocked founder actions: secrets or account steps the agent cannot complete
+- proof notes: secret-manager location and command evidence, never raw values
+
+Recommended repo files:
+- `SECRETS.md`: committed, names and locations only
+- `doppler.yaml`: committed only when it contains non-secret project/config/path hints
+- `.env.example`: committed names only, no values
+- `.env`, `.env.local`, `.env.*.local`, service-account JSON, `.p8`, `.p12`, `.mobileprovision`, raw keys, tokens, and downloaded credential files: ignored or stored outside git
+
+Use `templates/secrets/` as a starting point when available.
+
+## Secret Discovery Loop
+
+When a new secret appears during research, setup, or implementation:
+1. Stop and classify it before writing code around it.
+2. Add the name to `SECRETS.md` with service, class, environment, runtime surface, owner, and status.
+3. Route it to Doppler or the founder-approved provider before running commands that require it.
+4. Update `.env.example` with the name only when the repo needs a local schema.
+5. Update `AGENTS.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, provider ops docs, and `PRODUCTION_READINESS.md` if behavior or verification changes.
+6. Run or record a secret scan before handoff.
+
+Do not leave new secrets as ad hoc shell exports, pasted chat values, committed `.env` values, screenshots, raw logs, or untracked setup steps.
+
+## Classification
+
+Use these classes in `SECRETS.md`:
+- `public_client_config`: documented public tokens or IDs safe for client bundles, such as publishable analytics/project tokens when vendor docs say so
+- `server_secret`: API keys, database URLs, admin tokens, private provider keys, and service-role credentials
+- `webhook_signing_secret`: Resend, Stripe, RevenueCat, PostHog, GitHub, or store notification signing secrets
+- `store_credential`: App Store Connect keys, Play service-account JSON, ASC issuer/key IDs, private `.p8` files, signing material, provisioning credentials
+- `oauth_or_refresh_token`: OAuth refresh tokens, social account tokens, connected account sessions
+- `ci_deploy_secret`: deploy tokens, CI service tokens, cloud account tokens, `DOPPLER_TOKEN`
+- `runtime_user_secret`: app user tokens that belong in platform secure storage such as Apple Keychain or Android Keystore
+- `local_operator_secret`: local-only CLI credentials or personal tokens used by the founder/operator
+
+Public does not mean harmless. If a token can write, mutate, impersonate, bill, send email, read private data, or access admin APIs, it is server-only.
+
+## Doppler Workflow
+
+Local development:
+- Verify install: `doppler --version`.
+- If missing and the founder selected Doppler, install from current official docs or ask if global install is not appropriate.
+- Authenticate locally with `doppler login`; this is a founder/operator action when browser login or account access is required.
+- Run `doppler setup` at the repo root or configured app folder. Use `doppler.yaml` only for non-secret project/config/path hints.
+- Run commands as `doppler run -- <command>`, for example `doppler run -- pnpm dev`, `doppler run -- npm test`, or `doppler run -- wrangler deploy`.
+- Use `doppler run --watch -- <command>` only when the plan supports it and the current Doppler plan/docs allow it.
+- For one-off command strings that reference variables, escape variables or use single quotes so the shell does not expand before Doppler injects values.
+
+Setting and reading:
+- Prefer setting secrets through the Doppler dashboard or `doppler secrets set SECRET_NAME` without exposing values in command history or logs.
+- Do not run `doppler secrets get SECRET_NAME --plain` unless absolutely necessary; never paste or print the result into docs, chats, commits, screenshots, or logs.
+- If a secret value is needed and unavailable, mark a founder action instead of inventing a placeholder that may ship.
+
+CI and production:
+- Use Doppler service tokens, provider integrations, or OIDC identities for non-local environments.
+- Service tokens should be read-only where possible and scoped to one project/config.
+- Store `DOPPLER_TOKEN` only in the CI/deploy provider secret store or runtime secret store.
+- Do not use personal tokens or local CLI tokens in live environments.
+- If a service token is rotated, update the provider secret and rerun the verification command.
+
+## Alternatives And Fallbacks
+
+Allowed alternatives after founder confirmation:
+- Apple Keychain, Android Keystore, or secure storage for runtime user tokens on device
+- macOS Keychain for local operator-only CLI credentials
+- GitHub Actions secrets, Cloudflare secrets, Vercel/Netlify/Supabase/Firebase secrets, Xcode Cloud secrets, or platform-native secret stores for deploy/runtime
+- `.env.local` or manual shell exports only as a temporary local fallback, recorded as lower confidence in `SECRETS.md` and never committed
+
+Do not treat Apple Keychain as a replacement for server-side secret management. It is appropriate for local machine credentials or app runtime user secrets, not for committed app configuration or cloud production secrets.
+
+## Production Readiness Gates
+
+Before beta, store submission, or production launch:
+- `SECRETS.md` exists and every secret-bearing service is represented.
+- No raw secret values appear in git, docs, screenshots, logs, or proof artifacts.
+- `.gitignore` blocks local env files and credential artifacts.
+- Local commands that require secrets are documented with `doppler run --` or the approved provider command.
+- CI/deploy/runtime environments have secrets injected from Doppler or an approved provider.
+- Production uses service tokens/provider integrations/OIDC, not personal CLI tokens.
+- Frontend bundles expose only documented public client config.
+- Release/staging builds prove mocks are disabled and secrets are not bundled.
+- Rotation/revocation notes exist for live keys, webhook secrets, social/Fastlane keys, store credentials, and deploy tokens.
+
+## Common Failure Modes
+
+Flag these aggressively:
+- a new `process.env`, `import.meta.env`, `DartDefine`, `xcconfig`, `Info.plist`, GitHub Actions secret, Cloudflare secret, or mobile build setting appears without a `SECRETS.md` update
+- `.env.example` contains real-looking values instead of names or safe placeholders
+- production setup uses a Doppler personal/CLI token instead of a service token, provider integration, or OIDC
+- `doppler secrets get --plain` output is printed into logs or proof
+- a public `NEXT_PUBLIC_`, `PUBLIC_`, `EXPO_PUBLIC_`, or mobile plist value contains a server secret
+- service-account JSON, `.p8`, `.p12`, provisioning files, SSH keys, or OAuth refresh tokens are committed
+- CI/deploy works only from a developer shell because the agent forgot launch-time environment differs from interactive shell

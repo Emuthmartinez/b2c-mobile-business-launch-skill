@@ -55,6 +55,33 @@ Acceptance:
 - No free fallback is started just because a tool is missing from the runtime.
 - A future agent can tell which paid tools were intended, which fallbacks were approved, and which artifacts are lower-confidence because of fallback mode.
 
+## Phase 0c: Secrets Baseline
+
+Goal: prevent secret sprawl before service setup, CI, deploys, webhooks, and provider CLIs start depending on hidden local state.
+
+Do:
+- Load `secrets-management.md`.
+- Default to Doppler unless the founder selected a different secret manager.
+- If Doppler is selected, check `doppler --version`, current auth status, and whether `doppler.yaml` exists without printing secret values.
+- Create `SECRETS.md` from the template before adding provider keys.
+- Map expected secret-bearing services: AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, RevenueCat, Stripe, PostHog, Resend, Sentry, Supabase/Firebase/Postgres, Cloudflare/Vercel/GitHub Actions, App Store Connect, Google Play, Apple/Google signing, push, AI APIs, and social accounts.
+- Add `.env.example` names only when the repo needs a local schema.
+- Add or verify `.gitignore` blocks local env files, service-account JSON, app-store private keys, signing material, and downloaded credentials.
+- Record founder-only secret/account actions and blocked values.
+
+Outputs:
+- `SECRETS.md`
+- optional `doppler.yaml` with non-secret project/config hints
+- optional `.env.example` with names only
+- service token or provider-integration plan for CI/live environments
+- updated `.gitignore` or blocker if the repo cannot be changed
+
+Acceptance:
+- New secrets have a route before implementation uses them.
+- Secret-bearing commands have a `doppler run --` or approved provider wrapper.
+- A future agent can tell which secrets are public client config, server-only, webhook signing secrets, store credentials, CI/deploy secrets, or local operator credentials.
+- No raw values are written into docs, commits, screenshots, logs, or proof artifacts.
+
 ## Phase 1: Research-Backed Spec
 
 Goal: turn the rough idea into a defensible product spec.
@@ -248,6 +275,7 @@ Goal: make pricing, subscriptions, app-store products, web checkout, and entitle
 
 Do:
 - Load `analytics-attribution.md` before naming purchase, restore, entitlement, checkout, trial, closing-offer, subscription, or refund events.
+- Load `secrets-management.md` before creating RevenueCat, Stripe, store, webhook, or billing keys.
 - Load `revenue-monetization.md` before setting up RevenueCat, Stripe, store products, web billing, web purchase links, web funnels, paywalls, or subscription terms.
 - Load `onboarding-conversion.md` before choosing hard vs soft paywall, trial length, plan mix, paywall dismissal behavior, or review/purchase timing.
 - Decide the monetization path: waitlist-only, mobile app stores only, RevenueCat Web Billing, Stripe Billing through RevenueCat Web, existing Stripe sync, or no paid checkout yet.
@@ -261,6 +289,7 @@ Do:
 
 Outputs:
 - `REVENUE_OPS.md`
+- updated `SECRETS.md` for RevenueCat, Stripe, store credentials, webhook signing secrets, SDK keys, and deploy/runtime injection
 - monetization section in `LAUNCH.md`
 - updated `ANALYTICS.md` subscription and purchase events
 - updated `PRIVACY.md`, `TERMS.md`, and `LEGAL_REVIEW.md` when payments, subscriptions, taxes, or web checkout exist
@@ -288,11 +317,13 @@ Default stack from the model session:
 
 Do:
 - Load `analytics-attribution.md` before building the funnel, waitlist/referral loop, PostHog setup, GA4 setup, web checkout, or campaign links.
+- Load `secrets-management.md` before adding backend, email, analytics, deploy, database, or CI environment variables.
 - Build the landing page around the locked brand, not a generic marketing template.
 - Add email waitlist and optional referral loop; avoid fake scarcity.
 - Load `resend-email-ops.md` before configuring Resend, transactional sends, waitlist confirmations, lifecycle automations, broadcasts, inbound email, unsubscribe handling, or email webhooks.
 - If monetization is active, wire only the approved checkout path: RevenueCat Web Purchase Link, RevenueCat Web Funnel, RevenueCat Web SDK, Stripe Checkout/Payment Link, or no checkout. Do not mix billing engines casually.
 - Keep public keys public-only and secrets server-side.
+- Route new secrets to Doppler or the approved provider as they appear; do not leave provider keys as shell-only setup.
 - Add bot/rate-limit defenses proportional to launch stage.
 - Configure and test domain contact routes before public submission: `support@`, `privacy@`, and any `hello@`/founder/security aliases required by the launch. If using Cloudflare Email Routing, destination addresses must be verified, Email Routing must be connected/enabled at the zone level, DNS records must be configured, and inbound tests must pass.
 - Configure outbound email deliberately: use a verified Resend sending subdomain, server-only API key, idempotent transactional send wrapper, webhook observability, and unsubscribe handling for lifecycle/marketing messages.
@@ -387,6 +418,7 @@ Goal: implement the actual app with orchestration, review, and end-to-end proof.
 Do:
 - Load `flow-traceability.md` and require `ENGINEERING_PLAN.md` to reference trace IDs for build-critical work.
 - Load `engineering-orchestration.md`.
+- Load `secrets-management.md` before writing code, tests, or deploy configs that introduce environment variables or credentials.
 - Use `ce-brainstorm` first if product behavior is still ambiguous after research.
 - Use `ce-plan` or an equivalent plan to create implementation units with repo-relative paths, dependencies, test scenarios, and verification.
 - Use `TECH_SPEC.md` as the source for data models, API contracts, state machines, permission behavior, provider integrations, app integrity, remote config, and fixtures when it exists.
@@ -396,6 +428,7 @@ Do:
 - Keep the orchestrator responsible for git state, staging, commits, full-suite tests, migrations, releases, and final readiness calls.
 - Serialize MobAI/device automation; other agents may prepare fixtures, inspect code, or analyze logs while the device owner runs the flow.
 - Run backend and frontend E2E checks for in-scope user journeys: onboarding, attribution, paywall, entitlement, restore, referral, web checkout, lifecycle email, privacy/delete, analytics, and support.
+- Run secret-bearing commands through `doppler run --` or the approved provider wrapper, and update `SECRETS.md` whenever implementation introduces new variables.
 - Verify real test data lands where expected: database/Firestore/Supabase/Postgres, RevenueCat, Stripe, Resend, PostHog, Sentry, store console, or provider logs.
 - Use `ce-code-review`, `ce-test-browser`, `ce-test-xcode`, `ce-proof`, or `ce-demo-reel` when available and appropriate.
 - Use `xcodebuildmcp-testing.md` only after the founder confirms it as the Apple-platform fallback from MobAI, or when XcodeBuildMCP is the explicitly chosen Apple build/test route.

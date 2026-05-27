@@ -6,6 +6,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 
 - AppKittie App-Store Intelligence
 - Paid Tool Decision Protocol
+- Doppler And Secret Routing
 - Social-Language Research
 - Firecrawl Web Intelligence
 - Higgsfield Visual And Motion Production
@@ -40,6 +41,25 @@ Record the selected route in `TOOL_DECISIONS.md` or the relevant ops doc:
 - deferred with reason
 
 Do not spend tokens on the weaker fallback until the founder confirms.
+
+## Doppler And Secret Routing
+
+Load `secrets-management.md` before adding or using secrets. Default to Doppler unless the founder selected another provider.
+
+Local check:
+```bash
+doppler --version
+doppler setup
+doppler run -- npm test
+```
+
+Rules:
+- `doppler login` and account/project access are founder/operator actions when authentication is required.
+- Use `doppler run -- <command>` for local commands that need secrets.
+- Use Doppler service tokens, provider integrations, OIDC, or platform-native secrets for CI/live environments.
+- Do not print `doppler secrets get --plain` output.
+- Update `SECRETS.md` whenever a new secret, `process.env`, webhook signing secret, provider key, service-account file, app-store credential, mobile build setting, or CI/deploy secret appears.
+- Commit `.env.example` names only; never commit `.env`, private keys, service-account JSON, signing files, OAuth refresh tokens, or raw provider keys.
 
 ## AppKittie App-Store Intelligence
 
