@@ -103,6 +103,8 @@ Use `--dry-run` and read commands first. Do not use `--confirm`, `--submit`, pri
 
 Load `apple-signing-release.md` before this section. The common first-time failure is that the app builds in the simulator but cannot be uploaded because account/app-record/signing prerequisites are missing.
 
+Before running a mutating app-record command such as `asc apps create`, show the founder the exact preflight packet from `apple-signing-release.md`: Apple ID/ASC user, platform, app name, primary locale, bundle ID, SKU, user access, developer-name implications, and name-collision plan. Do not let an interactive prompt become the first place the founder sees these values.
+
 Run non-mutating checks first:
 
 ```bash
@@ -124,6 +126,8 @@ Interpretation rules:
 
 - `asc auth status` with no credentials means CLI automation is blocked until the founder authenticates or approves an API-key route through `SECRETS.md`.
 - An interactive `asc apps create` prompt that fails with EOF is an auth/input blocker, not a reason to retry blindly.
+- If `asc apps create` asks for Apple ID password or 2FA, the founder enters those directly in the secure prompt. Do not ask them to paste credentials into chat, logs, docs, or issue comments.
+- If the CLI reports that the app name is already in use and offers or applies a fallback such as `<Name> - app`, stop before accepting that fallback unless the founder already approved it in the preflight packet.
 - No bundle ID and no app record means create the explicit App ID/bundle identifier first, then create the app record, after founder approval.
 - Blank `DEVELOPMENT_TEAM` means project signing is not attached to an Apple team.
 - Only `Apple Development` identities means local development can work, but App Store/TestFlight distribution still needs Xcode automatic signing/cloud-managed distribution signing or an Apple Distribution certificate/profile.

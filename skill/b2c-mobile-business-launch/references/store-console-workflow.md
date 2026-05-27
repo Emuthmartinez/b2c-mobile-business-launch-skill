@@ -119,6 +119,8 @@ Founder gate: apply metadata / upload screenshots / submit for review
 Click path:
 - App Store Connect > Apps > plus button > New App
 
+Before opening this dialog or running `asc apps create`, show the founder the app-record preflight from `apple-signing-release.md`. The founder should know exactly what will be entered and what is sticky before credentials, 2FA, or mutating CLI prompts begin.
+
 Fields:
 - Platforms: iOS, iPadOS, macOS, tvOS, visionOS, or watchOS as applicable.
 - Name: app name, 2-30 characters.
@@ -141,6 +143,8 @@ Before creating the record, load `apple-signing-release.md` and confirm:
 - the SKU is final because it cannot be changed after the app is added.
 - the Xcode target bundle identifier matches the ASC bundle ID.
 - distribution signing strategy is known or explicitly blocked.
+- the name-collision plan is explicit; do not silently accept CLI fallback names like `<Name> - app`.
+- the founder understands whether they are using Full Access or Limited Access and why.
 
 ### App Information
 

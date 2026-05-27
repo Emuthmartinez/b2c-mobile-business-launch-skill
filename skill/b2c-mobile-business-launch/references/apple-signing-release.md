@@ -7,6 +7,7 @@ Use this before any iOS, iPadOS, macOS, tvOS, watchOS, or visionOS TestFlight, A
 - Current Sources To Refresh
 - Naming And Identifier Contract
 - First-Time Builder Gate
+- App Record Creation Preflight
 - Local Project Signing Inventory
 - Apple Portal And App Store Connect Inventory
 - Distribution Signing Strategy
@@ -74,6 +75,96 @@ For first-time builders:
 - If they need a business or brand seller name, confirm whether an organization account exists or needs D-U-N-S and legal authority setup.
 - If agreements are unsigned in App Store Connect, the app record and uploads can be blocked even when credentials work.
 - If ASC CLI auth prompts interactively and the agent is non-interactive, record the blocker and ask the founder to authenticate or provide the approved API-key path through the secret-management flow.
+
+## App Record Creation Preflight
+
+Before launching App Store Connect app-record creation in the browser, ASC CLI, or an interactive prompt, show the founder a concise preflight packet and get approval for any value that is not already final in the launch docs.
+
+Required founder-facing packet:
+
+```text
+App Store Connect > Apps > + > New App
+
+Apple ID / ASC user:
+- Use an Apple Account with Account Holder, Admin, or App Manager access.
+- Do not paste the password, 2FA code, API private key, or recovery code into chat or docs.
+- Prefer existing keychain/API-key auth when available; use interactive Apple ID password/2FA only with the founder present.
+
+Platforms:
+- Select iOS for iPhone/iPad apps.
+- Add macOS, tvOS, or visionOS only if this launch intentionally supports those platforms now.
+- Do not select extra platforms speculatively; each platform adds metadata/screenshot/review work.
+
+Name:
+- Paste the exact public App Store display name, 2-30 characters.
+- If unavailable, stop and present fallback options for founder approval before retrying.
+- Do not silently accept CLI-generated alternatives such as "<Name> - app".
+
+Primary language:
+- Use the metadata default locale, usually en-US for US English launches.
+- Confirm if the app's primary market or copy source is another language.
+
+Bundle ID:
+- Use the exact Xcode target bundle identifier.
+- Confirm the explicit App ID/bundle identifier already exists or will be created first.
+- Treat it as sticky platform identity because it cannot be changed in ASC after a build upload.
+
+SKU:
+- Use a stable internal slug, for example <app-slug>-ios.
+- It is not visible to users, but cannot be changed after app creation.
+- Allowed characters: letters, numbers, hyphens, periods, underscores; do not start with hyphen, period, or underscore.
+
+User Access:
+- Use Full Access by default for small founder teams.
+- Use Limited Access only when a larger organization needs per-app user restrictions.
+
+Developer Name:
+- Organization accounts may set a developer/trade name when adding the first app.
+- Individual accounts cannot customize this; their legal name is used.
+```
+
+Name-collision handling:
+
+- If App Store Connect reports the app name already in use, do not let the CLI invent and apply a public fallback name without approval.
+- First check whether the name is already used by another app in the same account/localization. If so, the founder can rename the existing app version or remove the old app record if appropriate.
+- If another developer is using the name and the founder has trademark rights, record the Apple support/trademark claim route instead of choosing a weaker name in the moment.
+- If the founder approves a fallback, update `BRAND.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, screenshots, website metadata, RevenueCat/store-product notes, and ASO keywords so the public name does not drift.
+
+`STORE_CONSOLE.md` should include a filled app-record table before creation:
+
+```text
+Field: Platforms
+Recommended value: iOS
+Why: Current V1 target is iPhone/iPad only.
+Editable/sticky: Adding extra platforms later is possible, but creates new metadata work.
+Founder approval: required if adding non-iOS platforms
+
+Field: Name
+Recommended value: <exact app name>
+Why: Matches BRAND.md and ASO plan.
+Editable/sticky: editable before review and in later version windows, but public/ASO-sensitive.
+Fallback if unavailable: <approved alternatives or blocked>
+
+Field: Bundle ID
+Recommended value: <bundle id>
+Why: Must match Xcode PRODUCT_BUNDLE_IDENTIFIER and explicit App ID.
+Editable/sticky: cannot change in ASC after build upload.
+
+Field: SKU
+Recommended value: <app-slug>-ios
+Why: Stable internal tracking ID.
+Editable/sticky: cannot change after app creation.
+
+Field: Primary language
+Recommended value: en-US
+Why: Launch metadata and support copy are US English.
+Editable/sticky: can change later, but affects localization defaults.
+
+Field: User Access
+Recommended value: Full Access
+Why: Founder/operator workflow; no per-app access restriction needed.
+Editable/sticky: can be changed via access management.
+```
 
 ## Local Project Signing Inventory
 
