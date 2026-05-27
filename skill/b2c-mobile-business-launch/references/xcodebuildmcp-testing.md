@@ -7,6 +7,7 @@ XcodeBuildMCP is not a full MobAI replacement. It is excellent for Apple simulat
 ## Contents
 
 - Current Sources To Refresh
+- Live Documentation Gate
 - When To Use
 - Setup Flow
 - MCP Client Routing
@@ -32,7 +33,26 @@ Refresh these before implementation because XcodeBuildMCP versions, tool names, 
 - Skills: `https://xcodebuildmcp.com/docs/skills`
 - Local skill when installed: `xcodebuildmcp-cli`
 
-As of the May 2026 docs, XcodeBuildMCP installs through Homebrew or npm, supports both CLI and MCP server modes, requires macOS 14.5+, Xcode 16.x+, and Node 18+ for npm installs, and ships optional agent skills.
+## Live Documentation Gate
+
+Before installation, setup, client configuration, CLI commands, tool names, privacy settings, skills, or screenshot/test proof, refresh the official docs above and the local CLI help when available. Do not treat this reference, the local `xcodebuildmcp-cli` skill, old transcripts, or project memory as version authority.
+
+Record in `PRODUCTION_READINESS.md` or `SCREENSHOTS.md`:
+- docs checked date
+- docs URLs used
+- official docs version/tag when shown
+- installed version or install route: Homebrew, npm/npx, or existing binary
+- `xcodebuildmcp --help`, `xcodebuildmcp tools`, or MCP tool-list snapshot
+- Xcode version, macOS version, simulator/device runtime, project/workspace, scheme, and configuration
+- command or tool-name differences between live docs, CLI help, MCP tools, and local skills
+
+When docs, CLI help, and MCP tool names disagree:
+- official docs plus the installed CLI help decide CLI syntax
+- exposed MCP tool schemas decide MCP tool-call names
+- local skill examples are only orientation
+- record the chosen command/tool route and mismatch in proof docs
+
+If current official docs or CLI help cannot be reached, mark setup as `blocked: docs refresh needed` or `provisional: docs unavailable`. Do not use memory-only command names for launch proof.
 
 ## When To Use
 
@@ -53,7 +73,7 @@ For Android:
 
 ## Setup Flow
 
-Preferred install options from current docs:
+Refresh the Live Documentation Gate first. Preferred install options below are examples from current docs, not permanent requirements:
 
 ```bash
 brew tap getsentry/xcodebuildmcp
@@ -67,7 +87,7 @@ npm install -g xcodebuildmcp@latest
 xcodebuildmcp --help
 ```
 
-Verify the environment:
+Verify the environment using the current docs:
 
 ```bash
 npx --package xcodebuildmcp@latest xcodebuildmcp-doctor
@@ -86,6 +106,8 @@ xcodebuildmcp setup
 ```
 
 The setup wizard creates or updates `.xcodebuildmcp/config.yaml` with enabled workflows, project/workspace path, scheme, configuration, simulator defaults, and debug options. Commit this config only when it contains repo-safe defaults and no secrets.
+
+Record whether setup used Homebrew, npm/npx, an existing binary, or an MCP client-managed `npx` command. If `xcodebuildmcp upgrade` or another update route is needed, use the current official docs before running it.
 
 ## MCP Client Routing
 
@@ -107,7 +129,7 @@ If Codex or Xcode agent tools time out, current docs recommend raising `tool_tim
 
 ## CLI Routing
 
-Use the CLI when MCP tools are not exposed or when scripting/CI is simpler. Prefer the local `xcodebuildmcp-cli` skill when available.
+Use the CLI when MCP tools are not exposed or when scripting/CI is simpler. Load the local `xcodebuildmcp-cli` skill when available, but let live docs and local `--help` override stale examples.
 
 Discovery:
 
@@ -131,6 +153,8 @@ xcodebuildmcp ui-automation screenshot --simulator-id <UDID> --return-format pat
 ```
 
 Use `--json` for complex arguments and `--output jsonl` for long-running operations that should stream machine-readable progress.
+
+If the CLI shows commands such as `simulator build-and-run` while an MCP tool or local skill uses names such as `build_run_sim`, do not mix the forms. Use CLI names only in shell commands and MCP tool names only in MCP calls.
 
 ## Testing And Screenshot Workflow
 
@@ -188,7 +212,9 @@ Do not flatten these into "Xcode is broken". Record the exact doctor finding and
 
 `PRODUCTION_READINESS.md` should include:
 - XcodeBuildMCP version or install route
-- docs refreshed date
+- docs refreshed date, official docs URLs, and docs version/tag when shown
+- CLI/help or `xcodebuildmcp tools` snapshot used to choose commands
+- any local skill/docs mismatch and the selected command/tool route
 - doctor status or blocker
 - MCP or CLI route
 - enabled workflows

@@ -9,7 +9,7 @@ It is built for the full path: research, positioning, design system, secrets, an
 - Research flows into product, brand, design, implementation specs, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
 - Visual work produces `DESIGN.md`, lowercase `design.md`, and rendered HTML proofs instead of prose-only design direction.
 - Analytics and PostHog attribution are planned upfront with founder-visible `analytics-plan.html`.
-- Secrets are routed through `SECRETS.md`, Doppler by default, `doppler run --` command wrappers, names-only `.env.example`, CI/deploy injection, and production service-token/provider-integration gates.
+- Secrets are routed through `SECRETS.md`, Doppler by default, live Doppler documentation checks, `doppler run --` command wrappers, names-only `.env.example`, CI/deploy injection, and production service-token/provider-integration gates.
 - Self-reported attribution is a data contract, not a screen: early prompt, stable source keys, `other` free text, PostHog person properties, backend/profile persistence, anonymous-to-identified reconciliation, and live proof.
 - Store ops produce copy-paste App Store Connect and Google Play packets, privacy answers, screenshot matrices, and founder-only gate lists.
 - Paid third-party tooling has explicit fallback routing; agents must ask before silently downgrading to free/manual paths.
@@ -26,6 +26,7 @@ It is built for the full path: research, positioning, design system, secrets, an
 - App Store Connect, Google Play Console, ASC CLI routing, screenshots, privacy labels, data safety, and review notes
 - Resend setup, sender DNS, transactional email, lifecycle automations, broadcasts, contacts/topics, webhooks, inbound, and unsubscribe handling
 - MobAI with XcodeBuildMCP fallback, device screenshots, E2E proof, backend/provider verification, and production readiness
+- Live documentation gates for Doppler and XcodeBuildMCP, including official-doc URLs, CLI/help snapshots, docs-vs-local mismatch notes, and proof artifacts
 - Fastlane AI and UGC creator-engine planning for post-launch organic growth
 
 ## Repo Layout

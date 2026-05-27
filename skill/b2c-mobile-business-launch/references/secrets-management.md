@@ -4,14 +4,27 @@ Use this before adding API keys, tokens, OAuth credentials, webhook signing secr
 
 Default to Doppler when the founder has not selected another secret manager. Load `paid-tool-routing.md` before replacing Doppler or another paid/account-gated secret manager with Apple Keychain, platform secrets, local `.env`, or manual exports.
 
-## Sources To Refresh
+## Live Documentation Gate
 
-Refresh current provider docs before locking commands:
+Refresh current provider docs before installing, configuring, writing commands, creating service tokens, wiring CI/deploy injection, or calling a Doppler setup complete. Prefer Doppler's official docs and `https://docs.doppler.com/llms.txt` over local examples, memory, old transcripts, or prior agent output.
+
+Required Doppler sources:
 - Doppler CLI install: `https://docs.doppler.com/docs/install-cli`
 - Doppler CLI guide: `https://docs.doppler.com/docs/cli`
 - Doppler secrets setup guide: `https://docs.doppler.com/docs/secrets-setup-guide`
 - Doppler service tokens: `https://docs.doppler.com/docs/service-tokens`
+- Doppler AI docs index: `https://docs.doppler.com/llms.txt`
 - Target deploy provider docs for secrets: Cloudflare, Vercel, Netlify, Supabase, GitHub Actions, EAS, Xcode Cloud, Firebase, or app-store provider docs as applicable
+
+Record in `SECRETS.md`:
+- docs checked date
+- docs URLs used
+- observed install route and CLI version, when available
+- project/config mapping source
+- command differences between live docs, local CLI help, this skill, or old project docs
+- live-environment auth model: service token, provider integration, OIDC, or platform-native secret store
+
+If current official docs or CLI help cannot be reached, mark setup as `blocked: docs refresh needed` or `provisional: docs unavailable`. Do not invent install, login, service-token, or deploy commands from memory.
 
 ## Required Artifacts
 
@@ -19,6 +32,7 @@ Create or update `SECRETS.md` whenever any service in the launch needs a secret 
 
 `SECRETS.md` must include:
 - selected secret provider: Doppler by default, or founder-approved alternative
+- provider docs basis: docs checked date, official URLs, install route, and observed CLI version when available
 - secret inventory: variable name, service, class, environment, runtime surface, public/server-only status, owner, rotation note, and status
 - Doppler project/config map or alternate provider location for each environment
 - command map: local dev, tests, build, deploy, migrations, webhook replay, store/CLI automation, and support scripts
@@ -64,7 +78,8 @@ Public does not mean harmless. If a token can write, mutate, impersonate, bill, 
 ## Doppler Workflow
 
 Local development:
-- Verify install: `doppler --version`.
+- Refresh the Live Documentation Gate before installation or setup.
+- Verify install with the current official command, usually `doppler --version`, and record the observed version or missing-binary status.
 - If missing and the founder selected Doppler, install from current official docs or ask if global install is not appropriate.
 - Authenticate locally with `doppler login`; this is a founder/operator action when browser login or account access is required.
 - Run `doppler setup` at the repo root or configured app folder. Use `doppler.yaml` only for non-secret project/config/path hints.
@@ -78,6 +93,7 @@ Setting and reading:
 - If a secret value is needed and unavailable, mark a founder action instead of inventing a placeholder that may ship.
 
 CI and production:
+- Refresh the Doppler service-token docs and target deploy-provider secret docs before writing production instructions.
 - Use Doppler service tokens, provider integrations, or OIDC identities for non-local environments.
 - Service tokens should be read-only where possible and scoped to one project/config.
 - Store `DOPPLER_TOKEN` only in the CI/deploy provider secret store or runtime secret store.

@@ -5,6 +5,11 @@ Raw secret values must not be committed, pasted into docs, or included in screen
 ## Provider
 
 - Selected provider: Doppler
+- Provider docs checked:
+  - date: Pending
+  - URLs: `https://docs.doppler.com/docs/install-cli`, `https://docs.doppler.com/docs/cli`, `https://docs.doppler.com/docs/secrets-setup-guide`, `https://docs.doppler.com/docs/service-tokens`, `https://docs.doppler.com/llms.txt`
+  - install route / CLI version: Pending
+  - docs-vs-local mismatch: Pending
 - Doppler project/config map:
   - local: `{{DOPPLER_PROJECT}}` / `dev_personal`
   - staging: `{{DOPPLER_PROJECT}}` / `stg`

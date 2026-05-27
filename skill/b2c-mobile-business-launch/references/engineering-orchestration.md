@@ -181,10 +181,12 @@ MobAI is a paid third-party tool. If it is unavailable, do not silently switch t
 
 Use XcodeBuildMCP after confirmation for Apple-platform build/run/test/UI automation/screenshots/logs/video:
 - load `xcodebuildmcp-testing.md`
+- refresh official XcodeBuildMCP docs and local CLI/tool help before install/setup/commands/proof
 - use MCP tools when exposed, otherwise the `xcodebuildmcp-cli` skill and CLI
 - run `session_show_defaults` before first MCP build/run/test in a session
 - use one-shot build/run tools when defaults are configured
 - record Apple-only scope and any missing Android/MobAI coverage
+- record docs checked date, docs URLs, CLI/tool snapshot, install route/version, and any docs-vs-skill mismatch in `PRODUCTION_READINESS.md`
 
 Device loop:
 - observe UI tree before acting

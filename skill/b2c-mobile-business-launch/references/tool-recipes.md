@@ -46,6 +46,8 @@ Do not spend tokens on the weaker fallback until the founder confirms.
 
 Load `secrets-management.md` before adding or using secrets. Default to Doppler unless the founder selected another provider.
 
+Refresh current Doppler official docs and `https://docs.doppler.com/llms.txt` before installation, setup, service-token, or CI/live-environment instructions. Record docs checked date, docs URLs, observed CLI version/install route, and any docs-vs-local mismatch in `SECRETS.md`.
+
 Local check:
 ```bash
 doppler --version
@@ -262,6 +264,7 @@ MobAI CLI route:
 Confirmed free fallback:
 - MobAI is a paid third-party tool. If MobAI is unavailable, load `paid-tool-routing.md` and ask before using XcodeBuildMCP as the Apple-platform fallback.
 - After confirmation, load `xcodebuildmcp-testing.md` for iOS/iPadOS/macOS/tvOS/watchOS/visionOS build, run, UI automation, screenshot, video, and log workflows.
+- Refresh official XcodeBuildMCP docs and local `xcodebuildmcp --help`/`xcodebuildmcp tools` output before setup commands, CLI syntax, MCP tool names, screenshot captures, or readiness proof.
 - Use XcodeBuildMCP for Apple simulator/device captures and record the missing MobAI coverage. Use Android emulator/ADB or mark Android proof blocked for Android-only flows.
 
 Record in `SCREENSHOTS.md`:

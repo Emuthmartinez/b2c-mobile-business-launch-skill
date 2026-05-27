@@ -98,6 +98,7 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 Flag these aggressively:
 - A paid/account-gated tool is missing in the runtime and the agent silently starts the free fallback without founder confirmation.
 - Doppler or the approved secret provider is not selected before API keys, webhook secrets, CI/deploy env vars, service-account files, or local `.env` files appear.
+- Doppler setup, service-token, or CI/live secret instructions were copied from memory without refreshing current official docs and local CLI help.
 - A new secret-bearing variable appears in code, CI, mobile build config, provider setup, or docs without a matching `SECRETS.md` entry.
 - Secret-bearing commands run from a developer shell but are not documented through `doppler run --` or the approved provider wrapper.
 - Production uses a personal Doppler/CLI token instead of a service token, provider integration, OIDC, or platform-native secret store.
@@ -114,6 +115,7 @@ Flag these aggressively:
 - Parallel subagents were launched without a file-overlap check, worktree isolation, or an orchestrator owning git, integration, and full test suites.
 - MobAI/device automation ran in parallel on the same simulator/device or produced screenshots without backend/provider verification.
 - XcodeBuildMCP was used as a MobAI fallback without founder confirmation, or Android coverage was implied even though XcodeBuildMCP is Apple-only.
+- XcodeBuildMCP commands, MCP tool names, setup snippets, privacy settings, or screenshot/test proof were copied from stale local skills without checking official docs and `xcodebuildmcp --help`/tool listings.
 - Engineering was declared done from unit/widget tests only; no frontend-to-backend, provider, entitlement, analytics, email, or database proof exists.
 - `PRODUCTION_READINESS.md` is missing, or it lacks command outcomes, fixture/account details, evidence paths, blocked E2E flows, and founder-only gates.
 - `DESIGN.md` is missing, unlinted, or duplicated by conflicting design-token docs.

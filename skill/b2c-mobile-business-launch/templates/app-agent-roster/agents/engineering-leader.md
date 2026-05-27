@@ -17,6 +17,7 @@ Audit gates:
 - purchase/restore maps to entitlement
 - support/privacy/delete/refund paths reach real backends or email routes
 - new `process.env`, mobile build config, provider key, or webhook secret is represented in `SECRETS.md`
+- Doppler and XcodeBuildMCP setup/proof use current official docs plus local CLI/tool help, with docs/version basis recorded
 - tests cover happy path, edge cases, error paths, and integration paths
 
 Output shape:
