@@ -32,6 +32,7 @@ Use the CLI route when:
 - the user wants App Store Connect work reduced to commands instead of clicks
 - app IDs, build IDs, version IDs, localizations, TestFlight groups, or screenshot localization IDs need deterministic resolution
 - metadata, localizations, keywords, screenshots, or review status need repeatable audit/apply flows
+- App Store listing preparation needs dry-run metadata, localization, screenshot, subscription, custom product page, or In-App Event state checks
 - TestFlight distribution, build upload, or release readiness must be preflighted
 - Apple Developer account, bundle ID/App ID, app record, signing, certificate/profile, or first upload state needs deterministic inspection
 - RevenueCat catalog/subscription mapping needs reconciliation against ASC products
@@ -60,6 +61,8 @@ When installed, route to these skill areas:
 - `asc-subscription-localization`: IAP/subscription display-name localization
 - `asc-revenuecat-catalog-sync`: reconcile ASC products with RevenueCat
 - `asc-crash-triage`: TestFlight crashes and beta feedback
+
+For App Store listing work, also load `app-store-listing-prep.md`. CLI automation can apply or verify pieces of the listing, but the durable deliverable still needs `APP_STORE_LISTING.md`, `app-store-listing.html`, `STORE_CONSOLE.md`, and founder-visible approval gates.
 
 Install only with founder approval if it is not already available:
 
@@ -153,6 +156,9 @@ Founder approval required:
 - metadata apply/push
 - screenshot upload/replace
 - IAP/subscription creation, pricing, localization, or attachment
+- custom product page creation, keyword assignment, deep link submission, disable/delete, or review submission
+- In-App Event creation, schedule/media/deep link changes, purchase-required flag changes, or review submission
+- App Privacy publish/update actions
 - TestFlight external distribution
 - final submit, cancel, release, phased release, or managed publishing changes
 - Wall of Apps submission or any public PR/post
@@ -176,6 +182,11 @@ For screenshot upload:
 For RevenueCat:
 - use `asc-revenuecat-catalog-sync` or equivalent audit before creating products or mappings
 - do not create products, change prices, or map entitlements without founder approval and `REVENUE_OPS.md`
+
+For App Store marketing surfaces:
+- use CLI/API reads and dry-runs to resolve localization IDs, screenshot set IDs, IAP/subscription IDs, custom product page IDs, In-App Event IDs, and app version IDs
+- keep manual click paths in `app-store-listing.html` even when CLI apply is available
+- do not skip App Privacy, age rating, accessibility labels, review notes, or product attachment checks because metadata dry-run succeeded
 
 ## Evidence Requirements
 

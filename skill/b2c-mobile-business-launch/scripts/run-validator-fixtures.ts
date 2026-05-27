@@ -97,7 +97,7 @@ function writeCompleteStoreConsole(root: string): void {
     path.join(root, "STORE_CONSOLE.md"),
     [
       "# Store Console",
-      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, privacy, screenshots, review notes, and account deletion.",
+      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
       "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
@@ -297,7 +297,7 @@ try {
     path.join(iosOnlyStore, "STORE_CONSOLE.md"),
     [
       "# Store Console",
-      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, privacy, screenshots, review notes, and account deletion.",
+      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
     "utf8",
@@ -305,13 +305,27 @@ try {
   writeFileSync(path.join(iosOnlyStore, "store-console.html"), "<!doctype html><html><body>iOS store packet</body></html>", "utf8");
   runFixture("iOS-only store packet does not require Google Play fields", iosOnlyStore, "check-store-console-packet.ts", 0);
 
+  const thinAscMarketing = makeFixture("thin-asc-marketing");
+  writeFileSync(
+    path.join(thinAscMarketing, "STORE_CONSOLE.md"),
+    [
+      "# Store Console",
+      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, privacy, screenshots, review notes, and account deletion.",
+      "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
+      "If the app name is already in use, stop for founder approval before using any fallback name.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(thinAscMarketing, "store-console.html"), "<!doctype html><html><body>Thin store packet</body></html>", "utf8");
+  runFixture("thin ASC listing packet without App Privacy and marketing surfaces fails", thinAscMarketing, "check-store-console-packet.ts", 1, "store_console.app_privacy.missing");
+
   const unsafeFallback = makeFixture("unsafe-store-fallback");
   writeCompleteStoreConsole(unsafeFallback);
   writeFileSync(
     path.join(unsafeFallback, "STORE_CONSOLE.md"),
     [
       "# Store Console",
-      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, privacy, screenshots, review notes, and account deletion.",
+      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
       "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
       "Founder approval is required before submission.",
       "If the app name is already in use, retry with fallback name App - app.",

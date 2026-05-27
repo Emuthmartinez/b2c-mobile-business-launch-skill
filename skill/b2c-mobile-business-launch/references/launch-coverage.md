@@ -28,8 +28,8 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Technical build contracts | data model, API/RPC/webhooks, auth/session, app states, permissions, integrations, app integrity, fixtures | `TECH_SPEC.md`, `ENGINEERING_PLAN.md` |
 | Brand/design | voice, `DESIGN.md` token system, screen spec, rendered HTML proofs, asset rules, accessibility | `BRAND.md`, `DESIGN.md`, `design.md`, `design.html` |
 | Onboarding/conversion | personalization, mascot/demo, attribution, review prompt, paywall timing, closing offer, activation | `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md` |
-| ASO/store listing | metadata, keyword map, screenshots, category, localization, review strategy | ASO skills, AppKittie |
-| Store-console readiness | `STORE_CONSOLE.md`, `store-console.html`, build/version, IAP/subscriptions, privacy labels/Data safety, review notes, account deletion, screenshots, optional `asc` CLI dry-runs | App Store Connect, Play Console, App Store Connect CLI, MobAI, XcodeBuildMCP fallback |
+| ASO/store listing | metadata, keyword map, App Store listing packet, screenshots, category, localization, custom product pages, In-App Events, review strategy | ASO skills, AppKittie, Higgsfield |
+| Store-console readiness | `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, build/version, IAP/subscriptions, privacy labels/Data safety, review notes, account deletion, screenshots, optional `asc` CLI dry-runs | App Store Connect, Play Console, App Store Connect CLI, MobAI, XcodeBuildMCP fallback |
 | Apple signing/release | Apple Developer membership, Team ID, bundle ID/App ID, app record, capabilities, certificates/profiles, archive/export/upload/TestFlight status, founder-only gates | `APPLE_SIGNING.md`, Xcode, XcodeBuildMCP, ASC CLI, App Store Connect |
 | Revenue | RevenueCat/Stripe/app-store products, entitlement mapping, web checkout, restore, webhooks | `revenue-monetization.md` |
 | Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics | Cloudflare, Supabase, PostHog, Resend |
@@ -138,7 +138,8 @@ Flag these aggressively:
 - Onboarding has questions but no reason matrix, attribution capture, review-prompt gate, paywall timing, closing-offer decision, or activation event.
 - Stripe checkout works but does not grant a RevenueCat entitlement.
 - Store products exist but are not attached to the app version, offering, entitlement, or review notes.
-- App Store Connect or Google Play values exist only in prose; no click paths, field limits, copyable packet, or HTML mock console exists.
+- App Store Connect or Google Play values exist only in prose; no click paths, field limits, copyable packet, App Store listing packet, privacy worksheet, or HTML mock console exists.
+- App Store listing prep stops at basic metadata and screenshots while skipping App Privacy, RevenueCat/Stripe/web-funnel pricing, custom product pages, In-App Events, localization, or Higgsfield/design-system marketing assets.
 - ASC CLI automation exists but no `store-console.html`, manual click path, dry-run/applied distinction, or founder approval list exists.
 - Simulator build succeeds, but Apple Developer membership, Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, distribution signing, certificates/profiles, archive/export/upload, or TestFlight processing are unknown.
 - The local Mac only has an `Apple Development` identity, but the launch is described as App Store/TestFlight-ready without Xcode cloud-managed signing, an Apple Distribution identity/profile, or a CI/cloud signing route.

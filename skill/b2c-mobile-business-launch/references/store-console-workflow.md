@@ -27,6 +27,12 @@ Apple:
 - Platform version information: `https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/`
 - Manage app privacy: `https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/`
 - App privacy details: `https://developer.apple.com/app-store/app-privacy-details/`
+- Configure In-App Purchase settings: `https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases`
+- Set IAP pricing: `https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/set-a-price-for-an-in-app-purchase/`
+- Custom product pages: `https://developer.apple.com/help/app-store-connect/create-custom-product-pages/configure-multiple-product-page-versions`
+- In-App Events: `https://developer.apple.com/help/app-store-connect/offer-in-app-events/offer-in-app-events`
+- Localize app information: `https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information/`
+- App Store localizations: `https://developer.apple.com/help/app-store-connect/reference/app-information/app-store-localizations/`
 - Screenshot specs: `https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications`
 - Upload previews and screenshots: `https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/`
 - Age rating: `https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating`
@@ -48,6 +54,7 @@ ASC CLI:
 - Rork App Store Connect CLI skills: `https://github.com/rorkai/app-store-connect-cli-skills`
 - Rork App Store Connect CLI: `https://github.com/rorkai/App-Store-Connect-CLI`
 - Load `app-store-connect-cli.md` before using `asc`, installing CLI skills, syncing metadata, planning/uploading screenshots, TestFlight orchestration, release validation, signing, or RevenueCat catalog sync.
+- Load `app-store-listing-prep.md` before Apple listing copy, App Privacy questionnaires, pricing/subscription mapping, In-App Events, custom product pages, localization, Higgsfield-backed marketing assets, or App Store marketing surface planning.
 
 Google Play:
 - Create and set up app: `https://support.google.com/googleplay/android-developer/answer/9859152?hl=en`
@@ -66,6 +73,9 @@ Create these when a store submission is in scope:
 
 - `PROJECT_STATE.yaml`: `store_console`, `apple_signing`, privacy/legal, revenue, screenshot, and provider/tool state with active failure cards.
 - `STORE_CONSOLE.md`: agent-readable source of truth for App Store Connect and Google Play Console fields, click paths, blockers, and evidence.
+- `APP_STORE_LISTING.md`: Apple listing preparation packet covering default listing fields, App Privacy, pricing/subscriptions, RevenueCat/Stripe/web funnels, custom product pages, In-App Events, localization, screenshots/previews, and marketing strategy.
+- `app-store-listing.html`: founder-facing App Store listing view with copyable values, character counts, pricing/product matrix, privacy status, CPP/event plan, and approval gates.
+- `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy answers when privacy disclosures are not already verified.
 - `APPLE_SIGNING.md`: required for Apple distribution, TestFlight, physical-device signing, or first upload readiness; include account/team, bundle ID/App ID, app record, signing, capabilities, certificates/profiles, archive/export/upload state, and founder gates.
 - `store-console.html`: founder-facing mock console with copy buttons or clearly copyable fields grouped by exact ASC/Play Console page.
 - `SCREENSHOTS.md`: screenshot capture, composition, dimensions, device targets, locale, proof constraints, upload status, and source image paths.
@@ -173,6 +183,8 @@ Packet should include:
 - whether value is editable after submission or version-gated
 - source evidence or policy source
 
+Also create `APP_STORE_LISTING.md` rows for any field that affects marketing, privacy, pricing, or discoverability. The App Information section should agree with `DESIGN.md`, `app-marketing-context.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`, `SCREENSHOTS.md`, and public support/privacy URLs.
+
 ### App Privacy
 
 Click path:
@@ -194,6 +206,11 @@ Packet sections:
 - privacy manifest/required reason API status from the built app
 
 Never answer App Privacy from generic policy text alone. Use the real data inventory and SDK/vendor behavior.
+
+Interactive worksheet:
+- Use `templates/app-store-listing/app-privacy-questionnaire.html` or a project-specific equivalent when the founder needs to review answers manually.
+- The worksheet should let the founder inspect selected data types, linked/tracking/purpose answers, vendors, proof paths, and unanswered items before publishing in App Store Connect.
+- Treat payment information entered through Apple, Stripe, or RevenueCat-hosted flows as collected only if the developer/app actually receives or stores it; otherwise document the payment provider and disclosure rationale.
 
 ### Version Page
 
@@ -219,6 +236,11 @@ Packet should show:
 - build number and bundle version
 - review-note script for the reviewer path
 
+ASO and marketing rules:
+- Produce 2-3 metadata variants when keyword or positioning uncertainty is material, then recommend one.
+- Keywords must stay within current byte limits, avoid competitor names/company names, and avoid duplicating app/company terms already indexed by Apple.
+- Promotional text, screenshots, app previews, custom product pages, events, web funnel pages, and paywall copy must agree on price, trial, renewal, and feature availability.
+
 ### Pricing, Availability, IAP, And Subscriptions
 
 Click paths vary by app setup. The packet must show:
@@ -229,6 +251,63 @@ Click paths vary by app setup. The packet must show:
 
 Founder gates:
 - price, trial, discount, intro offer, tax/compliance, territory, final submission
+
+Revenue alignment:
+- Load `revenue-monetization.md` before product or price changes.
+- Reconcile App Store Connect products with RevenueCat entitlements/offerings/packages before applying listing or paywall copy.
+- If Stripe or RevenueCat Web is used for a web funnel, record the web checkout route, redemption link/deep link, billing portal, and whether Apple rules allow any in-app mention or call to action.
+- Do not mark pricing ready until App Store products, RevenueCat, web funnel, screenshots, terms, privacy, analytics, and review notes all use the same product IDs, prices, trial/intro details, and cancellation/refund posture.
+
+### Custom Product Pages
+
+Click path:
+- Apps > <App Name> > Custom Product Pages
+
+Packet should include:
+- reference name
+- audience/channel/campaign
+- linked keywords or Apple Search Ads route
+- screenshots, app previews, promotional text, and localization
+- optional deep link and proof that it opens the right in-app content
+- App Analytics measurement threshold and post-launch owner
+- review/submission status
+
+Rules:
+- Do not create a custom product page without a traffic source or measurement purpose.
+- Do not use a custom product page to make claims not supported by the app, screenshots, terms, or paywall.
+- Founder approval is required before creating, submitting, disabling, or deleting custom product pages.
+
+### In-App Events
+
+Click path:
+- Apps > <App Name> > In-App Events
+
+Packet should include:
+- reference name
+- event name, short description, long description, badge/purpose, priority, schedule, country availability, primary language, localization
+- media source and upload specs
+- deep link and clean-install test
+- whether an IAP is required to participate
+- App Review status and launch calendar owner
+
+Rules:
+- Only plan events that correspond to real in-app content or time-bound functionality.
+- Do not use In-App Events as generic ads for permanent features.
+- Founder approval is required before submission, schedule changes, or launch.
+
+### Localization
+
+Packet should include:
+- primary language and target locales
+- localized name/subtitle/description/keywords/promotional text
+- localized privacy policy/support URLs when different
+- screenshot/app preview localization status
+- keyword and cultural review evidence
+- fallback behavior if no localization matches the user's device/storefront language
+
+Rules:
+- Do not localize keywords without checking whether screenshots and support/privacy coverage are acceptable for that market.
+- Keep localized pricing, trial, subscription, and refund language aligned with App Store products and web funnel copy.
 
 ### App Accessibility
 

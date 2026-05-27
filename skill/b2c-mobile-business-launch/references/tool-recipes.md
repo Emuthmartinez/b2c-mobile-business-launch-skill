@@ -256,11 +256,13 @@ Decision rule:
 
 Purpose: avoid re-creating specialist ASO work inside the broad launch skill.
 
-Use `aso-store-ops.md` as the router, then load `store-console-workflow.md` when the work moves from strategy into App Store Connect, Google Play Console, privacy forms, screenshots, or submission. When the runtime exposes ASO skills, delegate:
+Use `aso-store-ops.md` as the router. Load `app-store-listing-prep.md` for Apple listing packets, pricing/privacy/growth surfaces, and `store-console-workflow.md` when the work moves into App Store Connect, Google Play Console, privacy forms, screenshots, or submission. When the runtime exposes ASO skills, delegate:
 - `app-marketing-context` before any ASO project
 - `keyword-research` before title/subtitle/keyword locks
 - `metadata-optimization` before App Store Connect or Play Console copy
 - `screenshot-optimization` before screenshot briefs or upload assets
+- `custom-product-pages` before CPP audience/channel/keyword routing
+- `in-app-events` before App Store event planning
 - `aso-audit` before changing an existing listing
 - `app-launch` for launch calendar and channel sequencing
 - `apple-search-ads` for ASA campaign structure and budget rules
@@ -272,7 +274,8 @@ Use `aso-store-ops.md` as the router, then load `store-console-workflow.md` when
 
 Fallback:
 - If the ASO skills are installed but not discoverable in the current runtime, search local skill/plugin directories for the skill name and read its `SKILL.md`.
-- If no ASO skill pack is installed, use `paid-tool-routing.md` before replacing paid ASO tooling with AppKittie, public App Store/Play Console research, manual keyword sheets, and the same outputs: context, keyword map, metadata variants, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, launch calendar, and post-launch monitoring loop.
+- If the Eronred ASO skill set is relevant, refresh `https://github.com/Eronred/aso-skills` and prefer installed or vendored skill docs over memory.
+- If no ASO skill pack is installed, use `paid-tool-routing.md` before replacing paid ASO tooling with AppKittie, public App Store/Play Console research, manual keyword sheets, and the same outputs: context, keyword map, metadata variants, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, `app-store-listing.html`, `store-console.html`, `SCREENSHOTS.md`, launch calendar, and post-launch monitoring loop.
 
 ## MobAI Toolbelt, Recorders, And XcodeBuildMCP Capture
 

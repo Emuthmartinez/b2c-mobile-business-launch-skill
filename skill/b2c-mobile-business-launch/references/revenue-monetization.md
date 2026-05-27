@@ -33,6 +33,7 @@ Refresh current docs before acting because payment, tax, and app-store rules cha
 - Stripe go-live checklist: https://docs.stripe.com/get-started/checklist/go-live
 - Stripe Tax or tax rates when selling web subscriptions: https://docs.stripe.com/payments/advanced/tax
 - Apple App Review Guideline 3.1.1 and external purchase rules: https://developer.apple.com/app-store/review/guidelines/
+- Apple App Store Connect IAP setup and pricing docs from `app-store-listing-prep.md` when App Store products or subscriptions are in scope.
 - Google Play payments policy: https://support.google.com/googleplay/android-developer/answer/9858738?hl=en
 - Google Play subscription lifecycle and RTDNs: https://developer.android.com/google/play/billing/lifecycle/subscriptions
 
@@ -96,6 +97,7 @@ Android:
 
 Gate:
 - store products must match paywall copy, screenshots, app metadata, privacy/terms, RevenueCat products, and analytics event names.
+- App Store listing work must produce an `APP_STORE_LISTING.md` or `STORE_CONSOLE.md` pricing section that ties each App Store product/subscription to RevenueCat entitlement/offering/package, web funnel/Stripe route when used, review status, sandbox proof, and founder approval.
 
 ## 4b. Paywall Timing, Plans, Trials, And Offers
 
@@ -169,6 +171,7 @@ Do not publish sandbox purchase links. Keep production and sandbox URLs clearly 
 Before publishing pricing:
 - founder approves price, trial, intro offer, renewal price, cancellation language, and refund posture
 - paywall, landing page, app metadata, screenshots, terms, privacy, store products, RevenueCat offerings, Stripe prices, and analytics all match
+- App Store Connect pricing, RevenueCat offering/package IDs, Stripe/web funnel prices, screenshots/app previews, custom product pages, In-App Events, and localized metadata all use the same approved price/trial/renewal facts
 - if showing an annual intro offer, keep first-year price, renewal price, and monthly option visible together on direct funnel pages
 - avoid fake scarcity, hidden renewal mechanics, or unsupported savings claims
 - include platform billing caveats: App Store/Google Play manage in-app purchases; Stripe/RevenueCat/Paddle manage web purchases depending on chosen engine

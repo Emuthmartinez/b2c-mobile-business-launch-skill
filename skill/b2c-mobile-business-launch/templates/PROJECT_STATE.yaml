@@ -105,6 +105,9 @@ lanes:
     evidence:
       - "STORE_CONSOLE.md"
       - "store-console.html"
+      - "APP_STORE_LISTING.md"
+      - "app-store-listing.html"
+      - "app-privacy-questionnaire.html"
     blockers: []
   apple_signing:
     status: "partial"

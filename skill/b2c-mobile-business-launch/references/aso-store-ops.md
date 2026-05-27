@@ -4,7 +4,7 @@ Use this before writing App Store or Google Play metadata, producing screenshots
 
 This is an orchestration reference. Prefer specialist ASO skills and live store data when available; use this file to decide which lane to run and what evidence must be left behind.
 
-For founder-facing App Store Connect or Google Play Console work, load `store-console-workflow.md` too. ASO decides what to say; the store-console workflow decides exactly where the user clicks, what they paste, which privacy answers are selected, and which screenshots/assets satisfy each upload well.
+For App Store listing preparation, load `app-store-listing-prep.md` too. ASO decides what to say; App Store listing prep connects that message to App Privacy, subscriptions/pricing, RevenueCat/Stripe/web funnels, custom product pages, In-App Events, localization, screenshots, and App Store Connect policy constraints. For founder-facing App Store Connect or Google Play Console work, load `store-console-workflow.md` too; the store-console workflow decides exactly where the user clicks, what they paste, which privacy answers are selected, and which screenshots/assets satisfy each upload well.
 
 Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
 
@@ -14,11 +14,12 @@ Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator
 - 2. Required ASO Context
 - 3. Metadata And Keyword Gates
 - 4. Screenshot And Creative Gates
-- 5. Store Console Readiness
-- 6. App Store Connect CLI Routing
-- 7. Support, Privacy, And Email Routing
-- 8. Review And Rejection Playbook
-- 9. Post-Launch Growth Loop
+- 5. App Store Listing Marketing Surface
+- 6. Store Console Readiness
+- 7. App Store Connect CLI Routing
+- 8. Support, Privacy, And Email Routing
+- 9. Review And Rejection Playbook
+- 10. Post-Launch Growth Loop
 
 ## 1. Specialist Skill Delegation
 
@@ -96,7 +97,28 @@ Output:
 - final image dimensions and upload status
 - visual QA notes from desktop and mobile inspection where applicable
 
-## 5. Store Console Readiness
+## 5. App Store Listing Marketing Surface
+
+For iOS launches, create or update `APP_STORE_LISTING.md` before final App Store Connect work.
+
+Required Apple marketing surfaces:
+- default product page fields: name, subtitle, promotional text, description, keywords, support URL, marketing URL, categories, age rating, screenshots, previews, review notes, and release option
+- App Privacy mapping from the actual data inventory, SDK/vendor behavior, analytics, support, payments, AI, backend, and email flows
+- pricing and subscription mapping across App Store Connect, RevenueCat, Stripe/web funnels, paywalls, terms, screenshots, and analytics
+- custom product page strategy by audience/channel/keyword set, including deep links and measurement plan
+- In-App Event strategy only when the app has real event content, schedule, media, deep link, localization, and App Review readiness
+- localization matrix for metadata, keyword fields, screenshots, privacy/support URLs, and cultural review
+- visual asset route: real app UI captures first, Higgsfield for high-quality supporting art/icons/backgrounds/CPP/event imagery when needed, always tied to `DESIGN.md`
+
+Use the ASO skill set when available: `app-marketing-context`, `keyword-research`, `metadata-optimization`, `screenshot-optimization`, `custom-product-pages`, `in-app-events`, `localization`, `apple-search-ads`, `review-management`, `monetization-strategy`, and `subscription-lifecycle`.
+
+Output:
+- `APP_STORE_LISTING.md`
+- `app-store-listing.html`
+- `app-privacy-questionnaire.html` when privacy answers are not already proven
+- updated `STORE_CONSOLE.md`, `SCREENSHOTS.md`, `REVENUE_OPS.md`, and `LAUNCH_TRACE.md`
+
+## 6. Store Console Readiness
 
 Do not treat ASO as copy only. App Store Connect or Play Console readiness is part of launch.
 
@@ -126,11 +148,12 @@ Google Play checklist:
 Output:
 - `STORE_CONSOLE.md` with click paths, field limits, paste-ready values, evidence, statuses, and blockers
 - `store-console.html` with copyable fields grouped by ASC/Play Console page
+- `APP_STORE_LISTING.md` and `app-store-listing.html` when an iOS App Store listing is in scope
 - `SCREENSHOTS.md` with device capture, dimension, locale, proof, and upload state
 - required links and which console fields use them
 - final founder-only approval list
 
-## 6. App Store Connect CLI Routing
+## 7. App Store Connect CLI Routing
 
 Use `app-store-connect-cli.md` when the ASC CLI or skill pack can reduce manual work.
 
@@ -155,7 +178,7 @@ Founder-gated uses:
 
 Even when `asc` is used, produce `STORE_CONSOLE.md` and `store-console.html` with manual click paths, paste values, and founder-only approvals.
 
-## 7. Support, Privacy, And Email Routing
+## 8. Support, Privacy, And Email Routing
 
 Every launch needs working contact routes before public listing, legal pages, or review submission.
 
@@ -181,7 +204,7 @@ Output:
 - DNS/routing status evidence
 - any send-as or transactional email gap
 
-## 8. Review And Rejection Playbook
+## 9. Review And Rejection Playbook
 
 When a store review issue occurs:
 - read the exact rejection/message and store-console status
@@ -193,7 +216,7 @@ When a store review issue occurs:
 
 Do not stop at advice when the user asks to take care of a rejection end to end. Operationalize the fix, verify the console state, and leave handoff notes.
 
-## 9. Post-Launch Growth Loop
+## 10. Post-Launch Growth Loop
 
 Run a weekly loop for the first 6-8 weeks after launch:
 - keyword rank deltas and new keyword opportunities

@@ -24,10 +24,10 @@ That means future agents do not just "remember" the launch process. They can ins
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
-| Store Ops | App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, privacy answers, screenshots, review notes, and ASC CLI routing |
+| Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
-| Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, secrets, and launch state |
+| Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, and launch state |
 
 ## Non-Negotiables
 

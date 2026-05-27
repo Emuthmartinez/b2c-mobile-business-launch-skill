@@ -1,0 +1,163 @@
+# App Store Listing Preparation
+
+Use this before preparing Apple App Store listing fields, App Privacy answers, subscription/IAP pricing, App Store Connect screenshots/previews, In-App Events, custom product pages, promotional pages, localization, Apple Search Ads routing, or App Store marketing assets.
+
+This is the bridge between marketing and engineering. The listing packet must be persuasive, policy-aligned, tied to real App Store Connect state, and synchronized with RevenueCat, Stripe/web funnels, analytics, legal pages, screenshots, and the product build.
+
+## Current Sources To Refresh
+
+Refresh official docs before final packets or commands:
+- App information: `https://developer.apple.com/help/app-store-connect/reference/app-information/`
+- Platform version information: `https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/`
+- Manage App Privacy: `https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/`
+- App Privacy Details: `https://developer.apple.com/app-store/app-privacy-details/`
+- Configure custom product pages: `https://developer.apple.com/help/app-store-connect/create-custom-product-pages/configure-multiple-product-page-versions`
+- Offer In-App Events: `https://developer.apple.com/help/app-store-connect/offer-in-app-events/offer-in-app-events`
+- Configure In-App Purchase settings: `https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases`
+- Set IAP pricing: `https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/set-a-price-for-an-in-app-purchase/`
+- Upload screenshots and previews: `https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/`
+- Localize app information: `https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information/`
+- App Store localizations: `https://developer.apple.com/help/app-store-connect/reference/app-information/app-store-localizations/`
+- Product page guidance: `https://developer.apple.com/app-store/product-page`
+- App Review Guidelines: `https://developer.apple.com/app-store/review/guidelines/`
+
+Also inspect the ASO skill set when available:
+- Eronred ASO skills: `https://github.com/Eronred/aso-skills`
+- Local vendored copy, when present: `skills/vendor/aso-skills/skills/*`
+- Installed local skills such as `ios-screenshots`, `finding-app-niches`, `analyzing-competitors`, and `researching-paywalls`
+
+Record source URLs and checked dates in `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, and `PROJECT_STATE.yaml.tools.app_store_connect.docs_checked_at`.
+
+## Required Outputs
+
+For iOS store submission or marketing prep, produce:
+- `APP_STORE_LISTING.md`: canonical Apple listing, privacy, pricing, localization, custom product page, In-App Event, screenshot, and approval packet.
+- `app-store-listing.html`: founder-facing copy-paste view with ASC click paths, field limits, character counts, and status badges.
+- `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy data types, linked/tracking/purpose answers, vendors, and proof.
+- `STORE_CONSOLE.md` and `store-console.html`: manual console packet across App Store Connect and Play Console when relevant.
+- `REVENUE_OPS.md`: product, entitlement, offering, price, trial, intro offer, RevenueCat/Stripe/web funnel mapping, and sandbox proof.
+- `SCREENSHOTS.md`: slot-by-slot screenshot/app-preview plan and upload proof.
+
+Small projects may merge the listing packet into `STORE_CONSOLE.md`, but keep the App Privacy questionnaire and HTML copy-paste surface when privacy, subscriptions, localization, screenshots, or custom product pages are in scope.
+
+## Listing Packet Shape
+
+Start with a compact App Store page map:
+
+```text
+Page: Apps > <App> > App Store > iOS App <Version>
+Field: Promotional Text
+Limit: 170 characters
+Paste value: <exact text>
+Source: ASO keyword map, launch strategy, or founder approval
+Policy check: no unsupported health/finance/earnings/urgency/superiority claim
+Automation: asc metadata dry-run path or manual only
+Status: ready | blocked | founder approval needed | verified in console
+```
+
+Cover at minimum:
+- app information: name, subtitle, category, age rating, privacy policy URL, privacy choices URL, license/EULA, content rights, support URL, marketing URL
+- version page: promotional text, description, keyword field, screenshots, app previews, build, review notes, demo account, version release option
+- App Privacy: data collection yes/no, data types, linked to user, tracking, purposes, optional-disclosure rationale, third-party partner inventory, privacy manifest/required reason APIs
+- pricing and IAP/subscriptions: app price/free status, subscription group, product IDs, display names, descriptions, pricing, intro offers/trials, review screenshots, App Store Server Notifications, RevenueCat mapping
+- marketing surfaces: In-App Events, custom product pages, Apple Search Ads/CPP mapping, featuring nominations or App Store promotional surfaces when applicable
+- localization: target locales, localized metadata, localized keywords, screenshot/app preview localization, support/privacy URL localization
+
+## Interactive App Privacy Worksheet
+
+Do not answer App Privacy from policy prose alone. Use actual data flows:
+- code and SDK inventory
+- `ANALYTICS.md`, PostHog/event catalog, session replay/survey posture, and attribution plan
+- `REVENUE_OPS.md`, RevenueCat, Stripe/web billing, Apple/Google purchase identifiers
+- backend schema, storage buckets, logs, AI providers, email/support tools, push notifications, ads/MMPs
+- public privacy/terms/account deletion pages
+
+The worksheet should ask:
+- Does the app or any third-party partner collect data from the app?
+- Which Apple data types apply: contact info, health/fitness, financial info, location, sensitive info, contacts, user content, browsing/search history, identifiers, purchases, usage data, diagnostics, surroundings/body, other data?
+- For each selected data type: source/vendor, purpose, linked to user, used for tracking, required/optional, retention, deletion path, privacy-policy section, and proof.
+- Does any data meet Apple's optional-disclosure criteria? If yes, record every criterion and why it applies.
+- Are any SDK privacy manifests, required reason APIs, or third-party SDK signatures relevant?
+
+Use `templates/app-store-listing/app-privacy-questionnaire.html` as the local interactive worksheet or render an equivalent project-specific HTML page.
+
+## Pricing, RevenueCat, And Web Funnel Alignment
+
+Load `revenue-monetization.md` before pricing or product mutations. The App Store listing cannot be launch-ready unless pricing and entitlement truth line up across:
+- App Store Connect products/subscriptions
+- RevenueCat products, entitlements, offerings, packages, web billing, web purchase links, or redemption links
+- Stripe products/prices/customer portal/webhooks when web billing is used
+- in-app paywall copy and restore purchases
+- web funnel and landing page pricing
+- terms, privacy, refund/cancellation language, screenshots, and review notes
+- analytics events and revenue dimensions
+
+Founder approval is required before creating live products, changing prices, changing trials/intro offers, publishing purchase links, submitting IAP/subscriptions for review, or enabling external purchase calls to action.
+
+For every product, record:
+- ASC product ID and type
+- subscription group and rank
+- RevenueCat entitlement/offering/package
+- price, base country/region, storefront availability, trial/intro/promotional/offer-code posture
+- web funnel/Stripe mapping, if any
+- review screenshot/notes and sandbox proof
+- whether product is attached to the app version/submission where required
+
+## ASO, In-App Events, Custom Product Pages, And Localization
+
+Use ASO skills or equivalent frameworks for:
+- `app-marketing-context`: shared context before any listing copy
+- `keyword-research` and `metadata-optimization`: title/name, subtitle, keywords, promotional text, description, and variants
+- `screenshot-optimization` and `ios-screenshots`: screenshot story, device wells, app preview strategy, and final dimensions
+- `custom-product-pages`: audience/channel variants, unique keyword sets, CPP/ASA mapping, measurement floor, and deep-link proof
+- `in-app-events`: event purpose, badge, name, short/long description, media, schedule, deep link, purchase-required flag, and localization
+- `localization`: market prioritization, localized keywords, screenshots, product pages, pricing expectations, and cultural review
+- `apple-search-ads`: campaign/ad group/search-term routing to default page or custom product pages
+- `review-management`: review response plan and rating recovery
+
+For custom product pages:
+- Do not create variants without a traffic source or measurement reason.
+- Map each page to audience, promise, keywords, screenshots/app preview, deep link, campaign/UTM, and App Analytics metrics.
+- Confirm whether the app is eligible/currently live enough for CPP creation.
+
+For In-App Events:
+- Only plan events with real in-app content, a working deep link, schedule, localized copy, and media that matches Apple specs.
+- Record if an IAP is required for participation.
+
+For localization:
+- Prioritize locales from market evidence: downloads/revenue potential, competitors, AppKittie/App Store data, support capacity, and keyword opportunity.
+- Localize metadata and screenshots together. Do not ship translated keywords with English-only screenshots unless intentionally documented.
+- Add proofreading/cultural QA before upload.
+
+## Visual And Asset Rules
+
+Screenshots and previews should start from real app UI. When marketing compositions need more than raw screenshots:
+- use `DESIGN.md` and `design.md` for tokens, typography, voice, screen specs, and asset constraints
+- use MobAI for real iOS/Android captures when available
+- use XcodeBuildMCP only after founder-approved fallback from MobAI for Apple-platform capture
+- use Higgsfield for high-quality supporting visuals, mascots, backgrounds, icons, thumbnails, CPP/event artwork, and campaign imagery when the asset is not just a screenshot
+- keep generated assets consistent with the design system and label reference art separately from production upload files
+- verify generated marketing assets do not imply unsupported features, endorsements, offers, medical/financial outcomes, urgency, or unavailable UI
+
+## Automation Boundaries
+
+Use `app-store-connect-cli.md` for read/dry-run/apply routing. The CLI may reduce manual work for metadata, screenshots, localizations, TestFlight, products, and subscription catalog sync, but `APP_STORE_LISTING.md` and `app-store-listing.html` still need manual click paths and copyable fields.
+
+Safe without new approval when credentials are already configured and the user asked for ASC work:
+- read ASC state, resolve IDs, export metadata, run validators/doctors, plan screenshots, and dry-run changes
+
+Founder approval required:
+- app creation, metadata apply, screenshot upload/replace, pricing/product/subscription changes, custom product page submission, In-App Event submission, TestFlight external distribution, final submit/release, and any public campaign launch
+
+## Done Definition
+
+Do not call the App Store listing ready unless:
+- current Apple docs were refreshed and cited in the packet
+- default listing fields are paste-ready with character/byte counts
+- App Privacy answers are derived from real data inventory and third-party partners
+- pricing/subscriptions/products match RevenueCat/Stripe/web funnel/paywall/legal copy
+- screenshots/previews have real app UI, final dimensions, locale/device targets, and upload status
+- custom product pages, In-App Events, and ASA/marketing routing are either planned with proof or explicitly not needed
+- localization strategy is documented with target markets and proof status
+- Higgsfield or generated assets are tied to `DESIGN.md` and separated from raw UI proof
+- `STORE_CONSOLE.md` and HTML packet show what the founder must click, paste, approve, or leave blocked

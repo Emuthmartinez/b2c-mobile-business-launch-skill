@@ -143,7 +143,7 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
-- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
+- `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
 - `TECH_SPEC.md` exists when data/API/integration/state behavior is non-trivial
 - `ENGINEERING_PLAN.md` references trace IDs and breaks work into implementation units
 - `AGENTS.md` points builders to trace, design, analytics, technical contracts, and readiness gates

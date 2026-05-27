@@ -31,6 +31,8 @@ const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) :
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
 const hasAndroid = state ? platforms.includes("android") || Boolean(androidBundleId?.trim()) : true;
+const revenueStatus = state ? asString(getPath(state, "lanes.revenue.status"))?.toLowerCase() : undefined;
+const revenueInScope = !state || !["not_needed", "deferred"].includes(revenueStatus ?? "");
 
 if (!markdown) {
   issues.push(issue("error", "store_console.markdown_missing", "STORE_CONSOLE.md is required for copy-paste App Store Connect and Google Play guidance.", markdownPath));
@@ -46,10 +48,19 @@ if (!markdown) {
   if (hasIos) {
     requiredPhrases.push(
       "App Store Connect",
+      "App Privacy",
       "SKU",
       "primary locale",
       "bundle ID",
+      "pricing",
+      "localization",
+      "custom product page",
+      "In-App Event",
+      "Higgsfield",
     );
+    if (revenueInScope) {
+      requiredPhrases.push("RevenueCat", "subscription");
+    }
   }
   if (hasAndroid) {
     requiredPhrases.push("Google Play", "Data safety", "package name");
@@ -74,7 +85,27 @@ if (!markdown) {
     }
   }
 
-  const guardedTerms = ["App Store Connect", "Google Play", "privacy", "Data safety", "screenshots", "review notes", "account deletion", "SKU", "primary locale", "bundle ID", "package name"];
+  const guardedTerms = [
+    "App Store Connect",
+    "Google Play",
+    "privacy",
+    "App Privacy",
+    "Data safety",
+    "pricing",
+    "RevenueCat",
+    "subscription",
+    "custom product page",
+    "In-App Event",
+    "localization",
+    "Higgsfield",
+    "screenshots",
+    "review notes",
+    "account deletion",
+    "SKU",
+    "primary locale",
+    "bundle ID",
+    "package name",
+  ];
   for (const line of markdown.split(/\r?\n/)) {
     const trimmed = line.trim();
     if (!trimmed || /^(if|when|before|after)\b/i.test(trimmed)) {

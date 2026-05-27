@@ -270,10 +270,12 @@ Goal: produce the operational plan for App Store launch and first acquisition te
 Do:
 - Load `analytics-attribution.md` before defining App Store CTAs, Apple Search Ads, Google Play listing experiments, creator/referral codes, post-launch metrics, or attribution dashboards.
 - Load `aso-store-ops.md` and create or refresh `app-marketing-context.md` before writing listing copy.
+- Load `app-store-listing-prep.md` before Apple listing packets, App Privacy questionnaires, pricing/subscription mapping, custom product pages, In-App Events, localization, or App Store marketing assets.
 - Load `apple-signing-release.md` before Apple Developer account triage, Team ID, bundle ID/App ID, App Store Connect app record, Xcode signing, certificates/profiles, archive/export/upload, TestFlight, physical-device signing, or distribution-readiness claims.
 - Load `store-console-workflow.md` before App Store Connect, Google Play Console, privacy labels/Data safety, screenshot capture/upload, reviewer notes, or founder-facing console handoff work.
-- Use specialist ASO skills when available: app marketing context, keyword research, metadata optimization, screenshot optimization, ASO audit, launch planning, Apple Search Ads, localization, reviews/ratings, subscriptions, analytics, and competitor tracking.
+- Use specialist ASO skills when available: app marketing context, keyword research, metadata optimization, screenshot optimization, custom product pages, In-App Events, ASO audit, launch planning, Apple Search Ads, localization, reviews/ratings, subscriptions, analytics, and competitor tracking.
 - Write App Store metadata: name, subtitle, promotional text, keyword field, description, what's-new copy, categories, localization posture.
+- Prepare App Store listing packet: App Privacy answers, pricing/RevenueCat/Stripe/web-funnel matrix, custom product pages, In-App Events, localization, screenshot/app-preview upload wells, and Higgsfield/design-system marketing asset route.
 - Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/device capture, production-text overlay notes, final upload dimensions, and upload well.
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
 - Create Apple Search Ads campaign groups: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics.
@@ -289,6 +291,9 @@ Do:
 Outputs:
 - `LAUNCH.md`
 - updated `ANALYTICS.md` attribution and store-source events
+- `APP_STORE_LISTING.md`
+- `app-store-listing.html`
+- `app-privacy-questionnaire.html` when Apple App Privacy answers are in scope
 - `STORE_CONSOLE.md`
 - `APPLE_SIGNING.md` when Apple distribution, TestFlight, physical-device signing, or first upload readiness is in scope
 - `store-console.html`

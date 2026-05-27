@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -47,6 +47,9 @@ ONBOARDING.md             # onboarding, personalization, review prompt, paywall 
 onboarding.html           # rendered onboarding/paywall/review/offer flow proof
 LAUNCH.md                 # ASO, screenshots, ads, launch sequence, metrics
 APPLE_SIGNING.md          # Apple Developer account, Team ID, bundle ID/App ID, signing, archive/export/upload, and TestFlight gates
+APP_STORE_LISTING.md      # Apple listing, privacy, pricing, CPP/In-App Event, localization, and marketing packet
+app-store-listing.html    # rendered founder-facing Apple listing copy/paste board
+app-privacy-questionnaire.html # interactive Apple App Privacy worksheet
 EMAIL_OPS.md              # Resend/domain/lifecycle/broadcast/webhook/inbound email operations
 REVENUE_OPS.md            # RevenueCat, Stripe, store products, web funnels, entitlements, and purchase validation
 GEO_SEO.md                # public-site GEO/SEO, AI crawler, schema, llms.txt, and citability state
@@ -97,7 +100,10 @@ rork-ready/
   ONBOARDING.md
   onboarding.html
   STORE_CONSOLE.md
+  APP_STORE_LISTING.md
   APPLE_SIGNING.md
+  app-store-listing.html
+  app-privacy-questionnaire.html
   store-console.html
   SCREENSHOTS.md
   UGC_PLAYBOOK.md
@@ -561,6 +567,50 @@ Acceptance:
 - Launch tasks are dated or sequenced relative to launch week.
 - Metrics include intervention thresholds.
 - Store-console, screenshot, privacy, and contact-route blockers are explicit.
+
+## `APP_STORE_LISTING.md`
+
+Use when Apple App Store listing preparation is in scope.
+
+Must include:
+- official Apple docs checked with URLs and dates
+- default product-page fields: name, subtitle, promotional text, description, keywords, support URL, marketing URL, categories, screenshots, previews, review notes, and release option
+- App Privacy questionnaire output mapped to data inventory, SDKs, vendors, backend, analytics, payments, AI, email, support, and legal pages
+- pricing and subscription matrix across App Store Connect products, RevenueCat entitlements/offerings/packages, Stripe/web funnels, paywall copy, terms, screenshots, and analytics
+- custom product page plan or explicit not-needed status, including audience/channel, keyword set, screenshots/previews, deep link, campaign, measurement, and approval state
+- In-App Event plan or explicit not-needed status, including purpose/badge, copy, media, schedule, deep link, IAP-required flag, localization, and approval state
+- localization matrix: markets, locales, metadata, keywords, screenshots, privacy/support URLs, and review/proof owner
+- Higgsfield/design-system route for supporting App Store marketing art that is not just raw screenshots
+- founder-only gates for privacy publish, product/pricing changes, screenshot upload, CPP/event submission, localization upload, and final submission
+
+Acceptance:
+- A founder can see how the App Store page supports the full marketing strategy, not just the default metadata fields.
+- App Privacy answers come from actual behavior and third-party partners.
+- Pricing cannot drift between App Store Connect, RevenueCat, web funnel, screenshots, paywall, terms, and analytics.
+
+## `app-store-listing.html`
+
+Use this as the founder-facing Apple listing preparation board.
+
+Must include:
+- tabs or sections for listing, privacy, pricing/products, growth surfaces, screenshots/assets, and localization
+- field labels, click paths, limits, counts, paste values, source artifact, status, and approval gates
+- privacy status with pointer to `app-privacy-questionnaire.html`
+- RevenueCat/Stripe/web funnel product matrix
+- custom product page and In-App Event plan status
+- screenshot/app-preview matrix and Higgsfield/design-system asset route
+
+## `app-privacy-questionnaire.html`
+
+Use this as a local interactive worksheet for App Store App Privacy answers.
+
+Must include:
+- collection preflight
+- Apple data-type checklist
+- linked/tracking/purpose/vendor/proof fields per selected data type
+- third-party partner inventory
+- optional-disclosure rationale area
+- export/copy summary for `APP_STORE_LISTING.md` and `STORE_CONSOLE.md`
 
 ## `STORE_CONSOLE.md`
 
