@@ -190,6 +190,8 @@ lanes:
   growth:
     status: "partial"
     evidence:
+      - "growth/VIRAL_GROWTH.md"
+      - "growth/format-lab.csv"
       - "UGC_PLAYBOOK.md"
       - "FASTLANE_OPS.md"
     blockers: []

@@ -44,6 +44,7 @@ Update `PROJECT_STATE.yaml`:
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
 - `lanes.experience` tracks `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, the line of feasibility, and the V1 scalable slice.
 - `lanes.analytics_attribution.attribution_contract` is a hard data contract, not a UI note.
+- `lanes.growth` tracks `VIRAL_GROWTH.md`, product-led referral/share mechanics, content format evidence, UGC/Fastlane state, and growth proof.
 - `proof.commands` should include command, expected result, actual result, and evidence path.
 - `failure_cards.active` should point to concrete risks, not generic reminders.
 
@@ -57,6 +58,7 @@ npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
+npm run check:viral-growth -- --root /path/to/app
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app

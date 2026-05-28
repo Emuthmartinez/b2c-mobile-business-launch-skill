@@ -4,7 +4,7 @@ Use this after the app is launched, approved, in public beta, or otherwise ready
 
 The goal is to turn the launch package into a repeatable short-form content engine without posting unapproved claims, leaking keys, overposting from cold accounts, or losing the link between content performance and product metrics.
 
-Use `paid-tool-routing.md` before replacing Fastlane AI, MobAI, Higgsfield, XPOZ, AppKittie, or creator-marketplace tooling with a free/manual fallback. Use `ugc-creator-engine.md` before building creator-led organic growth, creator briefs, scripts, or Day 0 format-discovery loops.
+Use `paid-tool-routing.md` before replacing Fastlane AI, MobAI, Higgsfield, XPOZ, AppKittie, or creator-marketplace tooling with a free/manual fallback. Use `viral-growth-loops.md` before Fastlane content depends on referral/share mechanics, creator codes, social-comment loops, or viral paywall timing. Use `ugc-creator-engine.md` before building creator-led organic growth, creator briefs, scripts, or Day 0 format-discovery loops.
 
 ## Contents
 
@@ -53,6 +53,7 @@ Fastlane should amplify a real launch narrative and, when available, a UGC forma
 
 Before generating content:
 - load `ugc-creator-engine.md` when creator-led TikTok/Reels/Shorts is in scope
+- load `viral-growth-loops.md` when generated content is meant to drive product referrals, share unlocks, creator-code attribution, app-store search, or paywall conversion
 - confirm whether the current task is Day 0 format discovery, scaling a proven UGC format, or Fastlane-only organic scheduling
 - use UGC fit, creator scripts, hook results, post metrics, and audience comments as source material
 - keep creator disclosure, ad usage rights, and account ownership constraints visible

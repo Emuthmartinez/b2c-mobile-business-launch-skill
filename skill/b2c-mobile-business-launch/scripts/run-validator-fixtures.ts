@@ -19,9 +19,18 @@ type MutableRecord = Record<string, unknown>;
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(scriptDir, "..");
-const tsxBin = path.join(skillRoot, "node_modules/.bin/tsx");
 const tempRoot = mkdtempSync(path.join(tmpdir(), "b2c-validator-fixtures-"));
 const results: FixtureResult[] = [];
+
+function resolveTsxBin(): string {
+  const candidates = [
+    path.join(skillRoot, "node_modules/.bin/tsx"),
+    path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx"),
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
+}
+
+const tsxBin = resolveTsxBin();
 
 function makeFixture(name: string): string {
   const fixtureRoot = path.join(tempRoot, name);
@@ -266,6 +275,40 @@ function writeCompleteContentAssets(root: string): void {
   );
 }
 
+function writeCompleteViralGrowth(root: string): void {
+  mkdirSync(path.join(root, "growth"), { recursive: true });
+  const state = readState(root);
+  const growthLane = getLane(state, "growth");
+  growthLane["status"] = "done";
+  growthLane["evidence"] = ["growth/VIRAL_GROWTH.md", "growth/format-lab.csv", "UGC_PLAYBOOK.md", "FASTLANE_OPS.md"];
+  growthLane["blockers"] = [];
+  writeState(root, state);
+  writeFileSync(
+    path.join(root, "growth", "VIRAL_GROWTH.md"),
+    [
+      "# Viral Growth",
+      "Fit Gate: the app has a visible personal result, a shareable emotional moment, and no privacy or policy blocker.",
+      "Growth Thesis: the 11_STAR_EXPERIENCE.md V1 slice becomes a truthful product loop, a creator-visible content loop, and a measurable conversion path.",
+      "Product Loop: users can share or invite from the result preview after onboarding. Referral Or Share Mechanic: stable referral code, recipient value, backend entitlement validation, duplicate handling, self-referral prevention, rate limits, support recovery, and abuse controls.",
+      "Content Loop: TikTok/Reels/Shorts formats show real app UI, product visibility, a clear CTA, creator_code mapping, and claim constraints.",
+      "Format Lab: growth/format-lab.csv records format ID, hook, first frame, product insertion, CTA, variables, signal windows, and status.",
+      "Monetization Timing: ONBOARDING.md previews value before paywall, REVENUE_OPS.md owns RevenueCat and Stripe package rules, paywall timing, purchase proof, restore purchases, and transparent terms.",
+      "Measurement Plan: ANALYTICS.md and analytics-plan.html define PostHog events, dashboard proof, referral_invite_started, referral_invite_completed, referral_unlock_earned, share_started, share_completed, creator_code_applied, viral_format_signal_detected, paywall_viewed, purchase_completed, entitlement_active, and retention checks.",
+      "Stop And Scale Rules: one viral post is not a format; scale after 2-3 repeatable hits plus downstream app opens, paywall reach, purchases, and retention evidence.",
+      "Founder-Only Gates: creator payments, paid tools, public posting, social account connections, pricing changes, legal approval, and platform-policy approval.",
+      "Traceability: LAUNCH_TRACE.md maps GROW-001 from research to SPEC.md, 11_STAR_EXPERIENCE.md, ONBOARDING.md, UGC_PLAYBOOK.md, CONTENT_ASSETS.md, FASTLANE_OPS.md, REVENUE_OPS.md, ANALYTICS.md, PRIVACY.md, TERMS.md, and PRODUCTION_READINESS.md.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "growth", "format-lab.csv"),
+    "format_id,hook_structure,first_frame,product_insertion,cta,signal_window,status\nFMT-001,personal reveal,real app result,result preview,share referral code,24h/72h/7d,active\n",
+    "utf8",
+  );
+  writeFileSync(path.join(root, "UGC_PLAYBOOK.md"), "# UGC Playbook\n\nCreator scripts use GROW-001 and the format lab.\n", "utf8");
+  writeFileSync(path.join(root, "FASTLANE_OPS.md"), "# Fastlane Ops\n\nFastlane reuses approved format IDs after launch approval.\n", "utf8");
+}
+
 function writeCompleteOrchestration(root: string): void {
   mkdirSync(path.join(root, "orchestration"), { recursive: true });
   const state = readState(root);
@@ -422,12 +465,14 @@ try {
   writeCompleteElevenStar(clean);
   writeCompleteSecurity(clean);
   writeCompleteContentAssets(clean);
+  writeCompleteViralGrowth(clean);
   writeCompleteOrchestration(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
   runFixture("complete security release packet passes", clean, "check-security-release.ts", 0);
   runFixture("complete content assets packet passes", clean, "check-content-assets.ts", 0);
+  runFixture("complete viral growth packet passes", clean, "check-viral-growth-loop.ts", 0);
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
@@ -883,6 +928,32 @@ try {
     "utf8",
   );
   runFixture("thin Remotion content manifest fails", thinContentManifest, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.surface.missing");
+
+  const viralGrowthMissing = makeFixture("viral-growth-missing");
+  rmSync(path.join(viralGrowthMissing, "growth"), { recursive: true, force: true });
+  runFixture("missing viral growth packet fails", viralGrowthMissing, "check-viral-growth-loop.ts", 1, "viral_growth.markdown_missing");
+
+  const viralGrowthThin = makeFixture("viral-growth-thin");
+  mkdirSync(path.join(viralGrowthThin, "growth"), { recursive: true });
+  writeFileSync(
+    path.join(viralGrowthThin, "growth", "VIRAL_GROWTH.md"),
+    [
+      "# Viral Growth",
+      "Fit Gate",
+      "Growth Thesis: post on TikTok and see what happens.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("thin viral growth packet fails", viralGrowthThin, "check-viral-growth-loop.ts", 1, "viral_growth.product_loop.missing");
+
+  const viralGrowthDonePlaceholder = makeFixture("viral-growth-done-placeholder");
+  writeCompleteViralGrowth(viralGrowthDonePlaceholder);
+  writeFileSync(
+    path.join(viralGrowthDonePlaceholder, "growth", "VIRAL_GROWTH.md"),
+    readFileSync(path.join(viralGrowthDonePlaceholder, "growth", "VIRAL_GROWTH.md"), "utf8") + "\nTODO: choose final creator CTA.\n",
+    "utf8",
+  );
+  runFixture("done viral growth with placeholders fails", viralGrowthDonePlaceholder, "check-viral-growth-loop.ts", 1, "viral_growth.placeholder_complete");
 
   const orchestrationNoPreflight = makeFixture("orchestration-no-preflight");
   const orchestrationNoPreflightState = readState(orchestrationNoPreflight);

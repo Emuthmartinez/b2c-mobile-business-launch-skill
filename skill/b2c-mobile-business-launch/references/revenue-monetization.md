@@ -6,6 +6,8 @@ This is not a payment approval. Founder approval is required before changing pri
 
 Load `paid-tool-routing.md` before replacing RevenueCat, Stripe, app-store product setup, paid RevenueCat features, tax tooling, or provider dashboards with local mocks or free-tier-only planning. Mock purchases are implementation proof only; they are not live entitlement proof.
 
+Load `viral-growth-loops.md` before using referral unlocks, share rewards, creator codes, closing offers, or viral paywall timing as part of monetization. A growth spike is only useful if the paywall, entitlement, analytics, refund/restore, and abuse controls are ready to catch it.
+
 ## Contents
 
 - 1. Official Sources To Refresh
@@ -102,6 +104,7 @@ Gate:
 ## 4b. Paywall Timing, Plans, Trials, And Offers
 
 Load `onboarding-conversion.md` when paywall placement is part of the first-session flow.
+Load `viral-growth-loops.md` when the paywall is paired with referral/share alternatives, creator-code entry, social proof loops, or content-driven impulse purchase timing.
 
 Required decisions:
 - hard paywall, soft paywall/freemium, reverse trial, web funnel, or no paywall yet

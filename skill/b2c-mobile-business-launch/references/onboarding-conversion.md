@@ -30,6 +30,8 @@ Load `analytics-attribution.md` before locking onboarding event names, attributi
 
 Load `eleven-star-experience.md` before locking onboarding. The onboarding sequence should carry the product's 11-star V1 scalable slice: the user should see why the product is personally relevant before the flow asks for payment, long setup, or sensitive data.
 
+Load `viral-growth-loops.md` before using referral unlocks, share-to-unlock mechanics, creator-code CTAs, social-comment loops, or viral paywall/onboarding sequences. Onboarding can create growth momentum, but the loop needs a fair fallback, abuse controls, analytics proof, and traceability before build handoff.
+
 Create or update `ONBOARDING.md` when an app has more than one setup screen, asks personalization questions, uses a mascot/demo, has a paywall, or relies on first-session conversion.
 
 Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, compliant review prompt timing, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
@@ -53,6 +55,7 @@ Recommended Refero searches when access is available:
 - closing-offer behavior after paywall dismissal, if any
 - pricing/trial package matrix and RevenueCat offering/experiment names
 - first-session activation task after payment or before payment, depending on the model
+- viral growth loop mapping when relevant: referral/share trigger, reward, recipient value, fallback, abuse controls, backend/provider proof, and related `VIRAL_GROWTH.md` trace IDs
 - privacy/terms/support links shown before data collection or purchase
 
 Create `onboarding.html` or include an onboarding section in `design.html`:

@@ -17,6 +17,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - upstream App Store Connect CLI skills or provider docs change but stale command snippets remain in references/templates
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice
+- social growth is marked ready from UGC ideas, views, or TikTok hooks without `VIRAL_GROWTH.md`, product-loop contract, abuse controls, monetization timing, analytics proof, and stop/scale rules
 - Higgsfield is unavailable and the agent silently uses Remotion or local media without founder-approved fallback routing
 - Remotion content assets are marked ready without license status, source inputs, manifest entries, render proof, or claim review
 - broad launch work starts without an orchestration preflight, critical-path/sidecar split, or `ORCHESTRATION.md`

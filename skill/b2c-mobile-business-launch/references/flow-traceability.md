@@ -21,6 +21,7 @@ Every major launch decision should answer:
 - What evidence caused this decision?
 - Which paid/account-gated tool or confirmed fallback produced the evidence?
 - What 11-star experience moment or V1 scalable slice does it create or reject?
+- What viral/referral/share loop, content format, or growth claim does it create or reject?
 - What product behavior does it create or reject?
 - What brand/design expression carries it?
 - What analytics, security, revenue, privacy, ASO, or legal surface does it affect?
@@ -54,7 +55,7 @@ Tool route: paid tool | user export | free fallback | blocked | founder decision
 Research finding: what we learned
 Experience decision: what changes in 11_STAR_EXPERIENCE.md or 11-star-experience.html
 Product decision: what changes in SPEC.md or ONBOARDING.md
-Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, or HTML proofs
+Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, VIRAL_GROWTH.md, UGC_PLAYBOOK.md, or HTML proofs
 Build contract: screen/component/API/data/state/task that must exist
 Analytics/security/revenue/privacy/store impact: event, entitlement, threat/abuse control, data disclosure, screenshot, console field, signing/release gate, or legal note
 Verification: test, MobAI path, backend/provider proof, browser proof, dashboard check, or founder approval
@@ -147,6 +148,7 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `PROJECT_STATE.yaml` exists and matches current artifacts
 - `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
+- `VIRAL_GROWTH.md` exists when growth depends on referral/share loops, creator CTAs, TikTok/Reels/Shorts mechanics, or viral paywall/onboarding behavior
 - `11_STAR_EXPERIENCE.md` and `11-star-experience.html` exist unless the experience lane is explicitly deferred/not needed with a reason
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
 - `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `SECURITY.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
