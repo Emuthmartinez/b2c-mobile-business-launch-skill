@@ -38,6 +38,7 @@ Update `PROJECT_STATE.yaml`:
 
 - `autonomy.mode` controls what the agent may do without founder approval. See `autonomy-modes.md`.
 - top-level `orchestration` records preflight, strategy, candidate units, parallel-safe units, serialized units, spawned agents, collision checks, output review, state reconciliation, and validators.
+- top-level `compound_engineering` records whether Compound Engineering skills were available, used, blocked, or replaced with an equivalent fallback.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.

@@ -10,6 +10,7 @@ Refresh current provider guidance before changing runtime-specific orchestration
 
 - OpenAI agent guide: `https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/`
 - OpenAI Codex app: `https://openai.com/index/introducing-the-codex-app/`
+- OpenAI harness engineering: `https://openai.com/index/harness-engineering/`
 - OpenAI Agents SDK update: `https://openai.com/index/the-next-evolution-of-the-agents-sdk/`
 - Anthropic multi-agent research system: `https://www.anthropic.com/engineering/multi-agent-research-system`
 - Anthropic Claude Code subagents: `https://code.claude.com/docs/en/sub-agents`
@@ -23,6 +24,7 @@ Current synthesis for this skill:
 - Use parallel subagents for breadth-first work and bounded independent units, not for shared-file editing, device control, account mutations, or final launch decisions.
 - Treat subagents as tools with narrow objectives, explicit inputs, output contracts, forbidden actions, and blast-radius limits.
 - Parallelism is not free. It can burn tokens, duplicate work, create merge conflicts, and make hidden assumptions harder to catch unless the orchestrator records the plan and reconciles outputs.
+- Keep `AGENTS.md` as the short map over the harness: source docs, active plans, validations, and failure cards. Repeated orchestration misses should become mechanical checks or LaunchBench scenarios.
 
 ## Required Preflight
 
@@ -37,7 +39,7 @@ The orchestrator must answer:
 5. Which tasks must be serialized because they mutate the same source of truth?
 6. What proof will show subagent findings were reviewed, integrated, and validated?
 
-If the answer is "no useful parallelism," record `strategy: inline` with a short reason. The preflight still matters because it proves the agent considered parallelism deliberately.
+If the answer is "no useful parallelism," record `strategy: inline` with a short reason. If the runtime lacks a callable subagent facility, record `strategy: blocked` or `inline` with `subagents_unavailable` in the rationale and run the role audits serially or inline from `APP_AGENTS.md`. The preflight still matters because it proves the agent considered parallelism deliberately.
 
 ## Strategy Choices
 
@@ -51,7 +53,7 @@ Use the smallest strategy that fits the work:
 - `blocked`: orchestration would help, but access, repo state, or missing source truth prevents safe dispatch.
 - `not_needed`: the app has no real build, audit, or multi-lane launch work in scope.
 
-Default for broad B2C launch work is `hybrid`: the orchestrator continues the critical path locally while read-only or isolated specialists inspect independent lanes.
+Default for broad B2C launch work is `hybrid`: the orchestrator continues the critical path locally while read-only or isolated specialists inspect independent lanes. Do not silently run broad multi-lane work fully inline when a subagent-capable runtime is available.
 
 ## Good Parallel Units
 

@@ -48,6 +48,15 @@ orchestration:
   spawned_agents: []
   focused_validators_run: []
   full_suites_run: []
+compound_engineering:
+  availability: "unknown"
+  route: "not_evaluated"
+  brainstorm_status: "not_evaluated"
+  plan_status: "not_evaluated"
+  work_status: "not_evaluated"
+  review_status: "not_evaluated"
+  proof_status: "not_evaluated"
+  fallback_reason: ""
 lanes:
   paid_tool_routing:
     status: "partial"

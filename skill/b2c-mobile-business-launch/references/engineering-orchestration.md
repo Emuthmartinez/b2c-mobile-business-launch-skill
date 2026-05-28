@@ -35,6 +35,8 @@ Prefer Compound Engineering skills for engineering-heavy work when available:
 
 Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive.
 
+If Compound Engineering skills are unavailable in the current runtime, do not silently skip them. Record the unavailable route and equivalent fallback in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`, then keep the engineering lane partial until the fallback has comparable plan, work, review, and proof.
+
 ## 2. Autonomy And Project State
 
 Before implementation starts, create or refresh `PROJECT_STATE.yaml` and choose an autonomy mode:
@@ -77,10 +79,11 @@ If the research already makes the product direction obvious, skip the brainstorm
 
 ## 4. Agent Entrypoints
 
-Every real app build or builder handoff should create or update `AGENTS.md`.
+Every real app build or builder handoff should create or update a business-specific `AGENTS.md` from `templates/repo-agent-entrypoints/AGENTS.md`. Do not copy the skill repo's maintainer `AGENTS.md`. Keep `AGENTS.md` as a map to source docs, active plans, validation commands, and failure cards instead of a duplicate manual.
 
 `AGENTS.md` must include:
 - 60-second product brief
+- explicit instruction to keep using `b2c-mobile-business-launch` for broad launch/business work without requiring another founder prompt
 - repo map and first files to read
 - source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
 - `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and autonomy mode
@@ -98,8 +101,9 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 - exact verification commands or scripts when known
 - bundled validator/LaunchBench commands when copied into or callable from the repo
 
-`CLAUDE.md` should exist when Claude Code or a builder expects it. Keep it short:
+`CLAUDE.md` should exist when Claude Code or a builder expects it. Start from `templates/repo-agent-entrypoints/CLAUDE.md` and keep it short:
 - point to `AGENTS.md` as canonical
+- remind Claude to keep using `b2c-mobile-business-launch` for launch/business work
 - list Claude-specific skills/plugins/tools if useful
 - avoid duplicating product truth that will drift
 
@@ -130,6 +134,8 @@ At the start of broad launch or build work, the orchestrator should ask:
 - which specialists can improve consistency or catch launch-grade misses
 - which files, providers, devices, accounts, and git actions are shared resources
 - whether the current runtime actually allows subagent delegation
+
+For broad multi-lane work, the orchestrator must either dispatch read-only or isolated specialist audits from `APP_AGENTS.md`, or record why subagents are unavailable, unsafe, or not useful in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`.
 
 Good parallel lanes:
 - AppKittie competitor/review pass, XPOZ social-language pass, Firecrawl web pass

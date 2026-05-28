@@ -14,6 +14,24 @@ Rationale:
 
 Manager pattern: one orchestrator owns user thread, state, integration, git, provider mutations, and release decisions.
 
+Subagent availability:
+
+If broad work is kept inline, record why subagents are unavailable, unsafe, or not useful.
+
+## Compound Engineering Routing
+
+Availability:
+
+Route:
+
+- `ce-brainstorm`:
+- `ce-plan`:
+- `ce-work`:
+- `ce-worktree`:
+- review/proof:
+
+Fallback reason if unavailable:
+
 ## Candidate Units
 
 | ID | Role | Objective | Mode | Files | Shared resources | Parallel safe | Status |

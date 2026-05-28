@@ -9,6 +9,8 @@ Load `parallel-agent-orchestration.md` and `engineering-orchestration.md` first 
 Every real B2C app build or builder-ready package should include:
 
 ```text
+AGENTS.md
+CLAUDE.md
 APP_AGENTS.md
 agents/
   orchestrator.md
@@ -20,11 +22,11 @@ agents/
   security-architect.md
 ```
 
-Use `templates/app-agent-roster/` as the starting point when available. Fill placeholders with the current app's source-of-truth docs, stack, paid-tool decisions, and launch gates.
+Use `templates/repo-agent-entrypoints/` for the repo-root `AGENTS.md` and `CLAUDE.md`, then use `templates/app-agent-roster/` for `APP_AGENTS.md` and `agents/`. Fill placeholders with the current app's source-of-truth docs, stack, paid-tool decisions, and launch gates.
 
 ## Role Model
 
-The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents.
+The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents. `AGENTS.md` remains the business-specific canonical guide and must explicitly tell future agents to continue using the `b2c-mobile-business-launch` workflow instead of asking the founder to re-invoke it.
 
 - Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, actual file collision checks, integration, git/release coordination, and final production-readiness proof.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
@@ -67,6 +69,8 @@ If any item is missing, do not call attribution wired, complete, or launch-ready
 ## Acceptance
 
 - `APP_AGENTS.md` points to canonical docs and states the orchestrator is the integration owner.
+- `AGENTS.md` and `CLAUDE.md` are filled for the current business, not copied from this skill repo's maintainer docs.
+- `AGENTS.md` tells future agents to keep using `b2c-mobile-business-launch`, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run validators until a founder-only gate.
 - Seven role files exist and remain short enough to be used.
 - Each role has clear responsibilities, forbidden actions, founder-only gates, and output shape.
 - The roster gives future agents a clean way to audit and continue the app without duplicating product truth.

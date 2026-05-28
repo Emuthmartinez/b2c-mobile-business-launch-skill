@@ -159,8 +159,11 @@ Acceptance:
 
 ## `AGENTS.md`
 
+Use the shipped `templates/repo-agent-entrypoints/AGENTS.md` as the starting point for generated business repos. Do not copy the skill repo's root maintainer `AGENTS.md` into a launch repo.
+
 Must include:
 - 60-second project brief
+- an explicit instruction to continue using the `b2c-mobile-business-launch` skill for broad launch/business work without asking the founder to re-invoke it
 - source-of-truth file map
 - `PROJECT_STATE.yaml`, `launch-cockpit.html`, LaunchBench/failure-card rules, and the current autonomy mode contract
 - `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, and `TECH_SPEC.md` when they exist
@@ -183,6 +186,8 @@ Must include:
 
 Acceptance:
 - An agent can answer "what should I read first?"
+- The file is business-specific: product, stack, repo paths, scope, provider state, and launch phase are filled for the current app.
+- A future agent knows to load the next needed skill reference, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run validators before pausing for anything other than a founder-only gate.
 - Banned scope is explicit enough to stop feature creep.
 - Implementation rules are specific to the stack.
 - A future engineering agent knows when to use parallel agents and when to serialize MobAI, git, migrations, releases, or shared-file edits.
@@ -390,8 +395,11 @@ Acceptance:
 
 Use when Claude Code, Rork, or another builder expects Claude-specific guidance.
 
+Use the shipped `templates/repo-agent-entrypoints/CLAUDE.md` as the starting point for generated business repos. Do not copy this skill repo's root maintainer `CLAUDE.md`.
+
 Must include:
 - one-line pointer that `AGENTS.md` is canonical
+- one-line reminder to continue using `b2c-mobile-business-launch` for launch/business work without another founder prompt
 - Claude-specific skill/plugin notes only when they differ from general agent guidance
 - a warning not to duplicate product truth from `AGENTS.md`
 

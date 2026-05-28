@@ -453,13 +453,13 @@ Do:
 - Load `flow-traceability.md` before writing builder prompts, `AGENTS.md`, or implementation specs.
 - Load `parallel-agent-orchestration.md` and `engineering-orchestration.md` before writing `ORCHESTRATION.md`, `AGENTS.md`, `CLAUDE.md`, `PROMPTS.md`, or any implementation prompt.
 - Load `project-state.md`, `autonomy-modes.md`, `launchbench-evals.md`, and `failure-cards.md` before the handoff is considered complete.
-- Load `app-agent-roster.md` before writing `APP_AGENTS.md`, app-local `agents/`, or specialist audit prompts.
+- Load `app-agent-roster.md` before writing repo-root `AGENTS.md`/`CLAUDE.md`, `APP_AGENTS.md`, app-local `agents/`, or specialist audit prompts.
 - Use `launch-coverage.md` before moving from docs to implementation or submission.
-- Create an `AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, Compound Engineering routing, `ORCHESTRATION.md`, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
+- Create a business-specific `AGENTS.md` from `templates/repo-agent-entrypoints/AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, continued `b2c-mobile-business-launch` routing, Compound Engineering routing, `ORCHESTRATION.md`, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
 - Include `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator instructions in the first-read docs.
 - Create `APP_AGENTS.md` and the seven-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, security, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
-- Add a tool-specific `CLAUDE.md`, `CURSOR.md`, or equivalent only as a pointer/addendum.
+- Add a tool-specific `CLAUDE.md`, `CURSOR.md`, or equivalent only as a pointer/addendum; start `CLAUDE.md` from `templates/repo-agent-entrypoints/CLAUDE.md` when Claude/Rork compatibility is needed.
 - Include `LAUNCH_TRACE.md` and `11_STAR_EXPERIENCE.md` so builders can follow evidence-to-product-experience-to-design-to-build decisions.
 - Include `TECH_SPEC.md` when data, API, state, permissions, platform capabilities, app integrity, feature flags, or integration behavior is in scope.
 - Write an `ANALYTICS.md` event catalog and `analytics-plan.html` before build prompts. Do not let builders invent event names screen by screen.

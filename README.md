@@ -39,7 +39,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Orchestration | `ORCHESTRATION.md`, parallel-agent preflight, candidate units, serialized resources, worktree routing, subagent forbidden actions, collision checks, and integration proof |
-| Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
+| Engineering | business-specific `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, continued skill routing, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
 | Source Freshness | `source-registry.yaml`, weekly upstream docs/tool checks, source-refresh reports, and candidate-source PRs for third-party drift |
 | Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, security, source freshness, and launch state |
 
@@ -76,6 +76,8 @@ npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
+npm run check:agent-entrypoints
+npm run check:workflow-adherence
 npm run check:source-registry
 npm run refresh:source-freshness
 npm run check:autopilot
@@ -106,6 +108,8 @@ The scripts are intentionally simple:
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
 - `check-eleven-star-experience.ts` checks the 11-star experience ladder, line of feasibility, V1 scalable slice, surface matrix, visual board, and trace/build links.
 - `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
+- `check-agent-entrypoints.ts` checks maintainer-only root docs and shipped business-repo `AGENTS.md`/`CLAUDE.md` templates stay separated and keep future agents on the launch skill workflow.
+- `check-workflow-adherence.ts` checks harness-style agent maps, subagent availability gates, Compound Engineering routing, and LaunchBench coverage for workflow adherence.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
@@ -155,6 +159,7 @@ skill/
     templates/
       PROJECT_STATE.yaml
       11-star-experience/
+      repo-agent-entrypoints/
       orchestration/
       content-assets/
       app-agent-roster/

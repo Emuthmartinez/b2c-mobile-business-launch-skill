@@ -561,6 +561,7 @@ Delegate:
 - `ce-test-xcode` for iOS build/test verification where applicable.
 - `ce-proof` or `ce-demo-reel` when the founder/reviewer needs a visual proof artifact.
 - MobAI MCP or the local `using-mobai-cli` skill for serialized mobile-device E2E and store screenshot capture.
+- If Compound Engineering is unavailable, record the unavailable route and equivalent fallback in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`; do not let agents skip directly from docs to readiness.
 
 Parallel rules:
 - Parallelize research, static audits, independent docs, isolated frontend/backend units, fixtures, and test-writing only after mapping each unit to create/modify/test files.
@@ -591,7 +592,7 @@ Record in `PRODUCTION_READINESS.md`:
 - remaining blockers and founder-only gates
 
 Rules:
-- `AGENTS.md` is mandatory for real app builds and builder handoffs; `CLAUDE.md` should point back to it instead of duplicating product truth.
+- `AGENTS.md` is mandatory for real app builds and builder handoffs; start from `templates/repo-agent-entrypoints/AGENTS.md` so future agents keep using `b2c-mobile-business-launch` without another founder prompt. `CLAUDE.md` should start from `templates/repo-agent-entrypoints/CLAUDE.md` and point back to `AGENTS.md` instead of duplicating product truth. Keep these files as maps to source docs, active plans, validators, and failure cards.
 - Unit tests are not enough for production readiness.
 - MobAI screenshot proof is not backend proof; pair device actions with database/provider/dashboard evidence.
 - Do not use generated builders from a prompt alone. Include repo-local instructions and artifacts so later agents can continue without reconstructing the launch logic.

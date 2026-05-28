@@ -1,10 +1,14 @@
 # CLAUDE.md
 
-Read `AGENTS.md` first; it is the canonical maintainer guide for this repo.
+Read `AGENTS.md` first; it is the canonical maintainer guide for this skill repo.
+
+This file is maintainer-only. Do not copy it into businesses created by the skill; launched business repos should use the shipped `templates/repo-agent-entrypoints/CLAUDE.md` addendum after it has been filled with the app-specific context.
 
 Claude-specific notes:
 
 - Use subagents only for scoped independent audits or isolated file ownership assigned by the orchestrator.
 - Do not stage, commit, push, sync runtime copies, or mark readiness from subagent findings alone.
 - Refresh official docs and local CLI help before changing third-party command guidance.
+- Keep generated business-repo instructions in the shipped templates and validators, not in this root maintainer file.
+- Keep this file as a Claude-specific pointer; detailed policy belongs in `AGENTS.md`, skill references, validators, and LaunchBench.
 - After any skill change, ensure the Codex installed runtime is synced and audited because Claude and Agents consume that installed copy through symlinks on this machine.

@@ -23,6 +23,8 @@ const knownValidators = new Set([
   "check-source-freshness",
   "check-ux-patterns",
   "check-autopilot-contract",
+  "check-agent-entrypoints",
+  "check-workflow-adherence",
   "render-launch-cockpit",
 ]);
 

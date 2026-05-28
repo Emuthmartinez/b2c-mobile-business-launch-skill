@@ -54,6 +54,19 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/parallel-agent-orchestration.md
     notes: Official OpenAI Codex app page covering delegated coding work and parallel software tasks.
+  - id: openai-com-index-harness-engineering
+    name: OpenAI harness engineering
+    source_type: official_docs
+    url: https://openai.com/index/harness-engineering/
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - AGENTS.md
+      - CLAUDE.md
+      - skill/b2c-mobile-business-launch/references/parallel-agent-orchestration.md
+      - skill/b2c-mobile-business-launch/templates/repo-agent-entrypoints/AGENTS.md
+      - skill/b2c-mobile-business-launch/templates/repo-agent-entrypoints/CLAUDE.md
+    notes: Official OpenAI writeup informing short AGENTS.md maps, repo-local instructions, and mechanical harness checks.
   - id: openai-com-index-agents-sdk-evolution
     name: OpenAI Agents SDK evolution
     source_type: official_docs

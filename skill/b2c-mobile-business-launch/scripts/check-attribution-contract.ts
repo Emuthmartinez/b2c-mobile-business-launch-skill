@@ -29,6 +29,7 @@ function findImplementationText(root: string, needles: string[]): Map<string, st
     if (
       ignoredFiles.has(relative) ||
       relative.startsWith("templates/") ||
+      relative.startsWith("repo-agent-entrypoints/") ||
       relative.startsWith("agents/") ||
       relative.startsWith("app-agent-roster/") ||
       ["APP_AGENTS.md", "AGENTS.md", "CLAUDE.md"].includes(relative)
