@@ -84,7 +84,7 @@ For first-time builders:
 - If they are enrolling as an individual, confirm that their legal name will be the seller name.
 - If they need a business or brand seller name, confirm whether an organization account exists or needs D-U-N-S and legal authority setup.
 - If agreements are unsigned in App Store Connect, the app record and uploads can be blocked even when credentials work.
-- If ASC CLI auth prompts interactively and the agent is non-interactive, record the blocker and ask the founder to authenticate or provide the approved API-key path through the secret-management flow.
+- If ASC CLI auth prompts interactively and the agent is non-interactive, record the auth/input blocker and ask the founder to authenticate or provide the approved API-key path through the secret-management flow. Resume the ASC CLI/skill-pack route after authentication; do not switch to a manual-only handoff or claim app creation is impossible unless refreshed CLI/skill docs or Apple account state prove that specific blocker.
 - Keep the autonomy mode at `prepare` until the founder approves app-record, bundle ID, signing, or upload mutations; use `mutate` or `ship` only for the approved scope.
 
 ## App Record Creation Preflight

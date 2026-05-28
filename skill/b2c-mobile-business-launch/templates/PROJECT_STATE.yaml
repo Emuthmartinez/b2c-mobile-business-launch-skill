@@ -277,9 +277,9 @@ tools:
       - "ASC_KEY_ID"
       - "ASC_ISSUER_ID"
       - "ASC_PRIVATE_KEY"
-    preflight: "Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, and founder approval before app-record mutation."
-    validation: "Bundle ID and app record exist; archive/export/upload path is known."
-    fallback: "Manual ASC click-path packet after founder approval."
+    preflight: "Use app-store-connect-cli.md first. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, ASC CLI/skill-pack auth, and founder approval before app-record mutation."
+    validation: "ASC CLI/skill route records app creation/app record state, IDs, metadata, screenshots, TestFlight, review status, RevenueCat catalog reconciliation, and archive/export/upload path."
+    fallback: "Manual ASC click-path packet only after CLI/auth/account/skill-route blocker or founder-approved non-CLI route is recorded."
   aso_skills:
     route: "optional_local_skill_pack"
     docs_checked_at: ""
@@ -287,6 +287,28 @@ tools:
     preflight: "Refresh the Eronred ASO skill pack or installed local equivalents before ASO, icon, screenshot, CPP, event, paid UA, or post-launch metric guidance."
     validation: "APP_STORE_LISTING.md, SCREENSHOTS.md, and STORE_CONSOLE.md record which ASO specialist lanes were used or intentionally not needed."
     fallback: "Apply equivalent frameworks manually only after paid/account-gated ASO routes and missing runtime access are recorded."
+  app_store_screenshots:
+    route: "optional_local_skill_pack"
+    docs_checked_at: ""
+    required_secrets: []
+    selected_route: "ParthJadhav/app-store-screenshots | equivalent local export board | blocked"
+    preflight: "Refresh ParthJadhav/app-store-screenshots, confirm real UI captures, app icon, design tokens, 11-star slice, locales/themes, iPhone/iPad support, and whether Higgsfield/Remotion supporting assets need approval."
+    board_path: "screenshots/index.html or generated app-store-screenshots workspace"
+    state_path: "app-store-screenshots.json"
+    source_inputs:
+      - "screenshots/raw/"
+      - "app-icon/app-icon-1024.png"
+      - "DESIGN.md"
+      - "design.md"
+      - "11_STAR_EXPERIENCE.md"
+      - "APP_STORE_LISTING.md"
+      - "CONTENT_ASSETS.md when Higgsfield/Remotion/supporting art is used"
+    output_dirs:
+      - "screenshots/final/en-US/iphone-69/"
+      - "screenshots/final/en-US/ipad-13/"
+    validation: "SCREENSHOTS.md records exact iPhone/iPad wells, required/scaled decisions, screenshot count, dimensions, alpha/sRGB proof, asc-shots-pipeline dry-run, and upload status."
+    upload_status: "not_started | dry_run_ready | uploaded | blocked"
+    fallback: "Use Remotion, HTML/CSS composition, or designer-owned files only after the app-store-screenshots route is unavailable or not fit and the limitation is recorded."
   higgsfield:
     route: "optional_paid_or_account_tool"
     docs_checked_at: ""

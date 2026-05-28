@@ -14,10 +14,12 @@ This packet records distribution readiness for iOS. Keep it aligned with the Xco
 | Bundle ID | {{IOS_BUNDLE_ID}} | Xcode target and Apple Developer identifier |
 | App ID | {{APPLE_APP_ID}} | Apple Developer identifier record |
 | App Store Connect app record | {{ASC_APP_RECORD_URL}} | App Information URL |
+| ASC CLI auth status | Pending | `asc auth status --validate` or blocked reason without secrets |
 
 ## App Record Creation Preflight
 
 - Confirm name, SKU, primary locale, bundle ID, category, privacy URL, support URL, and ownership before creating or editing the App Store Connect app record.
+- Record the ASC CLI or skill-pack app creation route (`asc-app-create-ui` when browser automation is required) before falling back to manual-only instructions.
 - Stop for founder approval before any App Store Connect mutation, app record creation, SKU change, bundle ID change, capability change, or signing account change.
 
 ## Signing Assets

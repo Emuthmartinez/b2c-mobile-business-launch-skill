@@ -42,6 +42,7 @@ Refresh official docs before final packets or commands:
 - App Store localizations: `https://developer.apple.com/help/app-store-connect/reference/app-information/app-store-localizations/`
 - Product page guidance: `https://developer.apple.com/app-store/product-page`
 - App Review Guidelines: `https://developer.apple.com/app-store/review/guidelines/`
+- ParthJadhav App Store screenshots skill: `https://github.com/ParthJadhav/app-store-screenshots`
 
 Also inspect the ASO skill set when available:
 - Eronred ASO skills: `https://github.com/Eronred/aso-skills`
@@ -61,7 +62,7 @@ For iOS store submission or marketing prep, produce:
 - `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy data types, linked/tracking/purpose answers, vendors, and proof.
 - `STORE_CONSOLE.md` and `store-console.html`: manual console packet across App Store Connect and Play Console when relevant.
 - `REVENUE_OPS.md`: product, entitlement, offering, price, trial, intro offer, RevenueCat/Stripe/web funnel mapping, and sandbox proof.
-- `SCREENSHOTS.md`: slot-by-slot screenshot/app-preview plan and upload proof.
+- `SCREENSHOTS.md`: slot-by-slot screenshot/app-preview plan, ParthJadhav/app-store-screenshots export route when used, iPhone/iPad device-well matrix, and ASC CLI upload proof.
 
 Small projects may merge the listing packet into `STORE_CONSOLE.md`, but keep the App Privacy questionnaire and HTML copy-paste surface when privacy, subscriptions, localization, screenshots, or custom product pages are in scope.
 
@@ -164,6 +165,8 @@ When the Rork App Store Connect CLI skill pack is available, map App Store work 
 
 Refresh the upstream skill pack and `asc --help` before copying command syntax into launch artifacts. If a new upstream ASC skill appears, add it to `source-registry.yaml`, update this route map when relevant, and add LaunchBench coverage if it closes a known gap.
 
+App creation is in scope for the ASC route. If the app record does not exist, load `apple-signing-release.md` and `app-store-connect-cli.md`, produce the sticky-field preflight, and then use the current ASC CLI/skill-pack path after founder approval. Do not replace this with a manual-only handoff unless ASC auth, agreements, account role, or the refreshed CLI/skill docs show an explicit blocker.
+
 For custom product pages:
 - Do not create variants without a traffic source or measurement reason.
 - Map each page to audience, promise, keywords, screenshots/app preview, deep link, campaign/UTM, and App Analytics metrics.
@@ -185,8 +188,9 @@ Screenshots and previews should start from real app UI. When marketing compositi
 - use `11_STAR_EXPERIENCE.md` for the magical moment and line of feasibility so screenshots and ads do not overpromise
 - use MobAI for real iOS/Android captures when available
 - use XcodeBuildMCP only after founder-approved fallback from MobAI for Apple-platform capture
+- use ParthJadhav/app-store-screenshots as the preferred local composition/export editor when App Store or Play Store screenshot decks need production layouts, locale/device/theme variants, or bulk PNG export from real app captures plus design-system copy
 - create `SCREENSHOTS.md` before calling screenshots done; it must separate raw capture paths from production compositions and final upload files
-- produce final screenshot artwork for current iPhone and iPad wells, not just raw device captures, with readable headline/copy overlay, device frame or intentional frameless layout, dimensions, alpha/color-space validation, thumbnail QA, and visual proof
+- produce final screenshot artwork for every required supported iPhone and iPad well, not just raw device captures, with readable headline/copy overlay, device frame or intentional frameless layout, dimensions, alpha/color-space validation, thumbnail QA, and visual proof
 - create or update a screenshot composition/export board such as `screenshots/index.html` when composing final stills locally
 - route App Icon production through `app-icon-optimization` or equivalent, testing the 1024x1024 icon at App Store search thumbnail size with no alpha and no rounded corners
 - route App Preview or Play promo video through `app-preview-video`, MobAI/recording proof, and Remotion/Higgsfield/owned-media production rules when video is in scope
@@ -198,7 +202,7 @@ Screenshots and previews should start from real app UI. When marketing compositi
 
 ## Automation Boundaries
 
-Use `app-store-connect-cli.md` for read/dry-run/apply routing. The CLI may reduce manual work for metadata, screenshots, localizations, TestFlight, products, and subscription catalog sync, but `APP_STORE_LISTING.md` and `app-store-listing.html` still need manual click paths and copyable fields.
+Use `app-store-connect-cli.md` for read/dry-run/apply routing. The CLI may reduce manual work for app creation, metadata, screenshots, localizations, TestFlight, products, and subscription catalog sync, but `APP_STORE_LISTING.md` and `app-store-listing.html` still need manual click paths and copyable fields.
 
 Safe without new approval when credentials are already configured and the user asked for ASC work:
 - read ASC state, resolve IDs, export metadata, run validators/doctors, plan screenshots, and dry-run changes

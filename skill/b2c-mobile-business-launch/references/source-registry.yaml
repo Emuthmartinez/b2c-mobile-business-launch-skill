@@ -813,6 +813,19 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-parthjadhav-app-store-screenshots
+    name: github.com
+    source_type: github
+    url: https://github.com/ParthJadhav/app-store-screenshots
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/app-store-listing/SCREENSHOTS.md
+      - skill/b2c-mobile-business-launch/scripts/check-store-screenshots.ts
+      - skill/b2c-mobile-business-launch/evals/launchbench/app-store-screenshots-unvalidated.yaml
+    notes: AI-agent screenshot editor/export skill used for App Store and Play screenshot composition; verify current iPad and export behavior before relying on final upload assets.
   - id: github-com-peter-evans-create-pull-request
     name: github.com
     source_type: github

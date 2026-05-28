@@ -72,8 +72,13 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - `DESIGN.md` owns tokens, voice, components, and visual rules.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
-- Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, App Icon/App Preview routing, current device wells, validation, and visual QA.
+- Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, ParthJadhav/app-store-screenshots or equivalent export-board routing, App Icon/App Preview routing, current device wells, validation, and visual QA.
 - iOS App Store upload readiness needs `APPLE_APP_STORE_REQUIREMENTS.md`: `PrivacyInfo.xcprivacy`, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload warnings are checked before a build is pushed into App Store Connect.
+
+## Store Ops
+
+- Use `app-store-connect-cli.md` before all App Store Connect work. ASC CLI/skill routes can cover app creation, app-record inspection, metadata, screenshots, TestFlight, review/status reads, products/subscriptions, and RevenueCat catalog reconciliation.
+- Do not answer that an agent cannot create the app until ASC CLI auth, account role, agreements, current `asc --help`, and the ASC skill pack have been checked. Blocked auth or unapproved sticky fields are founder gates, not manual-only defaults.
 
 ## Analytics, Revenue, And Secrets
 

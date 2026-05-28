@@ -8,6 +8,7 @@ This packet is the copy-paste operator surface for App Store Connect and Google 
 
 | Surface | Click path | Values to record | Proof | Gate |
 | --- | --- | --- | --- | --- |
+| App Store Connect app creation | ASC CLI/skill-pack route, or App Store Connect > Apps > plus button > New App when blocked | platform, app name, primary locale, bundle ID, SKU, user access, developer-name implications | `APPLE_SIGNING.md`, `app-store-connect-cli.md` preflight, `asc-id-resolver` once created | founder approval before create |
 | App Store Connect app information | Apps > {{APP_NAME}} > App Information | name, subtitle, SKU, primary locale, bundle ID, category, privacy policy URL | `APP_STORE_LISTING.md` | founder approval before save |
 | App Store Connect App Privacy | Apps > {{APP_NAME}} > App Privacy | data types, linked status, tracking status, privacy purposes | `app-privacy-questionnaire.html` | founder approval before publish |
 | Apple pre-ASC requirements | local app bundle plus App Store Connect upload path | `PrivacyInfo.xcprivacy`, required reason APIs, SDK manifests/signatures, Xcode privacy report, purpose strings, ATT, account deletion, review notes, upload warnings | `APPLE_APP_STORE_REQUIREMENTS.md` | founder approval before upload/submission |
@@ -19,7 +20,9 @@ This packet is the copy-paste operator surface for App Store Connect and Google 
 
 ## Store Asset Rules
 
+- App Store Connect work should route through the ASC CLI/skill pack first when credentials are configured or the founder asked for ASC work. App creation, `asc-id-resolver`, metadata, screenshots, TestFlight, products, subscriptions, review status, and `asc-revenuecat-catalog-sync` are CLI/skill-pack candidates; blocked auth, 2FA, missing agreements, or unapproved sticky fields are blockers, not "cannot do it" answers.
 - Screenshots use `SCREENSHOTS.md` as the canonical packet; raw MobAI captures are proof inputs, while final iPhone, iPad, and Google Play assets need copy overlay, production composition, validation, and visual QA.
+- Use ParthJadhav/app-store-screenshots when a reusable local screenshot editor/export board is useful for iPhone/iPad/Play decks, locale variants, app icon placement, and final PNG export from real UI plus design-system copy.
 - Higgsfield can support app icons, backgrounds, CPP media, In-App Event media, and thumbnails when tied to `DESIGN.md` and `11_STAR_EXPERIENCE.md`.
 - App Icon output records `app-icon/app-icon-1024.png`, thumbnail contrast, no alpha, no rounded corners, and category differentiation.
 - App Preview and Google Play promo video output use real in-app footage, Remotion or owned media, captions, poster frame review, and current platform policy checks.

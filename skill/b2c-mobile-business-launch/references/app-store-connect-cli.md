@@ -4,6 +4,8 @@ Use this before automating App Store Connect work with the Rork `asc` CLI or the
 
 The goal is to reduce App Store Connect clicking while preserving founder control over credentials, pricing, products, privacy answers, screenshots, and final submission.
 
+Default stance: if the work is App Store Connect related, try the ASC CLI or ASC CLI skill pack route first. Do not tell the founder an agent cannot create the app, inspect ASC state, upload screenshots, manage metadata, run TestFlight, or reconcile products until `asc auth status`, the local `asc --help`/skill-pack help, and the current docs prove the route is unavailable. Missing credentials, 2FA, unsigned agreements, unapproved sticky fields, or missing founder approval are blockers, not proof the CLI cannot do the work.
+
 ## Contents
 
 - Current Sources To Refresh
@@ -30,6 +32,7 @@ As of the May 2026 GitHub README, the CLI is a scriptable, JSON-first App Store 
 
 Use the CLI route when:
 - the user wants App Store Connect work reduced to commands instead of clicks
+- a new app record, bundle ID/App ID, or first upload path needs deterministic preflight before any browser/manual fallback
 - app IDs, build IDs, version IDs, localizations, TestFlight groups, or screenshot localization IDs need deterministic resolution
 - metadata, localizations, keywords, screenshots, or review status need repeatable audit/apply flows
 - App Store listing preparation needs dry-run metadata, localization, screenshot, subscription, custom product page, or In-App Event state checks
@@ -67,6 +70,8 @@ When installed, route to these skill areas:
 
 For App Store listing work, also load `app-store-listing-prep.md`. CLI automation can apply or verify pieces of the listing, but the durable deliverable still needs `APP_STORE_LISTING.md`, `app-store-listing.html`, `STORE_CONSOLE.md`, and founder-visible approval gates.
 
+Treat `asc-app-create-ui` as the expected app-record creation route when the API route is missing or the upstream skill pack says browser automation is required. That still counts as ASC CLI skill-pack routing; it is not a reason to declare the task impossible.
+
 Install only with founder approval if it is not already available:
 
 ```bash
@@ -97,13 +102,17 @@ asc metadata validate --dir "./metadata" --output table
 asc metadata push --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata" --dry-run --output table
 asc metadata keywords diff --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
 asc screenshots sizes --all --output table
-asc screenshots validate --path "./screenshots/final" --device-type "IPHONE_65" --output table
-asc screenshots upload --version-localization "LOC_ID" --path "./screenshots/final" --device-type "IPHONE_65" --output json
+# For each approved SCREENSHOTS.md row, validate the exact final dir, locale, and current ASC device_type.
+asc screenshots validate --path "./screenshots/final/en-US/<device-well>" --device-type "<ASC_DEVICE_TYPE>" --output table
+# Upload only after founder approval, version-localization IDs are resolved, and every iPhone/iPad row is validated.
+asc screenshots upload --version-localization "LOC_ID" --path "./screenshots/final/en-US/<device-well>" --device-type "<ASC_DEVICE_TYPE>" --output json
 asc testflight feedback list --app "123456789" --paginate
 asc testflight crashes list --app "123456789" --sort -createdDate --limit 10
 asc workflow validate
 asc workflow run --dry-run testflight_beta VERSION:1.2.3
 ```
+
+Before any first-time app creation claim, refresh and record the exact creation path from `asc apps --help`, `asc bundle-ids --help`, and the ASC skill pack. If the current route is `asc-app-create-ui` rather than a direct API command, record the browser automation preflight and founder gate in `STORE_CONSOLE.md`.
 
 Use `--dry-run` and read commands first. Do not use `--confirm`, `--submit`, pricing changes, screenshot replacement, metadata apply, TestFlight external distribution, or release actions without explicit founder approval.
 

@@ -99,6 +99,7 @@ function writeCompleteAppleSigning(root: string): void {
       "Xcode DEVELOPMENT_TEAM is set for the Bundle ID and App ID.",
       "App Store Connect app record exists.",
       "App Record Creation Preflight stops for founder approval before mutations.",
+      "ASC CLI auth status is validated without secrets, and the app creation route is asc-app-create-ui when browser automation is required.",
       "Distribution certificate and provisioning profile are present.",
       "Archive, export, upload, and TestFlight proof are recorded.",
       "A simulator build alone is not distribution readiness.",
@@ -150,7 +151,7 @@ function writeCompleteStoreConsole(root: string): void {
     path.join(root, "STORE_CONSOLE.md"),
     [
       "# Store Console",
-      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
+      "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
       "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
@@ -162,8 +163,8 @@ function writeCompleteStoreConsole(root: string): void {
     [
       "# App Store Listing",
       "App Privacy answers are derived from data inventory and third-party partners.",
-      "Pricing, RevenueCat entitlement mapping, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, and Higgsfield-backed marketing assets are ready for founder approval.",
-      "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
+      "Pricing, RevenueCat entitlement mapping, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, ParthJadhav/app-store-screenshots, and Higgsfield-backed marketing assets are ready for founder approval.",
+      "ASC route proof includes app creation, asc-app-create-ui, asc-id-resolver, asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-shots-pipeline, asc-ppp-pricing, asc-subscription-localization, asc-testflight-orchestration, asc-submission-health, and asc-release-flow.",
       "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
     "utf8",
@@ -178,10 +179,11 @@ function writeCompleteStoreScreenshots(root: string): void {
     [
       "# Store Screenshots",
       "Status: partial until founder approval for upload.",
-      "Source Ledger: DESIGN.md, design.md, 11_STAR_EXPERIENCE.md, APP_STORE_LISTING.md, CONTENT_ASSETS.md, MobAI raw captures, Higgsfield supporting visuals, Remotion rendered frames, and asc-screenshot-resize validation.",
+      "Source Ledger: DESIGN.md, design.md, 11_STAR_EXPERIENCE.md, APP_STORE_LISTING.md, CONTENT_ASSETS.md, MobAI raw captures, Higgsfield supporting visuals, Remotion rendered frames, ParthJadhav/app-store-screenshots export board, app-store-screenshots.json state, and asc-screenshot-resize validation.",
       "Narrative: Slot 1 sells the core outcome; slots 2-3 prove the V1 scalable slice; later slots show one benefit per frame.",
       "App Icon: 1024x1024 PNG, no alpha, no rounded corners, tested at App Store search thumbnail size, with Higgsfield route recorded when generated.",
       "App Preview: App Store Preview or Google Play promo video route is recorded, with poster frame, muted captions, real in-app footage, and founder approval before upload.",
+      "Composition And Export Route: ParthJadhav/app-store-screenshots writes app-store-screenshots.json and a reusable screenshots/index.html board from real UI, app icon, design tokens, localized copy, and optional Higgsfield support assets.",
       "Raw Capture Matrix",
       "| Slot | Platform | Device | Locale | Source screen | Capture tool | Raw path | Version localization ID | Status |",
       "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -191,10 +193,15 @@ function writeCompleteStoreScreenshots(root: string): void {
       "Production Composition Matrix",
       "| Slot | Headline | Copy overlay | Layout | Supporting asset | Route | Final upload path | Dimensions | Alpha/color space | Visual QA |",
       "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
-      "| 1 | See the win fast | yes | framed iPhone app store screenshot | Higgsfield background tied to DESIGN.md | Remotion composition from real UI | screenshots/final/iphone-69-slot-1.png | 1320x2868 | alpha removed, sRGB color space | thumbnail and mobile proof passed |",
-      "| 2 | Built for big screens | yes | framed iPad app store screenshot | DESIGN.md gradient panel | Remotion composition from real UI | screenshots/final/ipad-13-slot-2.png | 2064x2752 | alpha removed, sRGB color space | iPad well proof passed |",
-      "Device Wells: iPhone 6.9, iPhone 6.5, iPhone 6.3, iPhone 6.1, iPad 13, iPad 12.9, Google Play phone, tablet, and feature graphic are listed with ready/blocked status.",
-      "Export And Validation: run asc-screenshot-resize for size, alpha, color space, and current device wells; record asc-shots-pipeline dry-run before upload.",
+      "| 1 | See the win fast | yes | framed iPhone app store screenshot | Higgsfield background tied to DESIGN.md | ParthJadhav/app-store-screenshots composition from real UI | screenshots/final/iphone-69-slot-1.png | 1320x2868 | alpha removed, sRGB color space | thumbnail and mobile proof passed |",
+      "| 2 | Built for big screens | yes | framed iPad app store screenshot | DESIGN.md gradient panel | ParthJadhav/app-store-screenshots composition from real UI | screenshots/final/ipad-13-slot-2.png | 2064x2752 | alpha removed, sRGB color space | iPad well proof passed |",
+      "Device Wells",
+      "| Platform | Well | Required/scaled decision | ASC device_type | Screenshot count | Dimensions | Target file | Validation proof | Status |",
+      "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+      "| iOS | iPhone 6.9 | required or scaled | IPHONE_69 | screenshot count: 3 | 1320x2868 | screenshots/final/iphone-69/ | asc-screenshot-resize and asc-shots-pipeline dry-run | blocked |",
+      "| iPadOS | iPad 13 | required if iPad supported | IPAD_13 | screenshot count: 2 | 2064x2752 | screenshots/final/ipad-13/ | asc-screenshot-resize and asc-shots-pipeline dry-run | blocked |",
+      "Device Wells: iPhone 6.9, iPhone 6.5, iPhone 6.3, iPhone 6.1, iPad 13, iPad 12.9, Google Play phone, tablet, and feature graphic are listed with required, scaled, ready, or blocked status.",
+      "Export And Validation: run asc-screenshot-resize for size, alpha, sRGB color space, current device wells, ASC device_type, and screenshot count; record asc-shots-pipeline dry-run before upload.",
       "Visual QA: check thumbnail readability, text fit, safe areas, overlap, color contrast, actual UI truth, pricing/trial consistency, and no unsupported claims.",
       "Founder approval is required before screenshot upload, App Preview upload, CPP/event media submission, paid Higgsfield generation, or replacing Higgsfield with a fallback.",
     ].join("\n"),
@@ -706,7 +713,7 @@ try {
     path.join(simulatorOnly, "APPLE_SIGNING.md"),
     [
       "# Apple Signing",
-      "Apple Developer Team ID DEVELOPMENT_TEAM Bundle ID App ID App Store Connect App Record Creation Preflight certificate provisioning archive export upload TestFlight founder approval.",
+      "Apple Developer Team ID DEVELOPMENT_TEAM Bundle ID App ID App Store Connect ASC CLI auth status app creation route App Record Creation Preflight certificate provisioning archive export upload TestFlight founder approval.",
       "Simulator build passed.",
     ].join("\n"),
     "utf8",
@@ -737,6 +744,7 @@ try {
       "Team ID unknown and DEVELOPMENT_TEAM blank.",
       "Bundle ID and App ID are not configured.",
       "App Store Connect app record missing.",
+      "ASC CLI auth status missing and app creation route blocked until founder approval.",
       "App Record Creation Preflight requires founder approval.",
       "Distribution certificate and provisioning profile missing.",
       "Archive, export, upload, and TestFlight are not configured.",
@@ -793,7 +801,7 @@ try {
     path.join(iosOnlyStore, "STORE_CONSOLE.md"),
     [
       "# Store Console",
-      "App Store Connect click path covers app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, review notes, and account deletion.",
+      "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
     "utf8",
@@ -803,8 +811,8 @@ try {
     path.join(iosOnlyStore, "APP_STORE_LISTING.md"),
     [
       "# App Store Listing",
-      "App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, Higgsfield-backed marketing assets, and founder approval are documented.",
-      "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
+      "App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, ParthJadhav/app-store-screenshots, Higgsfield-backed marketing assets, and founder approval are documented.",
+      "ASC route proof includes app creation, asc-app-create-ui, asc-id-resolver, asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-shots-pipeline, asc-ppp-pricing, asc-subscription-localization, asc-testflight-orchestration, asc-submission-health, and asc-release-flow.",
       "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
     "utf8",
@@ -875,6 +883,27 @@ try {
   );
   runFixture("unsafe ASC fallback-name retry fails", unsafeFallback, "check-store-console-packet.ts", 1, "unapproved_name_fallback");
 
+  const ascAppCreationUnderclaimed = makeFixture("asc-app-creation-underclaimed");
+  writeCompleteStoreConsole(ascAppCreationUnderclaimed);
+  writeFileSync(
+    path.join(ascAppCreationUnderclaimed, "STORE_CONSOLE.md"),
+    [
+      "# Store Console",
+      "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
+      "The founder must manually create the app record in App Store Connect.",
+      "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
+      "If the app name is already in use, stop for founder approval before using any fallback name.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "manual-only ASC app creation underclaim fails",
+    ascAppCreationUnderclaimed,
+    "check-store-console-packet.ts",
+    1,
+    "store_console.asc_app_creation_underclaimed",
+  );
+
   const phraseOnlyStore = makeFixture("store-phrase-only");
   const phraseOnlyStoreState = readState(phraseOnlyStore);
   const phraseOnlyStoreLane = getLane(phraseOnlyStoreState, "store_console");
@@ -921,6 +950,29 @@ try {
     "utf8",
   );
   runFixture("raw-only store screenshots fail", rawOnlyScreenshots, "check-store-screenshots.ts", 1, "store_screenshots.raw_capture_as_final");
+
+  const appStoreScreenshotsUnvalidated = makeFixture("app-store-screenshots-unvalidated");
+  writeCompleteStoreConsole(appStoreScreenshotsUnvalidated);
+  writeFileSync(
+    path.join(appStoreScreenshotsUnvalidated, "SCREENSHOTS.md"),
+    [
+      "# Store Screenshots",
+      "Status: ready for upload.",
+      "Raw Capture Matrix",
+      "Production Composition Matrix",
+      "Device Wells",
+      "headline, copy overlay, DESIGN.md, 11_STAR_EXPERIENCE.md, MobAI, Higgsfield, Remotion, ParthJadhav/app-store-screenshots, App Icon, App Preview, asc-screenshot-resize, ASC device_type, screenshot count, required, scaled, version localization ID, alpha, color space, sRGB, thumbnail, visual QA, founder approval, iPhone, iPad, Google Play, and feature graphic are mentioned.",
+      "Production artwork was styled with the external screenshot skill, but no saved board state or upload orchestration proof is recorded.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "app-store-screenshots mention without board or upload orchestration fails",
+    appStoreScreenshotsUnvalidated,
+    "check-store-screenshots.ts",
+    1,
+    "store_screenshots.app-store-screenshots.json.missing",
+  );
 
   const uxFallbackUnapproved = makeFixture("ux-fallback-unapproved");
   writeFileSync(

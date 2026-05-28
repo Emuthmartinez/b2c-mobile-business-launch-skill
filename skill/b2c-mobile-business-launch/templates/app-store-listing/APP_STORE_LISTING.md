@@ -23,6 +23,7 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | RevenueCat/Stripe docs | Pending | entitlement and web funnel | Refresh before final pricing |
 | Rork ASC CLI skills | Pending | metadata sync, localization, screenshots, pricing, release validation | Refresh before CLI guidance |
 | 11-star experience | Pending | screenshot story, preview hook, CPP/event promise | `11_STAR_EXPERIENCE.md` |
+| ParthJadhav/app-store-screenshots | Pending | local screenshot composition/export board, locale decks, iPhone/iPad/Play PNG output | Refresh before using the external skill |
 | Screenshot packet | Pending | iPhone/iPad wells, App Icon, App Preview, copy overlay, final upload paths | `SCREENSHOTS.md` |
 
 ## ASC CLI Route And IDs
@@ -30,11 +31,13 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | Surface | ASC route | Current ID/path | Dry-run proof | Apply/upload status | Founder gate |
 | --- | --- | --- | --- | --- | --- |
 | App IDs | `asc-id-resolver` | app/app-info/version/localization IDs pending | Pending | read-only | no mutation |
+| App creation | `app-store-connect-cli.md` + `asc-app-create-ui` when needed | app record pending | preflight pending | blocked | approval before app creation |
 | Metadata | `asc-metadata-sync` | `metadata/` pending | `asc metadata validate/push --dry-run` pending | blocked | approval before push |
 | Localization | `asc-localize-metadata` | target locale files pending | field-limit validation pending | blocked | approval before upload |
 | Screenshots | `asc-screenshot-resize` + `asc-shots-pipeline` | version-localization ID pending | sizes/validate output pending | blocked | approval before upload |
 | Pricing | `asc-ppp-pricing` | base territory and import CSV pending | pricing summary/import dry-run pending | blocked | approval before price changes |
 | Subscriptions | `asc-subscription-localization` + `asc-revenuecat-catalog-sync` | product/subscription IDs pending | catalog diff pending | blocked | approval before create/update |
+| TestFlight | `asc-testflight-orchestration` | groups/testers/build state pending | beta distribution dry-run pending | blocked | approval before external distribution |
 | Release health | `asc-submission-health` + `asc-release-flow` | build/version IDs pending | `asc validate` pending | blocked | approval before submit/release |
 
 ## Default Product Page
@@ -82,7 +85,7 @@ Do not publish App Privacy answers until this table matches `PRIVACY.md`, `ANALY
 ## Pricing And Revenue Matrix
 
 | Product | ASC product ID | Type | Base territory | Price | Trial/intro | PPP/import proof | Subscription localization | RevenueCat entitlement | Offering/package | Web funnel/Stripe | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | Monthly | Pending | auto-renewable subscription | USA | Pending | Pending | `asc-ppp-pricing` pending | `asc-subscription-localization` pending | `premium` | `default/monthly` | Pending | blocked |
 | Annual | Pending | auto-renewable subscription | USA | Pending | Pending | `asc-ppp-pricing` pending | `asc-subscription-localization` pending | `premium` | `default/annual` | Pending | blocked |
 | Lifetime | Pending | non-consumable | USA | Pending | n/a | `asc-ppp-pricing` pending | IAP localization pending | `premium` | `default/lifetime` | Pending | optional |
@@ -93,15 +96,16 @@ Founder approval required before creating live products, changing prices, changi
 
 Canonical screenshot packet: `SCREENSHOTS.md`
 
-| Slot | ASC device_type | Device well | Version localization ID | Locale | Headline | Source screen | Supporting asset | Tool | Size/alpha validation | Final path | Status |
+| Slot | ASC device_type | Device well | Required/scaled decision | Screenshot count | Version localization ID | Locale | Headline | Source screen | Supporting asset | Tool | Size/alpha validation | Final path | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-1.png` | blocked |
-| 1 | current iPad equivalent | iPad 13 or 12.9 | Pending | en-US | Pending | onboarding/value | design-system iPad frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/ipad-slot-1.png` | blocked |
-| 2 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-2.png` | blocked |
-| 3 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-3.png` | blocked |
+| 1 | current 6.9 iPhone value from `asc screenshots sizes --all` | iPhone 6.9 | required or scaled per current ASC matrix | 1-10 screenshots | Pending | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI raw capture plus ParthJadhav/app-store-screenshots composed final | `asc-screenshot-resize` + `asc-shots-pipeline` pending | `screenshots/final/iphone-69-slot-1.png` | blocked |
+| 1 | current iPad 13 value from `asc screenshots sizes --all` | iPad 13 or 12.9 | required if iPad is supported, otherwise not needed | 1-10 screenshots | Pending | en-US | Pending | onboarding/value | design-system iPad frame | MobAI raw capture plus ParthJadhav/app-store-screenshots composed final | `asc-screenshot-resize` + `asc-shots-pipeline` pending | `screenshots/final/ipad-slot-1.png` | blocked |
+| 2 | current 6.9 iPhone value from `asc screenshots sizes --all` | iPhone 6.9 | required or scaled per current ASC matrix | 1-10 screenshots | Pending | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI raw capture plus ParthJadhav/app-store-screenshots composed final | `asc-screenshot-resize` + `asc-shots-pipeline` pending | `screenshots/final/iphone-69-slot-2.png` | blocked |
+| 3 | current 6.9 iPhone value from `asc screenshots sizes --all` | iPhone 6.9 | required or scaled per current ASC matrix | 1-10 screenshots | Pending | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI raw capture plus ParthJadhav/app-store-screenshots composed final | `asc-screenshot-resize` + `asc-shots-pipeline` pending | `screenshots/final/iphone-69-slot-3.png` | blocked |
 
 Rules:
 - Real app UI capture is the proof layer; raw screenshots are not final upload assets.
+- Prefer ParthJadhav/app-store-screenshots for local production composition and bulk export when screenshot decks need copy-led iPhone/iPad/Play variants; save `app-store-screenshots.json` or the equivalent board state when used.
 - Final upload candidates need production composition: headline, copy overlay, device frame or intentional frameless treatment, export target, and visual QA.
 - Use current `asc screenshots sizes --all` before choosing device types; do not rely on stale dimension tables.
 - Final upload candidates need alpha transparency removed, color-space checked, size validated, and associated with the correct version localization ID.

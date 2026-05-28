@@ -163,9 +163,9 @@ Output:
 
 ## 7. App Store Connect CLI Routing
 
-Use `app-store-connect-cli.md` when the ASC CLI or skill pack can reduce manual work.
+Use `app-store-connect-cli.md` when the ASC CLI or skill pack can reduce manual work. ASC CLI routing is the default ASC automation/read path when available; manual-only guidance is a fallback for blocked auth, missing account role, unavailable command coverage, or founder-approved non-CLI operation.
 
-Good uses:
+Safe read/dry-run uses:
 - read app/build/version/review status
 - resolve IDs
 - export or dry-run metadata
@@ -174,8 +174,9 @@ Good uses:
 - plan screenshots
 - inspect TestFlight feedback/crashes
 - reconcile ASC products with RevenueCat before applying changes
+- preflight app creation, bundle ID/App ID state, and whether the current route is direct CLI/API or `asc-app-create-ui`
 
-Founder-gated uses:
+Valid with founder approval:
 - app creation
 - metadata apply/push
 - screenshot upload/replace
@@ -183,6 +184,8 @@ Founder-gated uses:
 - signing asset changes
 - external TestFlight distribution
 - final submission/release/cancel actions
+
+Do not tell the founder an agent cannot create the app unless current `asc` help/skill-pack guidance, auth/account checks, or Apple agreements prove a concrete blocker. Record the blocker and the exact next action instead.
 
 Even when `asc` is used, produce `STORE_CONSOLE.md` and `store-console.html` with manual click paths, paste values, and founder-only approvals.
 

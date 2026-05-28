@@ -63,6 +63,7 @@ ASC CLI:
 - Rork App Store Connect CLI: `https://github.com/rorkai/App-Store-Connect-CLI`
 - Load `app-store-connect-cli.md` before using `asc`, installing CLI skills, syncing metadata, planning/uploading screenshots, TestFlight orchestration, release validation, signing, or RevenueCat catalog sync.
 - Load `app-store-listing-prep.md` before Apple listing copy, App Privacy questionnaires, pricing/subscription mapping, In-App Events, custom product pages, localization, Higgsfield-backed marketing assets, or App Store marketing surface planning.
+- ParthJadhav App Store screenshots skill: `https://github.com/ParthJadhav/app-store-screenshots`; use it when production screenshot decks need a local editor/export system rather than one-off image edits.
 
 Google Play:
 - Create and set up app: `https://support.google.com/googleplay/android-developer/answer/9859152?hl=en`
@@ -87,7 +88,7 @@ Create these when a store submission is in scope:
 - `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy answers when privacy disclosures are not already verified.
 - `APPLE_SIGNING.md`: required for Apple distribution, TestFlight, physical-device signing, or first upload readiness; include account/team, bundle ID/App ID, app record, signing, capabilities, certificates/profiles, archive/export/upload state, and founder gates.
 - `store-console.html`: founder-facing mock console with copy buttons or clearly copyable fields grouped by exact ASC/Play Console page.
-- `SCREENSHOTS.md`: screenshot capture, composition, dimensions, device targets, locale, proof constraints, upload status, and source image paths.
+- `SCREENSHOTS.md`: screenshot capture, ParthJadhav/app-store-screenshots composition route when used, dimensions, device targets, locale, proof constraints, upload status, and source image paths.
 - `screenshots/`: final upload assets plus raw MobAI/device captures and intermediate compositions.
 - `TOOL_DECISIONS.md` or an embedded tool-decision section when ASC CLI, paid ASO tools, MobAI, XcodeBuildMCP fallback, Higgsfield, or paid screenshot/creator tooling affects the packet.
 - `launch-cockpit.html`: rendered state so the founder can see which console pages are ready, blocked, or founder-approval gated.
@@ -357,6 +358,8 @@ Before clicking:
 
 Use the Rork `asc` CLI to reduce clicking and make App Store Connect state inspectable, but do not let CLI automation replace the founder-facing store packet.
 
+ASC CLI-first rule: app creation, app-record inspection, metadata, localizations, screenshots, TestFlight, review status, subscriptions/IAP, RevenueCat reconciliation, and release validation should route through `app-store-connect-cli.md` before a manual-only handoff. A blocked auth session, missing role, 2FA prompt, unsigned agreement, or unapproved app name/SKU/bundle ID is a named blocker; it is not a reason to claim the agent cannot create or operate the app in App Store Connect.
+
 Safe read/dry-run uses:
 - auth status and auth doctor
 - app, build, version, localization, TestFlight group, screenshot, and review-status reads
@@ -365,6 +368,7 @@ Safe read/dry-run uses:
 - validation and review doctor
 - screenshot plan
 - workflow validate and dry-run
+- first-time app-record and signing preflight, including whether the current route is direct CLI/API or `asc-app-create-ui`
 
 Founder approval required:
 - auth changes or repo-local credential storage
@@ -384,6 +388,7 @@ Founder approval required:
 - dry-run commands and output paths
 - mutating commands still waiting on approval
 - manual App Store Connect pages still required
+- whether app creation is CLI/skill-pack ready, blocked by auth/account/agreement, or waiting on founder approval for sticky fields
 
 Use `paid-tool-routing.md` if the CLI or skill pack is unavailable. The founder may prefer installing or authorizing the CLI over receiving a manual-only packet.
 
@@ -531,6 +536,7 @@ Raw captures are never the final App Store or Google Play artwork by themselves.
 Use:
 - `DESIGN.md` for visual rules
 - `design.html` or screenshot HTML for framed concepts
+- ParthJadhav/app-store-screenshots for a reusable local screenshot editor/export board that can combine real app captures, app icon, design-system style, headline/copy overlays, locale variants, iPhone/iPad decks, and bulk PNG export
 - MobAI for real app screenshots from simulator/device
 - MobAI `mobile-recorder-skill` for polished iOS/Android app-preview or launch demo videos when video assets are in scope
 - XcodeBuildMCP for Apple-platform screenshots, videos, logs, and UI automation only after the founder confirms fallback from MobAI
@@ -600,11 +606,19 @@ Rules:
 
 Apple accepts one to ten screenshots per device size/localization. If UI is the same across device sizes/localizations, highest resolution screenshots can scale down, but the packet must say whether scaled screenshots are acceptable or whether each well gets explicit assets.
 
-Common iOS targets to check against current Apple specs:
-- iPhone 6.9 inch display, including current Pro Max/Plus/Air class sizes
-- iPhone 6.5 inch display fallback when 6.9 inch is not provided
-- iPad 13 inch display, if iPad is supported
+Common iOS targets to check against current Apple specs before export:
+- iPhone 6.9 inch display: include the current accepted portrait/landscape sizes from Apple or `asc screenshots sizes`; this is the preferred iPhone well for current devices.
+- iPhone 6.5 inch display fallback: required if the app runs on iPhone and 6.9 inch screenshots are not provided; Apple can scale from 6.9 inch screenshots when accepted.
+- iPad 13 inch display: required if the app runs on iPad; Apple can scale older iPad wells from accepted 13 inch screenshots when supported by the current spec.
+- iPad 12.9, 11, 10.5, and 9.7 inch wells: list as explicit, scaled, not needed, or blocked based on the current ASC size matrix and device-family support.
 - any watchOS, macOS, tvOS, or visionOS target actually supported
+
+Production composition route:
+1. Capture real app UI for each screenshot-critical path.
+2. Feed raw captures, app icon, design tokens, 11-star slice, and listing copy into ParthJadhav/app-store-screenshots or an equivalent local composition board.
+3. Use Higgsfield only for supporting art such as background imagery, mascots, icons, thumbnails, CPP/event media, or campaign visuals; do not let generated art replace real UI proof.
+4. Export every required iPhone and iPad well, locale, and orientation as final no-alpha PNGs.
+5. Validate dimensions, alpha, color space, and device type with `asc-screenshot-resize` or current `asc screenshots` validation before `asc-shots-pipeline` upload.
 
 `SCREENSHOTS.md` table:
 - platform
@@ -656,11 +670,13 @@ Do not make this a marketing page. It should feel like an operator console: dens
 
 - Metadata exists in `LAUNCH.md` but no click path tells the founder where to paste it.
 - ASC CLI exists but `store-console.html` and manual click paths were skipped.
+- ASC CLI/skill pack could create the app, but the agent gave a manual-only "I cannot create the app" answer without checking auth, role, agreements, local `asc --help`, or `asc-app-create-ui`.
 - A missing ASC CLI/MobAI/paid ASO runtime was treated as permission to use a free fallback without asking.
 - Privacy answers are copied from a policy generator instead of data inventory and SDK behavior.
 - Google Play Data safety and Apple App Privacy disagree.
 - App screenshots use generated art but do not show the real app UI.
 - MobAI or XcodeBuildMCP captures are raw but never converted into composed, copy-led, platform-specific iPhone/iPad/Play assets.
+- ParthJadhav/app-store-screenshots is used as a one-off style idea instead of a real local export board with source captures, app icon, locale/device decks, final files, and validation proof.
 - App Icon or App Preview work is skipped even though the ASO pack has specialist guidance for it.
 - Store products exist but are not attached to the app version or review/submission state.
 - Reviewer credentials are stale or cannot reach the paywalled/restricted flow.

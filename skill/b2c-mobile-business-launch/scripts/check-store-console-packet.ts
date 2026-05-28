@@ -47,6 +47,23 @@ function hasFounderStopGuard(line: string): boolean {
   return /(founder approval|founder-approved|stop|do not continue|do not retry|must not retry|requires approval|ask the founder|confirm with the founder)/i.test(line);
 }
 
+function ascManualOnlyLines(markdownText: string): string[] {
+  return markdownText
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) =>
+      /(cannot|can't|unable to|must manually|manual[- ]only|founder must).*(create|add).*(app|app record)|create.*(app|app record).*(cannot|can't|unable|manual[- ]only|founder must)/i.test(
+        line,
+      ),
+    );
+}
+
+function hasAscBlockedReason(line: string): boolean {
+  return /(ASC CLI|asc|skill[- ]pack).*(blocked|unavailable|unsupported|auth|2FA|agreement|role|permission|founder approval)|blocked.*(ASC CLI|asc|skill[- ]pack)/i.test(
+    line,
+  );
+}
+
 function missingPhraseCode(prefix: string, phrase: string): string {
   return `${prefix}.${phrase.replaceAll(" ", "_").toLowerCase()}.missing`;
 }
@@ -105,6 +122,7 @@ if (!markdown) {
   if (hasIos) {
     requiredPhrases.push(
       "App Store Connect",
+      "ASC CLI",
       "App Privacy",
       "SKU",
       "primary locale",
@@ -114,9 +132,13 @@ if (!markdown) {
       "custom product page",
       "In-App Event",
       "Higgsfield",
+      "app creation",
+      "asc-id-resolver",
+      "TestFlight",
+      "review status",
     );
     if (revenueInScope) {
-      requiredPhrases.push("RevenueCat", "subscription");
+      requiredPhrases.push("RevenueCat", "subscription", "asc-revenuecat-catalog-sync");
     }
   }
   if (hasAndroid) {
@@ -132,6 +154,19 @@ if (!markdown) {
           "error",
           "store_console.unapproved_name_fallback",
           `Name collision or fallback-name instruction must stop for founder approval on the same line: "${line}"`,
+          markdownPath,
+        ),
+      );
+    }
+  }
+
+  for (const line of ascManualOnlyLines(markdown)) {
+    if (!hasAscBlockedReason(line)) {
+      issues.push(
+        issue(
+          "error",
+          "store_console.asc_app_creation_underclaimed",
+          `ASC app creation must route through ASC CLI/skills or name a real CLI/auth/account blocker on the same line: "${line}"`,
           markdownPath,
         ),
       );
@@ -180,12 +215,18 @@ if (hasIos) {
       "In-App Event",
       "Higgsfield",
       "founder approval",
+      "app creation",
+      "asc-app-create-ui",
+      "asc-id-resolver",
       "asc-metadata-sync",
       "asc-localize-metadata",
       "asc-screenshot-resize",
+      "asc-shots-pipeline",
       "asc-ppp-pricing",
       "asc-subscription-localization",
+      "asc-testflight-orchestration",
       "asc-submission-health",
+      "asc-release-flow",
       "version localization ID",
       "base territory",
       "SCREENSHOTS.md",
@@ -195,7 +236,7 @@ if (hasIos) {
       "copy overlay",
     ];
     if (revenueInScope) {
-      appListingRequiredPhrases.push("RevenueCat", "subscription");
+      appListingRequiredPhrases.push("RevenueCat", "subscription", "asc-revenuecat-catalog-sync");
     }
     requirePhrases(appListingMarkdown.text, appListingRequiredPhrases, "app_store_listing", appListingMarkdown.relativePath);
     if (storeConsoleDone || statusLineClaimsReady(appListingMarkdown.text)) {

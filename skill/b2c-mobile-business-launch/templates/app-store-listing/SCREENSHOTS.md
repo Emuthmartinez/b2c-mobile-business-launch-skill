@@ -16,6 +16,7 @@ Raw device captures prove the product exists. Final store screenshots are compos
 | `APP_STORE_LISTING.md` | metadata, privacy, pricing, CPP/event alignment | Pending | Copy and offers must match listing truth |
 | `CONTENT_ASSETS.md` | Higgsfield/Remotion route, license, outputs, approvals | Pending | Required when generated/rendered assets are used |
 | MobAI raw captures | real app proof layer | Pending | Use approved fallback only after founder approval |
+| ParthJadhav/app-store-screenshots | production screenshot editor and bulk export board | Pending | Use for copy-led iPhone/iPad/Play decks when installed or approved |
 | `asc-screenshot-resize` | device wells, size, alpha, color space | Pending | Refresh current ASC sizing first |
 
 ## Narrative
@@ -44,21 +45,39 @@ Raw device captures prove the product exists. Final store screenshots are compos
 | 1 | iPad 13 | Pending | Pending | framed iPad App Store screenshot | design-system frame | Remotion/HTML composition from real UI | `screenshots/final/ipad-13-slot-1.png` | current ASC size | alpha removed, sRGB color space | iPad QA pending |
 | Feature graphic | Google Play | Pending | Pending | wide brand/product frame | Higgsfield or design-system artwork | content asset route | `screenshots/final/google-play-feature-graphic.png` | current Play size | sRGB color space | optional |
 
+## Composition And Export Route
+
+Preferred local route: ParthJadhav/app-store-screenshots.
+
+Inputs:
+- real app captures from `screenshots/raw/`
+- `app-icon/app-icon-1024.png`
+- `DESIGN.md`, `design.md`, and `11_STAR_EXPERIENCE.md`
+- headline/copy story from `APP_STORE_LISTING.md`
+- Higgsfield supporting art only when recorded in `CONTENT_ASSETS.md`
+
+Outputs:
+- screenshot editor or board: `screenshots/index.html` or generated app-store-screenshots workspace
+- reusable deck state: `app-store-screenshots.json` when the external skill is used
+- final no-alpha PNGs under `screenshots/final/<locale>/<device-well>/`
+- ASC validation output and `asc-shots-pipeline` upload dry-run output in `STORE_CONSOLE.md`
+
 ## Device Wells
 
 Run current sizing before export. Record ready, blocked, or not needed for each target.
 
-| Platform | Well | Target file | Validation proof | Status |
-| --- | --- | --- | --- | --- |
-| iOS | iPhone 6.9 | Pending | `asc-screenshot-resize` pending | blocked |
-| iOS | iPhone 6.5 | Pending | `asc-screenshot-resize` pending | blocked |
-| iOS | iPhone 6.3 | Pending | `asc-screenshot-resize` pending | blocked |
-| iOS | iPhone 6.1 | Pending | `asc-screenshot-resize` pending | blocked |
-| iPadOS | iPad 13 | Pending | `asc-screenshot-resize` pending | blocked |
-| iPadOS | iPad 12.9 | Pending | `asc-screenshot-resize` pending | blocked |
-| Google Play | phone screenshots | Pending | Play Console spec check pending | optional |
-| Google Play | tablet screenshots | Pending | Play Console spec check pending | optional |
-| Google Play | feature graphic | Pending | Play Console spec check pending | optional |
+| Platform | Well | Required/scaled decision | ASC device_type | Screenshot count | Current Apple size basis | Target file | Validation proof | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| iOS | iPhone 6.9 | required for current iPhone coverage when provided | Pending | 1-10 screenshots | from `asc screenshots sizes --all`; Apple currently accepts 1320x2868 portrait for this class | Pending | `asc-screenshot-resize` pending | blocked |
+| iOS | iPhone 6.5 | required if 6.9 is not provided, otherwise scaled when allowed | Pending | 1-10 screenshots | Apple currently accepts 1284x2778 or 1242x2688 portrait | Pending | `asc-screenshot-resize` pending | blocked |
+| iOS | iPhone 6.3 | scaled from accepted larger wells when allowed by current ASC spec | Pending | 1-10 screenshots | current ASC size matrix | Pending | `asc-screenshot-resize` pending | blocked |
+| iOS | iPhone 6.1 | scaled from accepted larger wells when allowed by current ASC spec | Pending | 1-10 screenshots | current ASC size matrix | Pending | `asc-screenshot-resize` pending | blocked |
+| iPadOS | iPad 13 | required when iPad is supported | Pending | 1-10 screenshots | Apple currently accepts 2064x2752 or 2048x2732 portrait | Pending | `asc-screenshot-resize` pending | blocked |
+| iPadOS | iPad 12.9 | scaled from 13 inch when allowed by current ASC spec | Pending | 1-10 screenshots | current ASC size matrix | Pending | `asc-screenshot-resize` pending | blocked |
+| iPadOS | iPad 11/10.5/9.7 | explicit, scaled, or not needed based on current device-family support | Pending | 1-10 screenshots | current ASC size matrix | Pending | `asc-screenshot-resize` pending | blocked |
+| Google Play | phone screenshots | required for Play listing | n/a | screenshot count from Play Console spec | Pending | Pending | Play Console spec check pending | optional |
+| Google Play | tablet screenshots | optional or required based on distribution target | n/a | screenshot count from Play Console spec | Pending | Pending | Play Console spec check pending | optional |
+| Google Play | feature graphic | required for many Play acquisition surfaces | n/a | one graphic | Pending | Pending | Play Console spec check pending | optional |
 
 ## App Icon
 
@@ -80,6 +99,7 @@ Run current sizing before export. Record ready, blocked, or not needed for each 
 - [ ] Real app UI remains visible and truthful in every production composition.
 - [ ] Generated Higgsfield assets are supporting visuals, not fake product proof.
 - [ ] Remotion or HTML compositions record source inputs, license status, render proof, and outputs in `CONTENT_ASSETS.md`.
+- [ ] ParthJadhav/app-store-screenshots deck state or equivalent export board is saved when used, including app icon, locale, iPhone/iPad deck, and final PNG paths.
 - [ ] Pricing, trial, renewal, subscription, and feature claims match `REVENUE_OPS.md`, paywall copy, and legal docs.
 - [ ] Alpha transparency is removed and color space is acceptable for upload.
 - [ ] iPhone and iPad safe areas, text fit, overlap, and contrast are checked.
