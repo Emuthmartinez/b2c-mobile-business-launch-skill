@@ -31,7 +31,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Brand/design | voice, `DESIGN.md` token system, screen spec, rendered HTML proofs, asset rules, accessibility | `BRAND.md`, `DESIGN.md`, `design.md`, `design.html` |
 | Onboarding/conversion | personalization, mascot/demo, attribution, review prompt, paywall timing, closing offer, activation | `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md` |
 | ASO/store listing | metadata, keyword map, App Store listing packet, screenshots, category, localization, custom product pages, In-App Events, review strategy | ASO skills, AppKittie, Higgsfield |
-| Store-console readiness | `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, build/version, IAP/subscriptions, privacy labels/Data safety, review notes, account deletion, screenshots, optional `asc` CLI dry-runs | App Store Connect, Play Console, App Store Connect CLI, MobAI, XcodeBuildMCP fallback |
+| Store-console readiness | `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, build/version, IAP/subscriptions, privacy manifests, required reason APIs, SDK manifests/signatures, privacy labels/Data safety, review notes, account deletion, screenshots, optional `asc` CLI dry-runs | App Store Connect, Play Console, App Store Connect CLI, MobAI, XcodeBuildMCP fallback |
 | Apple signing/release | Apple Developer membership, Team ID, bundle ID/App ID, app record, capabilities, certificates/profiles, archive/export/upload/TestFlight status, founder-only gates | `APPLE_SIGNING.md`, Xcode, XcodeBuildMCP, ASC CLI, App Store Connect |
 | Revenue | RevenueCat/Stripe/app-store products, entitlement mapping, web checkout, restore, webhooks | `revenue-monetization.md` |
 | Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics | Cloudflare, Supabase, PostHog, Resend |
@@ -75,6 +75,7 @@ Required unless explicitly marked not applicable:
 - App Store/Play product and privacy disclosure mapping when submitting
 - copy-paste App Store Connect/Google Play packet with exact click paths, field values, privacy answers, screenshot upload matrix, and founder-only gates when submitting
 - `APPLE_SIGNING.md` when Apple distribution, TestFlight, physical-device signing, or first upload readiness is in scope; simulator builds alone are not release proof
+- `APPLE_APP_STORE_REQUIREMENTS.md` when iOS App Store Connect upload/submission is in scope; privacy manifest files, required reason APIs, SDK manifests/signatures, Xcode privacy report, App Privacy labels, purpose strings, ATT, account deletion, review notes, and upload warnings must be proved or explicitly blocked
 - RevenueCat/Stripe/store products only if monetization is active, with purchase-to-entitlement validation
 - live domain checks: HTTP 200, HTTPS, metadata, security headers, robots/sitemap/`llms.txt`, schema where public site exists
 - release health: crash/error monitoring or a documented no-Sentry reason
@@ -153,7 +154,7 @@ Flag these aggressively:
 - Stripe checkout works but does not grant a RevenueCat entitlement.
 - Store products exist but are not attached to the app version, offering, entitlement, or review notes.
 - App Store Connect or Google Play values exist only in prose; no click paths, field limits, copyable packet, App Store listing packet, privacy worksheet, or HTML mock console exists.
-- App Store listing prep stops at basic metadata and screenshots while skipping App Privacy, RevenueCat/Stripe/web-funnel pricing, custom product pages, In-App Events, localization, or Higgsfield/design-system marketing assets.
+- App Store listing prep stops at basic metadata and screenshots while skipping Apple pre-ASC requirements, App Privacy, RevenueCat/Stripe/web-funnel pricing, custom product pages, In-App Events, localization, or Higgsfield/design-system marketing assets.
 - ASC CLI automation exists but no `store-console.html`, manual click path, dry-run/applied distinction, or founder approval list exists.
 - Simulator build succeeds, but Apple Developer membership, Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, distribution signing, certificates/profiles, archive/export/upload, or TestFlight processing are unknown.
 - The local Mac only has an `Apple Development` identity, but the launch is described as App Store/TestFlight-ready without Xcode cloud-managed signing, an Apple Distribution identity/profile, or a CI/cloud signing route.

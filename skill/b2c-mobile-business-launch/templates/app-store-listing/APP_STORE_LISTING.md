@@ -15,6 +15,9 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | Apple App information docs | Pending | name, subtitle, privacy URL | Refresh before final paste |
 | Apple Platform version docs | Pending | promo text, description, keywords, review notes | Refresh before final paste |
 | Apple App Privacy docs | Pending | privacy questionnaire | Refresh before final paste |
+| Apple privacy manifest docs | Pending | `APPLE_APP_STORE_REQUIREMENTS.md`, `PrivacyInfo.xcprivacy`, required reason APIs, SDK manifests/signatures, Xcode privacy report | Refresh before ASC upload readiness |
+| Apple protected resources and ATT docs | Pending | `Info.plist` purpose strings, `NSUserTrackingUsageDescription`, permission fallback route | Refresh before ASC upload readiness |
+| Apple upload builds docs | Pending | archive/upload delivery warnings and processing status | Refresh before upload |
 | Apple IAP/pricing docs | Pending | products, prices, trials | Refresh before final paste |
 | ASO research | Pending | keywords, metadata, screenshots | AppKittie/ASO skill/App Store evidence |
 | RevenueCat/Stripe docs | Pending | entitlement and web funnel | Refresh before final pricing |
@@ -53,6 +56,7 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 ## App Privacy Questionnaire
 
 Worksheet: `app-privacy-questionnaire.html`
+Pre-ASC requirements packet: `APPLE_APP_STORE_REQUIREMENTS.md`
 
 | Apple data type | Collected | Linked | Tracking | Purposes | Source/vendor | Proof |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -62,7 +66,18 @@ Worksheet: `app-privacy-questionnaire.html`
 | Product Interaction | Pending | Pending | Pending | analytics, personalization | PostHog | `ANALYTICS.md` |
 | Crash Data | Pending | Pending | Pending | diagnostics | Sentry/Apple | `PRODUCTION_READINESS.md` |
 
-Do not publish App Privacy answers until this table matches `PRIVACY.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, SDK manifests, backend schema, and vendor behavior.
+Do not publish App Privacy answers until this table matches `PRIVACY.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, SDK manifests, backend schema, vendor behavior, and `APPLE_APP_STORE_REQUIREMENTS.md`.
+
+## Apple Pre-ASC Requirements
+
+| Gate | Required proof | Source | Status |
+| --- | --- | --- | --- |
+| Privacy manifest | `PrivacyInfo.xcprivacy` exists in app target resources and declares `NSPrivacyCollectedDataTypes`, `NSPrivacyAccessedAPITypes`, `NSPrivacyAccessedAPITypeReasons`, `NSPrivacyTracking`, and `NSPrivacyTrackingDomains` as applicable | `APPLE_APP_STORE_REQUIREMENTS.md` | blocked |
+| Required reason APIs | Code and SDK audit records every required reason API category and Apple-approved reason | `APPLE_APP_STORE_REQUIREMENTS.md` | blocked |
+| Third-party SDKs | Apple-listed SDKs have bundled privacy manifests and SDK signatures where required | `APPLE_APP_STORE_REQUIREMENTS.md` | blocked |
+| Xcode privacy report | Archive-generated privacy report is reconciled with App Privacy answers and Privacy Nutrition Labels | `APPLE_APP_STORE_REQUIREMENTS.md`, `app-privacy-questionnaire.html` | blocked |
+| Protected resources and ATT | `Info.plist` `UsageDescription` strings, denied-permission fallbacks, `NSUserTrackingUsageDescription`, and App Tracking Transparency route are reviewed | `APPLE_APP_STORE_REQUIREMENTS.md` | blocked |
+| Review and upload | account deletion, review notes, archive/upload proof, App Store Connect delivery warnings, and founder approval are recorded | `APPLE_SIGNING.md`, `STORE_CONSOLE.md` | blocked |
 
 ## Pricing And Revenue Matrix
 
@@ -128,6 +143,7 @@ Only use In-App Events for real time-bound in-app content with working deep link
 ## Approval Gates
 
 - [ ] Official Apple docs refreshed.
+- [ ] `APPLE_APP_STORE_REQUIREMENTS.md` passes `npm run check:apple-requirements -- --root .`.
 - [ ] Rork ASC CLI skills and local `asc --help` refreshed for command syntax.
 - [ ] App Privacy answers reviewed from actual data inventory.
 - [ ] Screenshot and preview concepts map to `11_STAR_EXPERIENCE.md`.

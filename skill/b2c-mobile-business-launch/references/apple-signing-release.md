@@ -28,8 +28,16 @@ Refresh official Apple docs before account, signing, app-record, archive/export,
 - Preparing your app for distribution: `https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution`
 - Distributing your app for beta testing and releases: `https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases`
 - Changing the bundle identifier: `https://developer.apple.com/documentation/xcode/changing-the-bundle-identifier`
+- Privacy manifest files: `https://developer.apple.com/documentation/bundleresources/privacy-manifest-files`
+- Adding a privacy manifest: `https://developer.apple.com/documentation/bundleresources/adding-a-privacy-manifest-to-your-app-or-third-party-sdk`
+- Describing data use in privacy manifests: `https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests`
+- Describing use of required reason API: `https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api`
+- Third-party SDK requirements: `https://developer.apple.com/support/third-party-SDK-requirements/`
+- Protected resources: `https://developer.apple.com/documentation/bundleresources/protected-resources`
+- App Tracking Transparency purpose string: `https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSUserTrackingUsageDescription`
 - Add a new app: `https://developer.apple.com/help/app-store-connect/create-an-app-record/add-a-new-app/`
 - App information fields: `https://developer.apple.com/help/app-store-connect/reference/app-information`
+- Upload builds: `https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/`
 
 Also refresh:
 
@@ -39,9 +47,9 @@ Also refresh:
 - App Store Connect CLI docs and `asc --help` when using the Rork CLI route
 - XcodeBuildMCP docs and local CLI/tool help when using XcodeBuildMCP
 
-Record the docs checked date and command basis in `APPLE_SIGNING.md`, `STORE_CONSOLE.md`, or `PRODUCTION_READINESS.md`.
+Record the docs checked date and command basis in `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `STORE_CONSOLE.md`, or `PRODUCTION_READINESS.md`.
 
-Also update `PROJECT_STATE.yaml` with Apple provider state: docs checked date, Apple Developer membership, Team ID, bundle ID/App ID, app record, signing strategy, certificate/profile status, archive/export/upload/TestFlight status, founder-only gates, and active failure cards such as `apple-signing-simulator-only` or `asc-name-fallback-unapproved`.
+Also update `PROJECT_STATE.yaml` with Apple provider state: docs checked date, Apple Developer membership, Team ID, bundle ID/App ID, app record, signing strategy, certificate/profile status, privacy manifest/required-reason API status, archive/export/upload/TestFlight status, founder-only gates, and active failure cards such as `apple-signing-simulator-only`, `apple-privacy-manifest-unproven`, or `asc-name-fallback-unapproved`.
 
 ## Naming And Identifier Contract
 
@@ -230,9 +238,11 @@ Creation order for a new iOS app is usually:
 2. Create or verify explicit App ID / bundle identifier.
 3. Enable capabilities that match project entitlements.
 4. Create App Store Connect app record with app name, platform, bundle ID, SKU, primary language, and user access.
-5. Configure project `DEVELOPMENT_TEAM`, bundle identifier, signing style, capabilities, version, build number, icons, launch screen, privacy manifest, and export compliance inputs.
+5. Configure project `DEVELOPMENT_TEAM`, bundle identifier, signing style, capabilities, version, build number, icons, launch screen, `PrivacyInfo.xcprivacy`, `Info.plist` purpose strings, ATT string if tracking is in scope, and export compliance inputs.
 6. Archive, sign/export or upload.
 7. Wait for build processing, then attach build to version/TestFlight.
+
+Before step 6 is treated as ready, `APPLE_APP_STORE_REQUIREMENTS.md` should pass the installed `check:apple-requirements` validator or record the exact blocker. App Store Connect upload warnings about invalid privacy manifests or SDK requirements are release blockers, not post-submit cleanup.
 
 Do not mutate steps 2-4 without founder approval.
 

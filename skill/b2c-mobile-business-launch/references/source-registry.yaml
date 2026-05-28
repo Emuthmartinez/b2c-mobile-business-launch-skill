@@ -85,6 +85,15 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/eleven-star-experience.md
     notes: Source basis for the 11-star experience ladder and backsolving guidance.
+  - id: www-apple-com-dtds-propertylist-1-0-dtd
+    name: Apple Property List DTD
+    source_type: website
+    url: http://www.apple.com/DTDs/PropertyList-1.0.dtd
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/run-validator-fixtures.ts
+    notes: Standard plist DOCTYPE used by the PrivacyInfo.xcprivacy validator fixture.
   - id: api-github-com-orgs-mobai-app-repos
     name: api.github.com
     source_type: website
@@ -149,8 +158,10 @@ sources:
     refresh_cadence_days: 7
     owner: source-freshness
     locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
     notes: Auto-discovered from recently added repository content.
   - id: developer-apple-com-app-store-product-page
     name: developer.apple.com
@@ -177,10 +188,36 @@ sources:
     refresh_cadence_days: 7
     owner: source-freshness
     locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
       - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-bundleresources-adding-a-privacy-manifest-to
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/bundleresources/adding-a-privacy-manifest-to-your-app-or-third-party-sdk
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official Apple documentation for adding privacy manifest files to apps and third-party SDKs.
+  - id: developer-apple-com-documentation-bundleresources-describing-data-use-in-privac
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official Apple documentation for privacy manifest data-use declarations.
   - id: developer-apple-com-documentation-bundleresources-describing-use-of-required-rea
     name: developer.apple.com
     source_type: official_docs
@@ -188,8 +225,23 @@ sources:
     refresh_cadence_days: 7
     owner: source-freshness
     locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-bundleresources-protected-resources
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/bundleresources/protected-resources
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official Apple documentation for protected-resource purpose strings and related Info.plist keys.
   - id: developer-apple-com-documentation-bundleresources-privacy-manifest-files
     name: developer.apple.com
     source_type: official_docs
@@ -197,8 +249,35 @@ sources:
     refresh_cadence_days: 7
     owner: source-freshness
     locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-bundleresources-information-property-list-nsu
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSUserTrackingUsageDescription
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official Apple Info.plist key documentation for ATT tracking usage description copy.
+  - id: developer-apple-com-support-third-party-sdk-requirements
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/support/third-party-SDK-requirements
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official Apple list of third-party SDKs requiring privacy manifests and SDK signatures.
   - id: developer-apple-com-documentation-xcode-changing-the-bundle-identifier
     name: developer.apple.com
     source_type: official_docs
@@ -364,6 +443,18 @@ sources:
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-builds-upload-builds
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/templates/APPLE_APP_STORE_REQUIREMENTS.md
+    notes: Official App Store Connect documentation for uploading and processing builds.
   - id: developer-apple-com-help-app-store-connect-manage-in-app-purchases-set-a-price-f
     name: developer.apple.com
     source_type: official_docs

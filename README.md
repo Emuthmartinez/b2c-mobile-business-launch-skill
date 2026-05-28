@@ -37,7 +37,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Viral Growth | `VIRAL_GROWTH.md`, product-led referral/share loops, content format lab, monetization timing, abuse controls, analytics proof, and stop/scale rules |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
-| Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, professional iPhone/iPad screenshot compositions, App Icon/App Preview routing, review notes, and ASC CLI routing |
+| Store Ops | App Store listing packets, Apple pre-ASC requirements, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, privacy manifest/required-reason API proof, pricing/subscription mapping, CPP/In-App Event plans, localization, professional iPhone/iPad screenshot compositions, App Icon/App Preview routing, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Orchestration | `ORCHESTRATION.md`, parallel-agent preflight, candidate units, serialized resources, worktree routing, subagent forbidden actions, collision checks, and integration proof |
 | Engineering | business-specific `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, continued skill routing, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
@@ -59,6 +59,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 - Third-party docs and tool references are tracked in `source-registry.yaml`; new URLs must be registered and weekly source-refresh PRs should be reviewed before becoming launch policy.
 - Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
 - Apple distribution readiness must be proven through `APPLE_SIGNING.md`; a simulator build alone is not enough.
+- Apple App Store submission readiness must be proven through `APPLE_APP_STORE_REQUIREMENTS.md`; privacy manifests, required reason APIs, third-party SDK manifest/signature status, App Privacy answers, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload warnings must be accounted for before pushing a build into App Store Connect.
 - Launch-readiness claims should run LaunchBench or deterministic validators where available.
 
 ## TypeScript Tooling
@@ -75,6 +76,7 @@ npm run check:content-assets -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
+npm run check:apple-requirements -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
@@ -109,6 +111,7 @@ The scripts are intentionally simple:
 - `check-store-screenshots.ts` checks `SCREENSHOTS.md`, raw-vs-composed screenshot separation, iPhone/iPad/Play wells, App Icon/App Preview routing, copy overlays, validation, and visual QA proof.
 - `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
+- `check-apple-app-store-requirements.ts` checks `APPLE_APP_STORE_REQUIREMENTS.md`, privacy manifests, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report reconciliation, App Privacy URLs/labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload gates before ASC readiness.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
 - `check-eleven-star-experience.ts` checks the 11-star experience ladder, line of feasibility, V1 scalable slice, surface matrix, visual board, and trace/build links.

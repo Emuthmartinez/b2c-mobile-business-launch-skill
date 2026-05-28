@@ -2,7 +2,7 @@
 
 Status: scaffold
 
-This packet records distribution readiness for iOS. Keep it aligned with the Xcode project, App Store Connect app record, CI signing setup, and founder approval before TestFlight or App Store submission.
+This packet records distribution readiness for iOS. Keep it aligned with the Xcode project, App Store Connect app record, CI signing setup, `APPLE_APP_STORE_REQUIREMENTS.md`, and founder approval before TestFlight or App Store submission.
 
 ## Account And Identifiers
 
@@ -28,6 +28,17 @@ This packet records distribution readiness for iOS. Keep it aligned with the Xco
 | Provisioning profile | Apple Developer Profiles or Xcode managed signing | profile name, bundle ID, Team ID, and expiry recorded here |
 | Capabilities and entitlements | Xcode target and Apple Developer App ID | entitlement diff recorded here |
 | CI export method | ExportOptions.plist or CI workflow | archive, export, upload, and TestFlight command proof recorded here |
+
+## Apple App Store Requirements Gate
+
+`APPLE_APP_STORE_REQUIREMENTS.md` must be ready before a build is pushed into App Store Connect. Record:
+
+- bundled `PrivacyInfo.xcprivacy` path and target-resource proof
+- required reason API categories/reasons and `NSPrivacyAccessedAPITypeReasons`
+- third-party SDK privacy manifest/signature status
+- Xcode privacy report status and App Privacy label reconciliation
+- `Info.plist` purpose strings, `NSUserTrackingUsageDescription`, and ATT route when tracking is in scope
+- account deletion, review notes, privacy URLs, archive/upload warnings, and founder approval
 
 ## Release Proof
 

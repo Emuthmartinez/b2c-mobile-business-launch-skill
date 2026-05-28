@@ -61,6 +61,7 @@ npm run check:11-star -- --root /path/to/app
 npm run check:viral-growth -- --root /path/to/app
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
+npm run check:apple-requirements -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
 npm run render:launch-cockpit -- --root /path/to/app

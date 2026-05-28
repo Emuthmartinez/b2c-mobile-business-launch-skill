@@ -4,7 +4,7 @@ Use this before writing App Store or Google Play metadata, producing screenshots
 
 This is an orchestration reference. Prefer specialist ASO skills and live store data when available; use this file to decide which lane to run and what evidence must be left behind.
 
-For App Store listing preparation, load `app-store-listing-prep.md` too. ASO decides what to say; App Store listing prep connects that message to App Privacy, subscriptions/pricing, RevenueCat/Stripe/web funnels, custom product pages, In-App Events, localization, screenshots, and App Store Connect policy constraints. For founder-facing App Store Connect or Google Play Console work, load `store-console-workflow.md` too; the store-console workflow decides exactly where the user clicks, what they paste, which privacy answers are selected, and which screenshots/assets satisfy each upload well.
+For App Store listing preparation, load `app-store-listing-prep.md` too. ASO decides what to say; App Store listing prep connects that message to Apple pre-ASC requirements, App Privacy, subscriptions/pricing, RevenueCat/Stripe/web funnels, custom product pages, In-App Events, localization, screenshots, and App Store Connect policy constraints. For founder-facing App Store Connect or Google Play Console work, load `store-console-workflow.md` too; the store-console workflow decides exactly where the user clicks, what they paste, which privacy answers are selected, and which screenshots/assets satisfy each upload well.
 
 Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
 
@@ -39,7 +39,7 @@ If an ASO skill pack is installed, delegate narrow work instead of re-creating i
 
 If these skills are not directly discoverable in the current runtime, search installed skill/plugin paths for the names above, read the matching `SKILL.md`, and proceed with the same output contract manually. Do not assume Claude and Codex expose the same installed plugin surface.
 
-Before handing work back to the founder, produce or update `STORE_CONSOLE.md`, `store-console.html`, `APP_STORE_LISTING.md`, `SCREENSHOTS.md`, and the screenshot/export proof board when a store submission is in scope.
+Before handing work back to the founder, produce or update `STORE_CONSOLE.md`, `store-console.html`, `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `SCREENSHOTS.md`, and the screenshot/export proof board when a store submission is in scope.
 
 ## 2. Required ASO Context
 
@@ -120,6 +120,7 @@ Use the ASO skill set when available: `app-marketing-context`, `keyword-research
 
 Output:
 - `APP_STORE_LISTING.md`
+- `APPLE_APP_STORE_REQUIREMENTS.md`
 - `app-store-listing.html`
 - `app-privacy-questionnaire.html` when privacy answers are not already proven
 - updated `STORE_CONSOLE.md`, `SCREENSHOTS.md`, `REVENUE_OPS.md`, and `LAUNCH_TRACE.md`
@@ -134,7 +135,7 @@ Apple checklist:
 - bundle ID, SKU, category, age rating, availability, pricing, IAP/subscriptions, review notes, demo credentials, export compliance, and build status are known
 - privacy policy URL and optional privacy choices/account deletion URL are live
 - App Privacy responses match the actual data inventory and third-party SDKs
-- privacy manifest and required-reason API declarations are valid for the app and bundled SDKs
+- `APPLE_APP_STORE_REQUIREMENTS.md` proves privacy manifest and required-reason API declarations, third-party SDK manifests/signatures, Xcode privacy report, purpose strings, ATT, account deletion, review notes, and upload warnings for the app and bundled SDKs
 - Accessibility Nutrition Labels are answered or intentionally deferred, and any claimed support is backed by common-task testing on each supported device
 - account deletion is available in-app when accounts can be created
 - Sign in with Apple token revocation is handled when Sign in with Apple is used
@@ -155,6 +156,7 @@ Output:
 - `STORE_CONSOLE.md` with click paths, field limits, paste-ready values, evidence, statuses, and blockers
 - `store-console.html` with copyable fields grouped by ASC/Play Console page
 - `APP_STORE_LISTING.md` and `app-store-listing.html` when an iOS App Store listing is in scope
+- `APPLE_APP_STORE_REQUIREMENTS.md` when an iOS App Store Connect upload path is in scope
 - `SCREENSHOTS.md` with device capture, dimension, locale, proof, and upload state
 - required links and which console fields use them
 - final founder-only approval list

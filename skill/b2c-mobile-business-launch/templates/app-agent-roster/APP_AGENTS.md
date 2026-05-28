@@ -8,7 +8,7 @@
 - State: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Design: `DESIGN.md`, `design.md`, `design.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
-- Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`
+- Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`
 - Engineering: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
 
 ## Roles
@@ -33,11 +33,11 @@
 ## Required Audit Before Launch-Ready
 
 - Product: 11-star V1 scalable slice, scope, onboarding, activation, and retention match evidence.
-- Marketing: ASO, store console, claims, UGC/Fastlane, GEO/SEO, and attribution channels are ready.
+- Marketing: ASO, store console, Apple pre-ASC requirements, claims, UGC/Fastlane, GEO/SEO, and attribution channels are ready.
 - Design: HTML proofs match `DESIGN.md`, no mobile clipping/overlap, `SCREENSHOTS.md` separates raw captures from composed iPhone/iPad/Play assets, and generated/rendered content assets are traceable in `CONTENT_ASSETS.md`.
 - Engineering: app, backend, revenue, email, analytics, provider, Apple signing/release, and device paths are verified.
 - Secrets: new env vars, webhook secrets, provider keys, CI/deploy secrets, and store credentials are listed in `SECRETS.md` and injected through Doppler or the approved provider.
-- Security: `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool route, platform hardening, app integrity, revenue/webhook abuse controls, supply-chain checks, Sentry/release health, public reporting route, and accepted risks are current.
+- Security: `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool route, platform hardening, app integrity, Apple privacy manifest/purpose-string/ATT checks, revenue/webhook abuse controls, supply-chain checks, Sentry/release health, public reporting route, and accepted risks are current.
 - Customer success: support, privacy, terms, delete, refund, restore, lifecycle, and review-response paths are ready.
 - Attribution: stable source key, `other` free text, `attribution_source_selected`, PostHog `self_reported_source`, backend/profile persistence, and anonymous-to-identified reconciliation are proven when onboarding/signup/waitlist exists.
 - State: `PROJECT_STATE.yaml` matches current artifacts, `launch-cockpit.html` is rendered, and active failure cards are assigned or resolved with proof.

@@ -342,6 +342,7 @@ Do:
 - Use specialist ASO skills when available: app marketing context, keyword research, metadata optimization, screenshot optimization, custom product pages, In-App Events, ASO audit, launch planning, Apple Search Ads, localization, reviews/ratings, subscriptions, analytics, and competitor tracking.
 - Write App Store metadata: name, subtitle, promotional text, keyword field, description, what's-new copy, categories, localization posture.
 - Prepare App Store listing packet: App Privacy answers, pricing/RevenueCat/Stripe/web-funnel matrix, custom product pages, In-App Events, localization, screenshot/app-preview upload wells, and Higgsfield/design-system marketing asset route.
+- Prepare Apple pre-ASC requirements: `APPLE_APP_STORE_REQUIREMENTS.md` with `PrivacyInfo.xcprivacy`, required reason API declarations, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, archive/upload warnings, and founder approval before upload/submission.
 - Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/device capture, production-text overlay notes, final upload dimensions, and upload well.
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
 - Create Apple Search Ads campaign groups: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics.
@@ -358,6 +359,7 @@ Outputs:
 - `LAUNCH.md`
 - updated `ANALYTICS.md` attribution and store-source events
 - `APP_STORE_LISTING.md`
+- `APPLE_APP_STORE_REQUIREMENTS.md`
 - `app-store-listing.html`
 - `app-privacy-questionnaire.html` when Apple App Privacy answers are in scope
 - `STORE_CONSOLE.md`
@@ -375,6 +377,7 @@ Outputs:
 Acceptance:
 - App Store Connect can be filled from the doc without new copywriting.
 - Apple upload readiness is not inferred from simulator success; `APPLE_SIGNING.md` proves distribution prerequisites or names the exact blocker.
+- Apple upload readiness is not inferred from App Privacy copy; `APPLE_APP_STORE_REQUIREMENTS.md` proves privacy manifest, required-reason API, SDK, purpose-string, ATT, review-note, account-deletion, and upload-warning prerequisites or names the exact blocker.
 - The founder can follow exact App Store Connect/Google Play click paths and copy values from `store-console.html`.
 - Screenshot files are mapped from raw MobAI/device capture to final upload asset by platform, device well, locale, slot, and dimensions.
 - Store-console blockers are known before submission, not discovered during review.

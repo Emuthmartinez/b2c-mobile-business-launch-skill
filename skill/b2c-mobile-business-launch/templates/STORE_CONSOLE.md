@@ -2,7 +2,7 @@
 
 Status: scaffold
 
-This packet is the copy-paste operator surface for App Store Connect and Google Play. Keep values aligned with `PROJECT_STATE.yaml`, `APP_STORE_LISTING.md`, `SCREENSHOTS.md`, `PRIVACY.md`, `TERMS.md`, `REVENUE_OPS.md`, and founder approval.
+This packet is the copy-paste operator surface for App Store Connect and Google Play. Keep values aligned with `PROJECT_STATE.yaml`, `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `SCREENSHOTS.md`, `PRIVACY.md`, `TERMS.md`, `REVENUE_OPS.md`, and founder approval.
 
 ## Console Routes
 
@@ -10,6 +10,7 @@ This packet is the copy-paste operator surface for App Store Connect and Google 
 | --- | --- | --- | --- | --- |
 | App Store Connect app information | Apps > {{APP_NAME}} > App Information | name, subtitle, SKU, primary locale, bundle ID, category, privacy policy URL | `APP_STORE_LISTING.md` | founder approval before save |
 | App Store Connect App Privacy | Apps > {{APP_NAME}} > App Privacy | data types, linked status, tracking status, privacy purposes | `app-privacy-questionnaire.html` | founder approval before publish |
+| Apple pre-ASC requirements | local app bundle plus App Store Connect upload path | `PrivacyInfo.xcprivacy`, required reason APIs, SDK manifests/signatures, Xcode privacy report, purpose strings, ATT, account deletion, review notes, upload warnings | `APPLE_APP_STORE_REQUIREMENTS.md` | founder approval before upload/submission |
 | App Store Connect pricing | Apps > {{APP_NAME}} > Pricing and Availability | base territory, price, trial or intro offer, subscription groups | `REVENUE_OPS.md`, RevenueCat catalog diff | founder approval before price changes |
 | App Store Connect localization | Apps > {{APP_NAME}} > Localizations | metadata, keywords, screenshots, App Preview, review notes | `APP_STORE_LISTING.md`, `SCREENSHOTS.md` | founder approval before upload |
 | App Store Connect marketing | Apps > {{APP_NAME}} > Product Page Optimization, Custom Product Pages, In-App Events | custom product page plan, In-App Event plan, campaign measurement | ASO research, App Analytics plan | founder approval before create |
@@ -26,5 +27,6 @@ This packet is the copy-paste operator surface for App Store Connect and Google 
 ## Review Packet
 
 - Review notes describe account setup, demo credentials route, entitlement test path, purchase restoration, account deletion, and support contact.
+- App Store Connect upload readiness is blocked until `APPLE_APP_STORE_REQUIREMENTS.md` accounts for privacy manifests, required reason APIs, SDK manifest/signature status, App Privacy labels, purpose strings, ATT, account deletion, review notes, and archive/upload warnings.
 - If the app name is already in use, stop for founder approval before using any fallback name.
 - Founder approval is required before App Store submission, Google Play submission, pricing edits, subscription edits, custom product page creation, In-App Event creation, paid Higgsfield generation, or public asset upload.

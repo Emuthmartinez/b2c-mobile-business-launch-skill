@@ -15,6 +15,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - a new API key/env var appears but `SECRETS.md`, Doppler, CI injection, or public/server-only classification is not updated
 - a new third-party docs/tooling URL appears but is not added to `source-registry.yaml`
 - upstream App Store Connect CLI skills or provider docs change but stale command snippets remain in references/templates
+- iOS ASC upload readiness is claimed from metadata/privacy prose while `APPLE_APP_STORE_REQUIREMENTS.md`, `PrivacyInfo.xcprivacy`, required reason APIs, SDK manifests/signatures, Xcode privacy report, protected-resource purpose strings, ATT, account deletion, review notes, or upload-warning proof is missing
 - store screenshot work treats raw device captures as final App Store upload artwork without composed iPhone/iPad assets, copy overlays, device-well validation, icon/preview routing, and visual QA
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice

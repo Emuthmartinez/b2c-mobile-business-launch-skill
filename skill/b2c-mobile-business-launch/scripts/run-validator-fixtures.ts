@@ -107,6 +107,44 @@ function writeCompleteAppleSigning(root: string): void {
   );
 }
 
+function writeCompleteAppleRequirements(root: string): void {
+  mkdirSync(path.join(root, "ios", "App"), { recursive: true });
+  writeFileSync(
+    path.join(root, "ios", "App", "PrivacyInfo.xcprivacy"),
+    [
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">",
+      "<plist version=\"1.0\">",
+      "<dict>",
+      "  <key>NSPrivacyCollectedDataTypes</key>",
+      "  <array/>",
+      "  <key>NSPrivacyAccessedAPITypes</key>",
+      "  <array/>",
+      "  <key>NSPrivacyTracking</key>",
+      "  <false/>",
+      "</dict>",
+      "</plist>",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "APPLE_APP_STORE_REQUIREMENTS.md"),
+    [
+      "# Apple App Store Requirements",
+      "Status: ready for founder approval.",
+      "Source Basis: Privacy manifest files, Adding a privacy manifest, Describing data use in privacy manifests, Describing use of required reason API, Third-party SDK requirements, App Privacy Details, Protected resources, App Tracking Transparency, Upload builds, and App Review Guidelines were refreshed.",
+      "Privacy Manifest: PrivacyInfo.xcprivacy exists at ios/App/PrivacyInfo.xcprivacy and is included in app target resources.",
+      "Manifest keys: NSPrivacyCollectedDataTypes is empty for this fixture, NSPrivacyAccessedAPITypes is empty for this fixture, NSPrivacyAccessedAPITypeReasons is not used because no required reason API category is present, NSPrivacyTracking is false, and NSPrivacyTrackingDomains is empty.",
+      "Third-party SDK Inventory: third-party SDK entries are checked against Apple's listed SDKs; SDK signatures and bundled manifests are verified or the SDK is excluded from the build.",
+      "Xcode privacy report: generated from archive and reconciled with App Privacy, Privacy Nutrition Labels, PRIVACY.md, SECURITY.md, APP_STORE_LISTING.md, STORE_CONSOLE.md, and review notes.",
+      "App Privacy: Privacy Policy URL and Privacy Choices URL are verified, account deletion is present, and data collection answers match vendors and app behavior.",
+      "Protected resources: Info.plist UsageDescription purpose strings are audited for protected resources. NSUserTrackingUsageDescription and App Tracking Transparency are recorded when tracking or advertising identifiers are in scope.",
+      "Archive and upload: APPLE_SIGNING.md records archive, export, upload, App Store Connect delivery warnings, processing status, and founder approval before submission.",
+    ].join("\n"),
+    "utf8",
+  );
+}
+
 function writeCompleteStoreConsole(root: string): void {
   writeFileSync(
     path.join(root, "STORE_CONSOLE.md"),
@@ -491,6 +529,7 @@ try {
   const clean = makeFixture("clean");
   writeCompleteAttribution(clean);
   writeCompleteAppleSigning(clean);
+  writeCompleteAppleRequirements(clean);
   writeCompleteStoreConsole(clean);
   writeCompleteStoreScreenshots(clean);
   writeCompleteElevenStar(clean);
@@ -506,6 +545,7 @@ try {
   runFixture("complete viral growth packet passes", clean, "check-viral-growth-loop.ts", 0);
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
+  runFixture("complete Apple App Store requirements packet passes", clean, "check-apple-app-store-requirements.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete store screenshots packet passes", clean, "check-store-screenshots.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
@@ -704,6 +744,45 @@ try {
     "utf8",
   );
   runFixture("Apple signing packet with unresolved distribution gates fails", appleMissingState, "check-apple-signing-packet.ts", 1, "apple_signing.unresolved_distribution_gate");
+
+  const missingAppleRequirements = makeFixture("apple-requirements-missing");
+  rmSync(path.join(missingAppleRequirements, "APPLE_APP_STORE_REQUIREMENTS.md"), { force: true });
+  runFixture(
+    "missing Apple App Store requirements packet fails",
+    missingAppleRequirements,
+    "check-apple-app-store-requirements.ts",
+    1,
+    "apple_requirements.missing",
+  );
+
+  const thinAppleRequirements = makeFixture("apple-requirements-thin");
+  writeFileSync(
+    path.join(thinAppleRequirements, "APPLE_APP_STORE_REQUIREMENTS.md"),
+    [
+      "# Apple App Store Requirements",
+      "Privacy is handled in the policy.",
+      "The app can be uploaded to App Store Connect.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "thin Apple App Store requirements packet fails",
+    thinAppleRequirements,
+    "check-apple-app-store-requirements.ts",
+    1,
+    "apple_requirements.privacyinfo_xcprivacy.missing",
+  );
+
+  const readyAppleRequirementsNoManifest = makeFixture("apple-requirements-no-manifest-file");
+  writeCompleteAppleRequirements(readyAppleRequirementsNoManifest);
+  rmSync(path.join(readyAppleRequirementsNoManifest, "ios"), { recursive: true, force: true });
+  runFixture(
+    "ready Apple requirements without PrivacyInfo file fails",
+    readyAppleRequirementsNoManifest,
+    "check-apple-app-store-requirements.ts",
+    1,
+    "apple_requirements.privacy_manifest_file_missing",
+  );
 
   const iosOnlyStore = makeFixture("store-ios-only");
   const iosOnlyStoreState = readState(iosOnlyStore);

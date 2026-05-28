@@ -157,18 +157,21 @@ lanes:
       - "APP_STORE_LISTING.md"
       - "app-store-listing.html"
       - "app-privacy-questionnaire.html"
+      - "APPLE_APP_STORE_REQUIREMENTS.md"
       - "SCREENSHOTS.md"
     blockers: []
   apple_signing:
     status: "partial"
     evidence:
       - "APPLE_SIGNING.md"
+      - "APPLE_APP_STORE_REQUIREMENTS.md"
     blockers: []
   privacy_legal:
     status: "partial"
     evidence:
       - "PRIVACY.md"
       - "TERMS.md"
+      - "APPLE_APP_STORE_REQUIREMENTS.md"
     blockers: []
   email:
     status: "partial"

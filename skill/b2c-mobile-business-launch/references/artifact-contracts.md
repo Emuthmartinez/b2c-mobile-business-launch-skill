@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -53,6 +53,7 @@ ONBOARDING.md             # onboarding, personalization, review prompt, paywall 
 onboarding.html           # rendered onboarding/paywall/review/offer flow proof
 LAUNCH.md                 # ASO, screenshots, ads, launch sequence, metrics
 APPLE_SIGNING.md          # Apple Developer account, Team ID, bundle ID/App ID, signing, archive/export/upload, and TestFlight gates
+APPLE_APP_STORE_REQUIREMENTS.md # Apple pre-ASC requirements: privacy manifest, required reason APIs, SDK manifests/signatures, App Privacy labels, purpose strings, ATT, review notes, upload warnings
 APP_STORE_LISTING.md      # Apple listing, privacy, pricing, CPP/In-App Event, localization, and marketing packet
 app-store-listing.html    # rendered founder-facing Apple listing copy/paste board
 app-privacy-questionnaire.html # interactive Apple App Privacy worksheet
@@ -118,6 +119,7 @@ rork-ready/
   STORE_CONSOLE.md
   APP_STORE_LISTING.md
   APPLE_SIGNING.md
+  APPLE_APP_STORE_REQUIREMENTS.md
   CONTENT_ASSETS.md
   app-store-listing.html
   app-privacy-questionnaire.html
@@ -773,6 +775,28 @@ Acceptance:
 - A future agent can tell exactly why the app can or cannot be uploaded.
 - `Bundle ID` and `SKU` are treated as sticky identity, not temporary labels.
 - App Store distribution readiness is never inferred from simulator build success alone.
+
+## `APPLE_APP_STORE_REQUIREMENTS.md`
+
+Use before any iOS, iPadOS, visionOS, tvOS, watchOS, or macOS build is described as ready to upload to App Store Connect.
+
+Must include:
+- official Apple docs checked with URLs and dates for privacy manifests, adding manifests, data-use manifests, required reason APIs, third-party SDK requirements, protected resources, App Tracking Transparency, App Privacy details, upload builds, and App Review Guidelines
+- `PrivacyInfo.xcprivacy` path and proof that it is included in the app target resources
+- `NSPrivacyCollectedDataTypes`, `NSPrivacyAccessedAPITypes`, `NSPrivacyAccessedAPITypeReasons`, `NSPrivacyTracking`, and `NSPrivacyTrackingDomains` decisions
+- third-party SDK inventory with Apple-listed SDK status, bundled privacy manifest status, SDK signature status, data collected, and owner
+- Xcode privacy report status and reconciliation against App Privacy answers and Privacy Nutrition Labels
+- Privacy Policy URL, Privacy Choices URL, account deletion route, in-app privacy route, and public policy/legal source
+- protected-resource and `Info.plist` matrix: every touched camera, photos, microphone, location, contacts, tracking, or similar permission has a clear `UsageDescription` string and denied-permission fallback
+- `NSUserTrackingUsageDescription` and App Tracking Transparency route when tracking, advertising identifiers, retargeting, data broker sharing, or third-party ad attribution is in scope
+- archive/upload proof from `APPLE_SIGNING.md`, including any App Store Connect delivery warnings or processing blockers
+- founder-only gates for App Store Connect upload, App Review submission, public release, privacy/legal approval, and paid account mutations
+
+Acceptance:
+- `npm run check:apple-requirements -- --root .` passes before a ready/upload claim, or the exact blocker and active failure card are recorded.
+- A ready packet has an actual `PrivacyInfo.xcprivacy` in the app source tree.
+- App Privacy answers are not copied from policy prose alone; they reconcile app code, SDKs, vendors, analytics, revenue, privacy policy, Xcode privacy report, and App Store Connect labels.
+- Upload readiness is blocked by unresolved privacy manifest, required reason API, third-party SDK, purpose string, ATT, review-note, account-deletion, or ASC delivery-warning gaps.
 
 ## `store-console.html`
 

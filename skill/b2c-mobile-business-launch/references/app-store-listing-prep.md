@@ -25,6 +25,14 @@ Refresh official docs before final packets or commands:
 - Platform version information: `https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/`
 - Manage App Privacy: `https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/`
 - App Privacy Details: `https://developer.apple.com/app-store/app-privacy-details/`
+- Privacy manifest files: `https://developer.apple.com/documentation/bundleresources/privacy-manifest-files`
+- Adding a privacy manifest: `https://developer.apple.com/documentation/bundleresources/adding-a-privacy-manifest-to-your-app-or-third-party-sdk`
+- Describing data use in privacy manifests: `https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests`
+- Describing use of required reason API: `https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api`
+- Third-party SDK requirements: `https://developer.apple.com/support/third-party-SDK-requirements/`
+- Protected resources: `https://developer.apple.com/documentation/bundleresources/protected-resources`
+- App Tracking Transparency purpose string: `https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSUserTrackingUsageDescription`
+- Upload builds: `https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/`
 - Configure custom product pages: `https://developer.apple.com/help/app-store-connect/create-custom-product-pages/configure-multiple-product-page-versions`
 - Offer In-App Events: `https://developer.apple.com/help/app-store-connect/offer-in-app-events/offer-in-app-events`
 - Configure In-App Purchase settings: `https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases`
@@ -42,11 +50,13 @@ Also inspect the ASO skill set when available:
 - Installed local skills such as `ios-screenshots`, `finding-app-niches`, `analyzing-competitors`, and `researching-paywalls`
 
 Record source URLs and checked dates in `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, and `PROJECT_STATE.yaml.tools.app_store_connect.docs_checked_at`.
+Record Apple privacy/build source URLs and checked dates in `APPLE_APP_STORE_REQUIREMENTS.md` before any App Store Connect upload-readiness claim.
 
 ## Required Outputs
 
 For iOS store submission or marketing prep, produce:
 - `APP_STORE_LISTING.md`: canonical Apple listing, privacy, pricing, localization, custom product page, In-App Event, screenshot, and approval packet.
+- `APPLE_APP_STORE_REQUIREMENTS.md`: pre-ASC upload gate covering privacy manifest files, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, purpose strings, ATT, account deletion, review notes, and archive/upload warnings.
 - `app-store-listing.html`: founder-facing copy-paste view with ASC click paths, field limits, character counts, and status badges.
 - `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy data types, linked/tracking/purpose answers, vendors, and proof.
 - `STORE_CONSOLE.md` and `store-console.html`: manual console packet across App Store Connect and Play Console when relevant.
@@ -74,6 +84,7 @@ Cover at minimum:
 - app information: name, subtitle, category, age rating, privacy policy URL, privacy choices URL, license/EULA, content rights, support URL, marketing URL
 - version page: promotional text, description, keyword field, screenshots, app previews, build, review notes, demo account, version release option
 - App Privacy: data collection yes/no, data types, linked to user, tracking, purposes, optional-disclosure rationale, third-party partner inventory, privacy manifest/required reason APIs
+- Apple pre-ASC requirements: `PrivacyInfo.xcprivacy` path, `NSPrivacyCollectedDataTypes`, `NSPrivacyAccessedAPITypes`, `NSPrivacyAccessedAPITypeReasons`, `NSPrivacyTracking`, `NSPrivacyTrackingDomains`, third-party SDK manifest/signature status, Xcode privacy report, `Info.plist` purpose strings, `NSUserTrackingUsageDescription`, account deletion, review notes, and archive/upload warnings
 - pricing and IAP/subscriptions: app price/free status, subscription group, product IDs, display names, descriptions, pricing, intro offers/trials, review screenshots, App Store Server Notifications, RevenueCat mapping
 - marketing surfaces: In-App Events, custom product pages, Apple Search Ads/CPP mapping, featuring nominations or App Store promotional surfaces when applicable
 - localization: target locales, localized metadata, localized keywords, screenshot/app preview localization, support/privacy URL localization
@@ -93,6 +104,7 @@ The worksheet should ask:
 - For each selected data type: source/vendor, purpose, linked to user, used for tracking, required/optional, retention, deletion path, privacy-policy section, and proof.
 - Does any data meet Apple's optional-disclosure criteria? If yes, record every criterion and why it applies.
 - Are any SDK privacy manifests, required reason APIs, or third-party SDK signatures relevant?
+- Does `APPLE_APP_STORE_REQUIREMENTS.md` reconcile the Xcode privacy report, public App Privacy answers, privacy policy/choices URLs, SDK inventory, and actual bundled `PrivacyInfo.xcprivacy` before ASC upload?
 
 Use `templates/app-store-listing/app-privacy-questionnaire.html` as the local interactive worksheet or render an equivalent project-specific HTML page.
 
@@ -198,6 +210,9 @@ Founder approval required:
 
 Do not call the App Store listing ready unless:
 - current Apple docs were refreshed and cited in the packet
+- `APPLE_APP_STORE_REQUIREMENTS.md` exists and passes `npm run check:apple-requirements -- --root .`
+- `PrivacyInfo.xcprivacy` is present in the app target resources before a ready/upload claim
+- required reason API declarations, third-party SDK privacy manifests/signatures, Xcode privacy report, protected-resource purpose strings, ATT, App Privacy labels, account deletion, review notes, and archive/upload warnings are reconciled before App Store Connect upload
 - default listing fields are paste-ready with character/byte counts
 - App Privacy answers are derived from real data inventory and third-party partners
 - pricing/subscriptions/products match RevenueCat/Stripe/web funnel/paywall/legal copy

@@ -27,6 +27,13 @@ Apple:
 - Platform version information: `https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information/`
 - Manage app privacy: `https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy/`
 - App privacy details: `https://developer.apple.com/app-store/app-privacy-details/`
+- Privacy manifest files: `https://developer.apple.com/documentation/bundleresources/privacy-manifest-files`
+- Adding a privacy manifest: `https://developer.apple.com/documentation/bundleresources/adding-a-privacy-manifest-to-your-app-or-third-party-sdk`
+- Describing data use in privacy manifests: `https://developer.apple.com/documentation/bundleresources/describing-data-use-in-privacy-manifests`
+- Required reason APIs: `https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api`
+- Third-party SDK requirements: `https://developer.apple.com/support/third-party-SDK-requirements/`
+- Protected resources: `https://developer.apple.com/documentation/bundleresources/protected-resources`
+- App Tracking Transparency purpose string: `https://developer.apple.com/documentation/BundleResources/Information-Property-List/NSUserTrackingUsageDescription`
 - Configure In-App Purchase settings: `https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases`
 - Set IAP pricing: `https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/set-a-price-for-an-in-app-purchase/`
 - Custom product pages: `https://developer.apple.com/help/app-store-connect/create-custom-product-pages/configure-multiple-product-page-versions`
@@ -48,6 +55,7 @@ Apple:
 - App Store Connect provisioning profile: `https://developer.apple.com/help/account/provisioning-profiles/create-an-app-store-provisioning-profile/`
 - Xcode distribution preparation: `https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution`
 - Xcode beta/release distribution: `https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases`
+- Upload builds: `https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/`
 - Load `apple-signing-release.md` before Apple Developer enrollment, Team ID, bundle ID/App ID, signing, capabilities, certificates, provisioning profiles, archive/export/upload, TestFlight, or distribution-readiness claims.
 
 ASC CLI:
@@ -74,6 +82,7 @@ Create these when a store submission is in scope:
 - `PROJECT_STATE.yaml`: `store_console`, `apple_signing`, privacy/legal, revenue, screenshot, and provider/tool state with active failure cards.
 - `STORE_CONSOLE.md`: agent-readable source of truth for App Store Connect and Google Play Console fields, click paths, blockers, and evidence.
 - `APP_STORE_LISTING.md`: Apple listing preparation packet covering default listing fields, App Privacy, pricing/subscriptions, RevenueCat/Stripe/web funnels, custom product pages, In-App Events, localization, screenshots/previews, and marketing strategy.
+- `APPLE_APP_STORE_REQUIREMENTS.md`: Apple pre-ASC requirements packet covering privacy manifests, required reason API declarations, third-party SDK privacy manifests/signatures, Xcode privacy report, App Privacy labels, `Info.plist` purpose strings, ATT, account deletion, review notes, and archive/upload warnings.
 - `app-store-listing.html`: founder-facing App Store listing view with copyable values, character counts, pricing/product matrix, privacy status, CPP/event plan, and approval gates.
 - `app-privacy-questionnaire.html`: interactive local worksheet for Apple App Privacy answers when privacy disclosures are not already verified.
 - `APPLE_SIGNING.md`: required for Apple distribution, TestFlight, physical-device signing, or first upload readiness; include account/team, bundle ID/App ID, app record, signing, capabilities, certificates/profiles, archive/export/upload state, and founder gates.
@@ -197,6 +206,7 @@ Process:
 4. For each data type, answer whether it is linked to the user, used for tracking, and the purposes for collection.
 5. Compare the final answers against `PRIVACY.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `REVENUE_OPS.md`, SDK list, backend schema, and vendor docs.
 6. Preview the product-page privacy label and record any mismatch before publishing responses.
+7. Reconcile the answers with `APPLE_APP_STORE_REQUIREMENTS.md`, the bundled `PrivacyInfo.xcprivacy`, required reason API reasons, third-party SDK manifest/signature status, Xcode privacy report, `Info.plist` purpose strings, `NSUserTrackingUsageDescription`, and archive/upload warnings before upload readiness.
 
 Packet sections:
 - data type table: Apple data type, source, collected yes/no, linked yes/no, tracking yes/no, purposes, notes
@@ -204,6 +214,7 @@ Packet sections:
 - third-party partner inventory: analytics, crash, auth, payments, email, AI, ads, backend, push, support
 - optional disclosure rationale, if a data type is intentionally omitted
 - privacy manifest/required reason API status from the built app
+- Xcode privacy report and ASC upload/delivery-warning status when an archive has been produced
 
 Never answer App Privacy from generic policy text alone. Use the real data inventory and SDK/vendor behavior.
 
