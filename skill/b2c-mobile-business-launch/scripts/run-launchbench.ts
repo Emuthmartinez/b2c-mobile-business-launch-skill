@@ -19,6 +19,7 @@ const knownValidators = new Set([
   "check-security-release",
   "check-content-assets",
   "check-parallel-orchestration",
+  "check-eleven-star-experience",
   "check-source-freshness",
   "check-ux-patterns",
   "check-autopilot-contract",

@@ -75,6 +75,12 @@ lanes:
     evidence:
       - "LAUNCH_TRACE.md"
     blockers: []
+  experience:
+    status: "partial"
+    evidence:
+      - "11-star-experience/11_STAR_EXPERIENCE.md"
+      - "11-star-experience/11-star-experience.html"
+    blockers: []
   product:
     status: "partial"
     evidence:

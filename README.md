@@ -2,7 +2,7 @@
 
 A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript, early repo, or half-built product into a launch-ready business package.
 
-This is a launch operating system for consumer apps: research, positioning, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
+This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
 
 ## Core Idea
 
@@ -29,6 +29,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | --- | --- |
 | State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, autonomy mode, lane statuses, provider state, proof, and failure cards |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
+| Experience | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, and surface translation |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
 | Security | `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool routing, OWASP MASVS/ASVS basis, platform hardening, app integrity, abuse controls, scanner/review proof, and accepted risks |
 | Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, Remotion content assets, screenshot systems, and audit gates |
@@ -47,6 +48,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 - `PROJECT_STATE.yaml` is the compact state contract for phase, autonomy, lane status, provider setup, proof, blockers, and failure cards.
 - `launch-cockpit.html` is the founder-visible dashboard over that state.
 - Research must flow into product, brand, design, implementation, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
+- Every real product needs an 11-star experience contract before build handoff: the visual ladder, line of feasibility, V1 scalable slice, and surface translation must shape `SPEC.md`, `DESIGN.md`, `ONBOARDING.md`, `TECH_SPEC.md`, ads, screenshots, and content.
 - Secrets route through `SECRETS.md`, Doppler by default, live docs checks, `doppler run --`, names-only `.env.example`, and production service-token/provider-integration gates.
 - Security is a release lane: `SECURITY.md`, `security-review.html`, threat model, security tool routing, mobile/backend/revenue hardening, scanner/review proof, incident response, and accepted risks.
 - Attribution is a data contract, not a screen: stable keys, `other` free text, PostHog person properties, backend persistence, anonymous-to-identified reconciliation, and proof.
@@ -73,6 +75,7 @@ npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
+npm run check:11-star -- --root /path/to/app
 npm run check:source-registry
 npm run refresh:source-freshness
 npm run check:autopilot
@@ -101,6 +104,7 @@ The scripts are intentionally simple:
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
+- `check-eleven-star-experience.ts` checks the 11-star experience ladder, line of feasibility, V1 scalable slice, surface matrix, visual board, and trace/build links.
 - `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
@@ -150,6 +154,7 @@ skill/
     scripts/
     templates/
       PROJECT_STATE.yaml
+      11-star-experience/
       orchestration/
       content-assets/
       app-agent-roster/

@@ -90,6 +90,7 @@ Checklist:
 - ensure screenshots do not imply unavailable features, unsupported claims, free trials, prices, competitor comparisons, or endorsements without approval
 - localize screenshot copy when localized metadata is shipped
 - mark reference art separately from production upload assets
+- express the V1 scalable slice from `11_STAR_EXPERIENCE.md` instead of generic feature lists
 
 Output:
 - screenshot frame table: slot, headline, source screen, visual asset, proof constraint, production file path, locale/device target
@@ -108,7 +109,7 @@ Required Apple marketing surfaces:
 - custom product page strategy by audience/channel/keyword set, including deep links and measurement plan
 - In-App Event strategy only when the app has real event content, schedule, media, deep link, localization, and App Review readiness
 - localization matrix for metadata, keyword fields, screenshots, privacy/support URLs, and cultural review
-- visual asset route: real app UI captures first, Higgsfield for high-quality supporting art/icons/backgrounds/CPP/event imagery when needed, always tied to `DESIGN.md`
+- visual asset route: real app UI captures first, Higgsfield for high-quality supporting art/icons/backgrounds/CPP/event imagery when needed, always tied to `11_STAR_EXPERIENCE.md` and `DESIGN.md`
 
 Use the ASO skill set when available: `app-marketing-context`, `keyword-research`, `metadata-optimization`, `screenshot-optimization`, `custom-product-pages`, `in-app-events`, `localization`, `apple-search-ads`, `review-management`, `monetization-strategy`, and `subscription-lifecycle`.
 

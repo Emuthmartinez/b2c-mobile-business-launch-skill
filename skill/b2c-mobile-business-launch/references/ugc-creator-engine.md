@@ -33,7 +33,7 @@ Deprioritize UGC when:
 - the category is regulated and claims/compliance cannot be reviewed
 - the product cannot tolerate rough, fast, creator-native presentation
 
-Record the fit decision in `UGC_PLAYBOOK.md` and map it to `LAUNCH_TRACE.md`.
+Record the fit decision in `UGC_PLAYBOOK.md` and map it to `LAUNCH_TRACE.md` and `11_STAR_EXPERIENCE.md`. A creator hook should be a tiny, truthful version of the product's V1 scalable slice, not a separate marketing fantasy.
 
 ## Day 0 Operating Model
 
@@ -162,6 +162,7 @@ This does not replace launch analytics. Use `analytics-attribution.md` for UTMs,
 
 Before filming:
 - make the app logo or name visible in screenshot-heavy screens
+- identify which 11-star magical moment or V1 scalable slice the video is demonstrating
 - ensure the product moment can be captured in a short screen recording
 - design UI states that are legible inside vertical video
 - avoid tiny copy that disappears in phone-shot footage

@@ -6,7 +6,7 @@ Bundle ID: {{IOS_BUNDLE_ID}}
 Primary locale: en-US
 Status: partial
 
-This packet is the Apple listing source of truth. It connects ASO, App Store Connect fields, App Privacy, pricing, RevenueCat, web funnels, screenshots, localization, and marketing surfaces.
+This packet is the Apple listing source of truth. It connects ASO, App Store Connect fields, App Privacy, pricing, RevenueCat, web funnels, screenshots, localization, marketing surfaces, and the V1 scalable slice from `11_STAR_EXPERIENCE.md`.
 
 ## Source Ledger
 
@@ -19,6 +19,7 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | ASO research | Pending | keywords, metadata, screenshots | AppKittie/ASO skill/App Store evidence |
 | RevenueCat/Stripe docs | Pending | entitlement and web funnel | Refresh before final pricing |
 | Rork ASC CLI skills | Pending | metadata sync, localization, screenshots, pricing, release validation | Refresh before CLI guidance |
+| 11-star experience | Pending | screenshot story, preview hook, CPP/event promise | `11_STAR_EXPERIENCE.md` |
 
 ## ASC CLI Route And IDs
 
@@ -85,6 +86,7 @@ Rules:
 - Use current `asc screenshots sizes --all` before choosing device types; do not rely on stale dimension tables.
 - Final upload candidates need alpha transparency removed, color-space checked, size validated, and associated with the correct version localization ID.
 - Higgsfield may create supporting visuals, icons, backgrounds, mascots, CPP/event media, or thumbnails only when tied to `DESIGN.md`.
+- Store screenshots and previews should express the V1 scalable slice from `11_STAR_EXPERIENCE.md` without crossing the line of feasibility.
 - Remotion may render screenshot frames, app previews, captioned demo clips, CPP/event variants, or social/store cuts from real UI only after `CONTENT_ASSETS.md` records route approval, license status, source inputs, render proof, and output paths.
 - Generated or rendered visuals must not imply unsupported features, claims, prices, or endorsements.
 
@@ -115,6 +117,7 @@ Only use In-App Events for real time-bound in-app content with working deep link
 - [ ] Official Apple docs refreshed.
 - [ ] Rork ASC CLI skills and local `asc --help` refreshed for command syntax.
 - [ ] App Privacy answers reviewed from actual data inventory.
+- [ ] Screenshot and preview concepts map to `11_STAR_EXPERIENCE.md`.
 - [ ] Pricing/products approved by founder.
 - [ ] RevenueCat/Stripe/web funnel mapping verified.
 - [ ] PPP/base-territory and subscription/IAP localization status reviewed.

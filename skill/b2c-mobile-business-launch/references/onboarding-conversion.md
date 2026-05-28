@@ -28,6 +28,8 @@ Refresh current platform and monetization sources before locking a flow:
 
 Load `analytics-attribution.md` before locking onboarding event names, attribution-source options, paywall variants, or the dashboard plan. Onboarding should implement the approved analytics catalog, not invent events while building screens.
 
+Load `eleven-star-experience.md` before locking onboarding. The onboarding sequence should carry the product's 11-star V1 scalable slice: the user should see why the product is personally relevant before the flow asks for payment, long setup, or sensitive data.
+
 Create or update `ONBOARDING.md` when an app has more than one setup screen, asks personalization questions, uses a mascot/demo, has a paywall, or relies on first-session conversion.
 
 Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, compliant review prompt timing, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
@@ -39,6 +41,7 @@ Recommended Refero searches when access is available:
 
 `ONBOARDING.md` must include:
 - target user state before onboarding and desired state after onboarding
+- 11-star experience mapping: which step delivers or previews the magical moment from `11_STAR_EXPERIENCE.md`
 - screen-by-screen sequence with purpose, question/copy, state, visual asset, animation, analytics event, and skip/back rules
 - mascot/guide behavior if used: personality, reactions, emotion states, source assets, Higgsfield model/tool, and accessibility fallback
 - demo-video plan: clip length, aha moment, source UI, visual treatment, no-audio fallback, Higgsfield or Remotion route, and where it appears
@@ -211,6 +214,7 @@ Include dimensions: step_id, answer_key, attribution_source, source_key, source_
 ## Gates Before Build Handoff
 
 - `ONBOARDING.md` exists and maps every question to a real use.
+- `ONBOARDING.md` references `11_STAR_EXPERIENCE.md` and shows where the V1 scalable slice appears.
 - `onboarding.html` or `design.html` renders the full onboarding/paywall/review/closing-offer path.
 - Higgsfield asset plan exists for mascot, icons, demo video, screenshot frames, and animations when visuals are not already final.
 - If Higgsfield is unavailable, the founder confirmed the free/local visual fallback and limitations are recorded.

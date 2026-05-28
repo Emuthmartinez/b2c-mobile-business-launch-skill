@@ -63,6 +63,15 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/parallel-agent-orchestration.md
     notes: Official OpenAI Agents SDK update for current orchestration primitives and managed runtime direction.
+  - id: reid-medium-com-how-to-scale-a-magical-experience
+    name: Reid Hoffman on Brian Chesky's 11-star framework
+    source_type: website
+    url: https://reid.medium.com/how-to-scale-a-magical-experience-4-lessons-from-airbnbs-brian-chesky-eca0a182f3e3
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/eleven-star-experience.md
+    notes: Source basis for the 11-star experience ladder and backsolving guidance.
   - id: api-github-com-orgs-mobai-app-repos
     name: api.github.com
     source_type: website

@@ -24,6 +24,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Social/user language | pain language, creator formats, objections, screenshots/posts summarized | XPOZ, reviews, web search |
 | Competitor web intelligence | competitor landing pages, pricing, funnels, claims, policies, changelog | Firecrawl map/scrape/crawl/extract |
 | Product spec | V1/V2/V3, core loop, activation, scope exclusions, risks | `SPEC.md` |
+| 11-star experience | product-specific 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, visual board, surface translation | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `eleven-star-experience.md` |
 | Evidence-to-build trace | evidence IDs, decision trace, build contracts, verification map, rejected decisions | `LAUNCH_TRACE.md`, `flow-traceability.md` |
 | Engineering orchestration | product brainstorm decision, `ORCHESTRATION.md`, `AGENTS.md`, `CLAUDE.md` when needed, implementation plan, parallel-agent map, serialized resource map, E2E readiness proof | Compound Engineering, MobAI, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md` |
 | Technical build contracts | data model, API/RPC/webhooks, auth/session, app states, permissions, integrations, app integrity, fixtures | `TECH_SPEC.md`, `ENGINEERING_PLAN.md` |
@@ -56,6 +57,7 @@ Required unless explicitly marked not applicable:
 - `SECRETS.md` when any API key, token, OAuth credential, webhook signing secret, store credential, service-account file, CI/deploy env var, or `.env` file is needed; default to Doppler unless the founder approves another provider
 - `SECURITY.md` and `security-review.html` when building, submitting, or launching an app with accounts, payments, backend state, email, analytics, public web surfaces, or store distribution; include threat model, platform hardening, abuse controls, monitoring, incident response, accepted risks, and paid-security-tool routing
 - `LAUNCH_TRACE.md` or equivalent trace section for any multi-artifact launch, so research decisions flow into product, brand/design, build, analytics, revenue, privacy, store, and verification work
+- `11_STAR_EXPERIENCE.md` and `11-star-experience.html` before build handoff, so the V1 scalable slice shapes product, onboarding, paywall, ads, screenshots, content, and engineering contracts
 - product brainstorm checkpoint after research and before engineering plans when multiple product shapes remain viable
 - canonical `DESIGN.md` and rendered HTML visual proof when visual design, screenshots, or landing UI are in scope
 - `TECH_SPEC.md` when implementation includes backend APIs, database/storage, auth, subscriptions, email, analytics, AI, push, account deletion, app integrity, or non-trivial platform behavior
@@ -129,6 +131,8 @@ Flag these aggressively:
 - XPOZ was skipped, so copy is based on founder language instead of market/user language.
 - Firecrawl was not used to inspect competitor landing pages, pricing, policy pages, or funnel claims.
 - Product research left multiple viable wedges, onboarding shapes, or monetization paths, but no `ce-brainstorm` or equivalent requirements source resolved them before engineering.
+- No `11_STAR_EXPERIENCE.md` or visual ladder exists, so product, design, ads, screenshots, and engineering optimize separate interpretations of the magic.
+- The 11-star board exists but lacks a line of feasibility or V1 scalable slice, so agents either overbuild fantasy or ship a generic 5-star product.
 - No `AGENTS.md` exists, or it fails to point agents to canonical docs, Compound Engineering routing, MobAI rules, analytics, revenue, privacy, and E2E gates.
 - No lightweight app-local agent roster exists for continuing the app after bootstrap, or the roster lacks orchestrator, marketing, engineering, product, design, and customer-success ownership.
 - `CLAUDE.md` duplicates product truth instead of pointing to `AGENTS.md`, causing builder/runtime drift.

@@ -9,7 +9,7 @@ Use these phases as a reusable playbook. Skip phases that are already complete, 
 - Phase 0b: Tool Access And Fallback Decisions
 - Phase 1: Research-Backed Spec
 - Phase 1b: Analytics And Attribution Blueprint
-- Phase 1c: Product Brainstorm Checkpoint
+- Phase 1c: 11-Star Experience And Product Brainstorm Checkpoint
 - Phase 1d: Launch Trace And Build Contracts
 - Phase 1e: Security Architecture
 - Phase 2: Brand, Design, And Visual System
@@ -176,23 +176,32 @@ Acceptance:
 - Privacy/legal/store-disclosure implications are documented before SDKs or replay/surveys are enabled.
 - Current PostHog source URLs and date checked are recorded.
 
-## Phase 1c: Product Brainstorm Checkpoint
+## Phase 1c: 11-Star Experience And Product Brainstorm Checkpoint
 
-Goal: use the research to resolve product shape before engineering specs are built and actioned.
+Goal: use the research to resolve the product's magical moment, line of feasibility, and product shape before engineering specs are built and actioned.
 
 Do:
+- Load `eleven-star-experience.md`.
 - Load `parallel-agent-orchestration.md` and `engineering-orchestration.md`.
+- Create `11_STAR_EXPERIENCE.md` and `11-star-experience.html`.
+- Define the 1/2/5/6/7/10/11-star ladder with product-specific labels, scenes, emotional reactions, implied behavior, and learnings.
+- Draw the line of feasibility and name the V1 scalable slice.
+- Translate the experience into product, onboarding, paywall, ad/creator hook, App Store screenshots, landing, lifecycle email, support, and engineering surfaces.
 - Use Compound Engineering `ce-brainstorm` when research leaves multiple viable wedges, onboarding shapes, monetization postures, core loops, or user success definitions.
 - Use the brainstorm to produce a requirements source, not implementation code.
 - Preserve scope boundaries, actors, key flows, acceptance examples, risks, and non-goals.
-- Skip this phase only when `SPEC.md`, `ONBOARDING.md`, `ANALYTICS.md`, and monetization assumptions already define product behavior tightly enough for planning.
+- Skip the brainstorm only when `SPEC.md`, `11_STAR_EXPERIENCE.md`, `ONBOARDING.md`, `ANALYTICS.md`, and monetization assumptions already define product behavior tightly enough for planning. Do not skip the 11-star artifact for a real build handoff unless the experience lane is explicitly deferred or not needed with a reason.
 
 Outputs:
+- `11_STAR_EXPERIENCE.md`
+- `11-star-experience.html`
 - requirements/brainstorm document when product shape is ambiguous
-- updated `SPEC.md`, `ONBOARDING.md`, `ANALYTICS.md`, and `REVENUE_OPS.md` decisions when the brainstorm changes product behavior
+- updated `SPEC.md`, `ONBOARDING.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `DESIGN.md`, and `TECH_SPEC.md` decisions when the experience or brainstorm changes product behavior
 - decision log explaining whether the brainstorm was used or intentionally skipped
 
 Acceptance:
+- The founder can inspect the 11-star ladder and line of feasibility visually.
+- The V1 scalable slice is narrow enough to build and strong enough to shape design, ads, screenshots, onboarding, and engineering contracts.
 - `ce-plan` or a builder never has to invent product behavior.
 - Product alternatives are resolved before engineering tradeoffs are chosen.
 - Open founder-only decisions are explicit.
@@ -205,8 +214,8 @@ Do:
 - Load `flow-traceability.md`.
 - Refresh `PROJECT_STATE.yaml` before creating trace rows so status reflects the current phase and blockers.
 - Create or update `LAUNCH_TRACE.md` unless the launch is tiny enough for a clearly labeled trace section in `RESEARCH.md`.
-- Assign stable trace IDs for major research findings, product decisions, claims, onboarding questions, paywall choices, data collection, store-console answers, and build-critical flows.
-- Map each trace row to affected docs: `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
+- Assign stable trace IDs for major research findings, 11-star experience decisions, product decisions, claims, onboarding questions, paywall choices, data collection, store-console answers, and build-critical flows.
+- Map each trace row to affected docs: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
 - Decide whether `TECH_SPEC.md` is needed. Create it when app/backend/web implementation needs data model, API/RPC/webhook contracts, state machines, permissions, integrations, app integrity, feature flags, or test fixtures.
 - Record rejected decisions so future agents do not reintroduce weak claims, unproven features, generic styling, or unsupported monetization behavior.
 
@@ -218,7 +227,7 @@ Outputs:
 - updated `PROJECT_STATE.yaml` and `launch-cockpit.html` when trace/build-contract status changes
 
 Acceptance:
-- Every major brand, design, onboarding, revenue, privacy, store, and build decision can be traced to evidence or a founder-only decision.
+- Every major experience, brand, design, onboarding, revenue, privacy, store, and build decision can be traced to evidence or a founder-only decision.
 - A builder can identify what must be implemented and how it will be verified without rereading every research source.
 - Data/API/state behavior is precise enough that the implementation plan does not invent backend contracts.
 
@@ -256,6 +265,7 @@ Goal: lock the brand enough for builders, designers, screenshots, and landing pa
 
 Do:
 - Load `flow-traceability.md` and update `LAUNCH_TRACE.md` as brand and visual decisions are made.
+- Load `eleven-star-experience.md` and make the visual language express the V1 scalable slice, not a generic category aesthetic.
 - Load `parallel-agent-orchestration.md` and `engineering-orchestration.md` when screen specs will become builder prompts or implementation work.
 - Load `analytics-attribution.md` before locking screen analytics hooks, attribution questions, demo video metrics, paywall variants, or builder-facing event names.
 - Load `design-visual-system.md` before creating visual artifacts, app screens, screenshot frames, or landing UI.
@@ -450,7 +460,7 @@ Do:
 - Create `APP_AGENTS.md` and the seven-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, security, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
 - Add a tool-specific `CLAUDE.md`, `CURSOR.md`, or equivalent only as a pointer/addendum.
-- Include `LAUNCH_TRACE.md` so builders can follow evidence-to-product-to-design-to-build decisions.
+- Include `LAUNCH_TRACE.md` and `11_STAR_EXPERIENCE.md` so builders can follow evidence-to-product-experience-to-design-to-build decisions.
 - Include `TECH_SPEC.md` when data, API, state, permissions, platform capabilities, app integrity, feature flags, or integration behavior is in scope.
 - Write an `ANALYTICS.md` event catalog and `analytics-plan.html` before build prompts. Do not let builders invent event names screen by screen.
 - Include `ENGINEERING_PLAN.md` when the app build is ready for `ce-plan`/`ce-work` or a generated builder.
@@ -470,6 +480,8 @@ Outputs:
 - `APP_AGENTS.md`
 - `agents/` with orchestrator, marketing, engineering, product, design, and customer-success role prompts
 - `LAUNCH_TRACE.md`
+- `11_STAR_EXPERIENCE.md`
+- `11-star-experience.html`
 - `TECH_SPEC.md` when implementation contracts are in scope
 - `ANALYTICS.md`
 - `analytics-plan.html`
@@ -488,7 +500,7 @@ Outputs:
 Acceptance:
 - A future agent knows the first file to read.
 - A future orchestrator can route specialist audit work without duplicating product truth.
-- A future agent can follow research decisions into brand, design, build contracts, tests, and store/legal/revenue implications.
+- A future agent can follow research decisions into 11-star experience, brand, design, build contracts, tests, and store/legal/revenue implications.
 - Prompts are ordered and self-contained.
 - V2 features and banned components cannot accidentally creep into V1.
 - Analytics events are required at the moment each screen/flow is built.
@@ -501,6 +513,7 @@ Goal: implement the actual app with orchestration, review, and end-to-end proof.
 
 Do:
 - Load `flow-traceability.md` and require `ENGINEERING_PLAN.md` to reference trace IDs for build-critical work.
+- Load `eleven-star-experience.md` and require the engineering plan to name the V1 scalable slice and proof path.
 - Load `parallel-agent-orchestration.md` and `engineering-orchestration.md`.
 - Load `secrets-management.md` before writing code, tests, or deploy configs that introduce environment variables or credentials.
 - Load `project-state.md`, `launchbench-evals.md`, and `failure-cards.md` before declaring any lane done.

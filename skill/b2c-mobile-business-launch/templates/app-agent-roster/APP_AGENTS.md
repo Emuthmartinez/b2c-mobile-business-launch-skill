@@ -4,7 +4,7 @@
 
 ## Source Docs
 
-- Product: `SPEC.md`, `LAUNCH_TRACE.md`, `RESEARCH.md`
+- Product: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `LAUNCH_TRACE.md`, `RESEARCH.md`
 - State: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Design: `DESIGN.md`, `design.md`, `design.html`, `CONTENT_ASSETS.md`, `content-assets.html`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
@@ -17,8 +17,8 @@
 - `agents/marketing-guru.md`: ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, and channel learning.
 - `agents/engineering-leader.md`: architecture, implementation, backend/frontend/provider proof, Apple signing/release gates, tests, and readiness.
 - `agents/security-architect.md`: threat model, security tool routing, platform hardening, app integrity, abuse controls, accepted risks, and incident response.
-- `agents/product-leader.md`: ICP, scope, onboarding, activation, retention, roadmap, and traceability.
-- `agents/design-guru.md`: design system, HTML visual proofs, screenshots, accessibility, icons, motion, Higgsfield fit, and Remotion content assets.
+- `agents/product-leader.md`: ICP, 11-star experience, scope, onboarding, activation, retention, roadmap, and traceability.
+- `agents/design-guru.md`: design system, 11-star visual proof, HTML visual proofs, screenshots, accessibility, icons, motion, Higgsfield fit, and Remotion content assets.
 - `agents/customer-success.md`: support, FAQ, privacy/delete/refund/restore, lifecycle copy, reviews, and feedback triage.
 
 ## Operating Rules
@@ -32,7 +32,7 @@
 
 ## Required Audit Before Launch-Ready
 
-- Product: scope, onboarding, activation, and retention match evidence.
+- Product: 11-star V1 scalable slice, scope, onboarding, activation, and retention match evidence.
 - Marketing: ASO, store console, claims, UGC/Fastlane, GEO/SEO, and attribution channels are ready.
 - Design: HTML proofs match `DESIGN.md`, no mobile clipping/overlap, screenshots are device-backed, and generated/rendered content assets are traceable in `CONTENT_ASSETS.md`.
 - Engineering: app, backend, revenue, email, analytics, provider, Apple signing/release, and device paths are verified.

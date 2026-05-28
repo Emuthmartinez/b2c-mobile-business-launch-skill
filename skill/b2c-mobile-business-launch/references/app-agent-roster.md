@@ -24,7 +24,7 @@ Use `templates/app-agent-roster/` as the starting point when available. Fill pla
 
 ## Role Model
 
-The app-local roster is not a replacement for `AGENTS.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents.
+The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents.
 
 - Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, actual file collision checks, integration, git/release coordination, and final production-readiness proof.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
@@ -38,9 +38,9 @@ The app-local roster is not a replacement for `AGENTS.md`, `TECH_SPEC.md`, `DESI
 
 For non-trivial launches, use the roster to run independent review lanes before declaring the build or launch package complete:
 
-- Product leader reviews `SPEC.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, and activation/retention assumptions.
+- Product leader reviews `SPEC.md`, `11_STAR_EXPERIENCE.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, and activation/retention assumptions.
 - Marketing guru reviews `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, and attribution-channel learning.
-- Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
+- Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `11-star-experience.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
 - Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, analytics/revenue/email/backend contracts, signing/release readiness, and test coverage.
 - Security architect reviews `SECURITY.md`, `security-review.html`, `SECRETS.md`, `TECH_SPEC.md`, `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`, scanner/review evidence, app-integrity posture, and accepted risks.
 - Customer success reviews `PRIVACY.md`, `TERMS.md`, support routes, refund/restore/delete paths, lifecycle email, FAQ, and review-response readiness.

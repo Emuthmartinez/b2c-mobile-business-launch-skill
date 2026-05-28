@@ -18,7 +18,7 @@ Manager pattern: one orchestrator owns user thread, state, integration, git, pro
 
 | ID | Role | Objective | Mode | Files | Shared resources | Parallel safe | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| product-audit | product leader | Audit scope, onboarding, activation, and traceability. | read_only | `SPEC.md`, `ONBOARDING.md`, `LAUNCH_TRACE.md` | none | yes | pending |
+| product-audit | product leader | Audit scope, 11-star experience, onboarding, activation, and traceability. | read_only | `SPEC.md`, `11_STAR_EXPERIENCE.md`, `ONBOARDING.md`, `LAUNCH_TRACE.md` | none | yes | pending |
 
 ## Parallel Safety Check
 

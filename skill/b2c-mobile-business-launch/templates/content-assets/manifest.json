@@ -11,6 +11,7 @@
       "duration_seconds": 12,
       "inputs": [
         "screenshots/raw/onboarding.png",
+        "11_STAR_EXPERIENCE.md",
         "DESIGN.md",
         "content-assets/copy/hooks.json"
       ],
@@ -19,6 +20,7 @@
       ],
       "truth_constraints": [
         "real app UI remains visible",
+        "V1 scalable slice from 11_STAR_EXPERIENCE.md remains truthful",
         "no unsupported claims",
         "mock UI is not presented as production UI"
       ],

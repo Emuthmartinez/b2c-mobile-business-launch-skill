@@ -27,6 +27,7 @@ This packet records generated, rendered, edited, and source-backed launch media.
 | Input | Source | Rights/status | Used by | Notes |
 | --- | --- | --- | --- | --- |
 | `screenshots/raw/onboarding.png` | MobAI, XcodeBuildMCP, simulator/device, or founder-owned capture | Must be verified before production | App preview and social demo | Real app UI must remain visible |
+| `11_STAR_EXPERIENCE.md` | Product experience contract | Required | Store, ads, UGC, demo clips | Use the V1 scalable slice and stay inside the line of feasibility |
 | `DESIGN.md` | Project design system | Required | All rendered assets | Tokens, type, voice, motion, banned aesthetics |
 | `copy/hooks.json` | Founder-approved or research-backed copy | Draft | Social and ad variants | Claims must match listing, revenue, privacy, and legal docs |
 
@@ -81,6 +82,7 @@ npx remotion still SquareAdStill --output ../out/square-ad-still.png
 ## Claim Review
 
 - Real app UI is visible wherever the asset claims to show the app.
+- The hook, storyboard, screenshot, or preview expresses the V1 scalable slice from `11_STAR_EXPERIENCE.md`.
 - Store screenshots and app previews do not show mock UI as production UI.
 - Pricing, trials, subscription copy, and offers match `APP_STORE_LISTING.md`, `REVENUE_OPS.md`, and legal docs.
 - Health, financial, urgency, scarcity, endorsement, and outcome claims are either supported or removed.

@@ -27,7 +27,7 @@ If matching local skills are installed, load and use them. If Refero or Higgsfie
 
 ## Routing Order
 
-1. **Trace first.** Load `flow-traceability.md` and identify the research/product trace rows the brand and visual system must express.
+1. **Trace and experience first.** Load `flow-traceability.md` and `eleven-star-experience.md`; identify the research/product trace rows, magical moment, line of feasibility, and V1 scalable slice the brand and visual system must express.
 2. **Layers first when product clarity is weak.** Use Layers-style thinking to verify observed behavior, domain language, user needs, product strategy, conceptual model, interaction flow, and surface decisions before locking screens.
 3. **Refero or baseline UX patterns for real flow shape.** Use `refero-ux-patterns.md` to study styles, screens, and flows before locking interaction structure. If Refero is unavailable, use the bundled `templates/ux-patterns/` pack only after founder-approved fallback routing.
 4. **Google `design.md` for token truth.** Produce `DESIGN.md` as the canonical machine-readable and human-readable design system: YAML tokens first, Markdown rationale second.
@@ -59,6 +59,7 @@ If the CLI is unavailable or the package registry fails, record the exact blocke
 
 Use lowercase `design.md` for the screen implementation spec. It must reference `DESIGN.md` for tokens and include:
 - surface inventory and navigation model
+- 11-star experience slice: magical moment, line of feasibility, and which screens carry the V1 scalable slice
 - trace IDs from `LAUNCH_TRACE.md` for build-critical screens, claims, onboarding questions, paywall choices, and store screenshot concepts
 - onboarding, aha moment, core loop, paywall/revenue surface, settings/account, share/referral, and support/privacy surfaces when relevant
 - state matrix: empty, loading, error, permission denied, offline, success, premium locked, restored purchase
@@ -137,6 +138,7 @@ Rules:
 
 Before moving to ASO, landing implementation, or builder handoff:
 - `LAUNCH_TRACE.md` shows which research/product decisions the visual system expresses.
+- `11_STAR_EXPERIENCE.md` and `11-star-experience.html` show the product's magical moment and V1 scalable slice before screens are locked.
 - `DESIGN.md` exists and is the token source of truth.
 - lowercase `design.md` maps screens to tokens, states, analytics hooks, and HTML proof paths.
 - `UX_PATTERNS.md` exists, records Refero or founder-approved fallback research, and preserves the onboarding playbook.

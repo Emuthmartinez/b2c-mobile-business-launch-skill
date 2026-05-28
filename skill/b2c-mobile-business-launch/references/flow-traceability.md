@@ -1,6 +1,6 @@
 # Launch Flow Traceability And Build Contracts
 
-Use this for any multi-phase B2C app launch, especially before moving from research to brand/design or from design to implementation. The goal is to keep evidence, product decisions, visual decisions, security posture, build specs, and verification tied together.
+Use this for any multi-phase B2C app launch, especially before moving from research to 11-star experience, brand/design, or implementation. The goal is to keep evidence, product-experience decisions, visual decisions, security posture, build specs, and verification tied together.
 
 Create `PROJECT_STATE.yaml` first for phase/lane/provider/proof state. Create `LAUNCH_TRACE.md` when the launch has more than one serious artifact. Create `TECH_SPEC.md` when actual app/backend/web implementation is in scope and data, API, state, permissions, integrations, or platform behavior need to be precise.
 
@@ -20,6 +20,7 @@ Every major launch decision should answer:
 
 - What evidence caused this decision?
 - Which paid/account-gated tool or confirmed fallback produced the evidence?
+- What 11-star experience moment or V1 scalable slice does it create or reject?
 - What product behavior does it create or reject?
 - What brand/design expression carries it?
 - What analytics, security, revenue, privacy, ASO, or legal surface does it affect?
@@ -51,6 +52,7 @@ ID: EVID-001
 Source: AppKittie competitor reviews, XPOZ TikTok query, Firecrawl pricing crawl, founder transcript, official docs, user export, or approved fallback
 Tool route: paid tool | user export | free fallback | blocked | founder decision
 Research finding: what we learned
+Experience decision: what changes in 11_STAR_EXPERIENCE.md or 11-star-experience.html
 Product decision: what changes in SPEC.md or ONBOARDING.md
 Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, or HTML proofs
 Build contract: screen/component/API/data/state/task that must exist
@@ -76,6 +78,7 @@ Small launches can keep this inside `RESEARCH.md`, but the section must be easy 
 
 Pass only when:
 - category, target user, competitor set, user language, pricing posture, and V1/V2/V3 scope are evidence-backed
+- 11-star experience ladder, line of feasibility, and V1 scalable slice are created or explicitly blocked
 - unsupported claims are removed or marked founder-only/legal-review
 - each core feature has a reason: demand, differentiation, monetization, retention, compliance, or operational need
 - open product alternatives are resolved through `ce-brainstorm` or documented as explicit assumptions
@@ -85,6 +88,7 @@ Pass only when:
 
 Pass only when:
 - brand voice uses actual user/category language instead of founder-only phrasing
+- `11_STAR_EXPERIENCE.md` defines the magical moment, and `11-star-experience.html` visually shows the ladder and line of feasibility
 - core loop, aha moment, onboarding, paywall, support/privacy, settings, and error states have screen implications
 - each public claim has an evidence/proof constraint
 - `DESIGN.md`, `design.md`, `design.html`, and `onboarding.html` cite the trace IDs they express
@@ -95,6 +99,7 @@ Pass only when:
 
 Pass only when:
 - every build-critical screen has states, copy, components, analytics hooks, permissions, and backend/data expectations
+- the V1 scalable slice from `11_STAR_EXPERIENCE.md` is represented as concrete screen/state/data/API/analytics requirements
 - every onboarding question maps to personalization, attribution, lifecycle messaging, privacy, or setup
 - paywall and pricing surfaces match `REVENUE_OPS.md`, `TERMS.md`, store products, and analytics events
 - account deletion, privacy choices, restore purchases, support, and settings paths are specified
@@ -142,6 +147,7 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `PROJECT_STATE.yaml` exists and matches current artifacts
 - `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
+- `11_STAR_EXPERIENCE.md` and `11-star-experience.html` exist unless the experience lane is explicitly deferred/not needed with a reason
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth
 - `SPEC.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `SECURITY.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, and `STORE_CONSOLE.md` are internally consistent for in-scope surfaces
 - `TECH_SPEC.md` exists when data/API/integration/state behavior is non-trivial

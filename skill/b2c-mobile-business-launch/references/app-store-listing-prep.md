@@ -4,6 +4,8 @@ Use this before preparing Apple App Store listing fields, App Privacy answers, s
 
 This is the bridge between marketing and engineering. The listing packet must be persuasive, policy-aligned, tied to real App Store Connect state, and synchronized with RevenueCat, Stripe/web funnels, analytics, legal pages, screenshots, and the product build.
 
+Load `eleven-star-experience.md` before screenshot, app-preview, ad, custom product page, or In-App Event concepts are locked. Store marketing should show the V1 scalable slice truthfully instead of inventing a different promise for the listing.
+
 ## Contents
 
 - Current Sources To Refresh
@@ -164,6 +166,7 @@ For localization:
 
 Screenshots and previews should start from real app UI. When marketing compositions need more than raw screenshots:
 - use `DESIGN.md` and `design.md` for tokens, typography, voice, screen specs, and asset constraints
+- use `11_STAR_EXPERIENCE.md` for the magical moment and line of feasibility so screenshots and ads do not overpromise
 - use MobAI for real iOS/Android captures when available
 - use XcodeBuildMCP only after founder-approved fallback from MobAI for Apple-platform capture
 - use Higgsfield for high-quality supporting visuals, mascots, backgrounds, icons, thumbnails, CPP/event artwork, and campaign imagery when the asset is not just a screenshot
@@ -193,4 +196,5 @@ Do not call the App Store listing ready unless:
 - custom product pages, In-App Events, and ASA/marketing routing are either planned with proof or explicitly not needed
 - localization strategy is documented with target markets and proof status
 - Higgsfield, Remotion, or generated assets are tied to `DESIGN.md`, recorded in `CONTENT_ASSETS.md` when used, and separated from raw UI proof
+- store screenshots, previews, CPPs, and ads express the V1 scalable slice from `11_STAR_EXPERIENCE.md` without crossing the line of feasibility
 - `STORE_CONSOLE.md` and HTML packet show what the founder must click, paste, approve, or leave blocked

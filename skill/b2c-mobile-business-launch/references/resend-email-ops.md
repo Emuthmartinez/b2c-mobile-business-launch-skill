@@ -151,6 +151,7 @@ Choose one template strategy:
 Every template needs:
 - subject, preview text where supported, HTML, plain text, sender, reply-to, purpose, owner
 - brand fields and required email-safe design tokens derived from `DESIGN.md`: logo, app name, accent color, text colors, surface/border colors, typography, radius, spacing, max width, logo height, and footer rules
+- experience tone derived from `11_STAR_EXPERIENCE.md`, especially lifecycle copy that should feel like the product remembered the user's goal
 - mobile-safe layout and accessible links/buttons
 - unsubscribe/preference link for non-transactional messages
 - legal footer where marketing or lifecycle messaging requires it
@@ -257,7 +258,7 @@ Before public traffic:
 
 ## Starter Template Pack
 
-Use `templates/resend/email-templates.ts` as the out-of-the-box pack for B2C app launches. Copy it into the product repo when Resend is selected, then adapt brand copy, links, legal footer, support SLAs, and `LaunchEmailBrand.designSystem` from the project's canonical `DESIGN.md`.
+Use `templates/resend/email-templates.ts` as the out-of-the-box pack for B2C app launches. Copy it into the product repo when Resend is selected, then adapt brand copy, links, legal footer, support SLAs, `LaunchEmailBrand.designSystem` from the project's canonical `DESIGN.md`, and lifecycle tone from `11_STAR_EXPERIENCE.md`.
 
 Included templates:
 - `waitlistConfirmationEmail` - confirms waitlist signup and optional referral link.

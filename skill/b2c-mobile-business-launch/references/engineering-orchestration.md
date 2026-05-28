@@ -10,7 +10,7 @@ The goal is to turn the launch package into shippable software without losing st
 
 - 1. Compound Engineering Routing
 - 2. Autonomy And Project State
-- 3. Product Brainstorm Checkpoint
+- 3. 11-Star Experience And Product Brainstorm Checkpoint
 - 4. Agent Entrypoints
 - 4b. App-Local Agent Roster
 - 5. Parallel Agent Orchestration
@@ -58,9 +58,11 @@ The orchestrator owns state updates:
 
 Render `launch-cockpit.html` after material changes so the founder can inspect state without reading every doc.
 
-## 3. Product Brainstorm Checkpoint
+## 3. 11-Star Experience And Product Brainstorm Checkpoint
 
 After research and before engineering specs are actioned, decide whether the product is ready for implementation planning.
+
+Create or update `11_STAR_EXPERIENCE.md` and `11-star-experience.html` before engineering work starts. The engineering plan should inherit the V1 scalable slice, not invent the magical moment from screen sketches.
 
 Use `ce-brainstorm` when:
 - AppKittie/XPOZ/Firecrawl findings reveal competing wedges.
@@ -80,7 +82,7 @@ Every real app build or builder handoff should create or update `AGENTS.md`.
 `AGENTS.md` must include:
 - 60-second product brief
 - repo map and first files to read
-- source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
+- source-of-truth docs: `SPEC.md`, `RESEARCH.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
 - `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and autonomy mode
 - V1 scope, V2/V3 scope, and banned scope
 - design-system and HTML proof rules
@@ -164,6 +166,7 @@ Before `ce-work` or a generated builder starts, produce `ENGINEERING_PLAN.md` th
 
 The plan must include:
 - requirements trace to launch docs and `LAUNCH_TRACE.md` IDs
+- 11-star V1 scalable slice, line of feasibility, and magical-moment proof requirements
 - `PROJECT_STATE.yaml` phase, autonomy mode, active blockers, and failure cards that constrain implementation
 - `TECH_SPEC.md` pointer or inline technical contracts when data/API/state/integration behavior is in scope
 - implementation units with repo-relative file paths

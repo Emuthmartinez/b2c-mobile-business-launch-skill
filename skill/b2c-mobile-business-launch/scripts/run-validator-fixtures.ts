@@ -125,6 +125,64 @@ function writeCompleteStoreConsole(root: string): void {
   writeFileSync(path.join(root, "app-privacy-questionnaire.html"), "<!doctype html><html><body>App Privacy questionnaire</body></html>", "utf8");
 }
 
+function writeCompleteElevenStar(root: string): void {
+  const state = readState(root);
+  const experienceLane = getLane(state, "experience");
+  experienceLane["status"] = "done";
+  experienceLane["evidence"] = ["11_STAR_EXPERIENCE.md", "11-star-experience.html"];
+  experienceLane["blockers"] = [];
+  writeState(root, state);
+  writeFileSync(
+    path.join(root, "11_STAR_EXPERIENCE.md"),
+    [
+      "# 11-Star Experience",
+      "Experience Thesis: The user moves from anxious uncertainty to a confident next step they want to retell.",
+      "Star Ladder",
+      "| Stars | Label | User scene | Product behavior implied | Emotional reaction | What we learn |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "| 1 | Refund me | The app gives generic advice and breaks trust. | Block unsupported claims and bad recovery. | Regret. | Never ship this. |",
+      "| 2 | It technically works | The result appears after friction and confusion. | Reduce wait, explain state, add recovery. | Tolerance. | Baseline usability. |",
+      "| 5 | Expected experience | The core loop works. | Deliver the promised task reliably. | Neutral. | Category floor. |",
+      "| 6 | Better than expected | The app reflects the user's input in a useful summary. | Personalize the output and next step. | Relief. | First feasible delight. |",
+      "| 7 | Way beyond | The app prepares the next best action from the user's context. | Connect state, copy, and timing. | Made for me. | V1 magic candidate. |",
+      "| 10 | Impossible concierge | A human expert manually creates the perfect outcome. | Identify the unscalable service blueprint. | Amazement. | What to productize. |",
+      "| 11 | Absurd extreme | The user's problem disappears like a movie scene. | Reveal the true ambition. | Evangelism. | What users would tell everyone about. |",
+      "Line Of Feasibility: V1 lives between 6 and 7 stars; 10 and 11 stay deferred inspiration.",
+      "V1 Scalable Slice: produce the first context-aware result, explain why it matters, and route the next step.",
+      "Surface Matrix",
+      "| Surface | 11-star question | Product-specific answer | Artifact owner | Proof |",
+      "| --- | --- | --- | --- | --- |",
+      "| Product | What result would the user retell? | Context-aware next step. | SPEC.md, LAUNCH_TRACE.md | EXP-001 |",
+      "| Onboarding | What makes the user feel understood early? | Reflect answers before paywall. | ONBOARDING.md | EXP-001 |",
+      "| Paywall | What unlocks momentum? | Show the next unlocked action. | REVENUE_OPS.md | EXP-001 |",
+      "| Ad | What tiny experience can the ad deliver? | Show the before/after moment. | CONTENT_ASSETS.md | EXP-001 |",
+      "| App Store | What three frames prove the magic? | Problem, personalized result, next step. | APP_STORE_LISTING.md | EXP-001 |",
+      "| Engineering | What must be real? | State, API, analytics, and fixture proof. | TECH_SPEC.md | EXP-001 |",
+      "Visual Storyboard: 11-star-experience.html renders the ladder.",
+      "Traceability",
+      "| Trace ID | Experience decision | Source evidence | Product impact | Design impact | Build contract | Verification |",
+      "| --- | --- | --- | --- | --- | --- | --- |",
+      "| EXP-001 | Context-aware result is the magical moment. | RESEARCH.md | SPEC.md | DESIGN.md | TECH_SPEC.md | PRODUCTION_READINESS.md |",
+      "Engineering Contract: TECH_SPEC.md owns the state machine, data model, API/RPC/webhook contracts, permissions, offline/error states, analytics events, test fixture, and E2E proof path.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "11-star-experience.html"),
+    "<!doctype html><html><body><h1>11-Star Experience Board</h1><p>Line Of Feasibility</p><p>V1 Scalable Slice</p><p>Surface Translation</p></body></html>",
+    "utf8",
+  );
+  for (const [file, text] of [
+    ["SPEC.md", "# Spec\n\n## 11-Star Experience\n\nSource: 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
+    ["DESIGN.md", "# Design\n\nThis design expresses the 11-star V1 slice from 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
+    ["ONBOARDING.md", "# Onboarding\n\nThe onboarding preview carries the 11-star magical moment from 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
+    ["TECH_SPEC.md", "# Tech Spec\n\nThe state, API, analytics, and fixture contracts implement EXP-001 from 11_STAR_EXPERIENCE.md.\n"],
+    ["LAUNCH_TRACE.md", "# Launch Trace\n\nEXP-001 maps research to 11_STAR_EXPERIENCE.md, SPEC.md, DESIGN.md, ONBOARDING.md, TECH_SPEC.md, and proof.\n"],
+  ] as const) {
+    writeFileSync(path.join(root, file), text, "utf8");
+  }
+}
+
 function writeCompleteSecurity(root: string): void {
   writeFileSync(
     path.join(root, "SECURITY.md"),
@@ -164,7 +222,7 @@ function writeCompleteContentAssets(root: string): void {
       "Remotion is approved for local rendered product-demo assets from real app UI.",
       "Founder approval is required before public posting, store upload, paid generation, paid render infrastructure, or scheduling.",
       "License status: Remotion license eligibility for commercial use is checked or founder-approved before production output.",
-      "Source Inputs: screenshots/raw/onboarding.png, DESIGN.md, content-assets/copy/hooks.json, owned or licensed media.",
+      "Source Inputs: screenshots/raw/onboarding.png, 11_STAR_EXPERIENCE.md, DESIGN.md, content-assets/copy/hooks.json, owned or licensed media.",
       "Composition Manifest: content-assets/manifest.json records asset IDs, composition IDs, dimensions, inputs, outputs, truth constraints, approvals, render proof, and license status.",
       "Render Commands: cd content-assets/remotion && npx remotion render VerticalHookDemo --output ../out/vertical-hook-demo.mp4.",
       "Claim Review: real app UI remains visible, no unsupported pricing, endorsement, medical, financial, urgency, scarcity, or unavailable UI claims.",
@@ -192,9 +250,9 @@ function writeCompleteContentAssets(root: string): void {
             composition_id: "VerticalHookDemo",
             dimensions: "1080x1920",
             duration_seconds: 12,
-            inputs: ["screenshots/raw/onboarding.png", "DESIGN.md", "content-assets/copy/hooks.json"],
+            inputs: ["screenshots/raw/onboarding.png", "11_STAR_EXPERIENCE.md", "DESIGN.md", "content-assets/copy/hooks.json"],
             outputs: ["content-assets/out/vertical-hook-demo.mp4"],
-            truth_constraints: ["real app UI remains visible", "no unsupported claims"],
+            truth_constraints: ["real app UI remains visible", "V1 scalable slice from 11_STAR_EXPERIENCE.md remains truthful", "no unsupported claims"],
             approvals: ["founder approval before public posting", "fallback approval before replacing Higgsfield"],
             render_proof: "cd content-assets/remotion && npx remotion render VerticalHookDemo --output ../out/vertical-hook-demo.mp4",
             license_status: "Remotion license status checked before commercial use",
@@ -227,7 +285,7 @@ function writeCompleteOrchestration(root: string): void {
         role: "product leader",
         objective: "Audit scope, onboarding, activation, and traceability.",
         mode: "read_only",
-        files: ["SPEC.md", "ONBOARDING.md", "LAUNCH_TRACE.md"],
+        files: ["SPEC.md", "11_STAR_EXPERIENCE.md", "ONBOARDING.md", "LAUNCH_TRACE.md"],
         shared_resources: [],
         parallel_safe: true,
         output: "findings",
@@ -291,7 +349,7 @@ function writeCompleteOrchestration(root: string): void {
       "# Orchestration",
       "Orchestration Preflight: the orchestrator keeps state integration local while product and security audits run in parallel.",
       "Strategy: hybrid manager pattern with one orchestrator.",
-      "Candidate Units: product-audit and security-audit are read-only; state-integration is serialized.",
+      "Candidate Units: product-audit includes SPEC.md, 11_STAR_EXPERIENCE.md, ONBOARDING.md, and LAUNCH_TRACE.md; security-audit is read-only; state-integration is serialized.",
       "Parallel Safety Check: file-overlap check passed; actual modified files were compared after agent outputs returned.",
       "File Ownership: the orchestrator owns PROJECT_STATE.yaml, launch-cockpit.html, PRODUCTION_READINESS.md, git, and releases.",
       "Serialized Work: provider/account mutations, credentials, device control, git, commits, pushes, public posting, and release decisions stay serialized.",
@@ -361,6 +419,7 @@ try {
   writeCompleteAttribution(clean);
   writeCompleteAppleSigning(clean);
   writeCompleteStoreConsole(clean);
+  writeCompleteElevenStar(clean);
   writeCompleteSecurity(clean);
   writeCompleteContentAssets(clean);
   writeCompleteOrchestration(clean);
@@ -373,6 +432,7 @@ try {
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
+  runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
   const sourceRegistryClean = makeEmptyFixture("source-registry-clean");
   writeSourceRegistryFixture(sourceRegistryClean);
   runFixture("source registry with registered URL passes", sourceRegistryClean, "check-source-freshness.ts", 0);
@@ -694,6 +754,39 @@ try {
     "utf8",
   );
   runFixture("Refero fallback without founder approval fails", uxFallbackUnapproved, "check-ux-patterns.ts", 1, "ux_patterns.refero_fallback_unapproved");
+
+  const elevenStarMissing = makeFixture("eleven-star-missing");
+  rmSync(path.join(elevenStarMissing, "11-star-experience"), { recursive: true, force: true });
+  runFixture("missing 11-star experience packet fails", elevenStarMissing, "check-eleven-star-experience.ts", 1, "eleven_star.markdown_missing");
+
+  const elevenStarThin = makeFixture("eleven-star-thin");
+  writeFileSync(
+    path.join(elevenStarThin, "11-star-experience", "11_STAR_EXPERIENCE.md"),
+    [
+      "# 11-Star Experience",
+      "Experience Thesis: Make it feel magical.",
+      "Star Ladder",
+      "| Stars | Label | User scene | Product behavior implied | Emotional reaction | What we learn |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "| 5 | Expected | It works. | Build it. | Fine. | Baseline. |",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("thin 11-star experience packet fails", elevenStarThin, "check-eleven-star-experience.ts", 1, "eleven_star.line_of_feasibility.missing");
+
+  const elevenStarDonePlaceholder = makeFixture("eleven-star-done-placeholder");
+  const elevenStarDonePlaceholderState = readState(elevenStarDonePlaceholder);
+  const doneExperienceLane = getLane(elevenStarDonePlaceholderState, "experience");
+  doneExperienceLane["status"] = "done";
+  doneExperienceLane["evidence"] = ["11-star-experience/11_STAR_EXPERIENCE.md", "11-star-experience/11-star-experience.html"];
+  writeState(elevenStarDonePlaceholder, elevenStarDonePlaceholderState);
+  runFixture(
+    "done 11-star experience with placeholders fails",
+    elevenStarDonePlaceholder,
+    "check-eleven-star-experience.ts",
+    1,
+    "eleven_star.placeholder_complete",
+  );
 
   const contentFallbackUnapproved = makeFixture("content-fallback-unapproved");
   mkdirSync(path.join(contentFallbackUnapproved, "content-assets"), { recursive: true });

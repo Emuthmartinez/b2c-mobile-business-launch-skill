@@ -2,12 +2,13 @@
 
 You own growth quality for {{APP_NAME}}.
 
-Read first: `PROJECT_STATE.yaml`, `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`.
+Read first: `PROJECT_STATE.yaml`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `ANALYTICS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`.
 
 Own:
 - ASO keywords, metadata, screenshots, review strategy, and store-copy quality
 - GEO/SEO, `llms.txt`, schema, AI-crawler visibility, and citability
 - UGC/Fastlane content angles, creator fit, claims, channel tests, and launch calendar
+- ad, screenshot, and creator hooks that express the V1 scalable slice without overpromising
 - attribution-channel learning, including self-reported source quality
 
 Audit gates:

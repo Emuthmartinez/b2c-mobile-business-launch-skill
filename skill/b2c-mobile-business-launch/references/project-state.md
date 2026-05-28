@@ -30,7 +30,7 @@ Update `PROJECT_STATE.yaml`:
 - before using a paid/account-gated fallback
 - before dispatching subagents, worktrees, or parallel specialist audits
 - when a new secret, provider, bundle ID, app record, product, entitlement, analytics event, email route, or store field appears
-- before crossing research -> design, design -> build, build -> proof, or proof -> submission
+- before crossing research -> 11-star experience, experience -> design, design -> build, build -> proof, or proof -> submission
 - after validation or LaunchBench runs
 - before final handoff or commit
 
@@ -41,6 +41,7 @@ Update `PROJECT_STATE.yaml`:
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
+- `lanes.experience` tracks `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, the line of feasibility, and the V1 scalable slice.
 - `lanes.analytics_attribution.attribution_contract` is a hard data contract, not a UI note.
 - `proof.commands` should include command, expected result, actual result, and evidence path.
 - `failure_cards.active` should point to concrete risks, not generic reminders.
@@ -54,6 +55,7 @@ npm run validate:launch-state -- --root /path/to/app
 npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
+npm run check:11-star -- --root /path/to/app
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
@@ -69,6 +71,7 @@ Render `launch-cockpit.html` whenever state changes materially. It should show:
 - project, phase, platform, bundle IDs, and autonomy mode
 - orchestration strategy, serialized resources, spawned-agent status, and collision/reconciliation proof
 - lane statuses and evidence paths
+- 11-star experience status, visual proof, and V1 scalable slice blockers
 - paid-tool/provider route, docs checked date, required secret names, preflight, validation, and fallback
 - attribution contract completeness
 - security lane, accepted risks, and security-tool routing

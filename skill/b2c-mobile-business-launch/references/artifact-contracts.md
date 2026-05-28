@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -32,6 +32,8 @@ doppler.yaml              # optional non-secret Doppler project/config hints
 ANALYTICS.md              # upfront measurement, attribution, event catalog, funnels, dashboards, and QA gates
 analytics-plan.html       # founder-visible rendered analytics/attribution plan and dashboard wireframes
 LAUNCH_TRACE.md           # evidence-to-product-to-brand/design-to-build-to-proof traceability matrix
+11_STAR_EXPERIENCE.md     # 1/2/5/6/7/10/11-star product experience ladder and V1 scalable slice
+11-star-experience.html   # visual ladder, line of feasibility, and surface translation board
 TECH_SPEC.md              # data/API/state/permission/integration contracts when actual implementation is in scope
 ORCHESTRATION.md          # parallel-agent/worktree preflight, candidate units, file ownership, serialized resources, integration, and verification
 orchestration.html        # optional founder-facing orchestration board
@@ -97,6 +99,8 @@ rork-ready/
   ANALYTICS.md
   analytics-plan.html
   LAUNCH_TRACE.md
+  11_STAR_EXPERIENCE.md
+  11-star-experience.html
   TECH_SPEC.md
   ORCHESTRATION.md
   orchestration.html
@@ -159,7 +163,7 @@ Must include:
 - 60-second project brief
 - source-of-truth file map
 - `PROJECT_STATE.yaml`, `launch-cockpit.html`, LaunchBench/failure-card rules, and the current autonomy mode contract
-- `LAUNCH_TRACE.md` and `TECH_SPEC.md` when they exist
+- `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, and `TECH_SPEC.md` when they exist
 - brand voice rules and banned/owned words
 - `DESIGN.md` and HTML visual-proof enforcement rules
 - onboarding, review prompt, paywall, closing offer, and activation rules when in scope
@@ -323,15 +327,41 @@ Use for any multi-artifact launch so the chain from research to implementation d
 Must include:
 - evidence index with source, date, tool/query/URL, confidence, and affected decision area
 - decision trace table with stable IDs
-- research finding, product decision, brand/design decision, build contract, analytics/revenue/privacy/store impact, verification method, and status
+- research finding, product experience decision, product decision, brand/design decision, build contract, analytics/revenue/privacy/store impact, verification method, and status
 - rejected decisions and why
 - founder-only decisions and approval status
 - implementation blockers and proof blockers
 
 Acceptance:
 - A future agent can explain why each major screen, claim, onboarding question, paywall behavior, event, data collection, and store-console answer exists.
+- The 11-star ladder and V1 scalable slice have trace rows before design and engineering harden.
 - Brand/design work cites research/product trace rows.
 - `ENGINEERING_PLAN.md`, builder prompts, and production-readiness checks can reference trace IDs instead of restating context.
+
+## `11_STAR_EXPERIENCE.md` And `11-star-experience.html`
+
+Use before `SPEC.md`, design, onboarding, ad/store concepts, content assets, or engineering plans are treated as ready. This is the product's experience north star, not a mood board.
+
+`11_STAR_EXPERIENCE.md` must include:
+- experience thesis: target user, ordinary world, desired transformation, magical moment, and why the user would retell it
+- 1/2/5/6/7/10/11-star ladder with product-specific labels, user scenes, implied behavior, emotional reaction, and learning
+- visible line of feasibility separating V1, light manual/concierge support, deferred inspiration, and explicitly not-in-scope ideas
+- V1 scalable slice with product behavior, data/state/API needs, design/motion needs, analytics proof, and production-readiness proof
+- surface matrix for product, onboarding, paywall, ad/creator hook, App Store screenshots, landing, lifecycle email, support, and engineering
+- traceability rows that connect experience decisions to `RESEARCH.md`, `SPEC.md`, `DESIGN.md`, `ONBOARDING.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, and `PRODUCTION_READINESS.md`
+
+`11-star-experience.html` must include:
+- visual vertical or staged ladder similar in structure to the 1/2/5/6/7/10/11-star framework, but with product-specific labels
+- line of feasibility shown as a visible break or band
+- V1 scalable slice summary
+- surface translation board for product, onboarding, paywall, ads, App Store, landing/email/support, and engineering
+- references to the canonical docs that consume the decisions
+
+Acceptance:
+- The product doc has a `11-Star Experience` section or pointer to this artifact.
+- The visual board can be opened by the founder before implementation.
+- The V1 slice is narrow enough to build but strong enough to shape design, ad creative, screenshots, onboarding, and technical contracts.
+- `npm run check:11-star -- --root .` passes or leaves an active failure card.
 
 ## `TECH_SPEC.md`
 
@@ -339,6 +369,7 @@ Use when app, backend, or web-funnel implementation needs precise contracts beyo
 
 Must include:
 - source docs and trace IDs
+- 11-star V1 scalable slice and magical-moment contracts when the experience lane is in scope
 - architecture overview and repo boundaries
 - auth/session model, anonymous-to-known transition, roles, logout/reset behavior
 - data model: entities, fields, ownership, retention, deletion, indexes, migrations, and seed fixtures
@@ -448,6 +479,7 @@ Acceptance:
 
 Must include:
 - one-line promise
+- `11-Star Experience` section or pointer to `11_STAR_EXPERIENCE.md` and `11-star-experience.html`
 - problem/villain language
 - evidence for the language
 - category/storefront strategy
@@ -465,6 +497,7 @@ Must include:
 
 Acceptance:
 - The spec explains why the app can win, not just what it does.
+- The spec names the magical moment and V1 scalable slice before engineering planning.
 - The category strategy uses store data, not internal language.
 - The moat is stated as a bundle of advantages, not one vague differentiator.
 
@@ -545,6 +578,7 @@ Use this as the builder-facing screen implementation spec. It should reference `
 
 Must include:
 - product surfaces
+- 11-star experience slice and trace IDs for the magical moment
 - screen-by-screen flows
 - trace IDs from `LAUNCH_TRACE.md` for key screens, copy claims, onboarding questions, paywall decisions, data collection, and screenshot concepts
 - component contracts

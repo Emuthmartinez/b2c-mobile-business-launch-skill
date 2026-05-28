@@ -67,7 +67,7 @@ Do not treat one viral UGC video as a reusable Fastlane angle. Promote a structu
 Do not start public Fastlane posting until these are true or explicitly marked blocked/deferred:
 - public App Store/Play Store URL or TestFlight/beta URL exists
 - landing page exists when web funnel is part of acquisition
-- `BRAND.md`, `DESIGN.md`, `LAUNCH.md`, and `ONBOARDING.md` are current enough to constrain content
+- `11_STAR_EXPERIENCE.md`, `BRAND.md`, `DESIGN.md`, `LAUNCH.md`, and `ONBOARDING.md` are current enough to constrain content
 - privacy/terms/support links are live if content drives signups, purchases, or data collection
 - product claims, screenshots, pricing, and subscription disclosures match store/legal/revenue docs
 - UGC creator rights, disclosure rules, and account ownership are documented when creator content is reused or remixed
@@ -86,6 +86,7 @@ Capture in `FASTLANE_OPS.md`:
 - product category, ICP, promise, offer, and key proof points
 - banned claims and compliance notes
 - brand voice notes from `BRAND.md`
+- 11-star V1 scalable slice and line of feasibility from `11_STAR_EXPERIENCE.md`
 - visual constraints and asset sources from `DESIGN.md` and `design.html`
 
 If the Fastlane guide/onboarding asks for product context, fill it from canonical launch docs instead of ad hoc copy.
