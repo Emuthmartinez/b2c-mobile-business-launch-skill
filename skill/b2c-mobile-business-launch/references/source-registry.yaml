@@ -611,6 +611,15 @@ sources:
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/tool-recipes.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-eronred-aso-skills-tree-main-skills
+    name: github.com
+    source_type: github
+    url: https://github.com/Eronred/aso-skills/tree/main/skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+    notes: Upstream ASO skill directory used to track specialist store, creative, icon, preview, CPP, event, paid UA, and analytics lanes.
   - id: github-com-getsentry-xcodebuildmcp
     name: github.com
     source_type: github

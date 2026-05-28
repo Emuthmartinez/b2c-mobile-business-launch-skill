@@ -20,6 +20,7 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | RevenueCat/Stripe docs | Pending | entitlement and web funnel | Refresh before final pricing |
 | Rork ASC CLI skills | Pending | metadata sync, localization, screenshots, pricing, release validation | Refresh before CLI guidance |
 | 11-star experience | Pending | screenshot story, preview hook, CPP/event promise | `11_STAR_EXPERIENCE.md` |
+| Screenshot packet | Pending | iPhone/iPad wells, App Icon, App Preview, copy overlay, final upload paths | `SCREENSHOTS.md` |
 
 ## ASC CLI Route And IDs
 
@@ -75,20 +76,32 @@ Founder approval required before creating live products, changing prices, changi
 
 ## Screenshots And App Previews
 
+Canonical screenshot packet: `SCREENSHOTS.md`
+
 | Slot | ASC device_type | Device well | Version localization ID | Locale | Headline | Source screen | Supporting asset | Tool | Size/alpha validation | Final path | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
-| 2 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
-| 3 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
+| 1 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-1.png` | blocked |
+| 1 | current iPad equivalent | iPad 13 or 12.9 | Pending | en-US | Pending | onboarding/value | design-system iPad frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/ipad-slot-1.png` | blocked |
+| 2 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-2.png` | blocked |
+| 3 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI raw capture plus composed final | `asc-screenshot-resize` pending | `screenshots/final/iphone-69-slot-3.png` | blocked |
 
 Rules:
-- Real app UI capture is the proof layer.
+- Real app UI capture is the proof layer; raw screenshots are not final upload assets.
+- Final upload candidates need production composition: headline, copy overlay, device frame or intentional frameless treatment, export target, and visual QA.
 - Use current `asc screenshots sizes --all` before choosing device types; do not rely on stale dimension tables.
 - Final upload candidates need alpha transparency removed, color-space checked, size validated, and associated with the correct version localization ID.
 - Higgsfield may create supporting visuals, icons, backgrounds, mascots, CPP/event media, or thumbnails only when tied to `DESIGN.md`.
 - Store screenshots and previews should express the V1 scalable slice from `11_STAR_EXPERIENCE.md` without crossing the line of feasibility.
 - Remotion may render screenshot frames, app previews, captioned demo clips, CPP/event variants, or social/store cuts from real UI only after `CONTENT_ASSETS.md` records route approval, license status, source inputs, render proof, and output paths.
 - Generated or rendered visuals must not imply unsupported features, claims, prices, or endorsements.
+
+## App Icon And Preview Assets
+
+| Asset | Store surface | Source | Route | Output | QA | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| App Icon | App Store search, product page, device install | `DESIGN.md`, category/competitor icon audit | Higgsfield, designer/founder-owned asset, or approved fallback | `app-icon/app-icon-1024.png` | no alpha, no rounded corners, thumbnail contrast, category differentiation | blocked |
+| App Preview 1 | App Store search/product page | real in-app footage | MobAI recording + Remotion edit, or approved route | `previews/ios-preview-1.mp4` | muted readability, poster frame, in-app footage only, no unsupported CTA | optional |
+| Google Play promo | Play Store product page | real app footage or approved marketing footage | Remotion, Higgsfield, or owned media | YouTube URL pending | Play metadata compliance, captions, thumbnail | optional |
 
 ## Custom Product Pages
 

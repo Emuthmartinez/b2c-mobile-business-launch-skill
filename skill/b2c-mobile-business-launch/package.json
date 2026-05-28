@@ -9,6 +9,7 @@
     "check:attribution": "tsx scripts/check-attribution-contract.ts",
     "check:apple-signing": "tsx scripts/check-apple-signing-packet.ts",
     "check:store-console": "tsx scripts/check-store-console-packet.ts",
+    "check:store-screenshots": "tsx scripts/check-store-screenshots.ts",
     "check:ux-patterns": "tsx scripts/check-ux-patterns.ts",
     "check:11-star": "tsx scripts/check-eleven-star-experience.ts",
     "check:secrets": "tsx scripts/check-secret-routing.ts",
@@ -26,7 +27,7 @@
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

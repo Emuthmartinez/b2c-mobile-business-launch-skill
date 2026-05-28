@@ -15,7 +15,7 @@ Audit gates:
 - visuals render in HTML using `DESIGN.md`
 - `11-star-experience.html` makes the V1 scalable slice inspectable before screen handoff
 - text does not clip or overlap on mobile
-- screenshots are based on real device/app captures when required
+- screenshots are based on real device/app captures when required, but final store assets are composed in `SCREENSHOTS.md` with copy overlays, iPhone/iPad wells, App Icon/App Preview routing, and visual QA
 - Higgsfield outputs match the design system and are labeled draft or production
 - Remotion assets have source inputs, license status, render proof, output paths, and claim review in `CONTENT_ASSETS.md`
 

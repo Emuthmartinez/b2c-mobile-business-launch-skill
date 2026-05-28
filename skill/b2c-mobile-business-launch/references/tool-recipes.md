@@ -302,20 +302,17 @@ Decision rule:
 Purpose: avoid re-creating specialist ASO work inside the broad launch skill.
 
 Use `aso-store-ops.md` as the router. Load `app-store-listing-prep.md` for Apple listing packets, pricing/privacy/growth surfaces, and `store-console-workflow.md` when the work moves into App Store Connect, Google Play Console, privacy forms, screenshots, or submission. When the runtime exposes ASO skills, delegate:
-- `app-marketing-context` before any ASO project
-- `keyword-research` before title/subtitle/keyword locks
-- `metadata-optimization` before App Store Connect or Play Console copy
-- `screenshot-optimization` before screenshot briefs or upload assets
-- `custom-product-pages` before CPP audience/channel/keyword routing
-- `in-app-events` before App Store event planning
-- `aso-audit` before changing an existing listing
-- `app-launch` for launch calendar and channel sequencing
-- `apple-search-ads` for ASA campaign structure and budget rules
-- `localization` for non-US markets or localized listings
-- `review-management` and `rating-prompt-strategy` for ratings/review loops
-- `subscription-lifecycle` and `monetization-strategy` for subscription funnels
-- `asc-metrics`, `app-analytics`, and `competitor-tracking` after launch
-- `android-aso` when Google Play is in scope
+- `aso-router` and `app-marketing-context` before any broad or ambiguous ASO project
+- `market-pulse`, `market-movers`, `category-positioning`, `competitor-analysis`, and `competitor-tracking` for category, chart, and competitor context
+- `keyword-research`, `metadata-optimization`, `seasonal-aso`, `localization`, and `android-aso` before title/subtitle/keywords/Play copy locks
+- `screenshot-optimization`, `ios-screenshots`, `app-icon-optimization`, `app-preview-video`, and `ab-test-store-listing` before screenshot, App Icon, App Preview, or PPO work
+- `custom-product-pages`, `in-app-events`, `app-store-featured`, and `app-clips` before Apple marketing-surface plans
+- `apple-search-ads`, `ua-campaign`, `attribution-setup`, and `web-to-app-funnel` for paid traffic, CPP routing, SKAN/MMP/deep links, and web-to-app funnels
+- `monetization-strategy`, `paywall-optimization`, and `subscription-lifecycle` for pricing, paywall, trial, churn, and subscription lifecycle work
+- `onboarding-optimization`, `retention-optimization`, and `referral-program` for activation, engagement, and viral loops that shape store claims
+- `review-management`, `rating-prompt-strategy`, `crash-analytics`, and `app-rejection-recovery` for quality loops, ratings/reviews, stability, and resubmission
+- `asc-metrics` and `app-analytics` for first-party performance and dashboards after launch
+- `app-launch`, `creator-ugc-marketing`, and `press-and-pr` for launch calendar, UGC/creator strategy, and press kit consistency
 
 Fallback:
 - If the ASO skills are installed but not discoverable in the current runtime, search local skill/plugin directories for the skill name and read its `SKILL.md`.

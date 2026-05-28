@@ -25,23 +25,21 @@ Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator
 
 If an ASO skill pack is installed, delegate narrow work instead of re-creating its frameworks:
 
-- `app-marketing-context` - create or refresh the shared context doc before any ASO work.
-- `keyword-research` - discover and prioritize App Store or Play Store keywords by market.
-- `metadata-optimization` - write title/name, subtitle, keyword field, short description, long description, promotional text, and character-counted variants.
-- `screenshot-optimization` - design screenshot slots, app preview strategy, visual hierarchy, and competitor creative teardown.
-- `aso-audit` - score the current listing and prioritize fixes.
-- `app-launch` - build the launch timeline and channel sequence.
-- `apple-search-ads` - structure ASA campaigns, match types, bids, budgets, and custom product page routing.
-- `localization` - choose international markets, localized metadata, screenshot localization, and translation posture.
-- `review-management` and `rating-prompt-strategy` - analyze reviews, response patterns, prompt timing, and rating recovery.
-- `monetization-strategy` and `subscription-lifecycle` - benchmark pricing, trials, paywall timing, churn, dunning, and win-back.
-- `app-analytics` and `asc-metrics` - inspect first-party App Store Connect metrics when connected, or define dashboards when not.
-- `competitor-analysis` and `competitor-tracking` - run one-time competitor teardown and recurring watchlists.
-- `android-aso` - branch to Google Play-specific listing, Data safety, graphics, and store experiments.
+- Foundation and routing: `aso-router`, `app-marketing-context`.
+- Market and category: `market-pulse`, `market-movers`, `category-positioning`, `competitor-analysis`, `competitor-tracking`.
+- Keywords and metadata: `keyword-research`, `metadata-optimization`, `localization`, `seasonal-aso`, `android-aso`.
+- Creative conversion: `screenshot-optimization`, `app-icon-optimization`, `app-preview-video`, `ab-test-store-listing`.
+- App Store growth surfaces: `custom-product-pages`, `in-app-events`, `app-store-featured`, `app-clips`.
+- Paid acquisition and attribution: `apple-search-ads`, `ua-campaign`, `attribution-setup`.
+- Revenue and funnel quality: `monetization-strategy`, `paywall-optimization`, `subscription-lifecycle`, `web-to-app-funnel`.
+- Activation and retention: `onboarding-optimization`, `retention-optimization`, `referral-program`.
+- Ratings, reviews, and quality: `review-management`, `rating-prompt-strategy`, `crash-analytics`, `app-rejection-recovery`.
+- Analytics and first-party performance: `app-analytics`, `asc-metrics`.
+- Launch and publicity: `app-launch`, `creator-ugc-marketing`, `press-and-pr`.
 
 If these skills are not directly discoverable in the current runtime, search installed skill/plugin paths for the names above, read the matching `SKILL.md`, and proceed with the same output contract manually. Do not assume Claude and Codex expose the same installed plugin surface.
 
-Before handing work back to the founder, produce or update `STORE_CONSOLE.md`, `store-console.html`, and `SCREENSHOTS.md` when a store submission is in scope.
+Before handing work back to the founder, produce or update `STORE_CONSOLE.md`, `store-console.html`, `APP_STORE_LISTING.md`, `SCREENSHOTS.md`, and the screenshot/export proof board when a store submission is in scope.
 
 ## 2. Required ASO Context
 
@@ -82,20 +80,27 @@ Screenshots must sell the product and satisfy platform rules.
 
 Checklist:
 - define the first 3 screenshots as the search/product-page conversion set
+- treat raw app screenshots as proof inputs, not final store creative
+- produce composed final assets with headline, copy overlay, device frame or intentional frameless layout, background/supporting visuals, export dimensions, and visual QA
 - show actual app UI or faithful production screens; do not rely on generic generated art
 - capture real app UI with MobAI or an equivalent simulator/device workflow when a local build exists
 - use XcodeBuildMCP for Apple-platform screenshot capture only after the founder confirms fallback from MobAI
 - make the value proposition readable at thumbnail size
-- use device sizes and upload slots required for the current platform and app targets
+- use current iPhone, iPad, Google Play, and app-target device sizes/upload wells required for the current platform
+- route App Icon work through `app-icon-optimization` or equivalent, and verify 1024x1024 output, no alpha, no rounded corners, thumbnail contrast, and category differentiation
+- route App Preview or Play promo videos through `app-preview-video` plus MobAI/Remotion/Higgsfield/owned-media production rules when video is in scope
 - ensure screenshots do not imply unavailable features, unsupported claims, free trials, prices, competitor comparisons, or endorsements without approval
 - localize screenshot copy when localized metadata is shipped
 - mark reference art separately from production upload assets
 - express the V1 scalable slice from `11_STAR_EXPERIENCE.md` instead of generic feature lists
 
 Output:
-- screenshot frame table: slot, headline, source screen, visual asset, proof constraint, production file path, locale/device target
+- `SCREENSHOTS.md` with narrative, raw capture matrix, production composition matrix, device wells, App Icon, App Preview, validation, and visual QA
+- screenshot frame table: slot, headline, copy overlay, source screen, visual asset, proof constraint, production file path, locale/device target
 - MobAI/raw capture paths, composed asset paths, final upload paths, and the device/display wells each file satisfies
 - final image dimensions and upload status
+- `screenshots/index.html` or equivalent self-contained proof/export board when assets are being composed locally
+- content-asset route, license/source-input proof, and founder approval gate when Higgsfield, Remotion, or edited media are used
 - visual QA notes from desktop and mobile inspection where applicable
 
 ## 5. App Store Listing Marketing Surface

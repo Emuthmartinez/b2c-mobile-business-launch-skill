@@ -37,7 +37,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
 | Viral Growth | `VIRAL_GROWTH.md`, product-led referral/share loops, content format lab, monetization timing, abuse controls, analytics proof, and stop/scale rules |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
-| Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
+| Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, professional iPhone/iPad screenshot compositions, App Icon/App Preview routing, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Orchestration | `ORCHESTRATION.md`, parallel-agent preflight, candidate units, serialized resources, worktree routing, subagent forbidden actions, collision checks, and integration proof |
 | Engineering | business-specific `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, continued skill routing, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
@@ -72,6 +72,7 @@ npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
 npm run check:content-assets -- --root /path/to/app
+npm run check:store-screenshots -- --root /path/to/app
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
@@ -105,6 +106,7 @@ The scripts are intentionally simple:
 - `check-security-release.ts` checks `SECURITY.md`, security-review routing, OWASP/platform basis, mobile hardening, entitlement/webhook abuse controls, privacy/analytics/email controls, supply-chain checks, incident response, and accepted risks.
 - `check-content-assets.ts` checks `CONTENT_ASSETS.md`, Remotion/Higgsfield route decisions, fallback approval, license status, source inputs, render proof, claim review, and manifest shape.
 - `check-viral-growth-loop.ts` checks `VIRAL_GROWTH.md`, product/referral/content loops, monetization timing, analytics proof, abuse controls, stop/scale rules, and format-lab evidence.
+- `check-store-screenshots.ts` checks `SCREENSHOTS.md`, raw-vs-composed screenshot separation, iPhone/iPad/Play wells, App Icon/App Preview routing, copy overlays, validation, and visual QA proof.
 - `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.

@@ -39,7 +39,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 - Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`
 - Implementation: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`
 - Design and content: `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`
-- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
+- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `SCREENSHOTS.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
 - Revenue, lifecycle, and trust: `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `TERMS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`
 - Role routing: `APP_AGENTS.md` and `agents/`
 
@@ -72,6 +72,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - `DESIGN.md` owns tokens, voice, components, and visual rules.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
+- Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, App Icon/App Preview routing, current device wells, validation, and visual QA.
 
 ## Analytics, Revenue, And Secrets
 
@@ -108,6 +109,7 @@ npm run validate:launch-state -- --root /path/to/{{APP_SLUG}} --state PROJECT_ST
 npm run check:orchestration -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:secrets -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:security -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:store-screenshots -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run render:launch-cockpit -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml --out /path/to/{{APP_SLUG}}/launch-cockpit.html
 ```
 

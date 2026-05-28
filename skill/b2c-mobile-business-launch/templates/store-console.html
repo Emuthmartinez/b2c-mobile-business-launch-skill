@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{APP_NAME}} Store Console Packet</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17130f;
+        --muted: #63584e;
+        --line: #d8cfc3;
+        --paper: #fbf8f1;
+        --panel: #ffffff;
+        --accent: #0f766e;
+      }
+
+      body {
+        margin: 0;
+        font-family: Avenir Next, Verdana, sans-serif;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(2rem, 5vw, 4rem);
+        line-height: 0.95;
+      }
+
+      p {
+        max-width: 760px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      section {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: 8px;
+        padding: 18px;
+      }
+
+      h2 {
+        margin: 0 0 10px;
+        font-size: 1rem;
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      strong {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>{{APP_NAME}} Store Console</h1>
+      <p>
+        Copy-paste readiness surface for App Store Connect and Google Play. Keep this page aligned with
+        <strong>APP_STORE_LISTING.md</strong>, <strong>SCREENSHOTS.md</strong>, privacy/legal docs, and founder approval.
+      </p>
+      <div class="grid">
+        <section>
+          <h2>App Store Connect</h2>
+          <ul>
+            <li>App Information, SKU, primary locale, bundle ID, App Privacy</li>
+            <li>Pricing, subscription, RevenueCat, localization, review notes</li>
+            <li>Custom product page and In-App Event gates</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Google Play</h2>
+          <ul>
+            <li>Package name, main listing, Data safety, screenshots</li>
+            <li>Review notes, account deletion, privacy, promo assets</li>
+            <li>Submission and pricing changes gated by founder approval</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Creative Assets</h2>
+          <ul>
+            <li>Production screenshot composition from real app UI</li>
+            <li>Higgsfield support for approved visual systems</li>
+            <li>App Icon, App Preview, thumbnails, and validation proof</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

@@ -124,7 +124,7 @@ function writeCompleteStoreConsole(root: string): void {
     [
       "# App Store Listing",
       "App Privacy answers are derived from data inventory and third-party partners.",
-      "Pricing, RevenueCat entitlement mapping, subscription setup, localization, custom product page strategy, In-App Event planning, and Higgsfield-backed marketing assets are ready for founder approval.",
+      "Pricing, RevenueCat entitlement mapping, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, and Higgsfield-backed marketing assets are ready for founder approval.",
       "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
       "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
@@ -132,6 +132,36 @@ function writeCompleteStoreConsole(root: string): void {
   );
   writeFileSync(path.join(root, "app-store-listing.html"), "<!doctype html><html><body>App Store listing packet</body></html>", "utf8");
   writeFileSync(path.join(root, "app-privacy-questionnaire.html"), "<!doctype html><html><body>App Privacy questionnaire</body></html>", "utf8");
+}
+
+function writeCompleteStoreScreenshots(root: string): void {
+  writeFileSync(
+    path.join(root, "SCREENSHOTS.md"),
+    [
+      "# Store Screenshots",
+      "Status: partial until founder approval for upload.",
+      "Source Ledger: DESIGN.md, design.md, 11_STAR_EXPERIENCE.md, APP_STORE_LISTING.md, CONTENT_ASSETS.md, MobAI raw captures, Higgsfield supporting visuals, Remotion rendered frames, and asc-screenshot-resize validation.",
+      "Narrative: Slot 1 sells the core outcome; slots 2-3 prove the V1 scalable slice; later slots show one benefit per frame.",
+      "App Icon: 1024x1024 PNG, no alpha, no rounded corners, tested at App Store search thumbnail size, with Higgsfield route recorded when generated.",
+      "App Preview: App Store Preview or Google Play promo video route is recorded, with poster frame, muted captions, real in-app footage, and founder approval before upload.",
+      "Raw Capture Matrix",
+      "| Slot | Platform | Device | Locale | Source screen | Capture tool | Raw path | Version localization ID | Status |",
+      "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+      "| 1 | iOS | iPhone 6.9 | en-US | onboarding/value | MobAI | screenshots/raw/iphone-slot-1.png | 123 | captured |",
+      "| 2 | iOS | iPad 13 | en-US | core feature | MobAI | screenshots/raw/ipad-slot-2.png | 123 | captured |",
+      "| 3 | Google Play | phone | en-US | paywall/result | MobAI | screenshots/raw/play-slot-3.png | n/a | captured |",
+      "Production Composition Matrix",
+      "| Slot | Headline | Copy overlay | Layout | Supporting asset | Route | Final upload path | Dimensions | Alpha/color space | Visual QA |",
+      "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+      "| 1 | See the win fast | yes | framed iPhone app store screenshot | Higgsfield background tied to DESIGN.md | Remotion composition from real UI | screenshots/final/iphone-69-slot-1.png | 1320x2868 | alpha removed, sRGB color space | thumbnail and mobile proof passed |",
+      "| 2 | Built for big screens | yes | framed iPad app store screenshot | DESIGN.md gradient panel | Remotion composition from real UI | screenshots/final/ipad-13-slot-2.png | 2064x2752 | alpha removed, sRGB color space | iPad well proof passed |",
+      "Device Wells: iPhone 6.9, iPhone 6.5, iPhone 6.3, iPhone 6.1, iPad 13, iPad 12.9, Google Play phone, tablet, and feature graphic are listed with ready/blocked status.",
+      "Export And Validation: run asc-screenshot-resize for size, alpha, color space, and current device wells; record asc-shots-pipeline dry-run before upload.",
+      "Visual QA: check thumbnail readability, text fit, safe areas, overlap, color contrast, actual UI truth, pricing/trial consistency, and no unsupported claims.",
+      "Founder approval is required before screenshot upload, App Preview upload, CPP/event media submission, paid Higgsfield generation, or replacing Higgsfield with a fallback.",
+    ].join("\n"),
+    "utf8",
+  );
 }
 
 function writeCompleteElevenStar(root: string): void {
@@ -462,6 +492,7 @@ try {
   writeCompleteAttribution(clean);
   writeCompleteAppleSigning(clean);
   writeCompleteStoreConsole(clean);
+  writeCompleteStoreScreenshots(clean);
   writeCompleteElevenStar(clean);
   writeCompleteSecurity(clean);
   writeCompleteContentAssets(clean);
@@ -476,6 +507,7 @@ try {
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
+  runFixture("complete store screenshots packet passes", clean, "check-store-screenshots.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
   const sourceRegistryClean = makeEmptyFixture("source-registry-clean");
@@ -692,7 +724,7 @@ try {
     path.join(iosOnlyStore, "APP_STORE_LISTING.md"),
     [
       "# App Store Listing",
-      "App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, and founder approval are documented.",
+      "App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, App Icon direction, App Preview routing, SCREENSHOTS.md, iPad screenshot wells, copy overlay rules, Higgsfield-backed marketing assets, and founder approval are documented.",
       "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
       "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
@@ -700,6 +732,7 @@ try {
   );
   writeFileSync(path.join(iosOnlyStore, "app-store-listing.html"), "<!doctype html><html><body>iOS listing packet</body></html>", "utf8");
   writeFileSync(path.join(iosOnlyStore, "app-privacy-questionnaire.html"), "<!doctype html><html><body>iOS privacy questionnaire</body></html>", "utf8");
+  writeCompleteStoreScreenshots(iosOnlyStore);
   runFixture("iOS-only store packet does not require Google Play fields", iosOnlyStore, "check-store-console-packet.ts", 0);
 
   const missingListingArtifacts = makeFixture("store-missing-listing-artifacts");
@@ -719,6 +752,10 @@ try {
 
   const unresolvedListing = makeFixture("store-unresolved-listing");
   writeCompleteStoreConsole(unresolvedListing);
+  const unresolvedListingState = readState(unresolvedListing);
+  const unresolvedStoreLane = getLane(unresolvedListingState, "store_console");
+  unresolvedStoreLane["status"] = "done";
+  writeState(unresolvedListing, unresolvedListingState);
   writeFileSync(
     path.join(unresolvedListing, "APP_STORE_LISTING.md"),
     [
@@ -760,6 +797,10 @@ try {
   runFixture("unsafe ASC fallback-name retry fails", unsafeFallback, "check-store-console-packet.ts", 1, "unapproved_name_fallback");
 
   const phraseOnlyStore = makeFixture("store-phrase-only");
+  const phraseOnlyStoreState = readState(phraseOnlyStore);
+  const phraseOnlyStoreLane = getLane(phraseOnlyStoreState, "store_console");
+  phraseOnlyStoreLane["status"] = "done";
+  writeState(phraseOnlyStore, phraseOnlyStoreState);
   writeFileSync(
     path.join(phraseOnlyStore, "STORE_CONSOLE.md"),
     [
@@ -781,6 +822,26 @@ try {
   );
   writeFileSync(path.join(phraseOnlyStore, "store-console.html"), "<!doctype html><html><body>Store packet</body></html>", "utf8");
   runFixture("store packet with placeholders and unapproved fallback fails", phraseOnlyStore, "check-store-console-packet.ts", 1, "store_console.unapproved_name_fallback");
+
+  const rawOnlyScreenshots = makeFixture("raw-only-screenshots");
+  writeCompleteStoreConsole(rawOnlyScreenshots);
+  writeFileSync(
+    path.join(rawOnlyScreenshots, "SCREENSHOTS.md"),
+    [
+      "# Store Screenshots",
+      "Status: ready for upload.",
+      "Raw Capture Matrix",
+      "| Slot | Platform | Device | Locale | Source screen | Capture tool | Raw path | Version localization ID | Status |",
+      "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+      "| 1 | iOS | iPhone | en-US | Home | MobAI | screenshots/raw/home.png | 123 | ready |",
+      "Production Composition Matrix",
+      "Device Wells: iPhone and iPad wells are covered.",
+      "headline and copy overlay are not needed because raw screenshots are ready.",
+      "DESIGN.md, 11_STAR_EXPERIENCE.md, Higgsfield, Remotion, App Icon, App Preview, asc-screenshot-resize, alpha, color space, thumbnail, visual QA, Google Play, feature graphic, and founder approval are mentioned.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("raw-only store screenshots fail", rawOnlyScreenshots, "check-store-screenshots.ts", 1, "store_screenshots.raw_capture_as_final");
 
   const uxFallbackUnapproved = makeFixture("ux-fallback-unapproved");
   writeFileSync(

@@ -15,6 +15,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - a new API key/env var appears but `SECRETS.md`, Doppler, CI injection, or public/server-only classification is not updated
 - a new third-party docs/tooling URL appears but is not added to `source-registry.yaml`
 - upstream App Store Connect CLI skills or provider docs change but stale command snippets remain in references/templates
+- store screenshot work treats raw device captures as final App Store upload artwork without composed iPhone/iPad assets, copy overlays, device-well validation, icon/preview routing, and visual QA
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice
 - social growth is marked ready from UGC ideas, views, or TikTok hooks without `VIRAL_GROWTH.md`, product-loop contract, abuse controls, monetization timing, analytics proof, and stop/scale rules

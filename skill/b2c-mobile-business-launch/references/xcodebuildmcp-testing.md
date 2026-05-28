@@ -232,5 +232,6 @@ Do not flatten these into "Xcode is broken". Record the exact doctor finding and
 - raw capture path
 - final composition path
 - device/display well
+- headline/copy overlay and App Icon/App Preview route when store creative is in scope
 - locale, theme, fixture, screen path
 - upload readiness

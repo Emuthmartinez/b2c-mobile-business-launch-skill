@@ -80,9 +80,19 @@ const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim())
 const hasAndroid = state ? platforms.includes("android") || Boolean(androidBundleId?.trim()) : true;
 const revenueStatus = state ? asString(getPath(state, "lanes.revenue.status"))?.toLowerCase() : undefined;
 const revenueInScope = !state || !["not_needed", "deferred"].includes(revenueStatus ?? "");
+const storeConsoleStatus = state ? asString(getPath(state, "lanes.store_console.status"))?.toLowerCase() : undefined;
+const storeConsoleDone = storeConsoleStatus === "done";
+const storeConsoleSkipped = ["not_needed", "deferred"].includes(storeConsoleStatus ?? "");
+
+function statusLineClaimsReady(text: string): boolean {
+  return text.split(/\r?\n/).some((line) => /^\s*(status|launch status|upload status)\s*:/i.test(line) && /\b(done|complete|completed|ready|verified|approved)\b/i.test(line));
+}
 
 if (!markdown) {
-  issues.push(issue("error", "store_console.markdown_missing", "STORE_CONSOLE.md is required for copy-paste App Store Connect and Google Play guidance.", markdownPath));
+  if (!storeConsoleSkipped) {
+    const severity = storeConsoleDone || !state ? "error" : "warning";
+    issues.push(issue(severity, "store_console.markdown_missing", "STORE_CONSOLE.md is required for copy-paste App Store Connect and Google Play guidance.", markdownPath));
+  }
 } else {
   const requiredPhrases = [
     "click path",
@@ -149,7 +159,9 @@ if (!markdown) {
     "bundle ID",
     "package name",
   ];
-  checkUnresolvedStoreLines(markdown, markdownPath, guardedTerms);
+  if (storeConsoleDone || statusLineClaimsReady(markdown)) {
+    checkUnresolvedStoreLines(markdown, markdownPath, guardedTerms);
+  }
 }
 
 if (!htmlExists) {
@@ -176,12 +188,19 @@ if (hasIos) {
       "asc-submission-health",
       "version localization ID",
       "base territory",
+      "SCREENSHOTS.md",
+      "App Icon",
+      "App Preview",
+      "iPad",
+      "copy overlay",
     ];
     if (revenueInScope) {
       appListingRequiredPhrases.push("RevenueCat", "subscription");
     }
     requirePhrases(appListingMarkdown.text, appListingRequiredPhrases, "app_store_listing", appListingMarkdown.relativePath);
-    checkUnresolvedStoreLines(appListingMarkdown.text, appListingMarkdown.relativePath, appListingRequiredPhrases);
+    if (storeConsoleDone || statusLineClaimsReady(appListingMarkdown.text)) {
+      checkUnresolvedStoreLines(appListingMarkdown.text, appListingMarkdown.relativePath, appListingRequiredPhrases);
+    }
   }
 
   if (!appListingHtml) {

@@ -37,6 +37,7 @@ Refresh official docs before final packets or commands:
 
 Also inspect the ASO skill set when available:
 - Eronred ASO skills: `https://github.com/Eronred/aso-skills`
+- Eronred ASO skill directory: `https://github.com/Eronred/aso-skills/tree/main/skills`
 - Local vendored copy, when present: `skills/vendor/aso-skills/skills/*`
 - Installed local skills such as `ios-screenshots`, `finding-app-niches`, `analyzing-competitors`, and `researching-paywalls`
 
@@ -120,14 +121,17 @@ For every product, record:
 ## ASO, In-App Events, Custom Product Pages, And Localization
 
 Use ASO skills or equivalent frameworks for:
-- `app-marketing-context`: shared context before any listing copy
-- `keyword-research` and `metadata-optimization`: title/name, subtitle, keywords, promotional text, description, and variants
-- `screenshot-optimization` and `ios-screenshots`: screenshot story, device wells, app preview strategy, and final dimensions
-- `custom-product-pages`: audience/channel variants, unique keyword sets, CPP/ASA mapping, measurement floor, and deep-link proof
-- `in-app-events`: event purpose, badge, name, short/long description, media, schedule, deep link, purchase-required flag, and localization
-- `localization`: market prioritization, localized keywords, screenshots, product pages, pricing expectations, and cultural review
-- `apple-search-ads`: campaign/ad group/search-term routing to default page or custom product pages
-- `review-management`: review response plan and rating recovery
+- `aso-router` and `app-marketing-context`: dispatch ASO specialist lanes and create shared app/category/audience context
+- `market-pulse`, `market-movers`, `category-positioning`, `competitor-analysis`, and `competitor-tracking`: market/category context, chart movement, competitor positioning, and watchlists
+- `keyword-research`, `metadata-optimization`, `seasonal-aso`, `localization`, and `android-aso`: title/name, subtitle, keyword fields, Play Store descriptions, seasonal timing, country-specific keywords, and localized screenshots
+- `screenshot-optimization`, `ios-screenshots`, `app-icon-optimization`, `app-preview-video`, and `ab-test-store-listing`: screenshot story, iPhone/iPad export wells, App Icon variants, App Preview scripts, PPO tests, and creative conversion strategy
+- `custom-product-pages`, `in-app-events`, `app-store-featured`, and `app-clips`: Apple marketing surfaces beyond the default page
+- `apple-search-ads`, `ua-campaign`, `attribution-setup`, and `web-to-app-funnel`: paid traffic, CPP routing, MMP/SKAN/deep-link setup, and web-to-app conversion paths
+- `monetization-strategy`, `paywall-optimization`, and `subscription-lifecycle`: price/trial/paywall/lifecycle consistency across listing, RevenueCat, Stripe/web funnel, and screenshots
+- `onboarding-optimization`, `retention-optimization`, and `referral-program`: activation, retention, and viral loops that should shape screenshots, previews, and store claims
+- `review-management`, `rating-prompt-strategy`, `crash-analytics`, and `app-rejection-recovery`: quality signals, review loops, stability, and rejection response
+- `app-analytics` and `asc-metrics`: first-party App Store Connect metrics, dashboards, and post-launch experiment readouts
+- `app-launch`, `creator-ugc-marketing`, and `press-and-pr`: launch calendar, creator/UGC angles, and press kit consistency
 
 When the Rork App Store Connect CLI skill pack is available, map App Store work to exact ASC routes:
 
@@ -169,6 +173,11 @@ Screenshots and previews should start from real app UI. When marketing compositi
 - use `11_STAR_EXPERIENCE.md` for the magical moment and line of feasibility so screenshots and ads do not overpromise
 - use MobAI for real iOS/Android captures when available
 - use XcodeBuildMCP only after founder-approved fallback from MobAI for Apple-platform capture
+- create `SCREENSHOTS.md` before calling screenshots done; it must separate raw capture paths from production compositions and final upload files
+- produce final screenshot artwork for current iPhone and iPad wells, not just raw device captures, with readable headline/copy overlay, device frame or intentional frameless layout, dimensions, alpha/color-space validation, thumbnail QA, and visual proof
+- create or update a screenshot composition/export board such as `screenshots/index.html` when composing final stills locally
+- route App Icon production through `app-icon-optimization` or equivalent, testing the 1024x1024 icon at App Store search thumbnail size with no alpha and no rounded corners
+- route App Preview or Play promo video through `app-preview-video`, MobAI/recording proof, and Remotion/Higgsfield/owned-media production rules when video is in scope
 - use Higgsfield for high-quality supporting visuals, mascots, backgrounds, icons, thumbnails, CPP/event artwork, and campaign imagery when the asset is not just a screenshot
 - use Remotion after `remotion-content-assets.md` when screenshots, previews, CPP/event media, or social/store variants should be code-rendered from real app UI, brand tokens, copy, captions, and local media
 - keep generated assets consistent with the design system and label reference art separately from production upload files
@@ -193,6 +202,7 @@ Do not call the App Store listing ready unless:
 - App Privacy answers are derived from real data inventory and third-party partners
 - pricing/subscriptions/products match RevenueCat/Stripe/web funnel/paywall/legal copy
 - screenshots/previews have real app UI, final dimensions, locale/device targets, and upload status
+- `SCREENSHOTS.md` proves raw captures, composed production assets, iPhone/iPad device wells, App Icon/App Preview route, visual QA, and `check-store-screenshots` status
 - custom product pages, In-App Events, and ASA/marketing routing are either planned with proof or explicitly not needed
 - localization strategy is documented with target markets and proof status
 - Higgsfield, Remotion, or generated assets are tied to `DESIGN.md`, recorded in `CONTENT_ASSETS.md` when used, and separated from raw UI proof

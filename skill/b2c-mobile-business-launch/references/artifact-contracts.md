@@ -799,15 +799,17 @@ Use when App Store or Play Store screenshots, previews, icons, feature graphics,
 Must include:
 - current official screenshot/asset sources checked with URLs and dates
 - device matrix by platform, device class, display well, locale, required/optional status, and dimensions
-- raw MobAI/device capture path, or founder-confirmed XcodeBuildMCP Apple-platform capture path, design-system frame path, final upload path, visual proof path, and upload status
-- screenshot slot strategy: first three conversion frames, source screen, headline, claim risk, localization, and production readiness
+- raw MobAI/device capture path, or founder-confirmed XcodeBuildMCP Apple-platform capture path, production composition path, design-system frame path, final upload path, visual proof path, and upload status
+- screenshot slot strategy: first three conversion frames, source screen, headline, copy overlay, claim risk, localization, and production readiness
+- App Icon and App Preview route, source inputs, output paths, thumbnail/poster-frame QA, and founder approval gate when in scope
 - generated asset use: Higgsfield or other AI assets labeled `direction`, `draft`, or `production`, with proof that real app UI remains truthful and visible
 - capture notes: device/OS/app build, locale, theme, account fixture, data fixture, accessibility IDs, and any manual steps
+- `check-store-screenshots` result or explicit blocker
 
 Acceptance:
 - Every final screenshot can be traced to a real app screen or an explicitly approved mock state.
 - Final dimensions match current Apple or Google requirements.
-- Raw captures are preserved separately from composed upload assets.
+- Raw captures are preserved separately from composed upload assets and are never described as final store artwork by themselves.
 
 ## `CONTENT_ASSETS.md`, `content-assets.html`, And `content-assets/manifest.json`
 

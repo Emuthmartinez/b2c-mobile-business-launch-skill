@@ -157,6 +157,7 @@ lanes:
       - "APP_STORE_LISTING.md"
       - "app-store-listing.html"
       - "app-privacy-questionnaire.html"
+      - "SCREENSHOTS.md"
     blockers: []
   apple_signing:
     status: "partial"
@@ -276,6 +277,27 @@ tools:
     preflight: "Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, and founder approval before app-record mutation."
     validation: "Bundle ID and app record exist; archive/export/upload path is known."
     fallback: "Manual ASC click-path packet after founder approval."
+  aso_skills:
+    route: "optional_local_skill_pack"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Refresh the Eronred ASO skill pack or installed local equivalents before ASO, icon, screenshot, CPP, event, paid UA, or post-launch metric guidance."
+    validation: "APP_STORE_LISTING.md, SCREENSHOTS.md, and STORE_CONSOLE.md record which ASO specialist lanes were used or intentionally not needed."
+    fallback: "Apply equivalent frameworks manually only after paid/account-gated ASO routes and missing runtime access are recorded."
+  higgsfield:
+    route: "optional_paid_or_account_tool"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Confirm DESIGN.md tokens, asset family, prompt brief, source rights, and whether the output is screenshot support, App Icon, CPP/event art, preview thumbnail, or UGC/ad creative."
+    validation: "CONTENT_ASSETS.md and SCREENSHOTS.md record route, prompt summary, source inputs, output paths, visual QA, and founder approval gates."
+    fallback: "Remotion, HTML/CSS composition, founder-owned media, public-domain assets, or raw screenshots only after founder approval and limitation notes."
+  mobai:
+    route: "intended_paid_or_account_tool"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Confirm device/app access, bundle/package ID, locale, seeded demo state, and screenshot-critical flows before capture."
+    validation: "SCREENSHOTS.md records raw capture paths, device/locale, source screen, version localization ID, and final composition linkage."
+    fallback: "XcodeBuildMCP for Apple-only capture or founder-provided captures only after paid-tool fallback approval and limitations are recorded."
   google_play:
     route: "intended_account_tool"
     docs_checked_at: ""

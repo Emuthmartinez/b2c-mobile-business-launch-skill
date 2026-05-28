@@ -515,6 +515,8 @@ Packet should include:
 
 Screenshots should start from real app UI captured locally, then be composed with design-system frames, text overlays, generated characters/backgrounds, or store-specific templates.
 
+Raw captures are never the final App Store or Google Play artwork by themselves. They are the proof layer that feeds production screenshot compositions, App Icon checks, App Preview/poster frames, device-well exports, and upload validation.
+
 Use:
 - `DESIGN.md` for visual rules
 - `design.html` or screenshot HTML for framed concepts
@@ -523,6 +525,7 @@ Use:
 - XcodeBuildMCP for Apple-platform screenshots, videos, logs, and UI automation only after the founder confirms fallback from MobAI
 - Higgsfield for supporting visual assets only after the real UI is clear
 - `SCREENSHOTS.md` for final slot table
+- `screenshots/index.html` or equivalent screenshot HTML for local composition/export proof when final stills are being assembled
 - `DEMO_VIDEO.md` for app-preview/demo-video choreography, raw capture, edited export, captions, and upload copy
 
 ### MobAI Capture
@@ -572,6 +575,7 @@ Record in `SCREENSHOTS.md`:
 - raw capture path
 - device/simulator, OS, locale, theme, fixture, screen path
 - final composition and upload well
+- headline, copy overlay, supporting asset, device frame/frameless choice, and visual QA proof
 - coverage limitations
 
 Rules:
@@ -600,11 +604,16 @@ Common iOS targets to check against current Apple specs:
 - locale
 - slot number
 - headline
+- copy overlay
 - raw MobAI capture path
 - frame/composition path
 - final upload path
 - visual proof path
 - upload status
+
+App Icon and App Preview:
+- App Icon output must be a 1024x1024 PNG with no alpha and no rounded corners, tested at App Store thumbnail size and checked against category competitors.
+- App Preview output must come from real in-app footage for Apple, include a deliberate poster frame, support muted playback, and stay aligned with screenshot orientation and store claims.
 
 ### Google Play Screenshot Packet
 
@@ -626,6 +635,7 @@ Packet should cover:
 - paste-ready fields with limits and counts
 - privacy/Data safety tables
 - screenshot matrix with thumbnails or file links
+- App Icon and App Preview route/status when in scope
 - founder-only gates highlighted
 - latest official-doc refresh date and source links
 
@@ -639,7 +649,8 @@ Do not make this a marketing page. It should feel like an operator console: dens
 - Privacy answers are copied from a policy generator instead of data inventory and SDK behavior.
 - Google Play Data safety and Apple App Privacy disagree.
 - App screenshots use generated art but do not show the real app UI.
-- MobAI or XcodeBuildMCP captures are raw but never converted into platform-specific dimensions.
+- MobAI or XcodeBuildMCP captures are raw but never converted into composed, copy-led, platform-specific iPhone/iPad/Play assets.
+- App Icon or App Preview work is skipped even though the ASO pack has specialist guidance for it.
 - Store products exist but are not attached to the app version or review/submission state.
 - Reviewer credentials are stale or cannot reach the paywalled/restricted flow.
 - Apple screenshot wells changed and old dimensions were reused from memory.

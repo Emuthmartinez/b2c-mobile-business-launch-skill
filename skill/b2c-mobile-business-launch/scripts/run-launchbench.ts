@@ -23,6 +23,7 @@ const knownValidators = new Set([
   "check-attribution-contract",
   "check-apple-signing-packet",
   "check-store-console-packet",
+  "check-store-screenshots",
   "check-secret-routing",
   "check-security-release",
   "check-content-assets",

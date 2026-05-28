@@ -345,7 +345,7 @@ Do:
 - Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/device capture, production-text overlay notes, final upload dimensions, and upload well.
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
 - Create Apple Search Ads campaign groups: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics.
-- Verify store-console readiness with a copy-paste packet: categories, age rating, pricing/IAP/subscriptions, review notes, demo credentials, export compliance, privacy labels, privacy manifests/required-reason APIs, account deletion, screenshot slot requirements, and build/review status.
+- Verify store-console readiness with a copy-paste packet: categories, age rating, pricing/IAP/subscriptions, review notes, demo credentials, export compliance, privacy labels, privacy manifests/required-reason APIs, account deletion, screenshot slot requirements, App Icon/App Preview routes, and build/review status.
 - Verify Apple distribution readiness separately from simulator builds: Developer Program membership, role, agreements, Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, capabilities/entitlements, Apple Development versus Apple Distribution signing path, archive/export/upload, and TestFlight processing.
 - Add Google Play branch when Android is in scope: Data safety, privacy policy, account deletion web link, feature graphic, screenshots, short/long description, content rating, testing track, and store listing experiments.
 - Define launch calendar from pre-launch through 6 weeks post-launch.
@@ -366,7 +366,7 @@ Outputs:
 - `SCREENSHOTS.md`
 - `PRIVACY.md`, `TERMS.md`, and `LEGAL_REVIEW.md` when public collection, accounts, subscriptions, app-store submission, or sensitive data are in scope
 - `app-marketing-context.md` or equivalent ASO context section
-- screenshot mockups/assets
+- screenshot mockups/assets, including raw captures and composed iPhone/iPad/Play final upload candidates
 - ad and ASA plan
 - launch sequence
 - metrics dashboard requirements
