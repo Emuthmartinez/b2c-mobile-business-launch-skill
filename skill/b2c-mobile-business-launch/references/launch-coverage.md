@@ -35,6 +35,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Apple signing/release | Apple Developer membership, Team ID, bundle ID/App ID, app record, capabilities, certificates/profiles, archive/export/upload/TestFlight status, founder-only gates | `APPLE_SIGNING.md`, Xcode, XcodeBuildMCP, ASC CLI, App Store Connect |
 | Revenue | RevenueCat/Stripe/app-store products, entitlement mapping, web checkout, restore, webhooks | `revenue-monetization.md` |
 | Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics | Cloudflare, Supabase, PostHog, Resend |
+| Paid user acquisition | `PAID_UA.md`, one-channel decision, creative cadence, baseline and blended report, RevenueCat LTV/CPA review, store destination, stop/scale rules, founder-only spend gates | `paid-user-acquisition.md`, PostHog, RevenueCat, ASC/Play, ad-network reports |
 | Viral growth loop | `VIRAL_GROWTH.md`, product-led referral/share loop, format lab, monetization timing, abuse controls, analytics proof, stop/scale rules | `viral-growth-loops.md`, PostHog, RevenueCat/Stripe, UGC/Fastlane |
 | GEO/SEO | metadata, schema, robots, sitemap, `llms.txt`, AI crawler access, citability | GEO skills, Firecrawl |
 | Privacy/legal | privacy, terms, EULA, data deletion, subscription disclosures, source URLs | `privacy-terms.md` |
@@ -70,6 +71,7 @@ Required unless explicitly marked not applicable:
 - support and privacy contact routes tested from external sender
 - upfront analytics/attribution plan rendered for the founder, plus event catalog and at least one verified event when implementation exists
 - self-reported attribution data contract when onboarding/signup/waitlist exists: early visible screen, stable source keys, `other` free text, `attribution_source_selected`, PostHog person property, backend/profile persistence, and anonymous-to-identified reconciliation
+- paid user acquisition contract when the launch depends on paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, custom product pages, paid creative tests, or paid growth claims: `PAID_UA.md`, one-channel focus, creative cadence, baseline/blended report, RevenueCat LTV/CPA economics, store destination, stop/scale rules, and founder spend approval
 - viral growth contract when the launch depends on referrals, share-to-unlock, creator CTAs, social-comment loops, or TikTok/Reels/Shorts acquisition: `VIRAL_GROWTH.md`, fair fallback, abuse controls, analytics proof, and stop/scale rules
 - Resend or equivalent email path verified when the launch sends confirmation, lifecycle, marketing, billing, support, or admin email
 - App Store/Play product and privacy disclosure mapping when submitting
@@ -102,6 +104,7 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 - MobAI `mobile-recorder-skill` or `desktop-recorder-skill` for polished reproducible app-flow demos: `.mob` or `screenplay.json`, raw capture, edited export, captions, and upload copy
 - XcodeBuildMCP-backed Apple screenshot/test/video fallback after founder confirmation when MobAI is unavailable
 - UGC Day 0 experiment with 3-5 creators, founder-written scripts, creator contracts, payment model, disclosure rules, tracker, and stop/scale thresholds
+- paid UA weekly operating report with one selected channel, 3-5 asset cadence, RevenueCat LTV/cohort review, ASC/Play/PostHog baseline, and spend approval
 - Fastlane workspace setup with connected social accounts, Blitz angles/preferences, MobAI/Higgsfield media inputs, sanitized API logs, and a 30-day organic content plan
 - Push/email lifecycle plan for onboarding, trial reminders, billing issues, cancellation, win-back, and review prompts
 - Resend Automations for waitlist, welcome, onboarding resume, trial reminders, payment recovery, and win-back when email is the right channel
@@ -119,6 +122,7 @@ Flag these aggressively:
 - Autonomy mode is not recorded, and the agent mutates provider/store/public state without a named approval scope.
 - A known miss happened again but no LaunchBench scenario, validator, or failure card was added.
 - A paid/account-gated tool is missing in the runtime and the agent silently starts the free fallback without founder confirmation.
+- Paid acquisition is marked ready without `PAID_UA.md`, a one-channel decision, creative production cadence, baseline/blended reporting, RevenueCat LTV/CPA review, stop/scale rules, and founder-approved spend.
 - Doppler or the approved secret provider is not selected before API keys, webhook secrets, CI/deploy env vars, service-account files, or local `.env` files appear.
 - Security is treated as a general vibe instead of a lane with `SECURITY.md`, `security-review.html`, threat model, tool routing, release proof, and accepted risks.
 - Claude Security, Codex Security, GitHub Advanced Security, Snyk, Semgrep, Socket, MobSF Cloud, or commercial app-integrity tools are skipped without founder-approved fallback routing.

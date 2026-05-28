@@ -378,6 +378,32 @@ Rules:
 - Keep raw captures separate from final upload assets.
 - If capture is blocked by missing device/app access, leave the exact blocker. Continue with a clearly labeled design-system mock only after the founder approves the fallback.
 
+## Paid User Acquisition Routing
+
+Purpose: decide whether the product is ready for a small paid acquisition test before treating ad-channel ideas as a growth plan.
+
+Use `paid-user-acquisition.md` before:
+- paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, paid creative tests, or paid-growth readiness claims
+- custom product page campaign routing or web-to-app paid traffic
+- MMP/ad-network SDK decisions, ad-account reporting, or baseline uplift plans
+- using RevenueCat LTV/cohort data to judge CPA, trial conversion, payback, or ROAS
+
+Inputs:
+- `SPEC.md`, `11_STAR_EXPERIENCE.md`, `CONTENT_ASSETS.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `APP_STORE_LISTING.md`, `LAUNCH_TRACE.md`, `PRIVACY.md`, `TERMS.md`
+- RevenueCat LTV/cohort/trial/purchase/entitlement data when available
+- App Store Connect or Play Console baseline metrics
+- ad-channel access and budget approval state
+
+Outputs:
+- `PAID_UA.md`
+- `growth/paid-ua-report.csv` when spend is planned or active
+- updated `ANALYTICS.md`, `REVENUE_OPS.md`, `CONTENT_ASSETS.md`, `APP_STORE_LISTING.md`, and `LAUNCH_TRACE.md`
+
+Rules:
+- Start with one channel or document the exception.
+- Do not launch campaigns, connect accounts, install privacy-affecting ad SDKs, or change budgets without founder approval.
+- Do not call installs success unless paywall reach, purchase, entitlement, revenue, and retention quality are visible.
+
 ## Viral Growth Loop Routing
 
 Purpose: decide whether the product can grow through built-in sharing, referrals, invite loops, social-comment mechanics, or creator CTAs before treating content as the whole growth plan.

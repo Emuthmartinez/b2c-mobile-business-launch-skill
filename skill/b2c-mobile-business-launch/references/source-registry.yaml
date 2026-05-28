@@ -1278,6 +1278,16 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/resend-email-ops.md
     notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-blog-growth-how-to-build-a-ua-system-when-youre-a-one-person-team
+    name: www.revenuecat.com
+    source_type: website
+    url: https://www.revenuecat.com/blog/growth/how-to-build-a-ua-system-when-youre-a-one-person-team
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/paid-user-acquisition.md
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: "RevenueCat growth article used for the solo-founder paid UA system: one channel, creative production, tracking baseline, blended report, RevenueCat LTV/CPA review, and cadence."
   - id: revenuecat-com-docs-dashboard-and-metrics-customer-history-active-entitlements
     name: www.revenuecat.com
     source_type: docs

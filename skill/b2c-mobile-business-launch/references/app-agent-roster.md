@@ -41,7 +41,7 @@ The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.m
 For non-trivial launches, use the roster to run independent review lanes before declaring the build or launch package complete:
 
 - Product leader reviews `SPEC.md`, `11_STAR_EXPERIENCE.md`, `LAUNCH_TRACE.md`, `ONBOARDING.md`, and activation/retention assumptions.
-- Marketing guru reviews `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `GEO_SEO.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, and attribution-channel learning.
+- Marketing guru reviews `RESEARCH.md`, `LAUNCH.md`, `STORE_CONSOLE.md`, `GEO_SEO.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, and attribution-channel learning.
 - Design guru reviews `DESIGN.md`, `design.md`, `design.html`, `11-star-experience.html`, `onboarding.html`, screenshots, accessibility, and visual consistency.
 - Engineering leader reviews `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, analytics/revenue/email/backend contracts, signing/release readiness, and test coverage.
 - Security architect reviews `SECURITY.md`, `security-review.html`, `SECRETS.md`, `TECH_SPEC.md`, `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`, scanner/review evidence, app-integrity posture, and accepted risks.

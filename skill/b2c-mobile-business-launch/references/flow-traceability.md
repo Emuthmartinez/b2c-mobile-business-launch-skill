@@ -55,7 +55,7 @@ Tool route: paid tool | user export | free fallback | blocked | founder decision
 Research finding: what we learned
 Experience decision: what changes in 11_STAR_EXPERIENCE.md or 11-star-experience.html
 Product decision: what changes in SPEC.md or ONBOARDING.md
-Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, VIRAL_GROWTH.md, UGC_PLAYBOOK.md, or HTML proofs
+Brand/design decision: what changes in BRAND.md, DESIGN.md, design.md, PAID_UA.md, VIRAL_GROWTH.md, UGC_PLAYBOOK.md, or HTML proofs
 Build contract: screen/component/API/data/state/task that must exist
 Analytics/security/revenue/privacy/store impact: event, entitlement, threat/abuse control, data disclosure, screenshot, console field, signing/release gate, or legal note
 Verification: test, MobAI path, backend/provider proof, browser proof, dashboard check, or founder approval
@@ -148,6 +148,7 @@ Before sending to Rork, Claude, Codex, or another builder:
 - `PROJECT_STATE.yaml` exists and matches current artifacts
 - `launch-cockpit.html` renders current state for the founder
 - `LAUNCH_TRACE.md` exists or equivalent trace section exists in `RESEARCH.md`
+- `PAID_UA.md` exists when growth depends on paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, custom product pages, paid creative tests, MMP/ad-network SDK decisions, or paid-growth readiness claims
 - `VIRAL_GROWTH.md` exists when growth depends on referral/share loops, creator CTAs, TikTok/Reels/Shorts mechanics, or viral paywall/onboarding behavior
 - `11_STAR_EXPERIENCE.md` and `11-star-experience.html` exist unless the experience lane is explicitly deferred/not needed with a reason
 - `TOOL_DECISIONS.md` exists when paid/account-gated tools or fallbacks shaped evidence, screenshots, testing, store ops, or growth

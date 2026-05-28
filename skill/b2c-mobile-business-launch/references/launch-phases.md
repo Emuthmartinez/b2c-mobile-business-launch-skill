@@ -10,8 +10,10 @@ Use these phases as a reusable playbook. Skip phases that are already complete, 
 - Phase 1: Research-Backed Spec
 - Phase 1b: Analytics And Attribution Blueprint
 - Phase 1c: 11-Star Experience And Product Brainstorm Checkpoint
-- Phase 1d: Launch Trace And Build Contracts
-- Phase 1e: Security Architecture
+- Phase 1d: Paid User Acquisition System
+- Phase 1e: Viral Growth Loop Contract
+- Phase 1f: Launch Trace And Build Contracts
+- Phase 1g: Security Architecture
 - Phase 2: Brand, Design, And Visual System
 - Phase 3: ASO, Store Ops, And Launch Dossier
 - Phase 3b: Revenue And Monetization Ops
@@ -206,7 +208,32 @@ Acceptance:
 - Product alternatives are resolved before engineering tradeoffs are chosen.
 - Open founder-only decisions are explicit.
 
-## Phase 1d: Viral Growth Loop Contract
+## Phase 1d: Paid User Acquisition System
+
+Goal: decide whether the app is ready for a small paid acquisition test and define the one-person operating system before anyone spends.
+
+Do:
+- Load `paid-user-acquisition.md`.
+- Load `analytics-attribution.md`, `revenue-monetization.md`, `app-store-listing-prep.md`, and `remotion-content-assets.md` or `content-assets` guidance when tracking, LTV/CPA, store destination, or creative production is in scope.
+- Decide fit: store/beta/web destination, onboarding/paywall readiness, RevenueCat LTV/cohort visibility, analytics baseline, creative angles, privacy/store implications, and founder-approved budget.
+- Select one starting channel or document why paid UA is blocked/deferred/not needed.
+- Create `PAID_UA.md` with channel choice, creative production system, tracking baseline, blended report, weekly schedule, stop/scale rules, founder-only gates, and trace rows.
+- Add paid-UA events, dashboards, baseline windows, and ad-network/MMP decisions to `ANALYTICS.md` and `analytics-plan.html`.
+- Update `REVENUE_OPS.md` with RevenueCat LTV/CPA/payback assumptions and `CONTENT_ASSETS.md` with paid creative source assets.
+- Update `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, custom product page notes, or web-funnel docs when paid traffic lands on a store or web purchase surface.
+- Run `npm run check:paid-ua -- --root .` before claiming paid acquisition readiness.
+
+Outputs:
+- `PAID_UA.md`
+- `growth/paid-ua-report.csv` when spend is planned or active
+- updated `PROJECT_STATE.yaml`, `LAUNCH_TRACE.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `CONTENT_ASSETS.md`, and store/funnel docs
+
+Acceptance:
+- Paid UA is not reduced to "try ads."
+- One channel, creative cadence, baseline/blended reporting, RevenueCat economics, and stop/scale rules agree.
+- Spend, account connections, ad SDKs, public creative, pricing, legal, and campaign launch remain founder-only gates.
+
+## Phase 1e: Viral Growth Loop Contract
 
 Goal: decide whether growth can compound through the product itself before treating UGC, Fastlane, or TikTok ideas as the whole growth plan.
 
@@ -232,7 +259,7 @@ Acceptance:
 - Content tests have stop/scale rules and downstream metrics beyond views.
 - Founder-only gates are explicit for spend, public posting, pricing, social accounts, and legal/policy-sensitive incentives.
 
-## Phase 1e: Launch Trace And Build Contracts
+## Phase 1f: Launch Trace And Build Contracts
 
 Goal: make the handoff from research to brand/design to implementation explicit enough that agents cannot lose why a decision exists.
 
@@ -241,7 +268,7 @@ Do:
 - Refresh `PROJECT_STATE.yaml` before creating trace rows so status reflects the current phase and blockers.
 - Create or update `LAUNCH_TRACE.md` unless the launch is tiny enough for a clearly labeled trace section in `RESEARCH.md`.
 - Assign stable trace IDs for major research findings, 11-star experience decisions, product decisions, claims, onboarding questions, paywall choices, data collection, store-console answers, and build-critical flows.
-- Map each trace row to affected docs: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `VIRAL_GROWTH.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
+- Map each trace row to affected docs: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
 - Decide whether `TECH_SPEC.md` is needed. Create it when app/backend/web implementation needs data model, API/RPC/webhook contracts, state machines, permissions, integrations, app integrity, feature flags, or test fixtures.
 - Record rejected decisions so future agents do not reintroduce weak claims, unproven features, generic styling, or unsupported monetization behavior.
 
@@ -257,7 +284,7 @@ Acceptance:
 - A builder can identify what must be implemented and how it will be verified without rereading every research source.
 - Data/API/state behavior is precise enough that the implementation plan does not invent backend contracts.
 
-## Phase 1f: Security Architecture
+## Phase 1g: Security Architecture
 
 Goal: define the app's security posture before builders lock architecture, providers, webhooks, app integrity, and app-store disclosures.
 
@@ -335,6 +362,7 @@ Goal: produce the operational plan for App Store launch and first acquisition te
 
 Do:
 - Load `analytics-attribution.md` before defining App Store CTAs, Apple Search Ads, Google Play listing experiments, creator/referral codes, post-launch metrics, or attribution dashboards.
+- Load `paid-user-acquisition.md` before Apple Search Ads, paid ad library, custom product page campaign routing, MMP/ad-network SDK decisions, or paid-growth readiness claims.
 - Load `aso-store-ops.md` and create or refresh `app-marketing-context.md` before writing listing copy.
 - Load `app-store-listing-prep.md` before Apple listing packets, App Privacy questionnaires, pricing/subscription mapping, custom product pages, In-App Events, localization, or App Store marketing assets.
 - Load `apple-signing-release.md` before Apple Developer account triage, Team ID, bundle ID/App ID, App Store Connect app record, Xcode signing, certificates/profiles, archive/export/upload, TestFlight, physical-device signing, or distribution-readiness claims.
@@ -345,7 +373,7 @@ Do:
 - Prepare Apple pre-ASC requirements: `APPLE_APP_STORE_REQUIREMENTS.md` with `PrivacyInfo.xcprivacy`, required reason API declarations, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, archive/upload warnings, and founder approval before upload/submission.
 - Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/device capture, production-text overlay notes, final upload dimensions, and upload well.
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
-- Create Apple Search Ads campaign groups: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics.
+- Create Apple Search Ads or paid-channel campaign groups only inside `PAID_UA.md` or a linked campaign packet: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics, and founder approval.
 - Verify store-console readiness with a copy-paste packet: categories, age rating, pricing/IAP/subscriptions, review notes, demo credentials, export compliance, privacy labels, privacy manifests/required-reason APIs, account deletion, screenshot slot requirements, App Icon/App Preview routes, and build/review status.
 - Verify Apple distribution readiness separately from simulator builds: Developer Program membership, role, agreements, Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, capabilities/entitlements, Apple Development versus Apple Distribution signing path, archive/export/upload, and TestFlight processing.
 - Add Google Play branch when Android is in scope: Data safety, privacy policy, account deletion web link, feature graphic, screenshots, short/long description, content rating, testing track, and store listing experiments.
@@ -366,6 +394,7 @@ Outputs:
 - `APPLE_SIGNING.md` when Apple distribution, TestFlight, physical-device signing, or first upload readiness is in scope
 - `store-console.html`
 - `SCREENSHOTS.md`
+- `PAID_UA.md` when paid acquisition, Apple Search Ads, custom product pages, or ad creative are in scope
 - `PRIVACY.md`, `TERMS.md`, and `LEGAL_REVIEW.md` when public collection, accounts, subscriptions, app-store submission, or sensitive data are in scope
 - `app-marketing-context.md` or equivalent ASO context section
 - screenshot mockups/assets, including raw captures and composed iPhone/iPad/Play final upload candidates
@@ -492,6 +521,7 @@ Do:
 - Include `LAUNCH_TRACE.md` and `11_STAR_EXPERIENCE.md` so builders can follow evidence-to-product-experience-to-design-to-build decisions.
 - Include `TECH_SPEC.md` when data, API, state, permissions, platform capabilities, app integrity, feature flags, or integration behavior is in scope.
 - Write an `ANALYTICS.md` event catalog and `analytics-plan.html` before build prompts. Do not let builders invent event names screen by screen.
+- Include `PAID_UA.md` when paid acquisition, Apple Search Ads, custom product pages, paid creative tests, or spend-readiness claims are part of the business.
 - Include `ENGINEERING_PLAN.md` when the app build is ready for `ce-plan`/`ce-work` or a generated builder.
 - Include `PRODUCTION_READINESS.md` template or checklist before actual build execution begins.
 - Include `ONBOARDING.md` and `onboarding.html` when the build includes onboarding, personalization, review prompts, or a paywall.
@@ -522,6 +552,7 @@ Outputs:
 - `FAILURE_CARDS.md` when active risks need more detail than `PROJECT_STATE.yaml`
 - `PROMPTS.md`
 - `ONBOARDING.md` and `onboarding.html` when in scope
+- `PAID_UA.md` when in scope
 - `VIRAL_GROWTH.md` when in scope
 - `UGC_PLAYBOOK.md` and `ugc/` artifacts when in scope
 - `README.md`

@@ -1,0 +1,103 @@
+# Paid User Acquisition
+
+## Fit Gate
+
+Status: partial
+
+Product destination:
+Primary paid channel:
+Target event:
+Approved budget cap:
+Date range:
+Baseline window:
+Privacy/store constraints:
+Decision: fit | blocked | deferred | not fit
+
+## Channel Choice
+
+One-channel rule:
+Selected channel:
+Why this channel:
+Rejected channels:
+Campaign destination:
+Target event:
+Founder approval status:
+
+| Channel | Fit reason | Creative burden | Attribution/reporting burden | Decision |
+| --- | --- | --- | --- | --- |
+| Meta Ads | Pending | Pending | Pending | pending |
+| TikTok | Pending | Pending | Pending | pending |
+| Google web-to-app | Pending | Pending | Pending | pending |
+| Apple Ads | Pending | Pending | Pending | pending |
+
+## Creative Production
+
+Weekly cadence:
+First batch size:
+Product visibility rule:
+Claim constraints:
+Creative source: `CONTENT_ASSETS.md`
+11-star source: `11_STAR_EXPERIENCE.md`
+
+| Creative ID | Angle | Pain or desire | First frame | Product proof | CTA | Source asset | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| UA-001 | Pending | Pending | Pending | Pending | Pending | Pending | planned |
+
+## Tracking Baseline
+
+Analytics source: `ANALYTICS.md`
+Revenue source: `REVENUE_OPS.md`
+Store source: `APP_STORE_LISTING.md` or `STORE_CONSOLE.md`
+Baseline report: `growth/paid-ua-report.csv`
+
+Required data layers:
+- RevenueCat LTV, cohorts, trial starts, purchases, and entitlement active count
+- selected ad-network SDK or native report
+- App Store Connect or Google Play Console source/store metrics
+- PostHog acquisition-to-revenue funnel events
+- self-reported attribution from onboarding/signup/waitlist
+
+Baseline notes:
+
+## Blended Report
+
+Report owner:
+Report cadence:
+Tolerance for attribution discrepancy:
+
+| Date | Channel | Spend | Installs/opens | Paywall views | Trials | Purchases | Revenue | LTV window | CPA | ROAS/payback | Winning angle | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
+
+## Weekly Schedule
+
+- Monday: refresh campaign report, blended report, RevenueCat cohort/LTV view, and decide pause/keep/scale candidates.
+- Tuesday: produce 3-5 creative assets tied to winning or unresolved angles.
+- Wednesday: check delivery and upload 1-2 replacements when enough signal exists.
+- Thursday: check pacing and major anomalies.
+- Friday: decide scale, hold, reduce, or pause for the next week.
+- Daily: 15-minute pacing and anomaly check only.
+
+## Stop And Scale Rules
+
+Stop:
+Hold:
+Scale:
+Outsource:
+
+## Founder-Only Gates
+
+- ad account connection
+- paid spend, budget changes, or automated rules that affect spend
+- paid MMP/ad/ASO tooling
+- ad-network SDK install when privacy/ATT/store disclosures change
+- pricing, trial, intro offer, paywall, subscription, or legal-copy changes
+- public ad creative, custom product pages, web funnels, or web purchase links
+
+## Traceability
+
+Launch trace source: `LAUNCH_TRACE.md`
+
+| Trace ID | Evidence | Paid UA decision | Creative impact | Revenue/analytics impact | Store/privacy impact | Proof |
+| --- | --- | --- | --- | --- | --- | --- |
+| PUA-001 | `RESEARCH.md` | Pending | `CONTENT_ASSETS.md` | `REVENUE_OPS.md`, `ANALYTICS.md` | `APP_STORE_LISTING.md`, `PRIVACY.md`, `TERMS.md` | Pending |

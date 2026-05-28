@@ -138,6 +138,13 @@ lanes:
       backend_persistence: false
       anonymous_reconciliation: false
       verified: false
+  paid_user_acquisition:
+    status: "partial"
+    evidence:
+      - "growth/PAID_UA.md"
+      - "growth/paid-ua-report.csv"
+    blockers:
+      - "Founder approval is required before ad account connection, paid spend, budget changes, or live campaign launch."
   onboarding:
     status: "partial"
     evidence:
@@ -236,6 +243,13 @@ tools:
     preflight: "Confirm entitlement, offering, store products, and sandbox account."
     validation: "Sandbox purchase grants entitlement in app and backend/profile."
     fallback: "StoreKit/TestFlight sandbox notes only after founder approval."
+  paid_ad_channels:
+    route: "optional_paid_or_account_tool"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Use paid-user-acquisition.md before spend. Confirm one-channel choice, target event, baseline, creative cadence, tracking stack, RevenueCat LTV/CPA source, store destination, privacy/ATT implications, and founder-approved budget."
+    validation: "PAID_UA.md, growth/paid-ua-report.csv, ANALYTICS.md, REVENUE_OPS.md, CONTENT_ASSETS.md, and LAUNCH_TRACE.md show channel decision, blended report, RevenueCat economics, creative proof, and stop/scale rules."
+    fallback: "Use organic, ASO, waitlist, or manual spreadsheet planning only after paid spend or ad-account access is blocked, deferred, or not needed."
   stripe:
     route: "optional_account_tool"
     docs_checked_at: ""

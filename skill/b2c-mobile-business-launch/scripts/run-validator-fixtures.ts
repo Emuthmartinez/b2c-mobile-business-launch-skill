@@ -384,6 +384,38 @@ function writeCompleteViralGrowth(root: string): void {
   writeFileSync(path.join(root, "FASTLANE_OPS.md"), "# Fastlane Ops\n\nFastlane reuses approved format IDs after launch approval.\n", "utf8");
 }
 
+function writeCompletePaidUserAcquisition(root: string): void {
+  mkdirSync(path.join(root, "growth"), { recursive: true });
+  const state = readState(root);
+  const paidUaLane = getLane(state, "paid_user_acquisition");
+  paidUaLane["status"] = "done";
+  paidUaLane["evidence"] = ["growth/PAID_UA.md", "growth/paid-ua-report.csv"];
+  paidUaLane["blockers"] = [];
+  writeState(root, state);
+  writeFileSync(
+    path.join(root, "growth", "PAID_UA.md"),
+    [
+      "# Paid User Acquisition",
+      "Fit Gate: store destination, privacy, support, onboarding, paywall, RevenueCat entitlement, and founder-approved spend are ready for a limited test.",
+      "Channel Choice: one-channel rule selects Meta Ads for the first test while TikTok, Google web-to-app, Apple Ads, and Apple Search Ads are rejected until one channel works.",
+      "Creative Production: CONTENT_ASSETS.md owns 3-5 weekly creative assets, angle IDs, real app UI, product visibility, claim constraints, and the 11_STAR_EXPERIENCE.md V1 slice.",
+      "Tracking Baseline: ANALYTICS.md records PostHog events, ad-network SDK or native report route, App Store Connect or Google Play store metrics, self-reported attribution, and baseline uplift rules.",
+      "RevenueCat Economics: REVENUE_OPS.md uses RevenueCat LTV, cohorts, trial starts, purchases, and entitlement data to compare CPA, CPI, ROAS, and payback window.",
+      "Blended Report: growth/paid-ua-report.csv records spend, impressions, clicks, installs or app opens, paywall views, trials, purchases, entitlement active count, revenue, CPA, LTV window, winning angle, and next action.",
+      "Weekly Schedule: Monday report review, Tuesday 3-5 asset production, Wednesday delivery check, Thursday anomaly check, Friday scale/hold/reduce/pause decision, and daily 15-minute pacing checks.",
+      "Stop And Scale Rules: stop when baseline is missing, CPA cannot fit LTV, paywall or retention quality drops, or only clicks/installs improve; scale after one channel and repeatable creative angles show downstream revenue evidence.",
+      "Founder-Only Gates: founder approval is required for ad account connection, budget, spend, automated rules, paid MMP/ad tooling, ad-network SDK privacy changes, custom product pages, public creative, pricing, trials, offers, and legal copy.",
+      "Traceability: LAUNCH_TRACE.md maps PUA-001 from RESEARCH.md to CONTENT_ASSETS.md, REVENUE_OPS.md, ANALYTICS.md, APP_STORE_LISTING.md, PRIVACY.md, TERMS.md, and PRODUCTION_READINESS.md.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "growth", "paid-ua-report.csv"),
+    "date,channel,campaign,spend,impressions,clicks,installs_or_opens,paywall_views,trials,purchases,entitlement_active,revenue,ltv_window,cpa,roas_or_payback,winning_angle,next_action\n2026-05-28,meta,launch_v1,100,10000,300,80,40,10,3,3,90,d7,10,watch,UA-001,hold\n",
+    "utf8",
+  );
+}
+
 function writeCompleteOrchestration(root: string): void {
   mkdirSync(path.join(root, "orchestration"), { recursive: true });
   const state = readState(root);
@@ -543,6 +575,7 @@ try {
   writeCompleteSecurity(clean);
   writeCompleteContentAssets(clean);
   writeCompleteViralGrowth(clean);
+  writeCompletePaidUserAcquisition(clean);
   writeCompleteOrchestration(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
@@ -550,6 +583,7 @@ try {
   runFixture("complete security release packet passes", clean, "check-security-release.ts", 0);
   runFixture("complete content assets packet passes", clean, "check-content-assets.ts", 0);
   runFixture("complete viral growth packet passes", clean, "check-viral-growth-loop.ts", 0);
+  runFixture("complete paid UA packet passes", clean, "check-paid-user-acquisition.ts", 0);
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete Apple App Store requirements packet passes", clean, "check-apple-app-store-requirements.ts", 0);
@@ -1146,6 +1180,37 @@ try {
     "utf8",
   );
   runFixture("done viral growth with placeholders fails", viralGrowthDonePlaceholder, "check-viral-growth-loop.ts", 1, "viral_growth.placeholder_complete");
+
+  const paidUaMissing = makeFixture("paid-ua-missing");
+  rmSync(path.join(paidUaMissing, "growth", "PAID_UA.md"), { force: true });
+  runFixture("missing paid UA packet fails", paidUaMissing, "check-paid-user-acquisition.ts", 1, "paid_ua.markdown_missing");
+
+  const paidUaThin = makeFixture("paid-ua-thin");
+  mkdirSync(path.join(paidUaThin, "growth"), { recursive: true });
+  writeFileSync(
+    path.join(paidUaThin, "growth", "PAID_UA.md"),
+    [
+      "# Paid User Acquisition",
+      "Fit Gate",
+      "Channel Choice: try Meta, TikTok, Google, and Apple Ads at the same time.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("thin paid UA packet fails", paidUaThin, "check-paid-user-acquisition.ts", 1, "paid_ua.creative_production.missing");
+
+  const paidUaDonePlaceholder = makeFixture("paid-ua-done-placeholder");
+  writeCompletePaidUserAcquisition(paidUaDonePlaceholder);
+  writeFileSync(
+    path.join(paidUaDonePlaceholder, "growth", "PAID_UA.md"),
+    readFileSync(path.join(paidUaDonePlaceholder, "growth", "PAID_UA.md"), "utf8") + "\nTODO: choose final weekly budget.\n",
+    "utf8",
+  );
+  runFixture("done paid UA with placeholders fails", paidUaDonePlaceholder, "check-paid-user-acquisition.ts", 1, "paid_ua.placeholder_complete");
+
+  const paidUaDoneReportMissing = makeFixture("paid-ua-done-report-missing");
+  writeCompletePaidUserAcquisition(paidUaDoneReportMissing);
+  rmSync(path.join(paidUaDoneReportMissing, "growth", "paid-ua-report.csv"), { force: true });
+  runFixture("done paid UA without report fails", paidUaDoneReportMissing, "check-paid-user-acquisition.ts", 1, "paid_ua.report_missing_done");
 
   const orchestrationNoPreflight = makeFixture("orchestration-no-preflight");
   const orchestrationNoPreflightState = readState(orchestrationNoPreflight);

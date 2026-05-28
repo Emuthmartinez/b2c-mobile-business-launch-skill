@@ -1,0 +1,189 @@
+# Paid User Acquisition
+
+Use this before planning paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, web-to-app paid traffic, custom product page campaign routing, paid creative tests, MMP/ad-network SDK choices, or any launch claim that the app is ready to spend on acquisition.
+
+This reference factors in RevenueCat's May 2026 article, "How to build a UA system when you're a one-person team": https://www.revenuecat.com/blog/growth/how-to-build-a-ua-system-when-youre-a-one-person-team. Treat it as a practical solo-founder operating model, not universal law. The transferable shape is small, complete, measurable, and cadence-driven: one channel, creative production, tracking, and schedule.
+
+Paid spend is a founder-only gate. Agents may prepare the system, docs, creative plan, dashboards, and stop/scale rules, but must not launch campaigns, connect ad accounts, change budgets, create paid trials, or commit spend without approval.
+
+Load `paid-tool-routing.md` before replacing paid ASO/MMP/ad tools, ad-network accounts, RevenueCat paid features, PostHog paid features, or App Store/Play/Google/Meta/TikTok account data with free or manual reporting. Load `analytics-attribution.md`, `revenue-monetization.md`, `app-store-listing-prep.md`, and `content-assets.md` or `remotion-content-assets.md` when paid UA touches tracking, LTV/CPA, store conversion, screenshots, or ad creative.
+
+## Contents
+
+- Fit Gate
+- One-Channel Choice
+- Creative Production System
+- Tracking And Baseline
+- Blended Report
+- Weekly Schedule
+- Stop And Scale Rules
+- Founder-Only Gates
+- Outputs
+- Common Failure Modes
+
+## Fit Gate
+
+Paid UA is plausible when:
+- the app has a real store/beta/web destination that can accept traffic
+- onboarding and paywall flow can convert paid visitors without contradicting store, privacy, or subscription copy
+- RevenueCat or the approved subscription source can show LTV, trial starts, cohorts, and entitlement truth
+- analytics can distinguish landing/store clicks, installs or opens, onboarding, paywall reach, purchase/trial, entitlement activation, and retention
+- the product has at least 3-5 truthful creative angles tied to the 11-star V1 slice
+- the founder has approved a test budget and account access path
+
+Defer or reject paid UA when:
+- store pages, privacy/terms, support, pricing, or purchase validation are not ready
+- no baseline period exists for RevenueCat, App Store Connect, PostHog, and self-reported attribution
+- the launch cannot absorb traffic because onboarding, paywall, restore, support, or crash/error monitoring is weak
+- the only plan is "try ads" without a channel, creative cadence, target event, dashboard, and stop rule
+- paid spend or ad-account access is unapproved
+
+Record the fit decision in `PAID_UA.md`, update `PROJECT_STATE.yaml` `lanes.paid_user_acquisition`, and trace the decision into `LAUNCH_TRACE.md`.
+
+## One-Channel Choice
+
+Start with one paid channel. Do not launch Meta, TikTok, Google, and Apple Ads at the same time unless the founder has a team or explicit reason to absorb separate creative, reporting, account-management, and attribution costs.
+
+Default channel choice:
+- **Meta Ads**: default first channel for many subscription apps when the ICP is broad enough and the product can produce varied visual/pain-point creatives.
+- **TikTok**: consider when the buyer is younger, the product has strong native video hooks, and the launch can refresh creatives faster.
+- **Google web-to-app**: consider when search/demand capture or web funnels matter and the app can preserve campaign context into checkout or install.
+- **Apple Ads**: consider when search intent is clear, keyword economics are plausible, and App Store listing/custom product pages are ready.
+
+Document:
+- selected channel and why
+- rejected channels and why now is too early
+- target event: usually trial, direct subscription, paywall-qualified event, or another high-intent proxy; avoid install-only campaigns as the main growth pillar unless the launch explicitly uses them for creative testing
+- campaign destination: store listing, custom product page, web funnel, landing page, or web purchase link
+- founder-approved budget cap and date range, or blocker if not approved
+
+## Creative Production System
+
+Before spend, define the first creative batch:
+- 3-5 new assets per week for an early solo cadence
+- one ad group or equivalent simple structure for the first test
+- angle map: pain, aspiration, identity, objection, comparison, proof, result, or use case
+- product visibility: real app UI, store screenshot, app-flow recording, Remotion render, or approved generated/supporting asset
+- copy and claim constraints from `APP_STORE_LISTING.md`, `PRIVACY.md`, `TERMS.md`, `REVENUE_OPS.md`, and `SECURITY.md`
+- each creative tied to `11_STAR_EXPERIENCE.md`, `CONTENT_ASSETS.md`, and `LAUNCH_TRACE.md`
+
+Use `remotion-content-assets.md` when repeatable ad variants, motion screenshots, captions, cutdowns, or local render proof are needed. Use Higgsfield only after design-system constraints and paid-tool routing are recorded. Use real app UI wherever a user must inspect the actual product.
+
+## Tracking And Baseline
+
+Do not require a large MMP by default for the first solo paid-UA test. Decide the minimum tracking stack from current product phase:
+- RevenueCat for LTV, cohorts, subscription events, trial starts, purchase state, and entitlement truth
+- selected ad-network SDK or native reporting when the channel requires it
+- App Store Connect or Google Play Console for store/source signals
+- PostHog for product analytics, identity, attribution, funnels, and dashboards
+- a simple spreadsheet or `growth/paid-ua-report.csv` for the blended weekly report
+
+Create a baseline before campaign launch:
+- RevenueCat daily trials, purchases, revenue, cohorts, and LTV
+- App Store Connect or Play installs/product page views where available
+- PostHog events from app open through onboarding, paywall, purchase, entitlement, activation, and retention
+- self-reported attribution answers from onboarding/signup/waitlist
+- current organic/social traffic notes so uplift is not confused with paid performance
+
+For iOS, document that ad-platform attribution can under-report or over-report. Use baseline uplift across RevenueCat, ASC, PostHog, and self-reported attribution instead of pretending attribution is perfect.
+
+## Blended Report
+
+Create a weekly report that lets the founder decide whether to continue, pause, or scale.
+
+Minimum columns:
+- date
+- channel
+- campaign
+- spend
+- impressions
+- clicks
+- installs or app opens
+- onboarding starts
+- paywall views
+- trial starts
+- purchases
+- entitlement active count
+- revenue
+- RevenueCat LTV window
+- CPA or cost per trial/direct subscription
+- blended ROAS or projected payback
+- winning angle
+- notes and next action
+
+The report should compare paid traffic against organic baseline and category benchmarks where available. It should be good enough to catch product-side drop-offs, not only media-buying changes.
+
+## Weekly Schedule
+
+Use a calm twice-weekly operating cadence for low-budget tests instead of reactive daily edits:
+- Monday: refresh campaign and blended report, compare against previous week, decide pause/keep/scale candidates, and choose one paywall/onboarding test hypothesis.
+- Tuesday: plan and produce the next 3-5 creative assets from winning or unresolved angles.
+- Wednesday: check early creative delivery, pause older non-spending or clearly weak assets only when there is enough signal, and upload 1-2 replacements.
+- Thursday: quick anomaly and report check.
+- Friday: upload remaining assets when needed, then decide whether to scale, hold, reduce, or pause based on the full week.
+- Daily: spend 15 minutes checking pacing and major anomalies only.
+
+Automated ad-platform rules may be planned when supported, but live setup or budget changes require founder approval.
+
+## Stop And Scale Rules
+
+Stop, hold, or reposition when:
+- baseline cannot be established
+- spend is active but RevenueCat, ASC/Play, PostHog, and self-reported attribution disagree beyond the documented tolerance
+- CPA cannot plausibly fit LTV, trial conversion, or payback window
+- paywall reach, purchase conversion, entitlement activation, or retention drops versus organic traffic
+- creatives are being changed faster than the budget can generate useful signal
+- the only positive metric is impressions, clicks, or installs
+
+Scale only after:
+- one channel works at a meaningful founder-approved spend level
+- one or more creative angles repeat with downstream revenue or activation evidence
+- weekly creative production can keep up without lowering quality
+- onboarding/paywall/revenue experiments and support paths are stable
+- the founder approves higher spend or new channels
+
+Outsource only after identifying the bottleneck:
+- creative producer when asset production is slowing learning
+- data analyst when reporting quality is the bottleneck
+- part-time UA manager when campaign operations consume too much founder time
+
+Outsource execution, not strategy, until the founder understands the channel economics.
+
+## Founder-Only Gates
+
+Always ask before:
+- connecting ad accounts or creating campaigns
+- installing or enabling ad-network SDKs that change privacy disclosures or ATT posture
+- committing paid spend, changing budgets, or turning on automated rules that affect spend
+- using paid MMP/ad/ASO tooling
+- changing pricing, trials, intro offers, subscription terms, paywall behavior, or legal copy
+- launching custom product pages, web funnels, web purchase links, or public ad creative
+- sharing screenshots, creator/founder likeness, generated assets, or claims publicly
+
+## Outputs
+
+Create or update:
+- `PAID_UA.md`: fit gate, channel choice, creative system, tracking baseline, blended report, schedule, stop/scale rules, founder-only gates, and traceability
+- `growth/paid-ua-report.csv` when spend is planned or active
+- `ANALYTICS.md` and `analytics-plan.html` with campaign, ad-network, baseline, and RevenueCat/ASC/PostHog dashboard definitions
+- `REVENUE_OPS.md` with LTV/CPA/payback assumptions and RevenueCat cohort source
+- `CONTENT_ASSETS.md` and optional Remotion/Higgsfield artifacts for repeatable creative production
+- `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, or custom product page notes when the campaign destination is a store surface
+- `LAUNCH_TRACE.md` rows connecting research, 11-star slice, channel, creative angles, paywall/revenue, analytics, privacy/legal, and proof
+
+Run:
+
+```bash
+npm run check:paid-ua -- --root .
+```
+
+## Common Failure Modes
+
+- Marking paid acquisition ready while ad spend is still unapproved.
+- Launching multiple channels before one channel has a creative/reporting loop.
+- Treating install volume as success while paywall reach, purchase, entitlement, and retention are unknown.
+- Adding a paid ad SDK without updating analytics, privacy, ATT, store disclosures, and `SECRETS.md`.
+- Using RevenueCat products and paywalls without checking whether CPA can fit LTV and trial conversion.
+- Scaling creative volume before the app has real product UI, clear claims, and repeatable angle evidence.
+- Copying a big-team MMP/reporting stack when the first solo test only needs a small complete system.
+- Calling paid UA "done" while `PAID_UA.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `CONTENT_ASSETS.md`, `APP_STORE_LISTING.md`, or `LAUNCH_TRACE.md` disagree.

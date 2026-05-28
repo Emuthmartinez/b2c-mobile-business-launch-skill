@@ -32,6 +32,7 @@ export const requiredLanes = [
   "design",
   "content_assets",
   "analytics_attribution",
+  "paid_user_acquisition",
   "onboarding",
   "revenue",
   "store_console",

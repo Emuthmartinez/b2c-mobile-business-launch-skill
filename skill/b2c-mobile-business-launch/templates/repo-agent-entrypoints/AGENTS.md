@@ -39,7 +39,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 - Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`
 - Implementation: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`
 - Design and content: `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`
-- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `SCREENSHOTS.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
+- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `SCREENSHOTS.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
 - Revenue, lifecycle, and trust: `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `TERMS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`
 - Role routing: `APP_AGENTS.md` and `agents/`
 
@@ -84,6 +84,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 
 - `ANALYTICS.md` owns event names, identity, attribution, funnels, dashboards, and QA proof.
 - Attribution is a data contract: stable source keys, `other` free text when used, `attribution_source_selected`, PostHog `self_reported_source`, backend/profile persistence when identity exists, and anonymous-to-identified reconciliation.
+- `PAID_UA.md` owns paid acquisition readiness: one-channel choice, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, stop/scale rules, and founder-only spend gates.
 - `REVENUE_OPS.md` owns products, prices, entitlements, webhooks, restore/refund flows, and purchase proof.
 - `SECRETS.md` owns all secret names, locations, command wrappers, CI/deploy injection, and founder-only blockers. Use Doppler by default or the approved provider. Never commit, print, screenshot, or log raw secret values.
 
@@ -119,6 +120,7 @@ npm run check:store-screenshots -- --root /path/to/{{APP_SLUG}} --state PROJECT_
 npm run check:apple-signing -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:apple-requirements -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:store-console -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:paid-ua -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run render:launch-cockpit -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml --out /path/to/{{APP_SLUG}}/launch-cockpit.html
 ```
 

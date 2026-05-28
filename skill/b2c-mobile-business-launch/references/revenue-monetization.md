@@ -8,6 +8,8 @@ Load `paid-tool-routing.md` before replacing RevenueCat, Stripe, app-store produ
 
 Load `viral-growth-loops.md` before using referral unlocks, share rewards, creator codes, closing offers, or viral paywall timing as part of monetization. A growth spike is only useful if the paywall, entitlement, analytics, refund/restore, and abuse controls are ready to catch it.
 
+Load `paid-user-acquisition.md` before using paid ads, Apple Search Ads, web-to-app campaigns, paid creative tests, or custom product pages to drive purchases. A paid campaign is only launch-ready when CPA can be evaluated against RevenueCat LTV/cohorts, trial conversion, payback window, and entitlement proof.
+
 ## Contents
 
 - 1. Official Sources To Refresh
@@ -30,6 +32,7 @@ Refresh current docs before acting because payment, tax, and app-store rules cha
 - RevenueCat Web Purchase Links: https://www.revenuecat.com/docs/web/web-billing/web-purchase-links
 - RevenueCat Redemption Links: https://www.revenuecat.com/docs/web/web-billing/redemption-links
 - RevenueCat State of Subscription Apps: https://www.revenuecat.com/state-of-subscription-apps/
+- RevenueCat solo UA system article: https://www.revenuecat.com/blog/growth/how-to-build-a-ua-system-when-youre-a-one-person-team
 - Stripe subscriptions and webhooks: https://docs.stripe.com/billing/subscriptions/webhooks
 - Stripe customer portal: https://docs.stripe.com/customer-management
 - Stripe go-live checklist: https://docs.stripe.com/get-started/checklist/go-live
@@ -113,6 +116,7 @@ Required decisions:
 - closing offer or reverse-trial behavior after paywall dismissal
 - package mix: weekly/monthly entry, annual recommended, lifetime optional only if sustainable
 - trial duration hypothesis and experiment plan
+- paid UA hypothesis when in scope: target event, CPA/LTV/payback window, selected channel, baseline window, and blended reporting owner
 
 Evidence rules:
 - RevenueCat's 2026 report shows hard paywalls materially outperform freemium on Day 35 download-to-paid conversion, but freemium can still be correct when free users drive word of mouth, network effects, UGC, or trust-building.

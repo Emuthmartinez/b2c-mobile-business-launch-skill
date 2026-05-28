@@ -1,10 +1,12 @@
 # Analytics And Attribution Planning
 
-Use this before PostHog setup, event catalogs, attribution, dashboards, campaign links, onboarding questions, paywall experiments, referral loops, web funnels, Fastlane campaigns, or builder prompts that mention analytics.
+Use this before PostHog setup, event catalogs, attribution, dashboards, campaign links, onboarding questions, paywall experiments, referral loops, web funnels, paid UA, Fastlane campaigns, or builder prompts that mention analytics.
 
 The goal is to give the founder a visible measurement plan before launch work hardens. Do not bolt analytics on after the landing page, onboarding, paywall, or store CTAs are already built.
 
-Load `paid-tool-routing.md` before replacing PostHog paid/account features, GA4/ad-network tooling, MMP tooling, RevenueCat experiments, or Fastlane campaign analytics with a free/manual plan. Local event logs are not proof that analytics is live.
+Load `paid-user-acquisition.md` before paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, paid creative tests, ad-network SDK choices, MMP decisions, or paid spend-readiness claims.
+
+Load `paid-tool-routing.md` before replacing PostHog paid/account features, GA4/ad-network tooling, MMP tooling, RevenueCat experiments, ad-network account data, or Fastlane campaign analytics with a free/manual plan. Local event logs are not proof that analytics is live.
 
 ## Contents
 
@@ -47,6 +49,7 @@ Minimum PostHog doc map:
 
 Also refresh:
 - RevenueCat docs for subscription events, customer IDs, webhooks, experiments, Web Purchase Links, Web Funnels, and redemption links.
+- RevenueCat growth guidance and `paid-user-acquisition.md` when paid UA needs LTV, cohort, CPA, blended-report, or baseline-uplift planning.
 - Stripe docs when web checkout, Customer Portal, or Stripe Billing is in scope.
 - Apple App Analytics, Apple Search Ads, App Store privacy, and SKAdNetwork/AdAttributionKit docs when iOS paid acquisition is in scope.
 - Google Play Console analytics, Play Install Referrer, Data safety, and Google Ads/GA4 docs when Android paid acquisition is in scope.
@@ -73,6 +76,7 @@ Update `PROJECT_STATE.yaml` before calling analytics ready:
 - event catalog by surface and lifecycle stage
 - required event properties and super-properties
 - attribution model: UTMs, click IDs, referrer, deep links, referral codes, creator codes, vanity URLs, self-reported source, and store/ad-platform limits
+- paid UA measurement model when in scope: selected channel, target event, baseline window, blended report, RevenueCat LTV/CPA source, ad-network SDK/native report, MMP decision, and founder-approved spend state
 - dashboard/insight plan with exact funnel definitions
 - feature flag and experiment registry for onboarding, paywall, offers, pricing, referral, and lifecycle tests
 - session replay, survey, and feedback plan, including privacy controls
@@ -92,7 +96,7 @@ Render or refresh `launch-cockpit.html` after analytics status changes so the fo
 
 ## 3. Upfront Planning Workflow
 
-1. Inventory surfaces before writing events: landing, app install/open, onboarding, paywall, subscription, web checkout, referral/share, email, support, privacy/deletion, store CTAs, Fastlane/social campaigns, backend jobs, and admin tools.
+1. Inventory surfaces before writing events: landing, app install/open, onboarding, paywall, subscription, web checkout, paid UA, referral/share, email, support, privacy/deletion, store CTAs, Fastlane/social campaigns, backend jobs, and admin tools.
 2. Define the decision the founder must see upfront: what users are doing, where they came from, where they drop, what converts, what retains, what produces revenue, and which channel is worth repeating.
 3. Choose the minimum analytics stack. Default to PostHog primary, RevenueCat for subscription truth, Stripe for web payment truth, Sentry for errors, and GA4/ad-network tooling only when paid ads or Google attribution require it.
 4. Decide PostHog region and project grouping before setup. PostHog recommends grouping multiple customer-facing products such as marketing site, mobile app, and web app in one project when the goal is cross-surface journey analysis.

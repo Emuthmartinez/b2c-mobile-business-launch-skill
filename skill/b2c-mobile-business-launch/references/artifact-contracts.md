@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -69,6 +69,7 @@ SCREENSHOTS.md            # device capture, composition, dimensions, locale, and
 CONTENT_ASSETS.md         # Higgsfield/Remotion/source-media route, source inputs, manifest, render proof, license status, and content QA
 content-assets.html       # founder-facing media route and output proof board
 STORE_OPS.md              # optional review, email-routing, console status, and post-launch growth state when submission is active
+PAID_UA.md                # one-channel paid acquisition fit, creative cadence, tracking baseline, blended report, RevenueCat economics, stop/scale rules
 VIRAL_GROWTH.md           # product-led viral loop fit, referral/share mechanics, content format lab, monetization timing, analytics proof, abuse controls, and stop/scale rules
 UGC_PLAYBOOK.md           # creator-led organic growth fit, 90-day Day 0 plan, budget, creator ops, scripts, tracking, stop/scale rules
 FASTLANE_OPS.md           # Fastlane workspace, connections, content engine, schedule, and analytics loop
@@ -126,6 +127,7 @@ rork-ready/
   content-assets.html
   store-console.html
   SCREENSHOTS.md
+  PAID_UA.md
   VIRAL_GROWTH.md
   UGC_PLAYBOOK.md
   FASTLANE_OPS.md
@@ -856,6 +858,28 @@ Acceptance:
 - Generated or mock UI is not presented as real app functionality.
 - Real app UI remains truthful and visible when the asset claims to show the product.
 - Public, paid, or store-bound use is blocked until founder approvals are recorded.
+
+## `PAID_UA.md`
+
+Use when paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, custom product page campaign routing, paid creative tests, MMP/ad-network SDK choices, or spend-readiness claims are in scope.
+
+Must include:
+- fit gate and explicit defer/not-fit reason when paid UA is not appropriate
+- one-channel choice or documented exception
+- selected channel, rejected channels, target event, destination, budget cap, and date range
+- creative production cadence, first batch size, angle map, product visibility rule, and source asset route
+- tracking baseline across RevenueCat, ad-network/native reporting, App Store Connect or Play Console, PostHog, and self-reported attribution
+- blended report shape, ideally `growth/paid-ua-report.csv`
+- RevenueCat LTV/cohort/trial/purchase/entitlement basis for CPA and payback decisions
+- weekly operating cadence and anomaly check
+- stop/scale/outsource rules
+- founder-only gates for spend, account connection, SDK/privacy changes, public creative, pricing, legal, and campaign launch
+- traceability rows to `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `CONTENT_ASSETS.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `APP_STORE_LISTING.md`, `PRIVACY.md`, and proof artifacts
+
+Acceptance:
+- Paid growth is not reduced to "try ads."
+- One channel, creative cadence, tracking baseline, blended reporting, RevenueCat economics, and stop/scale rules agree.
+- Founder-only spend and account gates are visible.
 
 ## `VIRAL_GROWTH.md`
 
