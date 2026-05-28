@@ -39,7 +39,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 - Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`
 - Implementation: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`
 - Design and content: `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`
-- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
+- Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
 - Revenue, lifecycle, and trust: `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `TERMS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`
 - Role routing: `APP_AGENTS.md` and `agents/`
 

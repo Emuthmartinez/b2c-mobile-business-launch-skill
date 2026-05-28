@@ -8,7 +8,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
-- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
+- Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
@@ -68,6 +68,7 @@ SCREENSHOTS.md            # device capture, composition, dimensions, locale, and
 CONTENT_ASSETS.md         # Higgsfield/Remotion/source-media route, source inputs, manifest, render proof, license status, and content QA
 content-assets.html       # founder-facing media route and output proof board
 STORE_OPS.md              # optional review, email-routing, console status, and post-launch growth state when submission is active
+VIRAL_GROWTH.md           # product-led viral loop fit, referral/share mechanics, content format lab, monetization timing, analytics proof, abuse controls, and stop/scale rules
 UGC_PLAYBOOK.md           # creator-led organic growth fit, 90-day Day 0 plan, budget, creator ops, scripts, tracking, stop/scale rules
 FASTLANE_OPS.md           # Fastlane workspace, connections, content engine, schedule, and analytics loop
 OUTREACH.md               # endorsement/partner drafts when relevant
@@ -123,11 +124,13 @@ rork-ready/
   content-assets.html
   store-console.html
   SCREENSHOTS.md
+  VIRAL_GROWTH.md
   UGC_PLAYBOOK.md
   FASTLANE_OPS.md
   docs/
   orchestration/
   content-assets/
+  growth/
   ugc/
   fastlane/
   agents/
@@ -827,6 +830,29 @@ Acceptance:
 - Generated or mock UI is not presented as real app functionality.
 - Real app UI remains truthful and visible when the asset claims to show the product.
 - Public, paid, or store-bound use is blocked until founder approvals are recorded.
+
+## `VIRAL_GROWTH.md`
+
+Use when product-led sharing, referral unlocks, invite systems, social-comment loops, creator CTAs, content format tests, or viral paywall/onboarding mechanics are in scope.
+
+Must include:
+- fit gate: visible/emotional product moment, platform-native audience behavior, privacy/policy risks, monetization readiness, and decision
+- growth thesis: audience/platform, visible result, emotional trigger, product loop, content loop, conversion moment, compounding theory, and failure theory
+- product loop: trigger, reward, recipient value, share artifact, surface, fallback, abuse controls, and policy constraints
+- referral/share mechanic: stable keys, backend/provider owner, reward/unlock validation, duplicate/self-referral handling, entitlement rules, and support recovery
+- content loop: platform, account or creator route, product visibility, CTA mechanic, comment/share mechanic, app-store or landing path, and claim constraints
+- format lab: format IDs, hook structure, first-frame visual, product insertion, CTA, variables, signal windows, and status
+- monetization timing: paywall placement, package/intro/closing-offer tests, restore/terms/privacy visibility, RevenueCat/Stripe/app-store linkage, and risk notes
+- measurement plan: PostHog or equivalent events, attribution, dashboards, traffic quality, referral/share proof, paywall reach, purchase, entitlement, activation, retention, and platform/device mix
+- stop/scale rules: reps before judgment, repeatable-hit threshold, downstream evidence threshold, and shut-down/reposition rules
+- founder-only gates: creator payments, paid tools, public posting, social account connections, pricing changes, and legal/policy approval
+- traceability rows to `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `ANALYTICS.md`, `UGC_PLAYBOOK.md`, and proof artifacts
+
+Acceptance:
+- Growth is represented as a product/content/revenue/analytics system, not a list of social posts.
+- Referral or share mechanics are not build-ready without abuse controls, backend/provider proof, and a fair fallback.
+- A future agent can tell when to scale, repeat, stop, or defer a format.
+- Views are not treated as proof unless tied to launch goals such as opens, referrals, paywall reach, purchases, retention, or awareness-only objectives.
 
 ## `UGC_PLAYBOOK.md`
 

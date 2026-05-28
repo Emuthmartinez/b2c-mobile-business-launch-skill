@@ -206,7 +206,33 @@ Acceptance:
 - Product alternatives are resolved before engineering tradeoffs are chosen.
 - Open founder-only decisions are explicit.
 
-## Phase 1d: Launch Trace And Build Contracts
+## Phase 1d: Viral Growth Loop Contract
+
+Goal: decide whether growth can compound through the product itself before treating UGC, Fastlane, or TikTok ideas as the whole growth plan.
+
+Do:
+- Load `viral-growth-loops.md`.
+- Load `analytics-attribution.md`, `onboarding-conversion.md`, and `revenue-monetization.md` when the loop touches attribution, onboarding, paywalls, offers, purchases, or entitlements.
+- Decide fit: visible product moment, emotional hook, platform-native audience behavior, privacy/policy risk, traffic quality, and monetization readiness.
+- Create `VIRAL_GROWTH.md` with the growth thesis, product loop, referral/share mechanic, content loop, format lab, monetization timing, measurement plan, stop/scale rules, founder-only gates, and trace rows.
+- Define backend/provider proof for referral unlocks, share rewards, creator codes, entitlements, duplicate handling, self-referral prevention, and abuse controls before implementation.
+- Add growth-loop events and dashboards to `ANALYTICS.md` and `analytics-plan.html`.
+- Update `ONBOARDING.md`, `REVENUE_OPS.md`, `UGC_PLAYBOOK.md`, `CONTENT_ASSETS.md`, `FASTLANE_OPS.md`, and `LAUNCH_TRACE.md` when the loop affects those surfaces.
+- Run `npm run check:viral-growth -- --root .` before claiming the growth lane is ready.
+
+Outputs:
+- `VIRAL_GROWTH.md`
+- `growth/format-lab.csv` or `ugc/script-bank.md` when content tests are in scope
+- optional `growth/referral-loop-map.md` for non-trivial referral/unlock mechanics
+- updated `PROJECT_STATE.yaml`, `LAUNCH_TRACE.md`, `ANALYTICS.md`, `ONBOARDING.md`, and `REVENUE_OPS.md`
+
+Acceptance:
+- The launch explains how attention becomes product action, not just which videos to post.
+- Referral/share mechanics have a fair fallback, abuse controls, and backend/provider validation.
+- Content tests have stop/scale rules and downstream metrics beyond views.
+- Founder-only gates are explicit for spend, public posting, pricing, social accounts, and legal/policy-sensitive incentives.
+
+## Phase 1e: Launch Trace And Build Contracts
 
 Goal: make the handoff from research to brand/design to implementation explicit enough that agents cannot lose why a decision exists.
 
@@ -215,7 +241,7 @@ Do:
 - Refresh `PROJECT_STATE.yaml` before creating trace rows so status reflects the current phase and blockers.
 - Create or update `LAUNCH_TRACE.md` unless the launch is tiny enough for a clearly labeled trace section in `RESEARCH.md`.
 - Assign stable trace IDs for major research findings, 11-star experience decisions, product decisions, claims, onboarding questions, paywall choices, data collection, store-console answers, and build-critical flows.
-- Map each trace row to affected docs: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
+- Map each trace row to affected docs: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `VIRAL_GROWTH.md`, `BRAND.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `STORE_CONSOLE.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md` where applicable.
 - Decide whether `TECH_SPEC.md` is needed. Create it when app/backend/web implementation needs data model, API/RPC/webhook contracts, state machines, permissions, integrations, app integrity, feature flags, or test fixtures.
 - Record rejected decisions so future agents do not reintroduce weak claims, unproven features, generic styling, or unsupported monetization behavior.
 
@@ -227,11 +253,11 @@ Outputs:
 - updated `PROJECT_STATE.yaml` and `launch-cockpit.html` when trace/build-contract status changes
 
 Acceptance:
-- Every major experience, brand, design, onboarding, revenue, privacy, store, and build decision can be traced to evidence or a founder-only decision.
+- Every major experience, viral growth, brand, design, onboarding, revenue, privacy, store, and build decision can be traced to evidence or a founder-only decision.
 - A builder can identify what must be implemented and how it will be verified without rereading every research source.
 - Data/API/state behavior is precise enough that the implementation plan does not invent backend contracts.
 
-## Phase 1e: Security Architecture
+## Phase 1f: Security Architecture
 
 Goal: define the app's security posture before builders lock architecture, providers, webhooks, app integrity, and app-store disclosures.
 
@@ -466,6 +492,7 @@ Do:
 - Include `ENGINEERING_PLAN.md` when the app build is ready for `ce-plan`/`ce-work` or a generated builder.
 - Include `PRODUCTION_READINESS.md` template or checklist before actual build execution begins.
 - Include `ONBOARDING.md` and `onboarding.html` when the build includes onboarding, personalization, review prompts, or a paywall.
+- Include `VIRAL_GROWTH.md` when social, referral, invite, creator-code, or share-loop mechanics are part of the business.
 - Include `UGC_PLAYBOOK.md` and `ugc/` artifacts when social/creator distribution is part of the business.
 - Write sequenced build prompts for Rork or another builder. Each prompt should name required docs, deliverables, analytics events, definition of done, and scope exclusions.
 - Bundle docs and visual references into a `rork-ready/` or `builder-ready/` directory when handoff to another repo is expected.
@@ -492,6 +519,7 @@ Outputs:
 - `FAILURE_CARDS.md` when active risks need more detail than `PROJECT_STATE.yaml`
 - `PROMPTS.md`
 - `ONBOARDING.md` and `onboarding.html` when in scope
+- `VIRAL_GROWTH.md` when in scope
 - `UGC_PLAYBOOK.md` and `ugc/` artifacts when in scope
 - `README.md`
 - `docs/` bundle
@@ -581,8 +609,10 @@ Goal: connect the launched app to a repeatable organic short-form content engine
 
 Do:
 - Load `paid-tool-routing.md` before using or replacing Fastlane AI, creator marketplaces, MobAI, Higgsfield, AppKittie, XPOZ, or paid social/ASO tools.
+- Load `viral-growth-loops.md` when the channel depends on referral/share mechanics, creator codes, social-comment loops, app-store search behavior, or paywall timing.
 - Load `ugc-creator-engine.md` when creator-led UGC, founder-led TikTok/Reels/Shorts, Sideshift, creator contracts, creator payments, or format discovery is in scope.
 - Load `fastlane-growth-ops.md` when the app is approved, in public beta, or ready to start marketing through Fastlane AI.
+- Refresh the viral growth fit decision: visible product moment, emotional hook, platform-native behavior, referral/share mechanics, monetization readiness, analytics proof, and compliant claim surface.
 - Decide whether UGC is a fit: visible product moment, emotional hook, large consumer/prosumer audience, comment/share potential, and compliant claim surface.
 - If UGC is a fit, create `UGC_PLAYBOOK.md` with 90-day Day 0 plan, budget, 3-5 creator roster target, sourcing workflow, contract checklist, payment structure, script ownership, tracking sheet, and stop/scale thresholds.
 - Use the installed `usefastlane-ai` skill and current Fastlane app/docs/API as the live source for endpoint behavior, workspace state, limits, and connected accounts.
@@ -599,6 +629,8 @@ Do:
 - Run weekly analytics loops that connect Fastlane performance to installs, trials, purchases, attribution answers, and product analytics.
 
 Outputs:
+- `VIRAL_GROWTH.md`
+- `growth/format-lab.csv` when format tests are in scope
 - `UGC_PLAYBOOK.md`
 - `ugc/creator-list.csv`
 - `ugc/creator-brief.md`

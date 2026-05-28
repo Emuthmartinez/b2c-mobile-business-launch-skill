@@ -10,6 +10,14 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(scriptDir, "..");
 const scenarioDir = path.resolve(scriptDir, "../evals/launchbench");
 const issues = [];
+function resolveTsxBin(): string {
+  const candidates = [
+    path.join(skillRoot, "node_modules/.bin/tsx"),
+    path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx"),
+  ];
+  return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
+}
+
 const knownValidators = new Set([
   "validate-project-state",
   "check-attribution-contract",
@@ -18,6 +26,7 @@ const knownValidators = new Set([
   "check-secret-routing",
   "check-security-release",
   "check-content-assets",
+  "check-viral-growth-loop",
   "check-parallel-orchestration",
   "check-eleven-star-experience",
   "check-source-freshness",
@@ -75,10 +84,13 @@ if (issues.some((item) => item.severity === "error")) {
   process.exitCode = 1;
 } else {
   const fixtureRunner = path.join(scriptDir, "run-validator-fixtures.ts");
-  const tsxBin = path.join(skillRoot, "node_modules/.bin/tsx");
+  const tsxBin = resolveTsxBin();
   const result = spawnSync(tsxBin, [fixtureRunner], { cwd: skillRoot, encoding: "utf8" });
-  process.stdout.write(result.stdout);
-  process.stderr.write(result.stderr);
+  process.stdout.write(result.stdout ?? "");
+  process.stderr.write(result.stderr ?? "");
+  if (result.error) {
+    console.error(result.error.message);
+  }
   if (result.status !== 0) {
     process.exitCode = result.status ?? 1;
   }

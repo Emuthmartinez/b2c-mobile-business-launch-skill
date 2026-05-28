@@ -381,6 +381,34 @@ Rules:
 - Keep raw captures separate from final upload assets.
 - If capture is blocked by missing device/app access, leave the exact blocker. Continue with a clearly labeled design-system mock only after the founder approves the fallback.
 
+## Viral Growth Loop Routing
+
+Purpose: decide whether the product can grow through built-in sharing, referrals, invite loops, social-comment mechanics, or creator CTAs before treating content as the whole growth plan.
+
+Use `viral-growth-loops.md` before:
+- referral unlocks, share-to-unlock mechanics, invite systems, or referral codes
+- viral onboarding/paywall flows and closing-offer mechanics tied to sharing
+- TikTok/Reels/Shorts hooks that depend on users commenting, sharing, tagging, searching, or posting their own results
+- creator CTAs that must map to product rewards, store search, landing links, or self-reported attribution
+- calling a social channel ready from views, likes, or UGC ideas alone
+
+Inputs:
+- `SPEC.md`, `11_STAR_EXPERIENCE.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `ANALYTICS.md`, `LAUNCH_TRACE.md`, `PRIVACY.md`, `TERMS.md`
+- AppKittie/XPOZ/review/social evidence for category, platform, creator language, device mix, and content formats
+- real product screens or truthful prototypes that show the shareable result
+
+Outputs:
+- `VIRAL_GROWTH.md`
+- `growth/format-lab.csv` or `ugc/script-bank.md`
+- `growth/referral-loop-map.md` when referral/unlock mechanics are non-trivial
+- updated `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `CONTENT_ASSETS.md`, and `ANALYTICS.md` when content or automation is in scope
+
+Rules:
+- Treat UGC as supply and viral growth as the system that converts attention into product actions.
+- Do not force referral/share mechanics without fallback, abuse controls, and policy review.
+- Do not scale from one viral post; wait for repeatable format evidence plus downstream app, paywall, revenue, or retention signal.
+- Ask before creator payments, paid tools, public posting, social account connections, pricing changes, or legal/policy-sensitive incentives.
+
 ## UGC Creator Engine Routing
 
 Purpose: decide whether creator-led organic growth is a real channel and, if so, run a Day 0 format-discovery program before scaling or feeding Fastlane.

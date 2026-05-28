@@ -176,7 +176,7 @@ Rules:
 - Server-side events should cover purchase/webhook/account truth; client-side events should cover UI behavior and timing.
 
 Minimum B2C launch events:
-- Acquisition: `landing_page_viewed`, `pricing_section_viewed`, `app_store_cta_clicked`, `waitlist_joined`, `referral_link_created`, `referral_link_opened`, `web_checkout_started`
+- Acquisition: `landing_page_viewed`, `pricing_section_viewed`, `app_store_cta_clicked`, `waitlist_joined`, `referral_link_created`, `referral_link_opened`, `referral_invite_started`, `referral_invite_completed`, `referral_unlock_earned`, `share_started`, `share_completed`, `web_checkout_started`
 - Attribution: `campaign_context_received`, `deeplink_opened`, `attribution_source_selected`, `creator_code_applied`
 - App: `app_opened`, `signup_started`, `signup_completed`, `login_completed`, `permission_prompt_viewed`, `permission_granted`
 - Onboarding: `onboarding_started`, `onboarding_step_viewed`, `onboarding_answer_selected`, `demo_video_viewed`, `personalized_plan_viewed`, `onboarding_completed`
@@ -185,7 +185,7 @@ Minimum B2C launch events:
 - Activation/retention: `activation_task_started`, `activation_task_completed`, `core_action_completed`, `share_started`, `share_completed`, `notification_opened`, `return_session_started`
 - Email/lifecycle: `email_subscribed`, `email_sent`, `email_delivered`, `email_clicked`, `email_unsubscribed`, `lifecycle_message_triggered`
 - Support/privacy: `support_contact_clicked`, `data_deletion_requested`, `privacy_choice_updated`
-- Post-launch social: `fastlane_content_generated`, `fastlane_content_approved`, `fastlane_content_scheduled`, `social_campaign_click_received`
+- Post-launch social: `viral_format_signal_detected`, `fastlane_content_generated`, `fastlane_content_approved`, `fastlane_content_scheduled`, `social_campaign_click_received`
 
 Core properties:
 - `platform`, `device_type`, `app_version`, `build_number`, `environment`, `locale`, `country`, `storefront`

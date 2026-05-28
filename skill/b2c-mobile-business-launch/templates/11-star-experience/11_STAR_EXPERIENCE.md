@@ -45,6 +45,7 @@ This artifact defines the product's extreme experience, the feasible V1 slice, a
 | Product core loop | What result would the user retell? | Pending | `SPEC.md`, `LAUNCH_TRACE.md` | Pending |
 | Onboarding | What makes the user feel understood early? | Pending | `ONBOARDING.md`, `onboarding.html` | Pending |
 | Paywall | What makes purchase feel like unlocking momentum? | Pending | `REVENUE_OPS.md`, `design.md` | Pending |
+| Viral growth loop | What product moment would make sharing or referral feel natural? | Pending | `VIRAL_GROWTH.md`, `ANALYTICS.md`, `LAUNCH_TRACE.md` | Pending |
 | Ad or creator hook | What tiny experience can the ad deliver by itself? | Pending | `UGC_PLAYBOOK.md`, `CONTENT_ASSETS.md` | Pending |
 | App Store screenshots | What three frames prove the magic? | Pending | `APP_STORE_LISTING.md`, `SCREENSHOTS.md` | Pending |
 | Landing page | What scene makes the promise instantly clear? | Pending | landing page, `GEO_SEO.md` | Pending |
@@ -58,6 +59,7 @@ This artifact defines the product's extreme experience, the feasible V1 slice, a
 - Design-system source: `DESIGN.md`
 - Screen spec source: `design.md`
 - Content asset source: `CONTENT_ASSETS.md`
+- Viral growth source: `VIRAL_GROWTH.md`
 
 ## Traceability
 

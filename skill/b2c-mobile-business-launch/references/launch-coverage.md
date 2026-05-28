@@ -35,6 +35,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Apple signing/release | Apple Developer membership, Team ID, bundle ID/App ID, app record, capabilities, certificates/profiles, archive/export/upload/TestFlight status, founder-only gates | `APPLE_SIGNING.md`, Xcode, XcodeBuildMCP, ASC CLI, App Store Connect |
 | Revenue | RevenueCat/Stripe/app-store products, entitlement mapping, web checkout, restore, webhooks | `revenue-monetization.md` |
 | Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics | Cloudflare, Supabase, PostHog, Resend |
+| Viral growth loop | `VIRAL_GROWTH.md`, product-led referral/share loop, format lab, monetization timing, abuse controls, analytics proof, stop/scale rules | `viral-growth-loops.md`, PostHog, RevenueCat/Stripe, UGC/Fastlane |
 | GEO/SEO | metadata, schema, robots, sitemap, `llms.txt`, AI crawler access, citability | GEO skills, Firecrawl |
 | Privacy/legal | privacy, terms, EULA, data deletion, subscription disclosures, source URLs | `privacy-terms.md` |
 | Analytics/attribution | current PostHog doc map, identity model, event catalog, attribution matrix, dashboards, experiments, replay/survey posture, QA | `ANALYTICS.md`, `analytics-plan.html`, PostHog, GA4, RevenueCat, ASC |
@@ -69,6 +70,7 @@ Required unless explicitly marked not applicable:
 - support and privacy contact routes tested from external sender
 - upfront analytics/attribution plan rendered for the founder, plus event catalog and at least one verified event when implementation exists
 - self-reported attribution data contract when onboarding/signup/waitlist exists: early visible screen, stable source keys, `other` free text, `attribution_source_selected`, PostHog person property, backend/profile persistence, and anonymous-to-identified reconciliation
+- viral growth contract when the launch depends on referrals, share-to-unlock, creator CTAs, social-comment loops, or TikTok/Reels/Shorts acquisition: `VIRAL_GROWTH.md`, fair fallback, abuse controls, analytics proof, and stop/scale rules
 - Resend or equivalent email path verified when the launch sends confirmation, lifecycle, marketing, billing, support, or admin email
 - App Store/Play product and privacy disclosure mapping when submitting
 - copy-paste App Store Connect/Google Play packet with exact click paths, field values, privacy answers, screenshot upload matrix, and founder-only gates when submitting

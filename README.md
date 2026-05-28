@@ -35,6 +35,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, Remotion content assets, screenshot systems, and audit gates |
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
 | Monetization | RevenueCat, Stripe, app-store products, web funnels, entitlement validation, webhooks, restore/refund flows, and proof |
+| Viral Growth | `VIRAL_GROWTH.md`, product-led referral/share loops, content format lab, monetization timing, abuse controls, analytics proof, and stop/scale rules |
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
 | Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
@@ -76,6 +77,7 @@ npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
+npm run check:viral-growth -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:source-registry
@@ -102,6 +104,7 @@ The scripts are intentionally simple:
 - `check-secret-routing.ts` checks `SECRETS.md`, names-only secret routing, forbidden local secret files, and raw secret patterns.
 - `check-security-release.ts` checks `SECURITY.md`, security-review routing, OWASP/platform basis, mobile hardening, entitlement/webhook abuse controls, privacy/analytics/email controls, supply-chain checks, incident response, and accepted risks.
 - `check-content-assets.ts` checks `CONTENT_ASSETS.md`, Remotion/Higgsfield route decisions, fallback approval, license status, source inputs, render proof, claim review, and manifest shape.
+- `check-viral-growth-loop.ts` checks `VIRAL_GROWTH.md`, product/referral/content loops, monetization timing, analytics proof, abuse controls, stop/scale rules, and format-lab evidence.
 - `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
@@ -162,6 +165,7 @@ skill/
       repo-agent-entrypoints/
       orchestration/
       content-assets/
+      growth/
       app-agent-roster/
       resend/
       SECURITY.md

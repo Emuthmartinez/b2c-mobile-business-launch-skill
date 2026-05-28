@@ -82,6 +82,7 @@ Every important product and launch surface must carry the same experience thesis
 | Product core loop | What is the end-to-end result the user would retell? | `SPEC.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md` |
 | Onboarding | What makes the user feel understood before payment or setup completes? | `ONBOARDING.md`, `onboarding.html`, analytics events |
 | Paywall | What makes purchase feel like unlocking momentum rather than hitting a toll booth? | `REVENUE_OPS.md`, paywall copy, restore/legal state |
+| Viral growth loop | What product moment makes sharing, referral, or social participation feel natural? | `VIRAL_GROWTH.md`, `ANALYTICS.md`, `LAUNCH_TRACE.md` |
 | App Store screenshots | What visual proof shows the magic in three frames? | `APP_STORE_LISTING.md`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md` |
 | Ad or creator hook | What tiny version of the product experience can the ad itself deliver? | `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, content scripts |
 | Landing page | What is the one scene that makes the visitor understand the promise instantly? | landing page, GEO/SEO, analytics |

@@ -4,6 +4,8 @@ Use this when the launch depends on TikTok/Reels/Shorts, creator-led organic gro
 
 The Day 0 frame: do not build a mature creator machine before a format works. Run a 90-day founder-led format-discovery experiment with a tiny roster, high feedback intensity, and strict stop/scale rules.
 
+Load `viral-growth-loops.md` first when UGC depends on product-led referral/share mechanics, social-comment loops, paywall timing, creator codes, or share-to-unlock behavior. This file owns creator operations; `viral-growth-loops.md` owns the product/content/revenue/analytics system that makes attention compound.
+
 ## Contents
 
 - Fit Gate
@@ -177,6 +179,7 @@ Use Remotion when founder-led or creator-led content needs repeatable local vari
 
 Create these when UGC is in scope:
 - `UGC_PLAYBOOK.md`: fit decision, 90-day plan, budget, creator profile, sourcing channel, contract checklist, payment model, stop/scale rules
+- `VIRAL_GROWTH.md`: product-led loop, referral/share mechanics, content format lab, monetization timing, analytics proof, abuse controls, and stop/scale rules when creator content is expected to compound
 - `CONTENT_ASSETS.md`: Remotion/Higgsfield/raw-media route, source inputs, license status, render proof, and output registry when rendered or generated media supports the UGC lane
 - `ugc/creator-list.csv`: creators, platform, handle, geography, personal followers, notes, outreach status
 - `ugc/script-bank.md`: format IDs, hooks, scripts, CTA notes, product insertion notes
