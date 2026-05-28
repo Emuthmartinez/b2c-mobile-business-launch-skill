@@ -30,6 +30,7 @@ if (!loaded.state) {
   const updatedAt = asString(getPath(state, "updated_at")) ?? "unknown";
   const lanes = isRecord(getPath(state, "lanes")) ? (getPath(state, "lanes") as Record<string, unknown>) : {};
   const tools = isRecord(getPath(state, "tools")) ? (getPath(state, "tools") as Record<string, unknown>) : {};
+  const orchestration = isRecord(getPath(state, "orchestration")) ? (getPath(state, "orchestration") as Record<string, unknown>) : {};
   const cards = asArray(getPath(state, "failure_cards.active"));
   const gates = asArray(getPath(state, "autonomy.founder_only_gates"));
   const proofCommands = asArray(getPath(state, "proof.commands"));
@@ -63,6 +64,13 @@ if (!loaded.state) {
       return `<article class="proof"><strong>${escapeHtml(record.command)}</strong><p>Expected: ${escapeHtml(record.expected)}</p><p>Actual: ${escapeHtml(record.actual)}</p><p>Evidence: ${escapeHtml(record.evidence)}</p></article>`;
     })
     .join("");
+
+  const orchestrationMarkup = `<div class="grid">
+    <article class="card"><h3>Strategy</h3><p>${escapeHtml(orchestration.strategy ?? "not recorded")}</p><p class="muted">${escapeHtml(orchestration.rationale ?? "")}</p></article>
+    <article class="card"><h3>Owner</h3><p>${escapeHtml(orchestration.integration_owner ?? "not recorded")}</p><p class="muted">Manager pattern: ${escapeHtml(orchestration.manager_pattern ?? "unknown")}</p></article>
+    <article class="card"><h3>Safety</h3><p>File overlap checked: ${escapeHtml(orchestration.file_overlap_checked ?? "unknown")}</p><p>Actual collision check: ${escapeHtml(orchestration.actual_file_collision_check ?? "unknown")}</p></article>
+    <article class="card"><h3>Integration</h3><p>Outputs reviewed: ${escapeHtml(orchestration.agent_outputs_reviewed ?? "unknown")}</p><p>State reconciled: ${escapeHtml(orchestration.state_reconciled ?? "unknown")}</p></article>
+  </div>`;
 
   const html = `<!doctype html>
 <html lang="en">
@@ -120,6 +128,10 @@ if (!loaded.state) {
     <section>
       <h2>Lane Status</h2>
       <table><thead><tr><th>Lane</th><th>Status</th><th>Evidence</th><th>Blockers</th></tr></thead><tbody>${laneRows}</tbody></table>
+    </section>
+    <section>
+      <h2>Orchestration</h2>
+      ${orchestrationMarkup}
     </section>
     <section>
       <h2>Provider State</h2>

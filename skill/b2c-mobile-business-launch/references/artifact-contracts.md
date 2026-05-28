@@ -10,7 +10,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
-- Engineering docs: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
+- Engineering docs: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Handoff docs: `PROMPTS.md`, `AUDIT_PROMPT.md`, `agents/`
 
 ## Canonical File Map
@@ -33,6 +33,8 @@ ANALYTICS.md              # upfront measurement, attribution, event catalog, fun
 analytics-plan.html       # founder-visible rendered analytics/attribution plan and dashboard wireframes
 LAUNCH_TRACE.md           # evidence-to-product-to-brand/design-to-build-to-proof traceability matrix
 TECH_SPEC.md              # data/API/state/permission/integration contracts when actual implementation is in scope
+ORCHESTRATION.md          # parallel-agent/worktree preflight, candidate units, file ownership, serialized resources, integration, and verification
+orchestration.html        # optional founder-facing orchestration board
 ENGINEERING_PLAN.md       # Compound Engineering plan or implementation plan when actual app build is in scope
 PRODUCTION_READINESS.md   # end-to-end proof across frontend, backend, mobile device, providers, and release gates
 LAUNCHBENCH.md            # optional eval/check history for known launch-grade failure modes
@@ -96,6 +98,8 @@ rork-ready/
   analytics-plan.html
   LAUNCH_TRACE.md
   TECH_SPEC.md
+  ORCHESTRATION.md
+  orchestration.html
   ENGINEERING_PLAN.md
   PRODUCTION_READINESS.md
   LAUNCHBENCH.md
@@ -118,6 +122,7 @@ rork-ready/
   UGC_PLAYBOOK.md
   FASTLANE_OPS.md
   docs/
+  orchestration/
   content-assets/
   ugc/
   fastlane/
@@ -139,6 +144,7 @@ Must include:
 - analytics attribution contract completeness
 - proof commands and evidence paths
 - active and resolved failure cards
+- top-level orchestration strategy, candidate units, serialized resources, spawned agents, collision checks, integration proof, and validator runs
 - LaunchBench or validator run history when available
 
 Acceptance:
@@ -162,7 +168,7 @@ Must include:
 - analytics rules
 - secret-management rules: `SECRETS.md`, Doppler or approved provider, `.env.example` names only, no raw secret values in docs/logs/proofs, and `doppler run --` or approved wrapper for secret-bearing commands
 - security rules: `SECURITY.md`, `security-review.html`, threat model, security tool routing, OWASP MASVS/ASVS basis, mobile platform hardening, app-integrity decision, entitlement/webhook abuse controls, supply-chain checks, monitoring/incident response, accepted risks, and `check:security`
-- Compound Engineering routing, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
+- Compound Engineering routing, `ORCHESTRATION.md`, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
 - app-local agent roster pointer to `APP_AGENTS.md` and `agents/`, including orchestrator ownership and specialist audit roles
 - MobAI/device testing rules and serialized device ownership
 - paid-tool routing and approved MobAI/XcodeBuildMCP fallback rules
@@ -207,6 +213,28 @@ Acceptance:
 - `APP_AGENTS.md` points each role to canonical docs instead of duplicating them.
 - The orchestrator can launch parallel audits against the skill definition without letting specialists stage, commit, release, or edit overlapping files independently.
 - Product, design, marketing, engineering, security, and support follow-up work has a named owner after bootstrap.
+
+## `ORCHESTRATION.md` And `orchestration.html`
+
+Use before broad multi-lane launch work, subagent dispatch, worktree routing, production-readiness sweeps, or app handoff prompts that imply parallel agents.
+
+Must include:
+- orchestration preflight: current objective, critical path kept local, selected strategy, manager-pattern owner, and rationale
+- candidate units: role, objective, mode, expected output, input docs, files, shared resources, parallel-safe decision, and status
+- parallel safety check: declared file overlap, shared mutable resources, serialized units, worktree needs, and actual file collision check after agents return
+- file ownership: which files the orchestrator owns and which paths specialists may edit
+- serialized work: provider/account mutations, credentials, device automation, git, releases, pricing/legal/public posting/submission, and final readiness decisions
+- standard subagent instructions with forbidden actions: no staging, commits, pushes, merges, project-wide suites, provider mutation, device ownership, credential changes, public posting, submissions, or founder-only decisions
+- integration plan: review outputs, accept/reject findings, resolve collisions, update state/failure cards, run focused validators, then full suites
+- verification: focused validator commands, full-suite commands, proof paths, and unresolved blockers
+- founder-only gates and active failure cards
+
+Acceptance:
+- `PROJECT_STATE.yaml` has a matching top-level `orchestration` block.
+- Parallel-safe units do not share write files or mutable resources unless isolated in worktrees and integrated serially.
+- Subagent outputs are reviewed before any done/readiness claim.
+- The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, git, provider/device mutations, and final launch judgment.
+- `npm run check:orchestration -- --root .` passes or leaves named blockers/failure cards.
 
 ## `TOOL_DECISIONS.md`
 
@@ -379,7 +407,7 @@ Must include:
 - `TECH_SPEC.md` pointer or an inline technical contract section when implementation contracts are in scope
 - architecture and repo boundaries
 - implementation units with repo-relative paths
-- safe parallelization map: independent units, serial dependencies, shared files, and worktree needs
+- orchestration source: `ORCHESTRATION.md`, `PROJECT_STATE.yaml` strategy, candidate units, safe parallel lanes, serial dependencies, shared files/resources, actual collision check, and worktree needs
 - frontend, backend, database, analytics, revenue, email, privacy, and store-console impacts
 - secret impacts: new/changed env vars, Doppler/provider routing, `.env.example` updates, CI/deploy injection, and bundle-safety checks
 - test scenarios for each unit

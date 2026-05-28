@@ -208,6 +208,106 @@ function writeCompleteContentAssets(root: string): void {
   );
 }
 
+function writeCompleteOrchestration(root: string): void {
+  mkdirSync(path.join(root, "orchestration"), { recursive: true });
+  const state = readState(root);
+  state["orchestration"] = {
+    preflight_done: true,
+    strategy: "hybrid",
+    rationale: "Parallel read-only specialist audits are safe while implementation and state integration remain orchestrator-owned.",
+    integration_owner: "orchestrator",
+    manager_pattern: true,
+    file_overlap_checked: true,
+    actual_file_collision_check: true,
+    agent_outputs_reviewed: true,
+    state_reconciled: true,
+    candidate_units: [
+      {
+        id: "product-audit",
+        role: "product leader",
+        objective: "Audit scope, onboarding, activation, and traceability.",
+        mode: "read_only",
+        files: ["SPEC.md", "ONBOARDING.md", "LAUNCH_TRACE.md"],
+        shared_resources: [],
+        parallel_safe: true,
+        output: "findings",
+        status: "completed",
+      },
+      {
+        id: "security-audit",
+        role: "security architect",
+        objective: "Audit threat model, app integrity, entitlement abuse, and incident response.",
+        mode: "read_only",
+        files: ["SECURITY.md", "security-review.html"],
+        shared_resources: [],
+        parallel_safe: true,
+        output: "findings",
+        status: "completed",
+      },
+      {
+        id: "state-integration",
+        role: "orchestrator",
+        objective: "Update state, failure cards, launch cockpit, git, and final proof.",
+        mode: "serialized",
+        files: ["PROJECT_STATE.yaml", "launch-cockpit.html", "PRODUCTION_READINESS.md"],
+        shared_resources: ["git index"],
+        parallel_safe: false,
+        output: "integrated proof",
+        status: "completed",
+      },
+    ],
+    parallel_safe_units: ["product-audit", "security-audit"],
+    serialized_units: [
+      "PROJECT_STATE.yaml updates",
+      "launch-cockpit.html rendering",
+      "git staging, commits, merges, pushes, and releases",
+      "provider/account mutations",
+      "MobAI or simulator/device control",
+      "state-integration",
+    ],
+    spawned_agents: [
+      {
+        id: "agent-security-audit",
+        role: "security architect",
+        objective: "Audit security release hardening.",
+        mode: "read_only",
+        allowed_files: [],
+        forbidden_actions: ["stage", "commit", "push", "provider mutation", "device control"],
+        status: "completed",
+        output_path: "orchestration/security-audit.md",
+      },
+    ],
+    focused_validators_run: ["npm run check:security -- --root .", "npm run check:orchestration -- --root ."],
+    full_suites_run: ["npm run audit"],
+  };
+  const orchestrationLane = getLane(state, "orchestration");
+  orchestrationLane["status"] = "done";
+  orchestrationLane["evidence"] = ["orchestration/ORCHESTRATION.md", "orchestration/orchestration.html", "orchestration/security-audit.md"];
+  orchestrationLane["blockers"] = [];
+  writeState(root, state);
+  writeFileSync(
+    path.join(root, "orchestration", "ORCHESTRATION.md"),
+    [
+      "# Orchestration",
+      "Orchestration Preflight: the orchestrator keeps state integration local while product and security audits run in parallel.",
+      "Strategy: hybrid manager pattern with one orchestrator.",
+      "Candidate Units: product-audit and security-audit are read-only; state-integration is serialized.",
+      "Parallel Safety Check: file-overlap check passed; actual modified files were compared after agent outputs returned.",
+      "File Ownership: the orchestrator owns PROJECT_STATE.yaml, launch-cockpit.html, PRODUCTION_READINESS.md, git, and releases.",
+      "Serialized Work: provider/account mutations, credentials, device control, git, commits, pushes, public posting, and release decisions stay serialized.",
+      "Subagent Instructions: do not stage files, do not commit, do not push, do not mutate providers, do not control devices, and do not make founder-only decisions.",
+      "Integration Plan: the orchestrator reviews outputs, accepts or rejects findings, updates failure cards and state, then runs focused validators and the full suite.",
+      "Verification: npm run check:orchestration -- --root . and npm run audit passed.",
+      "Founder-Only Gates: pricing, legal, credentials, spending, public posting, app-store submission, and destructive repo actions.",
+      "State Updates: PROJECT_STATE.yaml and launch-cockpit.html were reconciled after integration.",
+      "Failure Cards: no active orchestration failure cards remain.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(path.join(root, "orchestration", "orchestration.html"), "<!doctype html><html><body>Orchestration board</body></html>", "utf8");
+  writeFileSync(path.join(root, "orchestration", "security-audit.md"), "# Security Audit\n\nNo orchestration blocker remains.\n", "utf8");
+}
+
 function writeSourceRegistryFixture(root: string, includeUrl = true): void {
   mkdirSync(path.join(root, "references"), { recursive: true });
   writeFileSync(
@@ -263,11 +363,13 @@ try {
   writeCompleteStoreConsole(clean);
   writeCompleteSecurity(clean);
   writeCompleteContentAssets(clean);
+  writeCompleteOrchestration(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
   runFixture("complete security release packet passes", clean, "check-security-release.ts", 0);
   runFixture("complete content assets packet passes", clean, "check-content-assets.ts", 0);
+  runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
@@ -688,6 +790,135 @@ try {
     "utf8",
   );
   runFixture("thin Remotion content manifest fails", thinContentManifest, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.surface.missing");
+
+  const orchestrationNoPreflight = makeFixture("orchestration-no-preflight");
+  const orchestrationNoPreflightState = readState(orchestrationNoPreflight);
+  const noPreflightLane = getLane(orchestrationNoPreflightState, "orchestration");
+  noPreflightLane["status"] = "done";
+  noPreflightLane["evidence"] = ["orchestration/ORCHESTRATION.md", "orchestration/orchestration.html"];
+  writeState(orchestrationNoPreflight, orchestrationNoPreflightState);
+  runFixture("orchestration done without preflight fails", orchestrationNoPreflight, "check-parallel-orchestration.ts", 1, "orchestration.done_without_preflight");
+
+  const orchestrationOverlap = makeFixture("orchestration-overlap");
+  const orchestrationOverlapState = readState(orchestrationOverlap);
+  orchestrationOverlapState["orchestration"] = {
+    preflight_done: true,
+    strategy: "parallel_subagents",
+    rationale: "Attempted two parallel implementation units.",
+    integration_owner: "orchestrator",
+    manager_pattern: true,
+    file_overlap_checked: true,
+    actual_file_collision_check: false,
+    agent_outputs_reviewed: false,
+    state_reconciled: false,
+    candidate_units: [
+      {
+        id: "analytics-doc",
+        role: "engineering leader",
+        objective: "Update analytics plan.",
+        mode: "edit",
+        files: ["ENGINEERING_PLAN.md"],
+        shared_resources: [],
+        parallel_safe: true,
+        status: "pending",
+      },
+      {
+        id: "revenue-doc",
+        role: "engineering leader",
+        objective: "Update revenue plan.",
+        mode: "edit",
+        files: ["ENGINEERING_PLAN.md"],
+        shared_resources: [],
+        parallel_safe: true,
+        status: "pending",
+      },
+    ],
+    parallel_safe_units: ["analytics-doc", "revenue-doc"],
+    serialized_units: ["PROJECT_STATE.yaml updates", "git staging, commits, merges, pushes, and releases"],
+    spawned_agents: [],
+    focused_validators_run: [],
+    full_suites_run: [],
+  };
+  writeState(orchestrationOverlap, orchestrationOverlapState);
+  runFixture("parallel units with same file fail orchestration check", orchestrationOverlap, "check-parallel-orchestration.ts", 1, "orchestration.parallel_file_overlap");
+
+  const orchestrationAgentGit = makeFixture("orchestration-agent-git");
+  const orchestrationAgentGitState = readState(orchestrationAgentGit);
+  orchestrationAgentGitState["orchestration"] = {
+    preflight_done: true,
+    strategy: "parallel_subagents",
+    rationale: "A spawned worker is assigned an isolated patch.",
+    integration_owner: "orchestrator",
+    manager_pattern: true,
+    file_overlap_checked: true,
+    actual_file_collision_check: false,
+    agent_outputs_reviewed: false,
+    state_reconciled: false,
+    candidate_units: [
+      {
+        id: "worker-doc",
+        role: "worker",
+        objective: "Patch one isolated doc.",
+        mode: "edit",
+        files: ["docs/worker.md"],
+        shared_resources: [],
+        parallel_safe: true,
+        status: "pending",
+      },
+    ],
+    parallel_safe_units: ["worker-doc"],
+    serialized_units: ["PROJECT_STATE.yaml updates", "git staging, commits, merges, pushes, and releases"],
+    spawned_agents: [
+      {
+        id: "agent-worker",
+        role: "worker",
+        objective: "Patch one isolated doc.",
+        mode: "edit",
+        status: "running",
+        forbidden_actions: ["provider mutation"],
+      },
+    ],
+    focused_validators_run: [],
+    full_suites_run: [],
+  };
+  writeState(orchestrationAgentGit, orchestrationAgentGitState);
+  runFixture(
+    "spawned agent without git forbidden actions fails",
+    orchestrationAgentGit,
+    "check-parallel-orchestration.ts",
+    1,
+    "orchestration.spawned_agents.0.forbidden_actions.git_missing",
+  );
+
+  const orchestrationUnreviewed = makeFixture("orchestration-unreviewed");
+  writeCompleteOrchestration(orchestrationUnreviewed);
+  const orchestrationUnreviewedState = readState(orchestrationUnreviewed);
+  expectRecord(orchestrationUnreviewedState["orchestration"], "orchestration")["agent_outputs_reviewed"] = false;
+  expectRecord(orchestrationUnreviewedState["orchestration"], "orchestration")["actual_file_collision_check"] = false;
+  writeState(orchestrationUnreviewed, orchestrationUnreviewedState);
+  runFixture("done spawned-agent orchestration without review fails", orchestrationUnreviewed, "check-parallel-orchestration.ts", 1, "orchestration.done_without_agent_review");
+
+  const orchestrationPermissivePrompt = makeFixture("orchestration-permissive-prompt");
+  writeFileSync(
+    path.join(orchestrationPermissivePrompt, "orchestration", "ORCHESTRATION.md"),
+    [
+      "# Orchestration",
+      "Orchestration Preflight",
+      "Strategy",
+      "Candidate Units",
+      "Parallel Safety Check",
+      "File Ownership",
+      "Serialized Work",
+      "Subagent Instructions: subagents may stage and commit their changes after they finish.",
+      "Integration Plan",
+      "Verification",
+      "Founder-Only Gates",
+      "State Updates",
+      "Failure Cards",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("subagent git authority in prompt fails", orchestrationPermissivePrompt, "check-parallel-orchestration.ts", 1, "orchestration.subagent_git_authority");
 
   const sourceRegistryMissing = makeEmptyFixture("source-registry-missing-url");
   writeSourceRegistryFixture(sourceRegistryMissing, false);

@@ -2,6 +2,8 @@
 
 Use this before building the actual app, coordinating frontend/backend work, writing `AGENTS.md` or `CLAUDE.md`, creating `TECH_SPEC.md` or `ENGINEERING_PLAN.md`, dispatching subagents, using Compound Engineering skills, or declaring production readiness.
 
+Load `parallel-agent-orchestration.md` alongside this file before multi-lane work, subagent dispatch, worktree routing, `ORCHESTRATION.md`, or any claim that parallel agents were used safely.
+
 The goal is to turn the launch package into shippable software without losing strategy, design, analytics, entitlement, or testing truth.
 
 ## Contents
@@ -51,6 +53,7 @@ The orchestrator owns state updates:
 - provider docs checked date, preflight, validation, fallback, and required secret names
 - proof commands and evidence paths
 - active failure cards
+- top-level `orchestration` strategy, candidate units, serialized resources, spawned agents, collision checks, integration proof, and validator runs
 - LaunchBench/validator runs
 
 Render `launch-cockpit.html` after material changes so the founder can inspect state without reading every doc.
@@ -117,7 +120,14 @@ Keep each role prompt short: mission, canonical docs to read first, responsibili
 
 ## 5. Parallel Agent Orchestration
 
-Use parallel agents for independent research, audits, static investigation, and implementation units that pass a safety check.
+Use `parallel-agent-orchestration.md` as the detailed contract. This section is the engineering-specific summary.
+
+At the start of broad launch or build work, the orchestrator should ask:
+- what critical-path work should stay local
+- what independent sidecar work can run in parallel
+- which specialists can improve consistency or catch launch-grade misses
+- which files, providers, devices, accounts, and git actions are shared resources
+- whether the current runtime actually allows subagent delegation
 
 Good parallel lanes:
 - AppKittie competitor/review pass, XPOZ social-language pass, Firecrawl web pass
@@ -137,6 +147,7 @@ Do not parallelize:
 Parallel safety check:
 - Map every candidate unit to create/modify/test files.
 - If two units touch the same file, run them serially.
+- Record the decision in `ORCHESTRATION.md` and the top-level `PROJECT_STATE.yaml` `orchestration` block before dispatch.
 - Use specialist subagents to audit against the skill definition before declaring completeness, especially for attribution, monetization, store-console, privacy, email, and E2E readiness.
 - Use one orchestrator to reconcile `PROJECT_STATE.yaml` and failure cards after parallel work; specialists should not independently mark lanes done.
 - For parallel implementation in one repo, the orchestrator owns staging, commits, and full test suites.
@@ -156,6 +167,7 @@ The plan must include:
 - `PROJECT_STATE.yaml` phase, autonomy mode, active blockers, and failure cards that constrain implementation
 - `TECH_SPEC.md` pointer or inline technical contracts when data/API/state/integration behavior is in scope
 - implementation units with repo-relative file paths
+- orchestration strategy, candidate units, safe parallel lanes, serialized lanes, worktree needs, shared resources, and subagent forbidden actions from `ORCHESTRATION.md`
 - frontend, backend, database, analytics, revenue, email, and store-console impacts
 - secret impacts: new secret or env var, secret class, Doppler/provider routing, service token/provider-integration plan, CI/deploy injection, `.env.example` names-only updates, and bundle-safety checks
 - feature flags or rollout controls
@@ -243,6 +255,7 @@ Run deterministic validators where the app repo has the required artifacts or co
 
 ```bash
 npm run validate:launch-state -- --root .
+npm run check:orchestration -- --root .
 npm run check:attribution -- --root .
 npm run check:secrets -- --root .
 npm run check:apple-signing -- --root .
@@ -265,9 +278,10 @@ Engineering-heavy work is done only when:
 - `LAUNCH_TRACE.md` exists or equivalent trace rows are embedded in `RESEARCH.md`.
 - `TECH_SPEC.md` exists when data/API/state/platform contracts are non-trivial.
 - `ENGINEERING_PLAN.md` exists when actual implementation is in scope.
+- `ORCHESTRATION.md` exists for multi-lane or subagent-assisted work, and `PROJECT_STATE.yaml` records strategy, candidate units, serialized resources, spawned agents, collision checks, integration proof, and validator runs.
 - `SECRETS.md` exists when any API key, token, webhook secret, service-account file, CI/deploy secret, store credential, or local env file is in scope.
 - Compound Engineering or equivalent workflow produced product requirements, implementation plan, execution, review, and proof for non-trivial app work.
-- Parallel agents were used where safe and serialized where required.
+- Parallel agents were considered by default, used where safe, and serialized where required.
 - Specialist audit agents or equivalent independent review checked the build against attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness requirements where in scope.
 - frontend, backend, analytics, revenue, email, and mobile-device paths were tested end to end where in scope.
 - MobAI proof, or founder-confirmed XcodeBuildMCP Apple-platform proof, is paired with backend/provider verification where app flows mutate state.

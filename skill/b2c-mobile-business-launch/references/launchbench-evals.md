@@ -18,6 +18,10 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - Higgsfield is unavailable and the agent silently uses Remotion or local media without founder-approved fallback routing
 - Remotion content assets are marked ready without license status, source inputs, manifest entries, render proof, or claim review
+- broad launch work starts without an orchestration preflight, critical-path/sidecar split, or `ORCHESTRATION.md`
+- parallel agents are marked safe while sharing files, provider accounts, devices, migrations, git actions, or final readiness decisions
+- spawned agents are allowed to stage, commit, push, mutate providers, control devices, run project-wide suites, or make founder-only decisions
+- subagent findings are not reviewed, reconciled into `PROJECT_STATE.yaml`, converted into failure cards, or verified by focused and full-suite validators
 
 ## Harness Shape
 

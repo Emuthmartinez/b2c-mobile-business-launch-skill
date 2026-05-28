@@ -27,6 +27,27 @@ autonomy:
     - "credentials, secrets, and account access"
     - "App Store or Google Play submission"
     - "public posting or scheduling"
+orchestration:
+  preflight_done: false
+  strategy: "inline"
+  rationale: "No parallel work has been evaluated yet."
+  integration_owner: "orchestrator"
+  manager_pattern: true
+  file_overlap_checked: false
+  actual_file_collision_check: false
+  agent_outputs_reviewed: false
+  state_reconciled: false
+  candidate_units: []
+  parallel_safe_units: []
+  serialized_units:
+    - "PROJECT_STATE.yaml updates"
+    - "launch-cockpit.html rendering"
+    - "git staging, commits, merges, pushes, and releases"
+    - "provider/account mutations"
+    - "MobAI or simulator/device control"
+  spawned_agents: []
+  focused_validators_run: []
+  full_suites_run: []
 lanes:
   paid_tool_routing:
     status: "partial"
@@ -137,6 +158,12 @@ lanes:
     status: "partial"
     evidence:
       - "EMAIL_OPS.md"
+    blockers: []
+  orchestration:
+    status: "partial"
+    evidence:
+      - "orchestration/ORCHESTRATION.md"
+      - "orchestration/orchestration.html"
     blockers: []
   engineering:
     status: "partial"

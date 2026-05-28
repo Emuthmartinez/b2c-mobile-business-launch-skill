@@ -37,6 +37,7 @@ export const requiredLanes = [
   "apple_signing",
   "privacy_legal",
   "email",
+  "orchestration",
   "engineering",
   "growth",
 ];

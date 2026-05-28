@@ -181,7 +181,7 @@ Acceptance:
 Goal: use the research to resolve product shape before engineering specs are built and actioned.
 
 Do:
-- Load `engineering-orchestration.md`.
+- Load `parallel-agent-orchestration.md` and `engineering-orchestration.md`.
 - Use Compound Engineering `ce-brainstorm` when research leaves multiple viable wedges, onboarding shapes, monetization postures, core loops, or user success definitions.
 - Use the brainstorm to produce a requirements source, not implementation code.
 - Preserve scope boundaries, actors, key flows, acceptance examples, risks, and non-goals.
@@ -256,7 +256,7 @@ Goal: lock the brand enough for builders, designers, screenshots, and landing pa
 
 Do:
 - Load `flow-traceability.md` and update `LAUNCH_TRACE.md` as brand and visual decisions are made.
-- Load `engineering-orchestration.md` when screen specs will become builder prompts or implementation work.
+- Load `parallel-agent-orchestration.md` and `engineering-orchestration.md` when screen specs will become builder prompts or implementation work.
 - Load `analytics-attribution.md` before locking screen analytics hooks, attribution questions, demo video metrics, paywall variants, or builder-facing event names.
 - Load `design-visual-system.md` before creating visual artifacts, app screens, screenshot frames, or landing UI.
 - Load `onboarding-conversion.md` before locking onboarding, demo videos, personalization questions, review prompts, paywall timing, or first-session activation.
@@ -441,11 +441,11 @@ Goal: package the business so another agent or builder can ship the app without 
 
 Do:
 - Load `flow-traceability.md` before writing builder prompts, `AGENTS.md`, or implementation specs.
-- Load `engineering-orchestration.md` before writing `AGENTS.md`, `CLAUDE.md`, `PROMPTS.md`, or any implementation prompt.
+- Load `parallel-agent-orchestration.md` and `engineering-orchestration.md` before writing `ORCHESTRATION.md`, `AGENTS.md`, `CLAUDE.md`, `PROMPTS.md`, or any implementation prompt.
 - Load `project-state.md`, `autonomy-modes.md`, `launchbench-evals.md`, and `failure-cards.md` before the handoff is considered complete.
 - Load `app-agent-roster.md` before writing `APP_AGENTS.md`, app-local `agents/`, or specialist audit prompts.
 - Use `launch-coverage.md` before moving from docs to implementation or submission.
-- Create an `AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, Compound Engineering routing, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
+- Create an `AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, Compound Engineering routing, `ORCHESTRATION.md`, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
 - Include `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator instructions in the first-read docs.
 - Create `APP_AGENTS.md` and the seven-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, security, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
@@ -501,7 +501,7 @@ Goal: implement the actual app with orchestration, review, and end-to-end proof.
 
 Do:
 - Load `flow-traceability.md` and require `ENGINEERING_PLAN.md` to reference trace IDs for build-critical work.
-- Load `engineering-orchestration.md`.
+- Load `parallel-agent-orchestration.md` and `engineering-orchestration.md`.
 - Load `secrets-management.md` before writing code, tests, or deploy configs that introduce environment variables or credentials.
 - Load `project-state.md`, `launchbench-evals.md`, and `failure-cards.md` before declaring any lane done.
 - Use `ce-brainstorm` first if product behavior is still ambiguous after research.
@@ -509,7 +509,7 @@ Do:
 - Use `TECH_SPEC.md` as the source for data models, API contracts, state machines, permission behavior, provider integrations, app integrity, remote config, and fixtures when it exists.
 - Use `ce-work` or the builder's equivalent executor for engineering-heavy implementation.
 - Use `ce-worktree` when parallel feature lanes need isolation or the current checkout must remain clean.
-- Use parallel agents only for independent units that pass file-overlap and dependency checks.
+- Create or update `ORCHESTRATION.md` and use parallel agents only for independent units that pass file-overlap, shared-resource, and dependency checks.
 - Keep the orchestrator responsible for git state, staging, commits, full-suite tests, migrations, releases, and final readiness calls.
 - Serialize MobAI/device automation; other agents may prepare fixtures, inspect code, or analyze logs while the device owner runs the flow.
 - Run backend and frontend E2E checks for in-scope user journeys: onboarding, attribution, paywall, entitlement, restore, referral, web checkout, lifecycle email, privacy/delete, analytics, and support.

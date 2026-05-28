@@ -4,7 +4,7 @@ Use this when starting, continuing, auditing, or handing off a launch. The goal 
 
 ## Required Artifacts
 
-- `PROJECT_STATE.yaml`: compact source of truth for phase, autonomy mode, lane statuses, paid-tool routing, secrets, provider setup, proof, open questions, and active failure cards.
+- `PROJECT_STATE.yaml`: compact source of truth for phase, autonomy mode, orchestration strategy, lane statuses, paid-tool routing, secrets, provider setup, proof, open questions, and active failure cards.
 - `launch-cockpit.html`: founder-visible rendered view of the same state.
 - `LAUNCHBENCH.md` or `proof.launchbench` in `PROJECT_STATE.yaml`: eval/check history for known failure modes.
 
@@ -28,6 +28,7 @@ Update `PROJECT_STATE.yaml`:
 
 - at the start of a new session after source-truth recovery
 - before using a paid/account-gated fallback
+- before dispatching subagents, worktrees, or parallel specialist audits
 - when a new secret, provider, bundle ID, app record, product, entitlement, analytics event, email route, or store field appears
 - before crossing research -> design, design -> build, build -> proof, or proof -> submission
 - after validation or LaunchBench runs
@@ -36,6 +37,7 @@ Update `PROJECT_STATE.yaml`:
 ## State Rules
 
 - `autonomy.mode` controls what the agent may do without founder approval. See `autonomy-modes.md`.
+- top-level `orchestration` records preflight, strategy, candidate units, parallel-safe units, serialized units, spawned agents, collision checks, output review, state reconciliation, and validators.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
@@ -52,6 +54,7 @@ npm run validate:launch-state -- --root /path/to/app
 npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
+npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run render:launch-cockpit -- --root /path/to/app
@@ -64,6 +67,7 @@ If the scripts are executed directly from the installed skill, run them with `ts
 Render `launch-cockpit.html` whenever state changes materially. It should show:
 
 - project, phase, platform, bundle IDs, and autonomy mode
+- orchestration strategy, serialized resources, spawned-agent status, and collision/reconciliation proof
 - lane statuses and evidence paths
 - paid-tool/provider route, docs checked date, required secret names, preflight, validation, and fallback
 - attribution contract completeness

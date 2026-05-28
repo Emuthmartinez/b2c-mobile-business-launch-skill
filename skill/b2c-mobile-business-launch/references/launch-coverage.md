@@ -25,7 +25,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Competitor web intelligence | competitor landing pages, pricing, funnels, claims, policies, changelog | Firecrawl map/scrape/crawl/extract |
 | Product spec | V1/V2/V3, core loop, activation, scope exclusions, risks | `SPEC.md` |
 | Evidence-to-build trace | evidence IDs, decision trace, build contracts, verification map, rejected decisions | `LAUNCH_TRACE.md`, `flow-traceability.md` |
-| Engineering orchestration | product brainstorm decision, `AGENTS.md`, `CLAUDE.md` when needed, implementation plan, parallel-agent map, E2E readiness proof | Compound Engineering, MobAI, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md` |
+| Engineering orchestration | product brainstorm decision, `ORCHESTRATION.md`, `AGENTS.md`, `CLAUDE.md` when needed, implementation plan, parallel-agent map, serialized resource map, E2E readiness proof | Compound Engineering, MobAI, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md` |
 | Technical build contracts | data model, API/RPC/webhooks, auth/session, app states, permissions, integrations, app integrity, fixtures | `TECH_SPEC.md`, `ENGINEERING_PLAN.md` |
 | Brand/design | voice, `DESIGN.md` token system, screen spec, rendered HTML proofs, asset rules, accessibility | `BRAND.md`, `DESIGN.md`, `design.md`, `design.html` |
 | Onboarding/conversion | personalization, mascot/demo, attribution, review prompt, paywall timing, closing offer, activation | `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md` |
@@ -88,6 +88,7 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 - AppKittie app watchlist with keywords, ads, reviews, screenshots, revenue/download deltas
 - RevenueCat Web Purchase Links or Web Funnels for direct web acquisition
 - PostHog feature flags/experiments or RevenueCat experiments for paywall, onboarding, offer, referral, lifecycle, and landing variants
+- `ORCHESTRATION.md` and `PROJECT_STATE.yaml` record the parallel-agent preflight, critical-path split, candidate units, file ownership, serialized resources, spawned agents, collision checks, integration, and validators
 - safe parallel agents/worktrees for independent research, static audits, frontend/backend units, fixtures, and test lanes, with the orchestrator owning integration, git, and full suites
 - `launch-cockpit.html` refreshed after each material provider, store, analytics, revenue, email, or readiness change
 - Compound Engineering `ce-proof` or `ce-demo-reel` artifacts for founder/reviewer inspection of shipped app behavior
@@ -132,7 +133,7 @@ Flag these aggressively:
 - No lightweight app-local agent roster exists for continuing the app after bootstrap, or the roster lacks orchestrator, marketing, engineering, product, design, and customer-success ownership.
 - `CLAUDE.md` duplicates product truth instead of pointing to `AGENTS.md`, causing builder/runtime drift.
 - App-local agents/subagents are used as uncoordinated implementers instead of scoped reviewers or isolated workers under an orchestrator.
-- Parallel subagents were launched without a file-overlap check, worktree isolation, or an orchestrator owning git, integration, and full test suites.
+- Parallel subagents were launched without `ORCHESTRATION.md`, a file-overlap check, worktree isolation, forbidden actions, output review, or an orchestrator owning git, integration, and full test suites.
 - MobAI/device automation ran in parallel on the same simulator/device or produced screenshots without backend/provider verification.
 - Demo video was recorded by improvising during capture instead of using recorder-skill choreography/screenplay, dry-run, raw capture, final export, captions, and rerenderable artifacts.
 - XcodeBuildMCP was used as a MobAI fallback without founder confirmation, or Android coverage was implied even though XcodeBuildMCP is Apple-only.

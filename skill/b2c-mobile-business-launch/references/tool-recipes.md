@@ -545,9 +545,11 @@ Purpose: turn the launch package into production-ready software without losing p
 Use `engineering-orchestration.md` before:
 - actual app, backend, or web-funnel implementation
 - builder/Rork/Codex/Claude handoff prompts that will create app code
-- `AGENTS.md`, `CLAUDE.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, or `PRODUCTION_READINESS.md`
+- `ORCHESTRATION.md`, `AGENTS.md`, `CLAUDE.md`, `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, or `PRODUCTION_READINESS.md`
 - deciding whether to use product brainstorm, planning, parallel agents, or worktrees
 - declaring beta, store-submission, or production readiness
+
+Use `parallel-agent-orchestration.md` before any subagent dispatch or multi-lane launch run. The default runtime habit should be: keep the critical path local, identify safe sidecar agents, serialize shared resources, and write the preflight before claiming speed from parallelism.
 
 Delegate:
 - `ce-brainstorm` after AppKittie/XPOZ/Firecrawl research when product shape, onboarding, paywall, core loop, activation, or scope still has multiple defensible directions.
@@ -567,10 +569,17 @@ Parallel rules:
 - Instruct parallel subagents not to run project-wide suites, stage files, commit, merge, publish, submit, schedule content, or mutate shared credentials.
 - After parallel work returns, compare modified files, resolve collisions, run focused tests, then run integration/E2E checks.
 
+Record in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`:
+- selected strategy: `inline`, `serial_subagents`, `parallel_subagents`, `worktrees`, `hybrid`, `blocked`, or `not_needed`
+- critical path kept local by the orchestrator
+- candidate units, roles, objectives, modes, files, shared resources, and safety decisions
+- spawned agents, forbidden actions, output paths, actual file collision check, and integration status
+- focused validators and full suites run after integration
+
 Record in `ENGINEERING_PLAN.md`:
 - product brainstorm source or skip rationale
 - requirements trace to `LAUNCH_TRACE.md`, `TECH_SPEC.md`, `SPEC.md`, `DESIGN.md`, `design.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `APPLE_SIGNING.md`, and `STORE_CONSOLE.md`
-- implementation units, repo-relative paths, serial dependencies, worktree needs, and safe parallel lanes
+- implementation units, repo-relative paths, serial dependencies, worktree needs, safe parallel lanes, serialized resources, and subagent output contracts
 - frontend, backend, database, analytics, revenue, email, privacy, store-console, app-integrity, permission, and state-machine impacts
 - test scenarios, MobAI E2E scenarios, backend/provider verification, release gates, and blockers
 

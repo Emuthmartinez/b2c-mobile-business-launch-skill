@@ -9,7 +9,7 @@
 - Design: `DESIGN.md`, `design.md`, `design.html`, `CONTENT_ASSETS.md`, `content-assets.html`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
 - Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `STORE_CONSOLE.md`
-- Engineering: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
+- Engineering: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
 
 ## Roles
 
@@ -23,11 +23,11 @@
 
 ## Operating Rules
 
-- The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, sequencing, file-overlap checks, integration, git/release coordination, and `PRODUCTION_READINESS.md`.
+- The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, active failure cards, sequencing, file-overlap checks, actual file collision checks, integration, git/release coordination, and `PRODUCTION_READINESS.md`.
 - Specialists review and propose by default. They implement only when assigned an isolated unit with paths and verification.
 - No role may stage, commit, release, submit app-store builds, publish social posts, spend money, change pricing, or connect accounts without founder approval and orchestrator assignment.
 - No role may print, paste, commit, screenshot, or log raw secret values. New secrets must be routed through `SECRETS.md` and Doppler or the approved provider before work is called complete.
-- Use parallel agents only for independent audits or isolated work; serialize shared files, migrations, device automation, git, and releases.
+- Use parallel agents only for independent audits or isolated work with recorded file ownership; serialize shared files, migrations, provider/account mutations, device automation, git, releases, pricing/legal/public posting/submission decisions, and final readiness calls.
 - Run deterministic validators or LaunchBench scenarios where available before declaring launch-ready, and record the outcome in `PROJECT_STATE.yaml`.
 
 ## Required Audit Before Launch-Ready
@@ -41,3 +41,4 @@
 - Customer success: support, privacy, terms, delete, refund, restore, lifecycle, and review-response paths are ready.
 - Attribution: stable source key, `other` free text, `attribution_source_selected`, PostHog `self_reported_source`, backend/profile persistence, and anonymous-to-identified reconciliation are proven when onboarding/signup/waitlist exists.
 - State: `PROJECT_STATE.yaml` matches current artifacts, `launch-cockpit.html` is rendered, and active failure cards are assigned or resolved with proof.
+- Orchestration: `ORCHESTRATION.md` records strategy, candidate units, serialized resources, subagent forbidden actions, output review, collision checks, integration, and validators.

@@ -37,6 +37,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Email | Resend DNS, sender map, webhooks, audiences, lifecycle automations, inbound handling, unsubscribe rules, and starter templates |
 | Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
+| Orchestration | `ORCHESTRATION.md`, parallel-agent preflight, candidate units, serialized resources, worktree routing, subagent forbidden actions, collision checks, and integration proof |
 | Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
 | Source Freshness | `source-registry.yaml`, weekly upstream docs/tool checks, source-refresh reports, and candidate-source PRs for third-party drift |
 | Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, security, source freshness, and launch state |
@@ -51,6 +52,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 - Attribution is a data contract, not a screen: stable keys, `other` free text, PostHog person properties, backend persistence, anonymous-to-identified reconciliation, and proof.
 - Visual work must produce tokenized design docs and rendered HTML proofs, not prose-only direction.
 - Content assets route through `CONTENT_ASSETS.md`; Higgsfield fallbacks, Remotion license status, source inputs, render proof, and public-use gates must be explicit.
+- Parallel agents are considered by default for broad work, but `ORCHESTRATION.md` and `PROJECT_STATE.yaml` must record the strategy, safe units, serialized resources, forbidden actions, collision checks, integration, and validation proof.
 - Third-party docs and tool references are tracked in `source-registry.yaml`; new URLs must be registered and weekly source-refresh PRs should be reviewed before becoming launch policy.
 - Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
 - Apple distribution readiness must be proven through `APPLE_SIGNING.md`; a simulator build alone is not enough.
@@ -67,6 +69,7 @@ npm run check:attribution -- --root /path/to/app
 npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
 npm run check:content-assets -- --root /path/to/app
+npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
@@ -94,6 +97,7 @@ The scripts are intentionally simple:
 - `check-secret-routing.ts` checks `SECRETS.md`, names-only secret routing, forbidden local secret files, and raw secret patterns.
 - `check-security-release.ts` checks `SECURITY.md`, security-review routing, OWASP/platform basis, mobile hardening, entitlement/webhook abuse controls, privacy/analytics/email controls, supply-chain checks, incident response, and accepted risks.
 - `check-content-assets.ts` checks `CONTENT_ASSETS.md`, Remotion/Higgsfield route decisions, fallback approval, license status, source inputs, render proof, claim review, and manifest shape.
+- `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
@@ -146,6 +150,7 @@ skill/
     scripts/
     templates/
       PROJECT_STATE.yaml
+      orchestration/
       content-assets/
       app-agent-roster/
       resend/
