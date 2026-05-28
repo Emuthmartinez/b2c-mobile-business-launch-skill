@@ -60,7 +60,10 @@ When installed, route to these skill areas:
 - `asc-ppp-pricing`: purchasing-power-pricing workflows
 - `asc-subscription-localization`: IAP/subscription display-name localization
 - `asc-revenuecat-catalog-sync`: reconcile ASC products with RevenueCat
+- `asc-screenshot-resize`: current screenshot size matrix, alpha stripping, resize, and validation
 - `asc-crash-triage`: TestFlight crashes and beta feedback
+- `asc-notarization`: macOS Developer ID archive/export/notarization when a macOS launch is in scope
+- `asc-wall-submit`: optional Wall of Apps public submission, always founder-approved
 
 For App Store listing work, also load `app-store-listing-prep.md`. CLI automation can apply or verify pieces of the listing, but the durable deliverable still needs `APP_STORE_LISTING.md`, `app-store-listing.html`, `STORE_CONSOLE.md`, and founder-visible approval gates.
 
@@ -89,11 +92,13 @@ Common workflows from the current README:
 asc validate --app "123456789" --version "1.2.3"
 asc review status --app "123456789"
 asc review doctor --app "123456789"
-asc metadata init --dir "./metadata" --version "1.2.3" --locale "en-US"
-asc metadata apply --app "123456789" --version "1.2.3" --dir "./metadata" --dry-run
-asc metadata keywords audit --app "123456789" --version "1.2.3"
-asc screenshots plan --app "123456789" --version "1.2.3" --review-output-dir "./screenshots/review"
-asc screenshots apply --app "123456789" --version "1.2.3" --review-output-dir "./screenshots/review" --confirm
+asc metadata pull --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
+asc metadata validate --dir "./metadata" --output table
+asc metadata push --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata" --dry-run --output table
+asc metadata keywords diff --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
+asc screenshots sizes --all --output table
+asc screenshots validate --path "./screenshots/final" --device-type "IPHONE_65" --output table
+asc screenshots upload --version-localization "LOC_ID" --path "./screenshots/final" --device-type "IPHONE_65" --output json
 asc testflight feedback list --app "123456789" --paginate
 asc testflight crashes list --app "123456789" --sort -createdDate --limit 10
 asc workflow validate
@@ -177,11 +182,26 @@ For screenshot upload:
 - plan screenshots with `SCREENSHOTS.md`
 - use real app captures from MobAI or confirmed XcodeBuildMCP fallback
 - use design-system frames for final compositions
-- use ASC CLI screenshot planning/upload only after the screenshot matrix is approved
+- use `asc-screenshot-resize` before upload to get the current size matrix, strip alpha, resize only after target selection, and validate final files
+- use `asc-shots-pipeline` only after the screenshot matrix is approved and version-localization IDs are resolved
 
 For RevenueCat:
 - use `asc-revenuecat-catalog-sync` or equivalent audit before creating products or mappings
 - do not create products, change prices, or map entitlements without founder approval and `REVENUE_OPS.md`
+
+For localization:
+- use `asc-metadata-sync` to pull canonical metadata before edits
+- use `asc-localize-metadata` for listing metadata and keyword adaptation
+- use `asc-subscription-localization` for subscription/IAP display names and descriptions
+- do not upload translated keywords without character-limit validation and market-specific keyword review
+
+For pricing:
+- use `asc-ppp-pricing` for territory pricing and purchasing-power-pricing plans
+- start in summary/dry-run/import mode; pricing changes require founder approval because they affect money, taxes, and public store behavior
+
+For release health:
+- use `asc-submission-health` and `asc-release-flow` for `asc validate`, digital-goods readiness, encryption/content-rights checks, App Privacy advisory, and review monitoring
+- use `asc-build-lifecycle`, `asc-testflight-orchestration`, and `asc-crash-triage` during beta and post-upload monitoring
 
 For App Store marketing surfaces:
 - use CLI/API reads and dry-runs to resolve localization IDs, screenshot set IDs, IAP/subscription IDs, custom product page IDs, In-App Event IDs, and app version IDs
@@ -213,6 +233,7 @@ Record in `PRODUCTION_READINESS.md` when release work is in scope:
 
 - Using `asc` to mutate metadata or screenshots without a dry-run and founder approval.
 - Treating a CLI success response as proof the App Store product page is ready without checking privacy, age rating, IAP, accessibility, review notes, screenshots, and build attachment.
+- Keeping stale `asc` command snippets after the upstream CLI or skill pack changes; refresh `asc --help`, the Rork skills repo, and official Apple docs before setup or apply commands.
 - Losing track of localization IDs and uploading screenshots to the wrong locale.
 - Storing App Store Connect credentials in committed files.
 - Using unofficial skill-pack guidance without refreshing official Apple docs for the current required fields.

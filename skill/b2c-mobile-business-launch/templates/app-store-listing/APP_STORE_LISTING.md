@@ -18,6 +18,19 @@ This packet is the Apple listing source of truth. It connects ASO, App Store Con
 | Apple IAP/pricing docs | Pending | products, prices, trials | Refresh before final paste |
 | ASO research | Pending | keywords, metadata, screenshots | AppKittie/ASO skill/App Store evidence |
 | RevenueCat/Stripe docs | Pending | entitlement and web funnel | Refresh before final pricing |
+| Rork ASC CLI skills | Pending | metadata sync, localization, screenshots, pricing, release validation | Refresh before CLI guidance |
+
+## ASC CLI Route And IDs
+
+| Surface | ASC route | Current ID/path | Dry-run proof | Apply/upload status | Founder gate |
+| --- | --- | --- | --- | --- | --- |
+| App IDs | `asc-id-resolver` | app/app-info/version/localization IDs pending | Pending | read-only | no mutation |
+| Metadata | `asc-metadata-sync` | `metadata/` pending | `asc metadata validate/push --dry-run` pending | blocked | approval before push |
+| Localization | `asc-localize-metadata` | target locale files pending | field-limit validation pending | blocked | approval before upload |
+| Screenshots | `asc-screenshot-resize` + `asc-shots-pipeline` | version-localization ID pending | sizes/validate output pending | blocked | approval before upload |
+| Pricing | `asc-ppp-pricing` | base territory and import CSV pending | pricing summary/import dry-run pending | blocked | approval before price changes |
+| Subscriptions | `asc-subscription-localization` + `asc-revenuecat-catalog-sync` | product/subscription IDs pending | catalog diff pending | blocked | approval before create/update |
+| Release health | `asc-submission-health` + `asc-release-flow` | build/version IDs pending | `asc validate` pending | blocked | approval before submit/release |
 
 ## Default Product Page
 
@@ -51,24 +64,26 @@ Do not publish App Privacy answers until this table matches `PRIVACY.md`, `ANALY
 
 ## Pricing And Revenue Matrix
 
-| Product | ASC product ID | Type | Price | Trial/intro | RevenueCat entitlement | Offering/package | Web funnel/Stripe | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Monthly | Pending | auto-renewable subscription | Pending | Pending | `premium` | `default/monthly` | Pending | blocked |
-| Annual | Pending | auto-renewable subscription | Pending | Pending | `premium` | `default/annual` | Pending | blocked |
-| Lifetime | Pending | non-consumable | Pending | n/a | `premium` | `default/lifetime` | Pending | optional |
+| Product | ASC product ID | Type | Base territory | Price | Trial/intro | PPP/import proof | Subscription localization | RevenueCat entitlement | Offering/package | Web funnel/Stripe | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Monthly | Pending | auto-renewable subscription | USA | Pending | Pending | `asc-ppp-pricing` pending | `asc-subscription-localization` pending | `premium` | `default/monthly` | Pending | blocked |
+| Annual | Pending | auto-renewable subscription | USA | Pending | Pending | `asc-ppp-pricing` pending | `asc-subscription-localization` pending | `premium` | `default/annual` | Pending | blocked |
+| Lifetime | Pending | non-consumable | USA | Pending | n/a | `asc-ppp-pricing` pending | IAP localization pending | `premium` | `default/lifetime` | Pending | optional |
 
 Founder approval required before creating live products, changing prices, changing trial or intro offers, publishing purchase links, submitting IAP/subscriptions, or enabling external purchase calls to action.
 
 ## Screenshots And App Previews
 
-| Slot | Device well | Locale | Headline | Source screen | Supporting asset | Tool | Final path | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | iPhone 6.9 | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
-| 2 | iPhone 6.9 | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
-| 3 | iPhone 6.9 | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI or fallback | `screenshots/final/` | blocked |
+| Slot | ASC device_type | Device well | Version localization ID | Locale | Headline | Source screen | Supporting asset | Tool | Size/alpha validation | Final path | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | onboarding/value | optional Higgsfield background or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
+| 2 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | core feature | optional Higgsfield visual or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
+| 3 | `IPHONE_65` or current 6.9 equivalent | iPhone 6.9 | Pending | en-US | Pending | paywall/result | optional Higgsfield visual or Remotion frame | MobAI or fallback | `asc-screenshot-resize` pending | `screenshots/final/` | blocked |
 
 Rules:
 - Real app UI capture is the proof layer.
+- Use current `asc screenshots sizes --all` before choosing device types; do not rely on stale dimension tables.
+- Final upload candidates need alpha transparency removed, color-space checked, size validated, and associated with the correct version localization ID.
 - Higgsfield may create supporting visuals, icons, backgrounds, mascots, CPP/event media, or thumbnails only when tied to `DESIGN.md`.
 - Remotion may render screenshot frames, app previews, captioned demo clips, CPP/event variants, or social/store cuts from real UI only after `CONTENT_ASSETS.md` records route approval, license status, source inputs, render proof, and output paths.
 - Generated or rendered visuals must not imply unsupported features, claims, prices, or endorsements.
@@ -91,16 +106,18 @@ Only use In-App Events for real time-bound in-app content with working deep link
 
 ## Localization
 
-| Locale | Market reason | Metadata | Keywords | Screenshots | Privacy/support URLs | Reviewer | Status |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| en-US | primary | Pending | Pending | Pending | Pending | Pending | blocked |
+| Locale | Market reason | Metadata route | Keywords | Screenshots | Subscription/IAP display names | Privacy/support URLs | Reviewer | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| en-US | primary | `asc-metadata-sync` pending | Pending | Pending | `asc-subscription-localization` pending | Pending | Pending | blocked |
 
 ## Approval Gates
 
 - [ ] Official Apple docs refreshed.
+- [ ] Rork ASC CLI skills and local `asc --help` refreshed for command syntax.
 - [ ] App Privacy answers reviewed from actual data inventory.
 - [ ] Pricing/products approved by founder.
 - [ ] RevenueCat/Stripe/web funnel mapping verified.
+- [ ] PPP/base-territory and subscription/IAP localization status reviewed.
 - [ ] Screenshots/app previews approved and dimension-checked.
 - [ ] Custom product pages and In-App Events marked ready or not needed.
 - [ ] Localized metadata and screenshots reviewed for each target locale.

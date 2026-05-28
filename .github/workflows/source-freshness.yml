@@ -1,0 +1,68 @@
+name: Skill Source Freshness
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "23 11 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  audit:
+    if: github.event_name != 'schedule' && github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix skill/b2c-mobile-business-launch
+      - run: npm run audit
+      - run: npm pack --dry-run --json
+
+  weekly-source-refresh:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix skill/b2c-mobile-business-launch
+      - name: Refresh source registry and snapshots
+        run: npm run refresh:source-freshness
+      - name: Audit after refresh
+        run: npm run audit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: source-freshness-report
+          path: |
+            docs/source-freshness/SOURCE_REFRESH_REPORT.md
+            docs/source-freshness/source-refresh.html
+            docs/source-freshness/source-snapshots/current.json
+      # Source freshness tracks this third-party action:
+      # https://github.com/peter-evans/create-pull-request
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: chore/source-freshness-refresh
+          title: "Refresh skill source freshness"
+          commit-message: "Refresh skill source freshness"
+          body: |
+            Weekly source freshness refresh.
+
+            Review auto-discovered sources as candidates before treating them as canonical launch policy. If upstream changes affect behavior, update references/templates/validators/evals in this PR before merging.
+          add-paths: |
+            skill/b2c-mobile-business-launch/references/source-registry.yaml
+            docs/source-freshness/

@@ -35,6 +35,9 @@ Use these as defaults and specialize them to the current app.
 | `resend-template-unbranded` | email templates ignore `DESIGN.md` or legal footer | map brand tokens, sender, support reply-to, unsubscribe, idempotency, and provider log proof |
 | `sentry-unverified` | SDK configured but no non-production event or alert proof | send test event, verify release/environment tags, PII scrubbing, and alert routing |
 | `asc-name-fallback-unapproved` | ASC CLI proposes fallback app name | stop, record collision, ask founder, update brand/store/screenshots/revenue docs if approved |
+| `asc-command-guidance-stale` | upstream ASC CLI or skill pack changes but references keep stale command families | refresh Rork skill pack, local `asc --help`, official Apple docs, then update references/templates/evals |
+| `source-registry-url-untracked` | new external docs/tool URL appears without `source-registry.yaml` entry | run `check:source-freshness -- --write-discovered`, review candidate source, and commit registry update |
+| `weekly-source-refresh-unreviewed` | weekly bot treats discovered or changed sources as accepted policy without review | keep PR blocked until capability analysis, reference/template updates, and LaunchBench pass |
 | `apple-signing-simulator-only` | simulator build is treated as release readiness | prove Team ID, signing, bundle ID/App ID, app record, certificate/profile, archive/export/upload/TestFlight |
 | `google-play-data-safety-untraced` | Data safety answers do not trace to actual SDK/data behavior | map SDKs, data types, purposes, sharing, deletion, security, and Play Console fields |
 | `cloudflare-routing-unverified` | domain/email routing exists without DNS/HTTP/email proof | verify HTTPS, DNS, security headers, routes, MX/TXT, and external email delivery |

@@ -127,6 +127,25 @@ Use ASO skills or equivalent frameworks for:
 - `apple-search-ads`: campaign/ad group/search-term routing to default page or custom product pages
 - `review-management`: review response plan and rating recovery
 
+When the Rork App Store Connect CLI skill pack is available, map App Store work to exact ASC routes:
+
+| Listing task | ASC skill route | Proof to record |
+| --- | --- | --- |
+| ID resolution | `asc-id-resolver` | app ID, version ID, app-info ID, localization IDs |
+| Metadata pull/edit/apply | `asc-metadata-sync` | `metadata/` JSON path, validate output, dry-run output |
+| Listing localization | `asc-localize-metadata` | locale list, translated metadata, keyword adaptation, field-limit validation |
+| ASO audit | `asc-aso-audit` | offline metadata findings and keyword gap notes |
+| Screenshot dimensions/resize | `asc-screenshot-resize` | `asc screenshots sizes`, alpha/color-space check, validation output |
+| Screenshot capture/frame/upload | `asc-shots-pipeline` | capture plan, raw/framed dirs, version-localization ID, upload dry-run/apply status |
+| Subscription/IAP localization | `asc-subscription-localization` | product IDs, locale coverage, display-name/description status |
+| Pricing and PPP | `asc-ppp-pricing` | base territory, price summary, CSV/import dry-run, founder approval |
+| RevenueCat reconciliation | `asc-revenuecat-catalog-sync` | ASC product IDs mapped to RevenueCat products, entitlements, offerings, packages |
+| Release notes | `asc-whats-new-writer` | primary and localized What's New copy tied to release changes |
+| Submission readiness | `asc-submission-health` and `asc-release-flow` | `asc validate`, IAP/subscription validation, App Privacy advisory, review status |
+| TestFlight and beta feedback | `asc-testflight-orchestration`, `asc-build-lifecycle`, `asc-crash-triage` | groups/testers/build state, crashes, feedback, diagnostics |
+
+Refresh the upstream skill pack and `asc --help` before copying command syntax into launch artifacts. If a new upstream ASC skill appears, add it to `source-registry.yaml`, update this route map when relevant, and add LaunchBench coverage if it closes a known gap.
+
 For custom product pages:
 - Do not create variants without a traffic source or measurement reason.
 - Map each page to audience, promise, keywords, screenshots/app preview, deep link, campaign/UTM, and App Analytics metrics.

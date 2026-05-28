@@ -18,6 +18,7 @@ const knownValidators = new Set([
   "check-secret-routing",
   "check-security-release",
   "check-content-assets",
+  "check-source-freshness",
   "check-ux-patterns",
   "check-autopilot-contract",
   "render-launch-cockpit",

@@ -38,7 +38,8 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Store Ops | App Store listing packets, App Privacy worksheets, App Store Connect and Google Play copy-paste packets, Apple signing/release readiness, pricing/subscription mapping, CPP/In-App Event plans, localization, screenshots, review notes, and ASC CLI routing |
 | Demo Media | MobAI mobile/desktop recorder routing, Remotion rendered clips/stills, `.mob` or `screenplay.json`, raw capture, edited export, captions, upload copy, and rerender notes |
 | Engineering | `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, role prompts, Compound Engineering routing, MobAI/XcodeBuildMCP E2E, and production readiness |
-| Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, security, and launch state |
+| Source Freshness | `source-registry.yaml`, weekly upstream docs/tool checks, source-refresh reports, and candidate-source PRs for third-party drift |
+| Evals | LaunchBench scenarios and deterministic checks for attribution, signing, store console, UX patterns, secrets, security, source freshness, and launch state |
 
 ## Non-Negotiables
 
@@ -50,6 +51,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 - Attribution is a data contract, not a screen: stable keys, `other` free text, PostHog person properties, backend persistence, anonymous-to-identified reconciliation, and proof.
 - Visual work must produce tokenized design docs and rendered HTML proofs, not prose-only direction.
 - Content assets route through `CONTENT_ASSETS.md`; Higgsfield fallbacks, Remotion license status, source inputs, render proof, and public-use gates must be explicit.
+- Third-party docs and tool references are tracked in `source-registry.yaml`; new URLs must be registered and weekly source-refresh PRs should be reviewed before becoming launch policy.
 - Paid/account-gated tooling requires explicit fallback routing; missing runtime access is not permission to silently downgrade.
 - Apple distribution readiness must be proven through `APPLE_SIGNING.md`; a simulator build alone is not enough.
 - Launch-readiness claims should run LaunchBench or deterministic validators where available.
@@ -68,6 +70,8 @@ npm run check:content-assets -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
+npm run check:source-registry
+npm run refresh:source-freshness
 npm run check:autopilot
 npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
@@ -93,6 +97,8 @@ The scripts are intentionally simple:
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
+- `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
+- `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
@@ -136,6 +142,7 @@ skill/
     agents/openai.yaml
     evals/launchbench/
     references/
+      source-registry.yaml
     scripts/
     templates/
       PROJECT_STATE.yaml

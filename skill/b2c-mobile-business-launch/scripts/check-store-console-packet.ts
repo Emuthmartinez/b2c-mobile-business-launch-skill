@@ -168,6 +168,14 @@ if (hasIos) {
       "In-App Event",
       "Higgsfield",
       "founder approval",
+      "asc-metadata-sync",
+      "asc-localize-metadata",
+      "asc-screenshot-resize",
+      "asc-ppp-pricing",
+      "asc-subscription-localization",
+      "asc-submission-health",
+      "version localization ID",
+      "base territory",
     ];
     if (revenueInScope) {
       appListingRequiredPhrases.push("RevenueCat", "subscription");

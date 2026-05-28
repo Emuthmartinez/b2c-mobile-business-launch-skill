@@ -1,0 +1,1344 @@
+schema_version: 1
+sources:
+  - id: api-github-com-orgs-mobai-app-repos
+    name: api.github.com
+    source_type: website
+    url: https://api.github.com/orgs/MobAI-App/repos?per_page=100&type=public&sort=updated
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: api-refero-design-mcp
+    name: api.refero.design
+    source_type: website
+    url: https://api.refero.design/mcp
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Auto-discovered from recently added repository content.
+  - id: app-usefastlane-ai-guide
+    name: app.usefastlane.ai
+    source_type: website
+    url: https://app.usefastlane.ai/guide
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/fastlane-growth-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: app-usefastlane-ai-home
+    name: app.usefastlane.ai
+    source_type: website
+    url: https://app.usefastlane.ai/home
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/fastlane-growth-ops.md
+      - skill/b2c-mobile-business-launch/references/launch-phases.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-android-com-google-play-billing-lifecycle-subscriptions
+    name: developer.android.com
+    source_type: official_docs
+    url: https://developer.android.com/google/play/billing/lifecycle/subscriptions
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-android-com-guide-playcore-in-app-review
+    name: developer.android.com
+    source_type: official_docs
+    url: https://developer.android.com/guide/playcore/in-app-review
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-app-store-app-privacy-details
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/app-store/app-privacy-details
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-app-store-product-page
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/app-store/product-page
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-app-store-ratings-and-reviews
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/app-store/ratings-and-reviews
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-app-store-review-guidelines
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/app-store/review/guidelines
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-bundleresources-describing-use-of-required-rea
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/bundleresources/describing-use-of-required-reason-api
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-bundleresources-privacy-manifest-files
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/bundleresources/privacy-manifest-files
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-xcode-changing-the-bundle-identifier
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/changing-the-bundle-identifier
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-xcode-distributing-your-app-for-beta-testing-a
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-documentation-xcode-preparing-your-app-for-distribution
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-account-certificates-certificates-overview
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/account/certificates/certificates-overview
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-account-certificates-cloud-managed-certificates
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/account/certificates/cloud-managed-certificates
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-account-identifiers-register-an-app-id
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/account/identifiers/register-an-app-id
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-account-provisioning-profiles-create-an-app-store-provi
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/account/provisioning-profiles/create-an-app-store-provisioning-profile
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-configure-in-app-purchase-settings-ov
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/configure-in-app-purchase-settings/overview-for-configuring-in-app-purchases
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-create-an-app-record-add-a-new-app
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/create-an-app-record/add-a-new-app
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-create-custom-product-pages-configure
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/create-custom-product-pages/configure-multiple-product-page-versions
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-accessibility-manage-acces
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-accessibility/manage-accessibility-nutrition-labels
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-accessibility-overview-of-
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-accessibility/overview-of-accessibility-nutrition-labels
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-information-localize-app-i
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-information/localize-app-information
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-information-manage-app-pri
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-information/manage-app-privacy
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-information-overview-of-ex
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-information/overview-of-export-compliance
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-information-set-an-app-age
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-information/set-an-app-age-rating
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-app-information-upload-app-pre
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-in-app-purchases-set-a-price-f
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-in-app-purchases/set-a-price-for-an-in-app-purchase
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-manage-submissions-to-app-review-subm
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/manage-submissions-to-app-review/submit-an-app
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-offer-in-app-events-offer-in-app-even
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/offer-in-app-events/offer-in-app-events
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-reference-app-information
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/reference/app-information
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-reference-app-information-app-store-l
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/reference/app-information/app-store-localizations
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-reference-app-information-platform-ve
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/reference/app-information/platform-version-information
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-reference-app-information-screenshot-
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-programs-enroll
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/programs/enroll
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/apple-signing-release.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: developers-usefastlane-ai
+    name: developers.usefastlane.ai
+    source_type: website
+    url: https://developers.usefastlane.ai/
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/fastlane-growth-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-llms-txt
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/llms.txt
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+      - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+      - skill/b2c-mobile-business-launch/templates/ux-patterns/UX_PATTERNS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-mcp-data-model
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/mcp/data-model
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/templates/ux-patterns/UX_PATTERNS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-mcp-examples
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/mcp/examples
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/templates/ux-patterns/UX_PATTERNS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-mcp-getting-started
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/mcp/getting-started
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/templates/ux-patterns/UX_PATTERNS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-mcp-tools
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/mcp/tools
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+      - skill/b2c-mobile-business-launch/templates/ux-patterns/UX_PATTERNS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: doc-refero-design-skill-overview
+    name: doc.refero.design
+    source_type: website
+    url: https://doc.refero.design/skill/overview
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/refero-ux-patterns.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-doppler-com-docs-cli
+    name: docs.doppler.com
+    source_type: docs
+    url: https://docs.doppler.com/docs/cli
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-doppler-com-docs-install-cli
+    name: docs.doppler.com
+    source_type: docs
+    url: https://docs.doppler.com/docs/install-cli
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-doppler-com-docs-secrets-setup-guide
+    name: docs.doppler.com
+    source_type: docs
+    url: https://docs.doppler.com/docs/secrets-setup-guide
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-doppler-com-docs-service-tokens
+    name: docs.doppler.com
+    source_type: docs
+    url: https://docs.doppler.com/docs/service-tokens
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-doppler-com-llms-txt
+    name: docs.doppler.com
+    source_type: docs
+    url: https://docs.doppler.com/llms.txt
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+      - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-stripe-com-billing-subscriptions-webhooks
+    name: docs.stripe.com
+    source_type: docs
+    url: https://docs.stripe.com/billing/subscriptions/webhooks
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-stripe-com-customer-management
+    name: docs.stripe.com
+    source_type: docs
+    url: https://docs.stripe.com/customer-management
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-stripe-com-get-started-checklist-go-live
+    name: docs.stripe.com
+    source_type: docs
+    url: https://docs.stripe.com/get-started/checklist/go-live
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: docs-stripe-com-payments-advanced-tax
+    name: docs.stripe.com
+    source_type: docs
+    url: https://docs.stripe.com/payments/advanced/tax
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-eronred-aso-skills
+    name: github.com
+    source_type: github
+    url: https://github.com/Eronred/aso-skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-getsentry-xcodebuildmcp
+    name: github.com
+    source_type: github
+    url: https://github.com/getsentry/XcodeBuildMCP
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-google-labs-code-design-md
+    name: github.com
+    source_type: github
+    url: https://github.com/google-labs-code/design.md
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-jamiemill-layers-skills
+    name: github.com
+    source_type: github
+    url: https://github.com/jamiemill/layers-skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-leonxlnx-taste-skill
+    name: github.com
+    source_type: github
+    url: https://github.com/Leonxlnx/taste-skill
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-desktop-recorder-skill
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/desktop-recorder-skill
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-ios-builder
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/ios-builder
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-mobai-mcp
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/mobai-mcp
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-mobile-harness
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/mobile-harness
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-mobile-recorder-skill
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/mobile-recorder-skill
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-pbakaus-impeccable
+    name: github.com
+    source_type: github
+    url: https://github.com/pbakaus/impeccable
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-peter-evans-create-pull-request
+    name: github.com
+    source_type: github
+    url: https://github.com/peter-evans/create-pull-request
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - .github/workflows/source-freshness.yml
+    notes: Auto-discovered from repository content.
+  - id: github-com-remotion-dev-remotion
+    name: github.com
+    source_type: github
+    url: https://github.com/remotion-dev/remotion
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - docs/remotion-content-assets-plan.html
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-remotion-dev-skills
+    name: github.com
+    source_type: github
+    url: https://github.com/remotion-dev/skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - docs/remotion-content-assets-plan.html
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-rorkai-app-store-connect-cli
+    name: github.com
+    source_type: github
+    url: https://github.com/rorkai/App-Store-Connect-CLI
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-connect-cli.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-rorkai-app-store-connect-cli-skills
+    name: github.com
+    source_type: github
+    url: https://github.com/rorkai/app-store-connect-cli-skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/app-store-connect-cli.md
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: github-com-zubair-trabzada-geo-seo-claude
+    name: github.com
+    source_type: github
+    url: https://github.com/zubair-trabzada/geo-seo-claude
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/geo-seo.md
+    notes: Auto-discovered from recently added repository content.
+  - id: mobai-run
+    name: mobai.run
+    source_type: website
+    url: https://mobai.run/
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-cdp
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/cdp
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-data-anonymous-vs-identified-events
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/data/anonymous-vs-identified-events
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-data-events
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/data/events
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-data-persons
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/data/persons
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-experiments
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/experiments
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-feature-flags
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/feature-flags
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-libraries-android
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/libraries/android
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-libraries-flutter
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/libraries/flutter
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-libraries-ios
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/libraries/ios
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-libraries-react-native
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/libraries/react-native
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-product-analytics
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/product-analytics
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-product-analytics-capture-events
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/product-analytics/capture-events
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-product-analytics-installation
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/product-analytics/installation
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-session-replay
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/session-replay
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-session-replay-privacy
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/session-replay/privacy
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-surveys
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/surveys
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-docs-web-analytics
+    name: posthog.com
+    source_type: docs
+    url: https://posthog.com/docs/web-analytics
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-tutorials-event-tracking-guide
+    name: posthog.com
+    source_type: website
+    url: https://posthog.com/tutorials/event-tracking-guide
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: posthog-com-tutorials-performance-marketing
+    name: posthog.com
+    source_type: website
+    url: https://posthog.com/tutorials/performance-marketing
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: Auto-discovered from recently added repository content.
+  - id: raw-githubusercontent-com-remotion-dev-remotion-main-license-md
+    name: raw.githubusercontent.com
+    source_type: website
+    url: https://raw.githubusercontent.com/remotion-dev/remotion/main/LICENSE.md
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - docs/remotion-content-assets-plan.html
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-api-reference-emails
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/api-reference/emails
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-api-keys-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/api-keys/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-audiences-contacts
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/audiences/contacts
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-audiences-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/audiences/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-automations-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/automations/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-broadcasts-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/broadcasts/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-domains-cloudflare
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/domains/cloudflare
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-domains-dmarc
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/domains/dmarc
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-domains-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/domains/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-domains-regions
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/domains/regions
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-domains-tracking
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/domains/tracking
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-emails-add-unsubscribe-to-transactional-emails
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/emails/add-unsubscribe-to-transactional-emails
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-emails-idempotency-keys
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/emails/idempotency-keys
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-receiving-custom-domains
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/receiving/custom-domains
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-receiving-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/receiving/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-dashboard-topics-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/dashboard/topics/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-knowledge-base-how-to-handle-api-keys
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/knowledge-base/how-to-handle-api-keys
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-llms-txt
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/llms.txt
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-send-with-nextjs
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/send-with-nextjs
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-webhooks-introduction
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/webhooks/introduction
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: resend-com-docs-webhooks-verify-webhooks-requests
+    name: resend.com
+    source_type: docs
+    url: https://resend.com/docs/webhooks/verify-webhooks-requests
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-api-v2
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/api-v2
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-dashboard-and-metrics-customer-history-active-entitlements
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/dashboard-and-metrics/customer-history/active-entitlements
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/resend-email-ops.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-projects-configuring-products
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/projects/configuring-products
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-projects-connect-a-store
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/projects/connect-a-store
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-web-web-billing-overview
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/web/web-billing/overview
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-web-web-billing-redemption-links
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/web/web-billing/redemption-links
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-docs-web-web-billing-web-purchase-links
+    name: www.revenuecat.com
+    source_type: docs
+    url: https://www.revenuecat.com/docs/web/web-billing/web-purchase-links
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: revenuecat-com-state-of-subscription-apps
+    name: www.revenuecat.com
+    source_type: website
+    url: https://www.revenuecat.com/state-of-subscription-apps
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: styles-refero-design
+    name: styles.refero.design
+    source_type: website
+    url: https://styles.refero.design/
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-10144311
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/10144311?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-10787469
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/10787469?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-13327111
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/13327111?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9842757
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9842757?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9858738
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9858738?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/revenue-monetization.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9859152
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9859152?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9859455
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9859455?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9866151
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9866151?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9867159
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9867159?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9898842
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9898842?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: support-google-com-googleplay-android-developer-answer-9898843
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9898843?hl=en
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-cli
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/cli
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-clients
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/clients
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-configuration
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/configuration
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-installation
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/installation
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-privacy
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/privacy
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-setup
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/setup
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-skills
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/skills
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-tools
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/tools
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-troubleshooting
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/troubleshooting
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.
+  - id: xcodebuildmcp-com-docs-workflows
+    name: xcodebuildmcp.com
+    source_type: docs
+    url: https://xcodebuildmcp.com/docs/workflows
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Auto-discovered from recently added repository content.

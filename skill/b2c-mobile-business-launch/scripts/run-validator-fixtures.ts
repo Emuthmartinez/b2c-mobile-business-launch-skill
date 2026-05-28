@@ -30,6 +30,12 @@ function makeFixture(name: string): string {
   return fixtureRoot;
 }
 
+function makeEmptyFixture(name: string): string {
+  const fixtureRoot = path.join(tempRoot, name);
+  mkdirSync(fixtureRoot, { recursive: true });
+  return fixtureRoot;
+}
+
 function expectRecord(value: unknown, label: string): MutableRecord {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
     throw new Error(`${label} must be an object.`);
@@ -110,6 +116,8 @@ function writeCompleteStoreConsole(root: string): void {
       "# App Store Listing",
       "App Privacy answers are derived from data inventory and third-party partners.",
       "Pricing, RevenueCat entitlement mapping, subscription setup, localization, custom product page strategy, In-App Event planning, and Higgsfield-backed marketing assets are ready for founder approval.",
+      "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
+      "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
     "utf8",
   );
@@ -200,6 +208,38 @@ function writeCompleteContentAssets(root: string): void {
   );
 }
 
+function writeSourceRegistryFixture(root: string, includeUrl = true): void {
+  mkdirSync(path.join(root, "references"), { recursive: true });
+  writeFileSync(
+    path.join(root, "README.md"),
+    [
+      "# Source Fixture",
+      "Use current docs from https://docs.doppler.com/docs/cli before setup.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "references", "source-registry.yaml"),
+    stringifyYaml({
+      schema_version: 1,
+      sources: includeUrl
+        ? [
+            {
+              id: "example-source-current",
+              name: "Example Source",
+              source_type: "docs",
+              url: "https://docs.doppler.com/docs/cli",
+              refresh_cadence_days: 7,
+              owner: "source-freshness",
+              locations: ["README.md"],
+            },
+          ]
+        : [],
+    }),
+    "utf8",
+  );
+}
+
 function runFixture(label: string, root: string, script: string, expectedCode: number, expectedText?: string, extraArgs: string[] = []): void {
   const result = spawnSync(tsxBin, [path.join("scripts", script), "--root", root, ...extraArgs], {
     cwd: skillRoot,
@@ -231,6 +271,9 @@ try {
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
+  const sourceRegistryClean = makeEmptyFixture("source-registry-clean");
+  writeSourceRegistryFixture(sourceRegistryClean);
+  runFixture("source registry with registered URL passes", sourceRegistryClean, "check-source-freshness.ts", 0);
   runFixture("template secret docs pass from bundled template path", path.join(skillRoot, "templates"), "check-secret-routing.ts", 0);
   const cockpitPath = path.join(clean, "launch-cockpit.html");
   runFixture("launch cockpit renders", clean, "render-launch-cockpit.ts", 0, undefined, ["--out", cockpitPath]);
@@ -443,6 +486,8 @@ try {
     [
       "# App Store Listing",
       "App Privacy, pricing, RevenueCat, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, and founder approval are documented.",
+      "ASC route proof includes asc-metadata-sync, asc-localize-metadata, asc-screenshot-resize, asc-ppp-pricing, asc-subscription-localization, and asc-submission-health.",
+      "Every screenshot row records version localization ID and every pricing row records base territory.",
     ].join("\n"),
     "utf8",
   );
@@ -643,6 +688,10 @@ try {
     "utf8",
   );
   runFixture("thin Remotion content manifest fails", thinContentManifest, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.surface.missing");
+
+  const sourceRegistryMissing = makeEmptyFixture("source-registry-missing-url");
+  writeSourceRegistryFixture(sourceRegistryMissing, false);
+  runFixture("unregistered external source fails source freshness", sourceRegistryMissing, "check-source-freshness.ts", 1, "source_freshness.url_unregistered");
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

@@ -13,6 +13,9 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - RevenueCat products exist but entitlement grant, restore, webhook, or backend projection is unproven
 - Resend templates ignore `DESIGN.md`, unsubscribe rules, sender-domain proof, or support reply paths
 - a new API key/env var appears but `SECRETS.md`, Doppler, CI injection, or public/server-only classification is not updated
+- a new third-party docs/tooling URL appears but is not added to `source-registry.yaml`
+- upstream App Store Connect CLI skills or provider docs change but stale command snippets remain in references/templates
+- weekly source refresh treats auto-discovered links as accepted launch policy without review
 - Higgsfield is unavailable and the agent silently uses Remotion or local media without founder-approved fallback routing
 - Remotion content assets are marked ready without license status, source inputs, manifest entries, render proof, or claim review
 
@@ -43,6 +46,7 @@ After major skill edits or before declaring a launch complete:
 
 - run deterministic validators against the current app repo
 - run LaunchBench scenario checks
+- run source freshness checks when the skill itself or third-party references changed
 - use parallel audit agents only for independent review, not for final integration
 - pass each audit agent the minimum scenario and artifact paths, not the intended answer
 - write failures into `PROJECT_STATE.yaml` as active failure cards
