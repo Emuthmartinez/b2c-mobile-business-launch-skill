@@ -42,10 +42,25 @@ This packet records distribution readiness for iOS. Keep it aligned with the Xco
 - `Info.plist` purpose strings, `NSUserTrackingUsageDescription`, and ATT route when tracking is in scope
 - account deletion, review notes, privacy URLs, archive/upload warnings, and founder approval
 
+## Pre-Archive/Export/Upload Preflight Sign-Off
+
+Record all five items below before running `xcodebuild archive`. Each item must read `pass` or `ready` before proceeding; if any item cannot pass, replace the line with `<item>: blocked — <reason>` and stop until it is resolved (that unresolved state opens the `apple-pre-upload-preflight-skipped` failure card).
+
+```text
+Pre-archive/export/upload preflight (sign-off recorded on the archive date):
+1. SDK keys in Info.plist (RevenueCat, PostHog, Supabase) verified with plutil -p on the compiled archive: pass.
+2. plutil -lint PrivacyInfo.xcprivacy (valid plist, not JSON): ok.
+3. NSPrivacyAccessedAPITypes coverage audited against actual API usage: pass.
+4. exportArchive API key auth flags (-authenticationKeyPath, -authenticationKeyID, -authenticationKeyIssuerID): ready.
+5. Screenshot dimension floor (raw captures meet device-well minimum, no upscaling): pass.
+```
+
+See the "Pre-Archive/Export/Upload Preflight Checklist" section in `apple-signing-release.md` for commands and acceptance criteria for each item.
+
 ## Release Proof
 
 - Archive proof records Xcode version, scheme, configuration, archive path, and signing identity.
-- Export proof records export method, provisioning profile mapping, and output IPA path.
+- Export proof records export method, provisioning profile mapping, output IPA path, and `-authenticationKeyPath`/`-authenticationKeyID`/`-authenticationKeyIssuerID` flags used.
 - Upload proof records Transporter, Xcode organizer, Fastlane, or App Store Connect API command output.
 - TestFlight proof records build number, processing status, tester group route, and review notes route.
 - A simulator build alone is not distribution readiness.

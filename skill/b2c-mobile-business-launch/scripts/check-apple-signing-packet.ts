@@ -40,6 +40,12 @@ if (skipAppleSigning) {
     "upload",
     "TestFlight",
     "founder approval",
+    // Pre-archive/export/upload preflight gates (apple-signing-pre-upload-checklist)
+    "plutil -lint",
+    "authenticationKeyPath",
+    "SDK key",
+    "preflight",
+    "screenshot dimension",
   ];
 
   for (const phrase of requiredPhrases) {
@@ -76,6 +82,21 @@ if (skipAppleSigning) {
     if (mentionsGate && unresolved) {
       issues.push(issue("error", "apple_signing.unresolved_distribution_gate", `Unresolved Apple distribution gate found: "${trimmed}"`, relative));
     }
+  }
+
+  // Pre-archive/export/upload preflight sign-off check (apple-signing-pre-upload-checklist theme)
+  // If the doc claims archive/upload readiness but has no preflight sign-off block, flag it.
+  const claimsArchiveReady = /\b(archive|export|upload|testflight)\b.{0,60}\b(pass|ready|done|complete|verified|uploaded)\b/i.test(text);
+  const hasPreflightSignoff = /pre-archive.*preflight|preflight.*sign.?off|sdk key.*(pass|blocked)|plutil.*lint.*(pass|ok|blocked)|authenticationkeypath.*(ready|blocked|set)|screenshot dimension.*(pass|blocked)/i.test(text);
+  if (claimsArchiveReady && !hasPreflightSignoff) {
+    issues.push(
+      issue(
+        "error",
+        "apple_signing.preflight_signoff_missing",
+        "APPLE_SIGNING.md claims archive/export/upload readiness but has no pre-archive/export/upload preflight sign-off covering SDK key injection, plutil -lint, exportArchive auth flags, and screenshot dimensions.",
+        relative,
+      ),
+    );
   }
 }
 

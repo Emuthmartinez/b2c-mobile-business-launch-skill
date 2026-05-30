@@ -31,8 +31,12 @@ Update `PROJECT_STATE.yaml`:
 - before dispatching subagents, worktrees, or parallel specialist audits
 - when a new secret, provider, bundle ID, app record, product, entitlement, analytics event, email route, or store field appears
 - before crossing research -> 11-star experience, experience -> design, design -> build, build -> proof, or proof -> submission
+- after any build is archived, exported, or uploaded to App Store Connect or Google Play — update the `apple_signing` lane evidence, build number, upload status, and `updated_at` before committing
+- after any store-ops event (custom product page created, in-app event attempted or submitted, iPad/new-platform target enabled, TestFlight group added, app record mutated) — update the affected lane status/evidence before committing
 - after validation or LaunchBench runs
 - before final handoff or commit
+
+If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write it to the file in that session — do not defer the write. Verbal or in-chat readiness notes that are not written to `PRODUCTION_READINESS.md` are not counted as evidence by validators. (Failure card: `project-state-stale-after-upload`.)
 
 ## State Rules
 

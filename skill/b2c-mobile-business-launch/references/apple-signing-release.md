@@ -276,10 +276,129 @@ Use when local Mac does not have distribution signing or the team prefers CI.
 - `.p8`, `.p12`, provisioning profiles, passwords, issuer IDs, key IDs, and team IDs are routed through `SECRETS.md` and Doppler or the approved provider.
 - Local agent output must distinguish "local simulator builds" from "CI distribution upload".
 
+## Pre-Archive/Export/Upload Preflight Checklist
+
+Run every item below and record pass/fail in `APPLE_SIGNING.md` before archiving, exporting, or uploading. A single unresolved failure blocks upload. Do not skip this checklist on re-archive cycles.
+
+### 1. SDK Keys Injected Into Info.plist
+
+Verify that all provider runtime keys are present in the archive's `Info.plist` — not just in source — before upload. Keys that come from build variables must be confirmed injected, not assumed.
+
+Check the keys the app uses (adapt names to the project):
+
+```bash
+# After archive, inspect the archived Info.plist directly
+plutil -p build/MyApp.xcarchive/Products/Applications/MyApp.app/Info.plist \
+  | grep -E 'REVENUECAT|SUPABASE|POSTHOG|STRIPE|AMPLITUDE'
+```
+
+If any expected key is absent or shows the raw `$(VAR_NAME)` placeholder, the archive was built without the variable injected. Stop. Fix the injection route (Doppler, CI env, xcconfig, or `xcodebuild` `-xcconfig`/`PRODUCT_VAR=value` args) and re-archive. Do not upload a build with missing or unexpanded SDK keys.
+
+Record result:
+
+```text
+SDK key preflight: pass | BLOCKED — <key name> missing or unexpanded in Info.plist
+```
+
+### 2. PrivacyInfo.xcprivacy Lint And Required Reason API Coverage
+
+`PrivacyInfo.xcprivacy` must be a valid property list, not JSON. Run lint before archive:
+
+```bash
+plutil -lint ios/MyApp/PrivacyInfo.xcprivacy
+```
+
+If the output is anything other than `PrivacyInfo.xcprivacy: OK`, fix the file and re-run before archiving. A JSON brace `{` at line 1 means the file was written as JSON and will fail Apple validation.
+
+Also scan the codebase for required-reason API usage and confirm `NSPrivacyAccessedAPITypes` covers it:
+
+```bash
+# UserDefaults usage scan
+grep -r 'UserDefaults\|standardUserDefaults\|NSUserDefaults' --include='*.swift' --include='*.m' ios/ | wc -l
+
+# File timestamp API scan
+grep -r 'NSFileCreationDate\|NSFileModificationDate\|getattrlist\|fgetattrlist\|stat\b\|fstat\b\|lstat\b\|statfs\b' \
+  --include='*.swift' --include='*.m' ios/ | wc -l
+```
+
+If `UserDefaults` usage count is greater than zero and `NSPrivacyAccessedAPITypes` in `PrivacyInfo.xcprivacy` does not declare the `NSPrivacyAccessedAPICategoryUserDefaults` category, the manifest is incomplete. Add the correct reason codes before archiving.
+
+Record result:
+
+```text
+plutil -lint: pass | BLOCKED — <error>
+NSPrivacyAccessedAPITypes coverage: complete | BLOCKED — <missing category>
+```
+
+### 3. Export With API Key Auth, Not Interactive Session
+
+Interactive Apple ID sessions expire silently. Every `xcodebuild -exportArchive` invocation must use API key authentication flags to avoid mid-export session expiry errors:
+
+```bash
+xcodebuild -exportArchive \
+  -archivePath build/MyApp.xcarchive \
+  -exportPath build/export \
+  -exportOptionsPlist ExportOptions.plist \
+  -authenticationKeyPath "$ASC_AUTH_KEY_PATH" \
+  -authenticationKeyID "$ASC_KEY_ID" \
+  -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+```
+
+The `.p8` key path, key ID, and issuer ID must be routed through `SECRETS.md` and Doppler (or the approved secret provider) — not hard-coded. If the founder has not yet provided API key credentials, record this as a blocker and ask for the key before attempting export.
+
+Do not omit these flags and rely on a cached Apple ID session. Session-based export will fail with `Your session has expired. Please log in.` as soon as the Keychain session ages out, wasting a full archive cycle.
+
+Record result:
+
+```text
+exportArchive auth: API key flags set | BLOCKED — <missing key/issuer>
+```
+
+### 4. Screenshot Dimension Floor Before Upload
+
+Upscaling low-resolution captures to meet App Store minimums produces blurry, pixelated images that Apple may reject. Before including any screenshot in an upload or `SCREENSHOTS.md` "ready" row, verify native capture dimensions:
+
+```bash
+sips -g pixelWidth -g pixelHeight screenshots/raw/*.png
+```
+
+Minimum accepted native widths before any upscale:
+
+| Well | Minimum native width |
+| --- | --- |
+| iPhone 6.9 in / 6.7 in / 6.5 in | 1242 px |
+| iPhone 5.5 in | 1242 px |
+| iPad Pro 13 in | 2048 px |
+| iPad Pro 11 in | 1668 px |
+
+If any raw capture is below the minimum width for its target well (for example, a MobAI or XcodeBuildMCP capture at 368 px or 393 px), do not upscale it. Re-capture at the correct simulator or device resolution, or use the ParthJadhav/app-store-screenshots export board to compose at the required output size from a higher-resolution source. Record the actual capture dimensions in `SCREENSHOTS.md` before marking any well as ready.
+
+Record result:
+
+```text
+Screenshot dimension preflight: pass (<device> native: <WxH>) | BLOCKED — <device> capture at <WxH>, below minimum
+```
+
+### 5. Preflight Sign-Off
+
+Record all four checks in `APPLE_SIGNING.md` before archiving:
+
+```text
+Pre-archive/export/upload preflight (YYYY-MM-DD):
+1. SDK keys in Info.plist: pass | BLOCKED
+2. plutil -lint PrivacyInfo.xcprivacy: pass | BLOCKED
+3. NSPrivacyAccessedAPITypes coverage: pass | BLOCKED
+4. exportArchive API key auth flags: ready | BLOCKED
+5. Screenshot dimension floor: pass | BLOCKED
+```
+
+Do not begin `xcodebuild archive` until all items are `pass` or `ready`. A blocked item stays open until fixed; do not re-archive and upload speculatively hoping the upload will succeed.
+
 ## Archive, Export, And Upload
 
 Before upload:
 
+- Pre-archive/export/upload preflight checklist above is fully signed off in `APPLE_SIGNING.md`.
 - Release build settings show correct `PRODUCT_BUNDLE_IDENTIFIER`, `DEVELOPMENT_TEAM`, `MARKETING_VERSION`, and `CURRENT_PROJECT_VERSION`.
 - App icons, launch screen, supported destinations, category, privacy manifest, Info.plist, URL schemes, entitlements, associated domains, push, and IAP capabilities are accounted for.
 - App record and explicit App ID exist in the same Apple team.
@@ -290,7 +409,13 @@ Archive/upload evidence can include:
 
 ```bash
 xcodebuild archive -scheme MyApp -configuration Release -archivePath build/MyApp.xcarchive
-xcodebuild -exportArchive -archivePath build/MyApp.xcarchive -exportPath build/export -exportOptionsPlist ExportOptions.plist
+xcodebuild -exportArchive \
+  -archivePath build/MyApp.xcarchive \
+  -exportPath build/export \
+  -exportOptionsPlist ExportOptions.plist \
+  -authenticationKeyPath "$ASC_AUTH_KEY_PATH" \
+  -authenticationKeyID "$ASC_KEY_ID" \
+  -authenticationKeyIssuerID "$ASC_ISSUER_ID"
 ```
 
 or Xcode Organizer / XcodeBuildMCP / ASC CLI proof. Prefer the repo's established build tooling and the live docs for exact commands.
@@ -346,6 +471,7 @@ Run `npm run check:apple-signing -- --root .` or the installed-skill equivalent 
 
 ## Common Failure Modes
 
+- Skipping the pre-archive/export/upload preflight checklist and discovering broken configuration only after upload — causes extra full archive/export/upload cycles. Add or activate the `apple-pre-upload-preflight-skipped` failure card in `PROJECT_STATE.yaml` and run `npm run check:apple-signing -- --root .` before each upload attempt.
 - Treating `xcodebuild` simulator success as proof the app can be uploaded.
 - `DEVELOPMENT_TEAM` is blank but the agent claims signing is configured.
 - Only an `Apple Development` identity exists locally, but the agent claims App Store distribution is ready.

@@ -18,6 +18,7 @@
     "check:content-assets": "tsx scripts/check-content-assets.ts",
     "check:viral-growth": "tsx scripts/check-viral-growth-loop.ts",
     "check:paid-ua": "tsx scripts/check-paid-user-acquisition.ts",
+    "check:paid-tool-decisions": "tsx scripts/check-paid-tool-decisions.ts",
     "check:orchestration": "tsx scripts/check-parallel-orchestration.ts",
     "check:source-registry": "tsx scripts/check-source-freshness.ts",
     "check:source-freshness": "tsx scripts/check-source-freshness.ts",
@@ -25,11 +26,13 @@
     "check:agent-entrypoints": "tsx scripts/check-agent-entrypoints.ts --skill-root .",
     "check:workflow-adherence": "tsx scripts/check-workflow-adherence.ts --skill-root .",
     "check:autopilot": "tsx scripts/check-autopilot-contract.ts",
+    "check:landing-funnel": "tsx scripts/check-landing-funnel.ts",
     "audit:links": "tsx scripts/audit-skill-links.ts --skill-root .",
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-ua -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-requirements -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html"
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-ua -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-requirements -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html",
+    "check:aso-metadata": "tsx scripts/check-aso-metadata.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

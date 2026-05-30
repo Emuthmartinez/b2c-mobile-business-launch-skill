@@ -476,8 +476,15 @@ Do:
 - Use GEO specialist skills when available: full audit, technical SEO, AI crawler access, `llms.txt`, schema, citability, content quality, brand mentions, platform optimization, and monthly compare.
 - Publish privacy policy, terms, privacy choices/account deletion pages, and footer/app links when the funnel collects email, account, subscription, analytics, or referral data.
 - Add security headers: CSP, HSTS after domain is stable, X-Frame-Options/frame-ancestors, Referrer-Policy, Permissions-Policy, X-Content-Type-Options.
+- When using Alpine.js with a strict Content Security Policy (CSP), use the `@alpinejs/csp` build. The CSP-safe Alpine build prohibits inline assignment expressions and `x-model`; replace with method calls and explicit event bindings. Discover and resolve this before the first deploy, not after observing broken form interactions.
+- **Pre-deploy gate (Cloudflare Pages/Workers via wrangler):** before any `wrangler deploy` or `npm run deploy` invocation, run all five gates in order:
+  1. `git status --porcelain` — abort if the working tree is dirty; commit all changes first. Never deploy with uncommitted changes; wrangler warns but proceeds, making the live state unauditable.
+  2. `wrangler --version` — if the major version is behind the latest (check `npm show wrangler version`), upgrade to the current major release before continuing. Running stale major versions silently limits deploy capabilities and surfaces repeated update warnings.
+  3. `wrangler whoami` — confirm the active API token has the required scope (Pages:Edit for Pages projects, Workers:Edit for Workers projects) before the first deploy. A scope-insufficient token causes deploy failures that look like network or config errors.
+  4. Confirm the local build artifact is up to date (`npm run build` or equivalent) before invoking wrangler.
+  5. After deploy, wait for the Cloudflare dashboard or CLI to confirm the deployment is active before running any verification.
 - Deploy and verify both preview and custom domain.
-- Smoke test signup, referral redirect, leaderboard/share state, analytics events, and mobile layout.
+- Smoke test signup, referral redirect, leaderboard/share state, analytics events, and mobile layout. **For any page containing an email capture or form, the smoke test must be browser-rendered, not curl or API-only.** Open the live URL in a real browser (or use MobAI/Playwright if available), fill in the form fields, click submit, and assert the success state is visible on screen. An API-level curl that returns 200 does not prove the browser form works; Alpine rendering bugs, CSP violations, and JS event-binding errors are invisible to curl. Do not declare the funnel ready until a browser-rendered form submission has succeeded end to end.
 
 Outputs:
 - landing repo or `landing/` directory
@@ -493,9 +500,11 @@ Outputs:
 
 Acceptance:
 - Live URL returns HTTP 200 and renders brand-critical copy.
-- At least one test signup is written end to end or a clear blocked reason exists.
+- At least one test signup is completed **in a real browser** (not curl) end to end, reaching the visible success state, or a clear blocked reason exists.
 - PostHog receives pageview and core funnel events.
 - Mobile and desktop visual checks are done.
+- Pre-deploy gates were satisfied before the last deploy: git clean, wrangler current major, token scope verified.
+- `npm run check:landing-funnel -- --root .` passes without errors.
 - DNS/cert status is known using concrete commands or dashboard evidence.
 - Support/privacy email routes are active, DNS-configured, and tested from an external sender.
 - Resend sender domain, test send, webhook, unsubscribe/preference, and automation/broadcast paths are verified when email is in scope.

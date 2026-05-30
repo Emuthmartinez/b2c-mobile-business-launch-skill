@@ -49,7 +49,42 @@ Write content for both humans and AI answer engines:
 - keep brand/entity names consistent across site, App Store metadata, schema, `llms.txt`, and social profiles
 - avoid thin marketing pages that have no extractable factual answers
 
-## 4. Technical GEO/SEO Gates
+## 4. Copy Compliance Pre-Edit Scan
+
+Run this scan before writing or accepting any landing copy, not only before deploy. These are trust-breaking patterns that have required founder corrections after deployment.
+
+**False or unverifiable claims — do not write without live proof:**
+- Superlatives tied to a ranked cohort: "Top N unlock", "Top 100 referrers get", "first N users receive". Remove unless the waitlist system actively enforces the cutoff and the size is not invented.
+- Unshipped-feature promises: device integrations ("WHOOP V2 V3 when they ship"), integrations not yet in code, or features scoped to V2/V3. Remove or move to a clearly labeled roadmap section.
+- Implied authority or credential claims: "tested by applied performance researchers", "clinically validated", "neuroscience-backed". Remove unless the founder supplies verifiable citations.
+- Lifetime or free-tier promises not reflected in `REVENUE_OPS.md`: "free first year of Pro at launch", "lifetime access". Cross-check against current pricing and RevenueCat entitlement design before writing.
+- Scarcity/urgency claims without a live enforcement mechanism: "spots are almost gone", "limited availability".
+
+**JSON-LD schema check:**
+- After writing or modifying any page that includes `application/ld+json`, verify the JSON parses (`JSON.parse(...)` locally or via `jq .` on the raw tag value). Invalid JSON-LD is silent in browsers but blocks structured-data rich results.
+- If schema sections reference product names, prices, or dates, cross-check them against `DESIGN.md`, `REVENUE_OPS.md`, and current copy before deploy.
+
+**Waitlist idempotency contract:**
+- Any landing page that collects email for a waitlist must guarantee: duplicate email submissions return HTTP 200 (not 4xx), with a de-duplicated response message. Test with a repeated submit before marking the funnel live.
+
+## 4a. DNS MX Pre-Check Before Writing Contact Email Addresses
+
+Before writing any contact email address (support, privacy, legal, security) into a public page or legal document:
+
+```bash
+# Check MX records exist before using the domain for contact addresses
+dig MX yourdomain.com +short
+# or: host -t MX yourdomain.com
+```
+
+If the domain returns no MX records:
+- Do not use `@yourdomain.com` addresses in the published copy.
+- Use a known-working fallback address (e.g. an existing provider domain or a forwarding alias that has been tested), and record the gap as a failure card with `id: legal-contact-email-mx-unverified`.
+- After DNS MX records are live and tested, update the pages and close the card.
+
+This check is required before drafting privacy policy, terms of service, support pages, or any public page where a contact address appears. See also `references/privacy-terms.md` section 5: "contact emails listed on the pages receive mail and have an owner."
+
+## 5. Technical GEO/SEO Gates
 
 Before calling the funnel launch-ready:
 - verify live HTTP 200 for homepage, `/privacy`, `/terms`, deletion/privacy choices, `robots.txt`, `sitemap.xml`, and `llms.txt`
@@ -69,7 +104,7 @@ curl -s https://example.com/llms.txt
 curl -s https://example.com | rg -i "<title|description|og:|application/ld\\+json|canonical"
 ```
 
-## 5. AI Visibility Reporting
+## 6. AI Visibility Reporting
 
 For launch handoff, record:
 - GEO/SEO score or audit summary when a GEO skill produced one
@@ -83,7 +118,7 @@ For launch handoff, record:
 
 Store this in `GEO_SEO.md` or in `AUDIT_PROMPT.md`/`LAUNCH.md` for smaller launches.
 
-## 6. Monitoring Loop
+## 7. Monitoring Loop
 
 After launch:
 - rerun `geo-compare` or a manual delta check monthly

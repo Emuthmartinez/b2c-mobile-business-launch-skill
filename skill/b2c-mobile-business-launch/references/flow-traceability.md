@@ -30,6 +30,12 @@ Every major launch decision should answer:
 
 Do not move a claim, screen, onboarding question, paywall behavior, pricing statement, data collection, or store-console answer forward unless it has a trace row or a clearly documented founder-only decision.
 
+### Lexicon Lock (one vocabulary across every surface)
+
+Pick the canonical product nouns/verbs once (e.g. the core feature name, the unit users act on, the metric names) and use the **same words everywhere**: in-app copy, onboarding, landing page hero/method/FAQ, SEO meta description, JSON-LD/structured data, App Store listing, paywall, and email. Record the locked terms in `DESIGN.md` (or `BRAND.md`) as the single source of truth.
+
+When a term changes, grep every surface and update them together — including the landing page's component files, `<meta>` description, and JSON-LD `description`/FAQ blocks, which are easy to miss. A term that means one thing in the app and another on the landing page (or a stale value left in one surface) reads as a different, less-trustworthy product and is a recurring drift bug. Treat "eliminate cross-surface inconsistency" as a sweep across all surfaces, not a single-file edit.
+
 ## 2. `PROJECT_STATE.yaml`
 
 Use `PROJECT_STATE.yaml` as the current-state index over trace work:

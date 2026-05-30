@@ -125,7 +125,7 @@ For launch funnels and apps, create URLs that are stable before store submission
 Verification:
 - pages return HTTP 200 on canonical domain
 - linked in footer, app settings, onboarding/paywall where relevant, App Store Connect, Play Console
-- contact emails listed on the pages receive mail and have an owner
+- contact emails listed on the pages receive mail and have an owner — before writing any `@yourdomain.com` address into copy, run `dig MX yourdomain.com +short` to confirm MX records exist; if none, use a tested fallback and open a `legal-contact-email-mx-unverified` failure card (see `references/geo-seo.md` section 4a)
 - readable on mobile
 - not blocked by robots/auth/geofencing
 - not a PDF for Google Play privacy policy

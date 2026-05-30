@@ -37,6 +37,20 @@ function checkPrivacyManifestContent(relativePath: string): void {
     return;
   }
 
+  // Detect JSON brace format — Apple requires plist format; JSON braces cause parse errors on upload
+  const trimmed = manifest.trimStart();
+  if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+    issues.push(
+      issue(
+        "error",
+        "apple_requirements.privacy_manifest_json_format",
+        "PrivacyInfo.xcprivacy appears to be JSON (starts with { or [) rather than an Apple property list. Apple requires plist format. Running `plutil -lint` on this file will fail with a parse error. Rewrite as a plist and verify with `plutil -lint` before archiving.",
+        relativePath,
+      ),
+    );
+    return; // Skip further key checks on invalid format
+  }
+
   const expectedKeys = ["NSPrivacyCollectedDataTypes", "NSPrivacyAccessedAPITypes", "NSPrivacyTracking"];
   const presentKeys = expectedKeys.filter((key) => normalizedIncludes(manifest, key));
   if (presentKeys.length === 0) {
@@ -45,6 +59,21 @@ function checkPrivacyManifestContent(relativePath: string): void {
         "error",
         "apple_requirements.privacy_manifest_keys_missing",
         "PrivacyInfo.xcprivacy exists but does not declare collected data, accessed API types, or tracking posture.",
+        relativePath,
+      ),
+    );
+  }
+
+  // Detect empty NSPrivacyAccessedAPITypes array when UserDefaults is likely in use
+  // (The array being present but empty is a common mistake that Apple catches on upload)
+  const emptyAccessedApiTypes = /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\s*\/>/i.test(manifest) ||
+    /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array>\s*<\/array>/i.test(manifest);
+  if (emptyAccessedApiTypes) {
+    issues.push(
+      issue(
+        "warning",
+        "apple_requirements.privacy_manifest_accessed_api_types_empty",
+        "NSPrivacyAccessedAPITypes in PrivacyInfo.xcprivacy is declared but empty. Confirm the app genuinely uses no required-reason APIs — apps using UserDefaults, file timestamps, system boot time, or disk space must declare reasons here or Apple flags an upload warning/rejection. Audit required-reason API usage; populate the array if any are used.",
         relativePath,
       ),
     );

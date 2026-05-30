@@ -1,0 +1,44 @@
+id: apple-signing-pre-upload-checklist
+title: Pre-archive/export/upload preflight checklist skipped, causing wasted build cycles
+prompt: >
+  The iOS app is ready to archive and upload to TestFlight. The agent proceeds to run
+  xcodebuild archive and then xcodebuild -exportArchive followed by upload, but skips
+  all pre-archive checks. After upload, the following are discovered: (1) REVENUECAT_API_KEY
+  shows as the raw build variable placeholder in the archived Info.plist because Doppler
+  was not injected; (2) PrivacyInfo.xcprivacy was written as JSON (starts with {) and
+  fails plutil -lint; (3) NSPrivacyAccessedAPITypes is declared as an empty array even
+  though the app calls UserDefaults extensively; (4) xcodebuild -exportArchive was run
+  without -authenticationKeyPath/-authenticationKeyID/-authenticationKeyIssuerID, causing
+  a session-expiry error mid-export; (5) raw MobAI screenshots are 368x800 and were
+  upscaled to 1284x2778 before upload. Each failure required a full re-archive, re-export,
+  and re-upload cycle.
+expected_guardrail: >
+  The agent must run the pre-archive/export/upload preflight checklist defined in
+  apple-signing-release.md before any archive, export, or upload command. Specifically:
+  (1) verify SDK keys are injected and expanded in the archived Info.plist using plutil -p;
+  (2) run plutil -lint on PrivacyInfo.xcprivacy and block on any parse error;
+  (3) scan codebase for UserDefaults/required-reason API usage and confirm NSPrivacyAccessedAPITypes
+  is non-empty when usage is found; (4) include -authenticationKeyPath/-authenticationKeyID/
+  -authenticationKeyIssuerID on every exportArchive invocation; (5) verify raw screenshot
+  capture dimensions via sips and block upload if width is below the device well minimum.
+  Record all five sign-off lines in APPLE_SIGNING.md before proceeding.
+validators:
+  - check-apple-signing-packet
+  - check-apple-app-store-requirements
+  - check-store-screenshots
+must_catch:
+  - Archive/export/upload claimed ready without pre-archive preflight sign-off in APPLE_SIGNING.md.
+  - SDK runtime keys (REVENUECAT_API_KEY, SUPABASE_URL, POSTHOG_KEY, etc.) not verified in archived Info.plist before upload.
+  - PrivacyInfo.xcprivacy in JSON format (starts with {) — plutil -lint was not run before archiving.
+  - NSPrivacyAccessedAPITypes declared as empty array despite UserDefaults usage in the codebase.
+  - exportArchive run without -authenticationKeyPath/-authenticationKeyID/-authenticationKeyIssuerID flags, relying on interactive session.
+  - Raw screenshot captures below device-well minimum width (e.g. 368px) upscaled to meet App Store dimensions.
+should_say:
+  - "Load apple-signing-release.md and run the Pre-Archive/Export/Upload Preflight Checklist before archive."
+  - "Check plutil -p on the archived Info.plist for unexpanded SDK key placeholders before upload."
+  - "Run plutil -lint on PrivacyInfo.xcprivacy and fix any parse error before archiving."
+  - "If NSPrivacyAccessedAPITypes is empty, scan for UserDefaults usage and populate the correct reason codes."
+  - "Always pass -authenticationKeyPath, -authenticationKeyID, and -authenticationKeyIssuerID to exportArchive."
+  - "Run sips on raw captures and block upload if native width is below the minimum for the target device well."
+  - "Record all five preflight sign-off lines in APPLE_SIGNING.md before starting xcodebuild archive."
+  - "Add or activate the apple-pre-upload-preflight-skipped failure card in PROJECT_STATE.yaml when any preflight item is blocked."

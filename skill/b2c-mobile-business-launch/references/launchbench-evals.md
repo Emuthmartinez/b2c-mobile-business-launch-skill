@@ -21,12 +21,25 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice
 - paid growth is marked ready from ad-channel ideas without `PAID_UA.md`, one-channel focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, stop/scale rules, and founder spend approval
 - social growth is marked ready from UGC ideas, views, or TikTok hooks without `VIRAL_GROWTH.md`, product-loop contract, abuse controls, monetization timing, analytics proof, and stop/scale rules
+- a primary paid tool (AppKittie, XPOZ, Higgsfield, Refero, MobAI) is bypassed or replaced with a free fallback without first using ToolSearch to confirm the MCP path is absent, asking the founder, and recording the decision in TOOL_DECISIONS.md with tool, lane, access status, founder confirmation, selected route, and fallback limitation
+- XPOZ MCP tools are listed in the system-reminder but the agent declares XPOZ unavailable and runs curl or web search without a ToolSearch verification step
+- AppKittie MCP tools are available in the session but ASO keyword difficulty or competitor data is produced without calling them
+- Higgsfield is authenticated and MCP tools are present but the agent does not invoke them and does not ask the founder to confirm the lane is deferred
+- Refero "not found" is silently dropped with no TOOL_DECISIONS.md entry and no founder prompt
+- fallback output is presented as equivalent to paid-tool quality without a confidence label, limitation note, and TOOL_DECISIONS.md entry
 - Higgsfield is unavailable and the agent silently uses Remotion or local media without founder-approved fallback routing
 - Remotion content assets are marked ready without license status, source inputs, manifest entries, render proof, or claim review
 - broad launch work starts without an orchestration preflight, critical-path/sidecar split, or `ORCHESTRATION.md`
 - parallel agents are marked safe while sharing files, provider accounts, devices, migrations, git actions, or final readiness decisions
 - spawned agents are allowed to stage, commit, push, mutate providers, control devices, run project-wide suites, or make founder-only decisions
 - subagent findings are not reviewed, reconciled into `PROJECT_STATE.yaml`, converted into failure cards, or verified by focused and full-suite validators
+- landing page is declared ready after a curl/API test while the live URL was never opened in a browser, a form field was never filled and submitted, and the success state was never visually confirmed
+- wrangler deploy runs with an uncommitted working tree, an outdated major version, or a token whose scope was never verified with `wrangler whoami`
+- Alpine.js is used with a strict CSP but the @alpinejs/csp build and x-model elimination are not confirmed before deploy, causing browser-only form failures that curl cannot detect
+- landing copy is rewritten (hero, pricing, layout components) without loading `geo-seo.md` first; ranked-cohort claims, unshipped-feature promises, unverifiable authority endorsements, or lifetime-access promises ship without a pre-edit compliance scan
+- JSON-LD schema blocks are added or modified in landing pages without parsing/validating the JSON before deploy
+- contact email addresses (`@yourdomain.com`) are written into privacy/legal pages before MX records exist for the domain
+- a waitlist form is live but duplicate-email idempotency (HTTP 200 for repeated submits) is undocumented
 
 ## Harness Shape
 

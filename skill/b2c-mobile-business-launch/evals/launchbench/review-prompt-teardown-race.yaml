@@ -1,0 +1,14 @@
+id: "review-prompt-teardown-race"
+title: "StoreKit review prompt is triggered on an acceptance tap instead of value-reveal screen mount"
+prompt: "Implement the review prompt for this onboarding flow. The user taps 'This looks right' on the plan-reveal screen to confirm their selections. Fire the native review prompt on that tap."
+expected_guardrail: "The review prompt must fire automatically after the value-reveal screen is mounted and visible, with a 1-2s async delay. Binding it to an acceptance tap that dismisses or navigates away from the screen creates a teardown race where the view may be deallocated before the review sheet can present."
+validators:
+  - "validate-project-state"
+must_catch:
+  - "firing the review prompt on an acceptance tap causes a teardown race"
+  - "the trigger must fire after the value-reveal screen is fully visible, not on a tap that dismisses it"
+  - "use a 1-2 second async delay while the screen stays mounted"
+should_say:
+  - "Do not bind the review request to any tap or action that triggers navigation away from the current screen."
+  - "Fire the request automatically after the value-reveal screen appears, with a short delay."
+  - "Create a review-prompt-teardown-race failure card if implementation binds it to an acceptance tap."

@@ -215,8 +215,14 @@ Founder approval required:
 Do not call the App Store listing ready unless:
 - current Apple docs were refreshed and cited in the packet
 - `APPLE_APP_STORE_REQUIREMENTS.md` exists and passes `npm run check:apple-requirements -- --root .`
+- `APP_STORE_LISTING.md` exists as a file artifact (not just inline chat copy) and `npm run check:aso-metadata -- --root .` passes
+- keyword field is backed by AppKittie `batch_keyword_difficulty` or `get_keyword_difficulty` evidence with difficulty scores, volumes, and selection rationale recorded; if AppKittie is unavailable the paid-tool-routing decision and fallback are recorded in `TOOL_DECISIONS.md` before proceeding
+- description field is ≥ 2500 characters of keyword-rich body copy, secondary benefit paragraphs, and social proof, or a founder-approved brevity rationale is recorded; descriptions < 2500 chars without a rationale are a conversion gap and must not be called ready
+- live ASC metadata was read via `asc metadata pull` (or the asc-metadata-sync read route) before any metadata audit or diff; build log files must not be used as the authoritative current App Store Connect state
 - `PrivacyInfo.xcprivacy` is present in the app target resources before a ready/upload claim
 - required reason API declarations, third-party SDK privacy manifests/signatures, Xcode privacy report, protected-resource purpose strings, ATT, App Privacy labels, account deletion, review notes, and archive/upload warnings are reconciled before App Store Connect upload
+- the App Review Information Notes packet is written (purpose+audience, setup/access instructions, demo credentials OR an explicit no-login "no account, no demo needed" confirmation with the demo-account-required flag cleared, test devices+OS, external services, regional differences, regulated-material proof) — empty notes or a missing no-login confirmation cause a Guideline 2.1 "Information Needed" rejection (failure card: `asc-review-information-missing`)
+- every **promoted** in-app purchase/subscription has a unique 1024×1024 promotional image that depicts that specific product — never the app icon and never a duplicate across products — or the promotional image is removed for products that will not be promoted (failure card: `asc-promoted-iap-image-duplicate`; Guideline 2.3.2)
 - default listing fields are paste-ready with character/byte counts
 - App Privacy answers are derived from real data inventory and third-party partners
 - pricing/subscriptions/products match RevenueCat/Stripe/web funnel/paywall/legal copy

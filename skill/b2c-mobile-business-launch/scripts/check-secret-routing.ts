@@ -97,7 +97,7 @@ for (const file of collectAllFiles(args.root, 10000)) {
 }
 
 const secretLike = /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{12,}|whsec_[A-Za-z0-9]{12,}|ghp_[A-Za-z0-9]{20,}|-----BEGIN (PRIVATE|RSA|EC) PRIVATE KEY-----/;
-const textFileExtensions = new Set([".md", ".yaml", ".yml", ".json", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".swift", ".kt", ".dart", ".plist", ".example", ".txt"]);
+const textFileExtensions = new Set([".md", ".yaml", ".yml", ".json", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".swift", ".kt", ".dart", ".plist", ".example", ".txt", ".toml"]);
 const envReference = /\b[A-Z][A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|DSN|PRIVATE_KEY|ISSUER_ID|KEY_ID)\b/g;
 for (const file of collectFiles(args.root, textFileExtensions, 5000)) {
   const relative = path.relative(args.root, file);
@@ -122,6 +122,52 @@ for (const file of collectFiles(args.root, textFileExtensions, 5000)) {
         );
       }
     }
+  }
+}
+
+// Scan wrangler.toml / wrangler.json [vars] for committed credential-shaped values.
+// Supabase anon/publishable keys are public-by-design, so this is a warning (smell), while
+// true secret patterns (handled above by secretLike) remain errors.
+const credentialShaped = /\b(sb_publishable_[A-Za-z0-9]{12,}|sb_secret_[A-Za-z0-9]{12,}|https:\/\/[a-z0-9]{16,}\.supabase\.co|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,})\b/;
+for (const wranglerFile of ["wrangler.toml", "wrangler.json"]) {
+  const wranglerText = readText(args.root, wranglerFile);
+  if (!wranglerText) continue;
+  const inVarsBlock = /\[vars\][\s\S]*/i.test(wranglerText) || /"vars"\s*:/.test(wranglerText);
+  if (inVarsBlock && credentialShaped.test(wranglerText)) {
+    issues.push(
+      issue(
+        "warning",
+        "secrets.wrangler_toml_credentials",
+        `${wranglerFile} appears to contain a credential-shaped value (Supabase URL/key or JWT) in committed config — route it through 'wrangler secret put' or Doppler-injected env vars and keep [vars] for non-secret config only.`,
+        wranglerFile,
+      ),
+    );
+  }
+}
+
+// Scan committed markdown for awk/grep credential extraction snippets.
+// These patterns print raw credential values (from .env, .p8, or similar files)
+// into a shell variable or stdout, which is unsafe in committed docs.
+// Allowed in SECRETS.md itself (which is about naming/locations) — flag everywhere else.
+const credentialExtractionPattern =
+  /(?:awk|grep|sed)[^`\n]*(?:\.env|\.p8|\.p12|\.pem|clueless\.env|credentials)[^`\n]*/i;
+const markdownExtensions = new Set([".md"]);
+for (const file of collectFiles(args.root, markdownExtensions, 5000)) {
+  const relative = path.relative(args.root, file);
+  if (relative.includes("node_modules")) continue;
+  // Allow the skill's own reference docs to describe the pattern; flag app-side committed docs.
+  if (relative.startsWith("references/") || relative.startsWith("scripts/")) continue;
+  const text = readText(args.root, relative);
+  if (text && credentialExtractionPattern.test(text)) {
+    issues.push(
+      issue(
+        "warning",
+        "secrets.credential_extraction_in_markdown",
+        `${relative} contains an awk/grep/sed extraction snippet referencing a credential file. ` +
+          "Remove raw extraction commands from committed docs. Use 'doppler run --' or document the secret name only.",
+        relative,
+      ),
+    );
   }
 }
 

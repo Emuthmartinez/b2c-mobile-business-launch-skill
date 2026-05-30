@@ -136,6 +136,11 @@ if (!markdown) {
       "asc-id-resolver",
       "TestFlight",
       "review status",
+      // App Review Information packet (prevents Guideline 2.1 "Information Needed" rejection).
+      "App Review Information",
+      "demo account",
+      "test device",
+      "external service",
     );
     if (revenueInScope) {
       requiredPhrases.push("RevenueCat", "subscription", "asc-revenuecat-catalog-sync");
@@ -167,6 +172,39 @@ if (!markdown) {
           "error",
           "store_console.asc_app_creation_underclaimed",
           `ASC app creation must route through ASC CLI/skills or name a real CLI/auth/account blocker on the same line: "${line}"`,
+          markdownPath,
+        ),
+      );
+    }
+  }
+
+  // App container price vs IAP/Lifetime distinction check.
+  // When the packet mentions a Lifetime offer it must also confirm:
+  // 1. The app container price is Free (not a paid download).
+  // 2. The Lifetime offer is implemented as a NON_CONSUMABLE IAP product.
+  const markdownLower = markdown.toLowerCase();
+  const hasLifetimeOffer = /\blifetime\b/.test(markdownLower);
+  if (hasLifetimeOffer && hasIos) {
+    if (!/\bnon[_-]consumable\b/.test(markdownLower)) {
+      issues.push(
+        issue(
+          "error",
+          "store_console.lifetime_iap_type_missing",
+          "STORE_CONSOLE.md mentions a Lifetime offer but does not confirm a NON_CONSUMABLE IAP product type. A Lifetime paywall row must be backed by a NON_CONSUMABLE in-app purchase, not the app container price.",
+          markdownPath,
+        ),
+      );
+    }
+    // Detect any line that sets the app container price to a non-free value alongside "lifetime".
+    const paidContainerPattern = /price[:\s]+\$?\d+(\.\d+)?\b(?!.*free)/i;
+    const containerPriceConfirmedFree = /container.*price.*free|app.*price.*free|price.*free.*download|pricing.*and.*availability.*free|download.*price.*free/i.test(markdown);
+    const paidContainerMentioned = paidContainerPattern.test(markdown) && !containerPriceConfirmedFree;
+    if (paidContainerMentioned) {
+      issues.push(
+        issue(
+          "warning",
+          "store_console.app_container_price_possibly_non_free",
+          "STORE_CONSOLE.md may set a non-zero app container price while a Lifetime IAP offer is present. Subscription/IAP apps must remain Free at the container level; the Lifetime price belongs on the NON_CONSUMABLE IAP product only.",
           markdownPath,
         ),
       );

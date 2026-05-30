@@ -90,6 +90,28 @@ Use these classes in `SECRETS.md`:
 
 Public does not mean harmless. If a token can write, mutate, impersonate, bill, send email, read private data, or access admin APIs, it is server-only.
 
+## Doppler Config Preflight And Shell Patterns
+
+**Config name preflight (never guess):** Before constructing any `doppler run --project <name> --config <config>` command, resolve the actual config name. Config names are project-specific and do not follow a universal convention — "prod" and "prd" are both common and the wrong one causes a hard error. Resolve in this priority order:
+1. Read the project's `SECRETS.md` config map — it is the canonical record.
+2. Read `STORE_CONSOLE.md` if it contains Doppler snippets; those snippets are written from a working session.
+3. Run `doppler configs --project <name>` to list all real config names in the project.
+Never construct a `doppler run` command with a config name sourced from memory, a different project's docs, or a prior session transcript. Record the resolved config name in `SECRETS.md` if it is missing.
+
+**Doppler preflight check:** Run `doppler me` to confirm the local CLI is authenticated and the expected account is active before any secrets work. A missing or wrong account is a silent failure that produces confusing auth errors downstream.
+
+**Env file extraction — never `source`:** Do not run `source` or `.` on `.env` files that contain prose comments, export-less assignments, or multi-line values (such as `.p8` or PEM keys). Shell attempts to execute each line as a command, so a comment line or a value with spaces causes "command not found" errors and may execute unintended commands. Use awk for single-value extraction:
+```bash
+VAR=$(awk -F= '/^KEY_NAME=/{print $2}' /path/to/file.env)
+```
+For multiline values such as a `.p8` private key, never extract the raw value into a shell variable or print it. Read the file path directly or route through Doppler. Document the extraction command in `SECRETS.md`; do not commit awk/grep extraction snippets that print raw credential values in `STORE_CONSOLE.md` or any committed markdown.
+
+**JS template literals inside `doppler run -- bash -lc`:** When a command passed to `doppler run -- bash -lc '...'` contains JavaScript template literals (`${...}`, `` `...` ``), the outer bash shell expands the `${...}` before Doppler injects secrets, causing "bad substitution" or silent empty-string substitution. Use one of these patterns instead:
+- Use a single-quoted heredoc to pass a Node script (`doppler run -- node --input-type=module <<'NODE' ... NODE`). Single-quoting the heredoc delimiter prevents bash expansion; Doppler injects environment variables and Node sees them as `process.env.*`.
+- Rewrite the JS template literals as string concatenation before passing to bash.
+- Write the script to a temp file and invoke it: `doppler run -- node /tmp/script.mjs`.
+Do not nest multi-line JavaScript containing template literals inside a double-quoted or unquoted bash heredoc passed to `doppler run`.
+
 ## Doppler Workflow
 
 Local development:
@@ -97,10 +119,21 @@ Local development:
 - Verify install with the current official command, usually `doppler --version`, and record the observed version or missing-binary status.
 - If missing and the founder selected Doppler, install from current official docs or ask if global install is not appropriate.
 - Authenticate locally with `doppler login`; this is a founder/operator action when browser login or account access is required.
+- Run `doppler me` to confirm the active account before secrets work.
 - Run `doppler setup` at the repo root or configured app folder. Use `doppler.yaml` only for non-secret project/config/path hints.
+- Before constructing `doppler run --project X --config Y`, verify the config name from `SECRETS.md`, `STORE_CONSOLE.md`, or `doppler configs --project X`. Never guess the config name.
 - Run commands as `doppler run -- <command>`, for example `doppler run -- pnpm dev`, `doppler run -- npm test`, or `doppler run -- wrangler deploy`.
 - Use `doppler run --watch -- <command>` only when the plan supports it and the current Doppler plan/docs allow it.
 - For one-off command strings that reference variables, escape variables or use single quotes so the shell does not expand before Doppler injects values.
+- When the command contains JavaScript template literals, use a single-quoted Node heredoc (`doppler run -- node --input-type=module <<'NODE' ... NODE`) instead of passing JS through `bash -lc`.
+
+Secret visibility (masked vs restricted):
+- Set automation-consumed secrets with the **default `masked`** visibility (plain `doppler secrets set SECRET_NAME`, no `--visibility` flag).
+- Do **not** use `--visibility restricted` for secrets that automation reads: restricted secrets are invisible to CLI injection (`doppler run --`) and produce errors like "The current authentication does not have access to restricted secrets," forcing every secret to be re-created. Reserve `restricted` for dashboard-/API-only secrets that never need CLI injection.
+- Any config consumed by `wrangler deploy`, Expo, CI, or another `doppler run --` consumer must use `masked`.
+
+wrangler.toml / committed config (never plaintext credentials):
+- `wrangler.toml`/`wrangler.json` `[vars]` (and `next.config.js`/`app.json` env blocks) must not contain real credential values (Supabase URL/keys, API keys). Route them through `wrangler secret put` or Doppler-injected env vars and keep `[vars]` for non-secret config only. `check:secrets` scans `.toml`/config files for credential-shaped values; a hit is the `wrangler-toml-credentials-committed` failure card. Audit git history if a credential was ever committed.
 
 Setting and reading:
 - Prefer setting secrets through the Doppler dashboard or `doppler secrets set SECRET_NAME` without exposing values in command history or logs.
@@ -150,3 +183,7 @@ Flag these aggressively:
 - service-account JSON, `.p8`, `.p12`, provisioning files, SSH keys, or OAuth refresh tokens are committed
 - CI/deploy works only from a developer shell because the agent forgot launch-time environment differs from interactive shell
 - `PROJECT_STATE.yaml` says provider setup is done even though `SECRETS.md`, CI injection, or command wrappers are missing
+- `doppler run --config` uses a guessed config name (such as "prod" instead of "prd") without reading `SECRETS.md` or running `doppler configs` first
+- `source` or `.` is used on a `.env` or credential file containing prose, multiline values, or non-POSIX assignment syntax
+- a committed markdown file (`STORE_CONSOLE.md` or similar) contains an awk/grep/shell snippet that extracts and prints a raw credential value from a `.env` or `.p8` file
+- JavaScript template literals are nested inside a double-quoted bash heredoc passed to `doppler run -- bash -lc`, causing silent bash expansion before Doppler injection

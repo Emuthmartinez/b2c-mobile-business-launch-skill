@@ -128,6 +128,41 @@ Before implementation:
 
 Use real constraints. If the 7-star idea requires unavailable data, blocked permissions, unsafe claims, or unsupported AI quality, either redesign the slice or mark the blocker explicitly.
 
+## 11-Star Run Protocol
+
+When the founder says "run an 11-star experience", "run it through the 11-star framework", "do an 11-star pass", or any equivalent, the **first output must be a written or updated `11_STAR_EXPERIENCE.md`** and **second must be `11-star-experience.html`**. Do not begin subagent code audits, UX audits, or implementation changes before both artifacts exist or are updated. This is a hard ordered sequence, not a preference.
+
+**Ordered steps for any "11-star run" request:**
+
+1. Read `eleven-star-experience.md` (this file) if not already loaded.
+2. Read the existing `11_STAR_EXPERIENCE.md` if it exists; otherwise create it from `templates/11-star-experience/11_STAR_EXPERIENCE.md`.
+3. Write or update `11_STAR_EXPERIENCE.md` with a complete ladder for this specific product. All seven star levels (1, 2, 5, 6, 7, 10, 11) must be present with product-specific labels, not Airbnb copy.
+4. Write or update `11-star-experience.html` with the visual ladder, line of feasibility, V1 scalable slice, and surface translation board.
+5. Update `PROJECT_STATE.yaml` `lanes.experience` status and evidence fields.
+6. Run `npm run check:11-star -- --root .` and fix any errors before continuing.
+7. Only after the above six steps: proceed to implementation changes, subagent code audits, or UX audit work.
+
+If the founder asks for both "11-star experience" and "make your changes" in a single turn, produce the artifacts first, then apply changes using the V1 scalable slice as the governing constraint.
+
+## UX And Onboarding Audit Output Contract
+
+When a UX or onboarding audit subagent produces findings, each finding **must** include:
+
+- **star-ladder level**: which star level (1–11) the finding maps to in `11_STAR_EXPERIENCE.md` (e.g. "2-star friction", "5-star expected", "7-star way-beyond target")
+- **file/component**: the specific file, screen, or component affected
+- **recommendation**: what to change and why, grounded in the V1 scalable slice
+- **failure-card flag**: "open failure card: yes/no" with reason — if yes, include a draft card shape from `failure-cards.md`
+
+Findings that do not map to a star-ladder level or do not reference `11_STAR_EXPERIENCE.md` are incomplete and must be rejected by the orchestrator. The orchestrator must convert starred findings into `PROJECT_STATE.yaml` updates or failure cards before claiming any progress.
+
+## Copy Output Brand-Voice Attestation
+
+Any copy recommendation output — onboarding copy, paywall copy, ad creative copy, store listing copy, email copy — must include a brand-voice attestation line:
+
+> Brand-voice attestation: verified against `BRAND.md §Voice` and `design.md §Copy Rules`. Hard rules: [list any violated or confirmed rules from those sections].
+
+If `BRAND.md` or `design.md` does not exist yet, flag that attestation is blocked and list it as a blocker in `PROJECT_STATE.yaml` before producing copy that will be used in production.
+
 ## Gates Before Build
 
 Do not move to engineering handoff until:
@@ -157,3 +192,7 @@ npm run check:11-star -- --root .
 - The engineering plan implements screens but not the state/data/API behavior needed for the magical moment.
 - The 11-star board is prose-only and cannot be inspected visually.
 - The line of feasibility is vague, so agents keep overbuilding or underbuilding.
+- The founder asks for an "11-star run" and the agent loads this reference but proceeds directly to code audits or implementation without writing `11_STAR_EXPERIENCE.md` and `11-star-experience.html` first. The artifact is required before any downstream work, not after.
+- UX audit findings are produced as narrative prose with no star-ladder level mapping. Findings that cannot be mapped to a star level cannot be integrated into the experience contract.
+- Copy outputs include no brand-voice attestation. Copy changes produced without verifying `BRAND.md` and `design.md` hard rules drift from the experience voice immediately.
+- The `check:11-star` validator is never run during an audit session, so known gaps accumulate invisibly.

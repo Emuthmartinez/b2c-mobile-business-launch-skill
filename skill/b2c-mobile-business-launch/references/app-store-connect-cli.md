@@ -116,6 +116,25 @@ Before any first-time app creation claim, refresh and record the exact creation 
 
 Use `--dry-run` and read commands first. Do not use `--confirm`, `--submit`, pricing changes, screenshot replacement, metadata apply, TestFlight external distribution, or release actions without explicit founder approval.
 
+## Verified Command Cookbook
+
+These notes exist because agents repeatedly burned live-store cycles guessing flag and subcommand forms. The CLI evolves — treat every form below as "confirm with `--help` first," not as memorized fact.
+
+- **Pre-use `--help` rule.** Before the first use of any `asc` subcommand not shown in this file, run `asc <subcommand> --help` and record the confirmed flags. If a command errors on a flag, run `asc <cmd> --help` before retrying — never retry a mutating command with a guessed alternate flag. (Failure card: `asc-flag-drift`.)
+- **`--confirm` is a CLI-required gate, not just a founder gate.** Destructive/mutating commands (`asc review cancel`, `asc review submit`, `asc subscriptions review submit`, release actions) error and do nothing unless `--confirm` is passed. So they need *both* the CLI `--confirm` flag *and* explicit founder approval before you run them. Omitting `--confirm` does not "safely no-op into a dry run" — it just errors; check `--help` for the required flags before the first live call.
+- **`validate` form.** Validation runs against an app + version, e.g. `asc validate --app <APP_ID> --version <VERSION_STRING>` (confirm `--version` vs a numeric `--version-id` with `asc validate --help`). There is no `asc validate app-store-version` subcommand — that guess errors. Resolve the numeric version id first with `asc versions list --app <APP_ID> --output json` when a command needs `--version-id`.
+- **Auth env vars.** ASC auth reads API-key env vars (the skill uses `ASC_KEY_ID` and `ASC_ISSUER_ID`; confirm the private-key path variable name with `asc auth --help` and keep it consistent with `PROJECT_STATE.yaml`). Do not `source` a `.env`/`clueless.env` that contains comments or values with spaces — that throws `command not found` on every invocation. Extract single values with the awk pattern in [`secrets-management.md`](secrets-management.md) ("Env file extraction — never `source`"); never print raw `.p8` contents.
+- **Internal TestFlight groups auto-distribute.** Internal groups deliver to all internal testers automatically; do not pass a skip flag unless you intend to block internal delivery. External distribution always needs founder approval.
+- **Test notes are idempotent updates.** Updating a build's test notes is an update, not a create — do not create a second build record when one already exists.
+
+## Promoted In-App Purchase Images
+
+If any in-app purchase or subscription is **promoted** on the App Store (or has a promotional image attached), each promoted product needs its own **unique 1024×1024 promotional image that depicts that specific product**. Reusing the app icon, or the same image across weekly/yearly/lifetime products, triggers a Guideline 2.3.2 "Accurate Metadata" rejection. Generate distinct on-brand images (Higgsfield tied to `DESIGN.md`), set each via the ASC IAP/subscription image route (confirm the exact verb with `--help`), or remove the promotional image for products you will not promote. (Failure card: `asc-promoted-iap-image-duplicate`.)
+
+## Post-Action State Update
+
+After any ASC action that changes build, metadata, screenshot, TestFlight, custom product page, in-app event, subscription, or platform state, update `PROJECT_STATE.yaml` (`updated_at`, the relevant lane status/evidence, build number, and upload status) and re-render `launch-cockpit.html` before the session ends — write any new `PRODUCTION_READINESS.md` evidence to the file rather than leaving it in chat. Skipping this is the `project-state-stale-after-upload` failure card.
+
 ## First-Time Signing And App Record Triage
 
 Load `apple-signing-release.md` before this section. The common first-time failure is that the app builds in the simulator but cannot be uploaded because account/app-record/signing prerequisites are missing.

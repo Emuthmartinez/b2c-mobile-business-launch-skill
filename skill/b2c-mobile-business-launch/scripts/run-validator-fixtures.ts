@@ -103,6 +103,11 @@ function writeCompleteAppleSigning(root: string): void {
       "Distribution certificate and provisioning profile are present.",
       "Archive, export, upload, and TestFlight proof are recorded.",
       "A simulator build alone is not distribution readiness.",
+      "Pre-Archive/Export/Upload Preflight sign-off:",
+      "SDK key injection into Info.plist verified with plutil -p on the compiled archive: pass.",
+      "plutil -lint on PrivacyInfo.xcprivacy: ok.",
+      "exportArchive uses -authenticationKeyPath, -authenticationKeyID, and -authenticationKeyIssuerID: ready.",
+      "Screenshot dimension floor check (raw capture meets device well minimum, no upscaling): pass.",
     ].join("\n"),
     "utf8",
   );
@@ -152,6 +157,7 @@ function writeCompleteStoreConsole(root: string): void {
     [
       "# Store Console",
       "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
+      "App Review Information notes cover purpose and target audience, setup and access instructions, the demo account decision (including an explicit no-login confirmation when there is no account system), the list of test devices and OS versions, and the external services used.",
       "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
@@ -516,6 +522,23 @@ function writeCompleteOrchestration(root: string): void {
   writeFileSync(path.join(root, "orchestration", "security-audit.md"), "# Security Audit\n\nNo orchestration blocker remains.\n", "utf8");
 }
 
+function writeCompletePaidToolDecisions(root: string): void {
+  writeFileSync(
+    path.join(root, "TOOL_DECISIONS.md"),
+    [
+      "# Tool Decisions",
+      "| Tool | Lane | Access status | Founder confirmation | Selected route | Fallback limitation |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "| AppKittie | research/aso | access confirmed | founder approved paid use | AppKittie MCP | n/a |",
+      "| XPOZ | research | access confirmed | founder approved paid use | XPOZ MCP | n/a |",
+      "| Higgsfield | content_assets | access confirmed | founder approved; Remotion fallback approved if Higgsfield is unavailable | Higgsfield MCP | Remotion fallback is founder-approved |",
+      "| Refero | design | access confirmed | founder approved | Refero MCP | bundled ux-patterns fallback approved |",
+      "| MobAI | engineering | access confirmed | founder approved | MobAI MCP | XcodeBuildMCP fallback approved when MobAI is unavailable |",
+    ].join("\n"),
+    "utf8",
+  );
+}
+
 function writeSourceRegistryFixture(root: string, includeUrl = true): void {
   mkdirSync(path.join(root, "references"), { recursive: true });
   writeFileSync(
@@ -591,6 +614,28 @@ try {
   runFixture("complete store screenshots packet passes", clean, "check-store-screenshots.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
+  runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
+  runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
+  writeCompletePaidToolDecisions(clean);
+  runFixture("complete paid-tool decisions packet passes", clean, "check-paid-tool-decisions.ts", 0);
+
+  const asoMissingListing = makeFixture("aso-missing-listing");
+  rmSync(path.join(asoMissingListing, "app-store-listing"), { recursive: true, force: true });
+  rmSync(path.join(asoMissingListing, "APP_STORE_LISTING.md"), { force: true });
+  runFixture("aso metadata without APP_STORE_LISTING fails", asoMissingListing, "check-aso-metadata.ts", 1, "aso_metadata.app_store_listing_missing");
+
+  const paidToolMissing = makeFixture("paid-tool-missing-decisions");
+  rmSync(path.join(paidToolMissing, "TOOL_DECISIONS.md"), { force: true });
+  runFixture("missing TOOL_DECISIONS.md fails when paid tools in scope", paidToolMissing, "check-paid-tool-decisions.ts", 1, "paid_tool_decisions.file_missing");
+
+  const wranglerCreds = makeFixture("wrangler-toml-credentials");
+  writeFileSync(
+    path.join(wranglerCreds, "wrangler.toml"),
+    ["name = \"app-landing\"", "[vars]", "SUPABASE_ANON = \"sb_publishable_abcdefghijklmnopqrstuvwx\""].join("\n"),
+    "utf8",
+  );
+  runFixture("wrangler.toml committed credential warns", wranglerCreds, "check-secret-routing.ts", 0, "secrets.wrangler_toml_credentials");
+
   const sourceRegistryClean = makeEmptyFixture("source-registry-clean");
   writeSourceRegistryFixture(sourceRegistryClean);
   runFixture("source registry with registered URL passes", sourceRegistryClean, "check-source-freshness.ts", 0);
@@ -836,6 +881,7 @@ try {
     [
       "# Store Console",
       "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
+      "App Review Information notes cover purpose and target audience, setup and access instructions, the demo account decision (including an explicit no-login confirmation when there is no account system), the list of test devices and OS versions, and the external services used.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",
     ].join("\n"),
     "utf8",
@@ -924,6 +970,7 @@ try {
     [
       "# Store Console",
       "App Store Connect click path and ASC CLI routes cover app creation, asc-id-resolver ID resolution, app info, SKU, primary locale, bundle ID, App Privacy, pricing, RevenueCat, asc-revenuecat-catalog-sync, subscription setup, localization, custom product page strategy, In-App Event planning, Higgsfield-backed marketing assets, screenshots, TestFlight, review status, review notes, and account deletion.",
+      "App Review Information notes cover purpose and target audience, setup and access instructions, the demo account decision (including an explicit no-login confirmation when there is no account system), the list of test devices and OS versions, and the external services used.",
       "The founder must manually create the app record in App Store Connect.",
       "Google Play click path covers package name, Data safety, screenshots, review notes, privacy, and account deletion.",
       "If the app name is already in use, stop for founder approval before using any fallback name.",

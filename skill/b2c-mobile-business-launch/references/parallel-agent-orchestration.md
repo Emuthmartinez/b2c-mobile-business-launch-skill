@@ -41,6 +41,8 @@ The orchestrator must answer:
 
 If the answer is "no useful parallelism," record `strategy: inline` with a short reason. If the runtime lacks a callable subagent facility, record `strategy: blocked` or `inline` with `subagents_unavailable` in the rationale and run the role audits serially or inline from `APP_AGENTS.md`. The preflight still matters because it proves the agent considered parallelism deliberately.
 
+**MCP catalog overflow (a common silent subagent failure).** When many MCP servers are connected, the combined tool catalog can overflow a subagent's context before it starts — the subagent returns empty with ~0 tokens in a few seconds, or fails with "Prompt is too long." If a dispatched subagent exits in under ~5 seconds with no output, treat it as a context-overflow signal, not a task result. Mitigation: prefer `strategy: inline` for MCP-tool-heavy research (run it in the parent session); if background dispatch is required, enable on-demand tool loading (e.g. `ENABLE_TOOL_SEARCH=true`, which typically needs a client restart) and confirm it is active before dispatch. Record the overflow and the chosen mitigation in `ORCHESTRATION.md`; do not silently retry the same dispatch.
+
 ## Strategy Choices
 
 Use the smallest strategy that fits the work:

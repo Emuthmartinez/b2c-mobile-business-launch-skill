@@ -37,6 +37,9 @@ const knownValidators = new Set([
   "check-autopilot-contract",
   "check-agent-entrypoints",
   "check-workflow-adherence",
+  "check-aso-metadata",
+  "check-paid-tool-decisions",
+  "check-landing-funnel",
   "render-launch-cockpit",
 ]);
 

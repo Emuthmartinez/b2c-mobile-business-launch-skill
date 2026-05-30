@@ -151,11 +151,16 @@ Attribution answers should be treated as first-class launch learning:
 
 Prompt only after a real delight moment or completed action. "Mid-onboarding" is acceptable only if the user has already experienced enough of the app/prototype/demo to give meaningful feedback.
 
+**Canonical placement — value-reveal screen, automatic trigger:**
+- Fire the native review request automatically after the value-reveal screen is fully displayed (plan, analysis, demo result, or aha moment is visible on screen), with a 1-2 second async delay so the screen remains mounted and visible.
+- Do not fire on the user's acceptance tap or on any button that causes the screen to dismiss or navigate away. Binding the trigger to a tap that tears down the current screen creates a teardown race: the view may be deallocated before the review sheet can present.
+- Do not fire on the paywall screen or after the paywall is shown; the user must see the value first.
+
 Rules:
-- iOS: use Apple's native review request API path; do not build a custom App Store review prompt or incentive.
+- iOS: use Apple's native review request API path (`SKStoreReviewController.requestReview` or `requestReview(in:)`); do not build a custom App Store review prompt or incentive.
 - Android: use Google Play In-App Review API, do not alter the review card, and do not ask opinion/predictive questions before showing it.
 - never reward, unlock, or discount in exchange for a rating or review
-- assume the platform may choose not to show the prompt; keep the onboarding flow functional
+- assume the platform may choose not to show the prompt; keep the onboarding flow functional with or without the sheet appearing
 - log prompt eligibility, request attempt, and post-prompt continuation without trying to infer private rating content
 
 ### Paywall Timing
@@ -214,6 +219,8 @@ Add these to `ANALYTICS.md` before implementation:
 
 Include dimensions: step_id, answer_key, attribution_source, source_key, source_label, other_text_present, demo_id, mascot_state, paywall_variant, offering_id, package_id, trial_state, platform, campaign/source/medium, and error_state.
 
+**Event naming rule — cross-check before proposing:** Any onboarding event name not in the approved catalog above must be verified against `ANALYTICS.md` before being proposed or implemented. Do not invent new event names (e.g. first-use coach events, tutorial events) without first checking whether `ANALYTICS.md` already defines an equivalent. If no equivalent exists, add the candidate name to `ANALYTICS.md` explicitly before referencing it in implementation docs or code. Invented event names that bypass this step create permanent dashboard schema drift.
+
 ## Gates Before Build Handoff
 
 - `ONBOARDING.md` exists and maps every question to a real use.
@@ -222,9 +229,9 @@ Include dimensions: step_id, answer_key, attribution_source, source_key, source_
 - Higgsfield asset plan exists for mascot, icons, demo video, screenshot frames, and animations when visuals are not already final.
 - If Higgsfield is unavailable, the founder confirmed the free/local visual fallback and limitations are recorded.
 - `EMAIL_OPS.md` covers any onboarding resume, welcome, trial, payment recovery, or win-back emails triggered by the flow.
-- Review prompt timing is platform-compliant and not incentivized.
+- Review prompt timing is platform-compliant, not incentivized, and uses the canonical value-reveal placement: auto-trigger after the value-reveal screen mounts with a 1-2s delay, not bound to an acceptance tap or to any navigation action that dismisses the screen.
 - Paywall placement, product IDs, offerings, prices, trial, and closing offer match `REVENUE_OPS.md`.
 - Privacy/terms links and data-use explanations match the data collection matrix.
-- Analytics events are named before implementation.
+- Analytics events are named before implementation, and every proposed event name is present in `ANALYTICS.md`; no event name is invented during implementation without a prior `ANALYTICS.md` entry.
 - `analytics-plan.html` shows the onboarding and paywall funnel before build handoff.
 - Self-reported attribution passes the data contract: early visible screen, stable source keys, `other` free text, analytics event, PostHog person property, backend/profile persistence, anonymous-to-identified reconciliation, and verification evidence.

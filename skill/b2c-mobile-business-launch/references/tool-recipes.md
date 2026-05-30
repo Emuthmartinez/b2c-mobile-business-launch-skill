@@ -59,9 +59,13 @@ doppler run -- npm test
 
 Rules:
 - `doppler login` and account/project access are founder/operator actions when authentication is required.
+- Run `doppler me` before secrets work to confirm the active account.
+- **Config name preflight:** Before any `doppler run --project X --config Y` command, read the config name from `SECRETS.md` or run `doppler configs --project X`. Never guess from memory (e.g. "prod" vs "prd" differ by project and both are valid naming conventions).
 - Use `doppler run -- <command>` for local commands that need secrets.
 - Use Doppler service tokens, provider integrations, OIDC, or platform-native secrets for CI/live environments.
 - Do not print `doppler secrets get --plain` output.
+- **Env file extraction:** Never `source` a `.env`, `.p8`, or credential file. Use `awk -F= '/^KEY=/{print $2}' file` for single values. Do not commit awk/shell extraction snippets that print raw credential values to committed docs.
+- **JS inside doppler run:** When the command contains JavaScript template literals (`${...}`), pass the script via a single-quoted heredoc (`doppler run -- node --input-type=module <<'NODE' ... NODE`) so bash does not expand template syntax before Doppler injects secrets.
 - Update `SECRETS.md` whenever a new secret, `process.env`, webhook signing secret, provider key, service-account file, app-store credential, mobile build setting, or CI/deploy secret appears.
 - Commit `.env.example` names only; never commit `.env`, private keys, service-account JSON, signing files, OAuth refresh tokens, or raw provider keys.
 

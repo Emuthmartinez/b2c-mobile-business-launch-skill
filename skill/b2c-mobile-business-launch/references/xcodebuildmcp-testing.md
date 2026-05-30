@@ -170,6 +170,19 @@ For production-readiness proof:
 7. Pair device proof with backend/provider proof: database, RevenueCat, Stripe, PostHog, Resend, Sentry, or store-console evidence when in scope.
 8. Record command/tool output paths, simulator/device, OS, scheme, build config, account fixture, and result in `PRODUCTION_READINESS.md` and `SCREENSHOTS.md`.
 
+### Test Triage Protocol
+
+When UI tests crash with signal kill, time out, or flake, escalate in order — do not loop the full suite on a crashing run:
+
+1. **Unit tests first**, in isolation (`-only-testing:<Scheme>Tests`). A clean unit run proves logic but NOT paywall entitlement, RevenueCat offering load, or attribution persistence.
+2. **Short isolated UI tests second.** Keep each XCUITest interaction under ~20s of wall-clock; longer sequences hit `signal kill` from simulator memory pressure.
+3. **Full suite last**, once — only after units + isolated UI pass.
+4. **A green suite is not contract proof.** If the suite passes while RevenueCat returns zero packages, the paywall shows "Purchases unavailable", or PostHog person properties lack `self_reported_source`, open a `test-suite-green-contracts-unproven` failure card and require backend/provider proof before any paywall/attribution-ready claim.
+
+**120s MCP tool timeout — manual fallback.** XcodeBuildMCP MCP tools time out at ~120s; post-clean-cache builds exceed it. When `test_sim`/`build_run_sim` times out: `build_sim` (build only) → `install_app_sim` (built `.app`) → `launch_app_sim` → `get_simulator_logs`/`tail_logs`. Record the fallback route in `PRODUCTION_READINESS.md`.
+
+**xcresulttool syntax (Xcode 16 / 26).** `xcresulttool get --path <bundle> --format json` was deprecated in Xcode 16 and needs `--legacy` in Xcode 26. Prefer `xcresulttool get test-results summary --path <bundle.xcresult>`; refresh `xcresulttool --help` before scripting result parsing.
+
 For App Store screenshot work:
 - use real app UI from XcodeBuildMCP captures when MobAI is not approved/available
 - compose final screenshots through `DESIGN.md` tokens and screenshot HTML

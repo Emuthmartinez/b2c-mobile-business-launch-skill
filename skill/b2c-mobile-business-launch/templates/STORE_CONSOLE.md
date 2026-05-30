@@ -32,4 +32,18 @@ This packet is the copy-paste operator surface for App Store Connect and Google 
 - Review notes describe account setup, demo credentials route, entitlement test path, purchase restoration, account deletion, and support contact.
 - App Store Connect upload readiness is blocked until `APPLE_APP_STORE_REQUIREMENTS.md` accounts for privacy manifests, required reason APIs, SDK manifest/signature status, App Privacy labels, purpose strings, ATT, account deletion, review notes, and archive/upload warnings.
 - If the app name is already in use, stop for founder approval before using any fallback name.
+
+### App Review Information (App Store Connect Notes field)
+
+Populate the App Review Information **Notes** field before submitting, or App Review returns a Guideline 2.1 "Information Needed" rejection that costs a full review cycle. Cover all of Apple's requested items:
+
+1. **Purpose and target audience** — the problem the app solves and who it is for.
+2. **Setup and access instructions** — how to reach the core features, plus any required login credentials or sample data.
+3. **Demo account decision** — if the app has a login, provide a working demo username/password (one per account type) in the Demo Account fields. **If the app has NO login/account system, the automated reviewer still flags "login without demo account" — you must add an explicit line such as "No login / no account: all data is stored locally on device; no demo account is needed" and clear the demo-account-required flag.**
+4. **Test devices and OS** — the physical device models and OS versions the app was tested on before submission.
+5. **External services** — data providers, authentication services, payment processors, and AI services the app relies on for core functionality.
+6. **Regional differences** — any regional feature/content differences, or confirm the app functions consistently across all regions.
+7. **Regulated material** — documentation/credentials if the app operates in a regulated industry or uses protected third-party material.
+
+Record the Notes content in `APP_STORE_LISTING.md` so it is reusable across submissions, and set it via the ASC CLI review-details route (refresh `asc <review-details cmd> --help` for current flags) rather than re-typing it each time.
 - Founder approval is required before App Store submission, Google Play submission, pricing edits, subscription edits, custom product page creation, In-App Event creation, paid Higgsfield generation, or public asset upload.

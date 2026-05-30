@@ -148,6 +148,50 @@ Before moving to ASO, landing implementation, or builder handoff:
 - Impeccable/Taste/Layers routing is documented: which checks were used, skipped, or blocked.
 - generated visuals are labeled as direction or production, with source and permission caveats.
 
+## Copy Rewrites And Brand-Owned Vocabulary
+
+Before rewriting any landing page, onboarding, paywall, or in-app copy, check two documents in this order:
+
+1. **`BRAND.md` owned-words list and `DESIGN.md` §7 calibration set (or equivalent).** These sections define phrases that belong exclusively to the product's brand voice. Do not replace, rephrase, or delete them unless the founder has explicitly approved a brand-voice change. Scanning for third-party IP risk is not a license to rewrite owned vocabulary.
+
+2. **Third-party IP risk scan scope.** IP risk scanning covers only: names of third-party frameworks, SDKs, companies, or products presented as if they are the app's own capability; phrases from competitor marketing or product copy; trademarked terms used in a confusing or endorsing way. It does not cover product-specific metaphors, brand names, or calibrated copy phrases the app owns.
+
+Rule: if a copy change removes or alters a phrase that appears in `BRAND.md` or `DESIGN.md` calibration set, that change must be flagged as out-of-scope for IP scanning and requires founder approval before the rewrite is applied.
+
+## Locked Production Design
+
+When native production code — a SwiftUI component library, a Flutter widget package, a React Native design-system package, or equivalent locked implementation — is the founder's canonical visual source, these rules apply before any design audit, asset generation, or doc update:
+
+**Establishing the lock.** A production native implementation is canonical when the founder explicitly says so ("this component is locked", "don't change the character geometry", "the existing app look is final") or when a named source file (e.g. `OchoComponents.swift`, `AppCharacter.kt`) is described as the truth for geometry, palette, or animation. Record this in `DESIGN.md` as a `visual_lock` block:
+
+```yaml
+visual_lock:
+  status: locked
+  canonical_source: "path/to/LockedComponent.swift"   # or equivalent
+  locked_by: "founder"
+  locked_date: "YYYY-MM-DD"
+  locked_properties:
+    - geometry
+    - palette
+    - animation
+  generated_asset_role: "concept-only"
+```
+
+**Generated assets are concept-only when a lock exists.** All Higgsfield, Remotion, or other generated outputs created after a visual lock is declared are `concept` or `direction` assets — never `canonical visual targets`. This applies regardless of how the assets are labeled in older docs. If `design.md` or `DESIGN.md` currently calls any generated asset a "canonical visual target," update that language before doing any audit or handoff work.
+
+**`CONTENT_ASSETS.md` manifest status.** When a visual lock is in effect, any generated asset in `content-assets/manifest.json` must use `status: concept`, `status: direction`, or `status: draft` — never `status: production` or `status: approved` for a field (`truth_constraints`) that conflicts with the locked native implementation.
+
+**Audit scope for a locked production character.** When auditing Higgsfield or other generated assets against a locked native implementation:
+- Do not spend time adjusting generated outputs to match the locked native design; treat the native code as ground truth.
+- Flag only genuine gaps where the generated assets would mislead a builder into ignoring the locked native geometry, palette, or animation.
+- Correct any docs that assign canonical status to generated assets and record the correction in `PROJECT_STATE.yaml`.
+- Do not propose re-generating assets to narrow the gap; ask the founder whether the generated assets are still needed as concept references.
+
+**Failure card.** Raise `design-canonical-conflict` when any of these conditions exist:
+- `design.md` or `DESIGN.md` labels a generated asset as "canonical visual target" and native production code exists.
+- `CONTENT_ASSETS.md` manifest lists a generated asset as `production` or `approved` when the native implementation is locked.
+- A design-guru or audit subagent spent more than one iteration comparing generated assets to locked native code without correcting the doc conflict first.
+
 ## Common Failures
 
 - `DESIGN_SYSTEM.md` and `DESIGN.md` disagree; fix by making `DESIGN.md` canonical and reducing the other doc to an appendix.
@@ -155,3 +199,5 @@ Before moving to ASO, landing implementation, or builder handoff:
 - generated images carry the brand while the actual app UI stays generic; require HTML app frames using the same design language.
 - Phase 2 jumps straight to surface style even though user needs, conceptual model, or flow are unresolved; run Layers-style orientation first.
 - no browser/mobile proof exists, so cramped copy, broken contrast, and clipped controls are discovered during implementation or store screenshot production.
+- copy rewrite sweeps that target IP risk also alter brand-owned phrases from `DESIGN.md` calibration set or `BRAND.md`; scope IP-risk sweeps to third-party names only and preserve owned vocabulary.
+- `design.md` calls Higgsfield-generated assets "canonical visual targets" while a locked native component library is the true canonical source; correct the doc before auditing assets, not after.
