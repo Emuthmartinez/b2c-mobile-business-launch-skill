@@ -12,6 +12,10 @@ Default stance: if the work is App Store Connect related, try the ASC CLI or ASC
 - When To Use
 - Skill Pack Routing
 - CLI Routing
+- ASC Auth Setup And Recovery
+- Verified Command Cookbook
+- Promoted In-App Purchase Images
+- Post-Action State Update
 - First-Time Signing And App Record Triage
 - Safe Automation Boundaries
 - Store Packet Integration
@@ -116,6 +120,17 @@ Before any first-time app creation claim, refresh and record the exact creation 
 
 Use `--dry-run` and read commands first. Do not use `--confirm`, `--submit`, pricing changes, screenshot replacement, metadata apply, TestFlight external distribution, or release actions without explicit founder approval.
 
+## ASC Auth Setup And Recovery
+
+"I cannot access App Store Connect" is almost always wrong when the `asc` CLI is installed — it usually means auth is **not set up yet**, which is a fixable step, not a dead end. Work this ladder before reporting ASC as blocked:
+
+1. **Check what's actually wrong.** `asc auth status --validate --output json` and `asc auth doctor`. A common output is `Error: ... missing authentication. Run 'asc auth login' or create ~/.asc/config.json (see 'asc auth init')` with the hint to set `ASC_KEY_ID` / `ASC_ISSUER_ID` / `ASC_PRIVATE_KEY_PATH`. That is a setup instruction, not an access denial.
+2. **Look for an existing keychain profile first.** Founders often already have an API key stored under a named profile (e.g. from another app on the same team). List/try profiles and use `asc --profile <Name> <cmd>` (e.g. `asc --profile Clueless apps list`). One App Store Connect API key is **account/team-level — it can read and mutate every app on the team**, so an existing profile from another app works for this app too. Do not declare "no ASC access" before checking for an existing profile.
+3. **Do not `source` a credential/profile `.env` blindly.** Profile env files often contain shell-unsafe values (an unquoted brand name like `Clueless Clothing` makes `source clueless.env` throw `command not found: Clothing`, which then breaks **every** `asc` call). Instead: use `asc --profile <Name>`, or extract the three vars with the awk pattern in [`secrets-management.md`](secrets-management.md) ("Env file extraction — never `source`"), or run `asc auth init` (writes `~/.asc/config.json`) / `asc auth login`.
+4. **Set the env vars if no profile exists.** The `asc` CLI reads `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY_PATH` (the **path** to the `.p8`, not the key contents). Route these through Doppler/keychain; never print the `.p8`.
+5. **Distinguish "not authenticated" from "this app/record/cert doesn't exist yet."** Healthy API read access plus `apps list` not showing the app means the **app record must be created** (via `asc-app-create-ui`/the app-create route, founder-gated) — not that ASC is inaccessible. Same for a missing distribution certificate, provisioning profile, or RevenueCat app: each is a setup step with a precise next command.
+6. **Report blockers as setup steps with the exact next action and founder gate** — e.g. "ASC read access healthy via profile `X`; app record for `com.acme.app` does not exist yet → next: create app record (founder approval)". Never write "cannot access ASC." (Failure card: `asc-auth-not-set-up`.)
+
 ## Verified Command Cookbook
 
 These notes exist because agents repeatedly burned live-store cycles guessing flag and subcommand forms. The CLI evolves — treat every form below as "confirm with `--help` first," not as memorized fact.
@@ -123,7 +138,7 @@ These notes exist because agents repeatedly burned live-store cycles guessing fl
 - **Pre-use `--help` rule.** Before the first use of any `asc` subcommand not shown in this file, run `asc <subcommand> --help` and record the confirmed flags. If a command errors on a flag, run `asc <cmd> --help` before retrying — never retry a mutating command with a guessed alternate flag. (Failure card: `asc-flag-drift`.)
 - **`--confirm` is a CLI-required gate, not just a founder gate.** Destructive/mutating commands (`asc review cancel`, `asc review submit`, `asc subscriptions review submit`, release actions) error and do nothing unless `--confirm` is passed. So they need *both* the CLI `--confirm` flag *and* explicit founder approval before you run them. Omitting `--confirm` does not "safely no-op into a dry run" — it just errors; check `--help` for the required flags before the first live call.
 - **`validate` form.** Validation runs against an app + version, e.g. `asc validate --app <APP_ID> --version <VERSION_STRING>` (confirm `--version` vs a numeric `--version-id` with `asc validate --help`). There is no `asc validate app-store-version` subcommand — that guess errors. Resolve the numeric version id first with `asc versions list --app <APP_ID> --output json` when a command needs `--version-id`.
-- **Auth env vars.** ASC auth reads API-key env vars (the skill uses `ASC_KEY_ID` and `ASC_ISSUER_ID`; confirm the private-key path variable name with `asc auth --help` and keep it consistent with `PROJECT_STATE.yaml`). Do not `source` a `.env`/`clueless.env` that contains comments or values with spaces — that throws `command not found` on every invocation. Extract single values with the awk pattern in [`secrets-management.md`](secrets-management.md) ("Env file extraction — never `source`"); never print raw `.p8` contents.
+- **Auth env vars.** The `asc` CLI reads `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY_PATH` (the **path** to the `.p8`, confirmed from the CLI's own auth hint — not the key contents). Keep these names consistent with `PROJECT_STATE.yaml`. See "ASC Auth Setup And Recovery" above for the full auth ladder (keychain profiles, account-level keys, `asc auth init/login`). Do not `source` a `.env`/`clueless.env` that contains comments or unquoted values — that throws `command not found` on every invocation; extract single values with the awk pattern in [`secrets-management.md`](secrets-management.md) ("Env file extraction — never `source`").
 - **Internal TestFlight groups auto-distribute.** Internal groups deliver to all internal testers automatically; do not pass a skip flag unless you intend to block internal delivery. External distribution always needs founder approval.
 - **Test notes are idempotent updates.** Updating a build's test notes is an update, not a create — do not create a second build record when one already exists.
 

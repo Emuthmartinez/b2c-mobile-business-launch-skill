@@ -290,8 +290,8 @@ tools:
     required_secrets:
       - "ASC_KEY_ID"
       - "ASC_ISSUER_ID"
-      - "ASC_PRIVATE_KEY"
-    preflight: "Use app-store-connect-cli.md first. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, ASC CLI/skill-pack auth, and founder approval before app-record mutation."
+      - "ASC_PRIVATE_KEY_PATH"
+    preflight: "Use app-store-connect-cli.md first (ASC Auth Setup And Recovery). Check for an existing keychain profile (asc --profile <Name>) before claiming no ASC access; one account-level API key reaches every app on the team. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, ASC CLI/skill-pack auth, and founder approval before app-record mutation."
     validation: "ASC CLI/skill route records app creation/app record state, IDs, metadata, screenshots, TestFlight, review status, RevenueCat catalog reconciliation, and archive/export/upload path."
     fallback: "Manual ASC click-path packet only after CLI/auth/account/skill-route blocker or founder-approved non-CLI route is recorded."
   aso_skills:
