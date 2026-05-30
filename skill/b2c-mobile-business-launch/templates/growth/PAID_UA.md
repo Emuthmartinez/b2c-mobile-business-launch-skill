@@ -39,6 +39,8 @@ Claim constraints:
 Creative source: `CONTENT_ASSETS.md`
 11-star source: `11_STAR_EXPERIENCE.md`
 
+Creative scoring gate: score every video creative with the Virality Predictor (`brain_activity`) before paid distribution; do not spend on an unscored video creative. Record `virality_score` and `hook_dmn_risk` per creative and feed low scorers back through revision. See the Virality Closed Loop recipe in `tool-recipes.md`. (For static-only creative or a documented exception, record "virality scoring not applicable" with the reason.)
+
 | Creative ID | Angle | Pain or desire | First frame | Product proof | CTA | Source asset | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | UA-001 | Pending | Pending | Pending | Pending | Pending | Pending | planned |
@@ -65,9 +67,9 @@ Report owner:
 Report cadence:
 Tolerance for attribution discrepancy:
 
-| Date | Channel | Spend | Installs/opens | Paywall views | Trials | Purchases | Revenue | LTV window | CPA | ROAS/payback | Winning angle | Next action |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
+| Date | Channel | Spend | Installs/opens | Paywall views | Trials | Purchases | Revenue | LTV window | CPA | ROAS/payback | Virality score | Hook/DMN risk | Winning angle | Next action |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending | Pending |
 
 ## Weekly Schedule
 

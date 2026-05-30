@@ -330,6 +330,15 @@ tools:
     preflight: "Confirm DESIGN.md tokens, asset family, prompt brief, source rights, and whether the output is screenshot support, App Icon, CPP/event art, preview thumbnail, or UGC/ad creative."
     validation: "CONTENT_ASSETS.md and SCREENSHOTS.md record route, prompt summary, source inputs, output paths, visual QA, and founder approval gates."
     fallback: "Remotion, HTML/CSS composition, founder-owned media, public-domain assets, or raw screenshots only after founder approval and limitation notes."
+    identity:
+      # Trained-once Soul/presenter identity, reused across ads, UGC, and presenter video.
+      # Run show_characters before training to avoid duplicate runs. See tool-recipes.md "Soul-Once Founder-Face Ads".
+      soul_reference_id: ""
+      soul_variant: ""
+      avatar_id: ""
+      training_date: ""
+      photos_source: ""
+      training_manifest_path: ""
   mobai:
     route: "intended_paid_or_account_tool"
     docs_checked_at: ""

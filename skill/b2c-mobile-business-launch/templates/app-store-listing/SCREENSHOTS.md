@@ -92,6 +92,8 @@ Run current sizing before export. Record ready, blocked, or not needed for each 
 | iOS Preview 1 | real in-app footage | MobAI recording + Remotion edit or approved route | Pending | required if audio carries meaning | `previews/ios-preview-1.mp4` | optional |
 | Google Play promo | real app footage or approved marketing video | Remotion/Higgsfield/owned media | Pending | recommended | YouTube URL pending | optional |
 
+Produce the required Apple/Play preview resolution variants by `reframe`-ing one master (9:16 / 1:1 / 16:9) rather than re-rendering per size; the source must be real app footage, never generated UI. See the Master → All Platforms recipe in `references/tool-recipes.md`.
+
 ## Visual QA
 
 - [ ] Headlines are readable at App Store search thumbnail size.

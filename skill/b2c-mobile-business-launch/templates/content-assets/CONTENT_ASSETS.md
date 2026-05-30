@@ -19,6 +19,8 @@ This packet records generated, rendered, edited, and source-backed launch media.
 ## Higgsfield Route
 
 - Use Higgsfield for net-new AI visuals, mascots, app icons, image-to-video, presenter ads, Marketing Studio, Soul ID, and Virality Predictor.
+- Reuse the trained Soul identity instead of retraining: persist `soul_reference_id`, `soul_variant`, and `avatar_id` in `PROJECT_STATE.yaml` `tools.higgsfield.identity`, and call `show_characters` before any new training run. See the chained recipes in `references/tool-recipes.md`.
+- Score every video creative with the Virality Predictor (`brain_activity`) before paid distribution, and reframe one master into platform variants (9:16 / 1:1 / 16:9) rather than regenerating per format.
 - If Higgsfield was intended but unavailable, stop for founder approval before using Remotion, raw screenshots, local recordings, public-domain media, or hand-authored graphics as a fallback.
 - Record the fallback in `TOOL_DECISIONS.md` and in this packet.
 
@@ -48,6 +50,13 @@ Required fields per asset:
 - `approvals`
 - `render_proof`
 - `license_status`
+
+Optional fields for Higgsfield / Marketing Studio assets:
+- `prompt_brief` — the `DESIGN.md` tokens carried into the generation prompt
+- `soul_reference_id` / `avatar_id` — reused Soul identity, mirrored in `PROJECT_STATE.yaml` `tools.higgsfield.identity`
+- `webproduct_id` — Marketing Studio product/webproduct entity
+- `source_job_id` — origin job for `reframe`/`personal_clipper` derivatives
+- `virality_score` — `brain_activity` overall, peak hook second, sustain %, and Default Mode risk
 
 ## Render Commands
 
