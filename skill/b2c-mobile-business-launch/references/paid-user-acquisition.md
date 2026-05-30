@@ -69,6 +69,27 @@ Before spend, define the first creative batch:
 
 Use `remotion-content-assets.md` when repeatable ad variants, motion screenshots, captions, cutdowns, or local render proof are needed. Use Higgsfield only after design-system constraints and paid-tool routing are recorded. Use real app UI wherever a user must inspect the actual product.
 
+### Higgsfield Creative Production
+
+Before generating any Higgsfield asset: confirm spend with the founder per `paid-tool-routing.md`, carry `DESIGN.md` tokens (palette, type mood, shapes, texture, motion energy, banned aesthetics, surface) in every prompt, and record every output in `CONTENT_ASSETS.md`.
+
+**Routed recipes** (bodies in `tool-recipes.md` — do not re-copy here):
+- **App Store URL → UGC Ad Batch (Click-to-Ad)** — webproducts fetch → avatar pick → parallel mode batch → score → save winners → founder approval.
+- **Virality Closed Loop** — generate → score → decision rules → iterate → record → paid distribution only after a score is recorded.
+- **Cheap-First Direction** — z_image drafts → pick direction → production model → founder selects. Apply only when presented as a spend-reduction option at the spend-confirmation prompt; never silently.
+
+**DTC static-ad batch path.** Browse available formats first (`higgsfield marketing-studio ad-formats list`), then:
+```
+higgsfield marketing-studio dtc-ads generate --format-id <id> [--brand-kit-id <id>] [--batch-size 1..20]
+```
+`--format-id` is mandatory. `--brand-kit-id` requires a prior paid brand-kit fetch — confirm spend before running.
+
+**Hook A/B protocol.** Before committing to a production run, test breadth before depth: run 4 hooks × 1 mode first to find the winning hook, then 1 hook × 4 modes to find the winning mode. Score each variant with `brain_activity` before expanding.
+
+**Click-to-Ad `--url` note.** The `--url <app-store-url>` shortcut bypasses brief injection — `DESIGN.md` tokens are NOT carried automatically. Always inject them explicitly into `--prompt`.
+
+**Win-back / re-engagement creatives.** For lapsed-user campaigns, generate `marketing_studio_video --mode product_review` ads with "do you miss X" hooks, plus `product-photoshoot --mode lifestyle_scene` static re-engagement visuals; score the video with `brain_activity` before allocating any spend. Record `virality_score` and `hook_dmn_risk` in `CONTENT_ASSETS.md` before distributing.
+
 ## Tracking And Baseline
 
 Do not require a large MMP by default for the first solo paid-UA test. Decide the minimum tracking stack from current product phase:
@@ -109,6 +130,8 @@ Minimum columns:
 - CPA or cost per trial/direct subscription
 - blended ROAS or projected payback
 - winning angle
+- virality_score (brain_activity overall)
+- hook_dmn_risk (Default Mode risk from brain_activity)
 - notes and next action
 
 The report should compare paid traffic against organic baseline and category benchmarks where available. It should be good enough to catch product-side drop-offs, not only media-buying changes.

@@ -215,6 +215,19 @@ XcodeBuildMCP fallback:
 - load `xcodebuildmcp-testing.md`
 - record Apple-only coverage limits in `FASTLANE_OPS.md` and `SCREENSHOTS.md`
 
+### Multi-Format Delivery
+
+Once a master video exists (real app footage from MobAI/XcodeBuildMCP recorder, or a Higgsfield-generated supporting creative), convert it to all required aspect ratios at near-zero incremental cost versus three separate generations. See the **Master → All Platforms** recipe in `tool-recipes.md` for the full workflow.
+
+Key points for this surface:
+- `mcp__claude_ai_Higgsfield__reframe` is MCP-only — there is no `higgsfield reframe ...` CLI command. Confirm exact invocation via the `higgsfield-generate` skill or MCP tool help before running.
+- `mcp__claude_ai_Higgsfield__personal_clipper_create` / `_jobs` / `_status` extracts shorts from long recordings before reframing. Same MCP-only constraint applies.
+- Targets: 9:16 (TikTok / Reels), 1:1 (feed), 16:9 (YouTube / LinkedIn).
+- **App Preview guardrail:** any reframe intended as an App Preview must be sourced from REAL app footage (MobAI/XcodeBuildMCP capture). Generated video is never a valid App Preview source.
+- **Spend-confirmation gate:** reframe and personal_clipper consume paid credits. Confirm spend with the founder per `paid-tool-routing.md` and surface the current balance (`mcp__claude_ai_Higgsfield__balance`) before running.
+- **CONTENT_ASSETS.md traceability:** record all output URLs, source job IDs (`source_job_id`), and aspect-ratio variants in `CONTENT_ASSETS.md` / `content-assets/manifest.json`. Run `brain_activity` virality scoring on each variant and log the score before scheduling any paid distribution.
+- Do not schedule reframed variants until the founder approves each output.
+
 ### 8. Generate, QA, And Schedule
 
 Workflow:
@@ -276,3 +289,6 @@ Record in `FASTLANE_OPS.md`:
 - Forgetting to restore Blitz preferences after a focused campaign.
 - Judging the channel after a few posts instead of a 30-day test.
 - Tracking social metrics but not mapping them back to installs, trials, or revenue.
+- Generating three separate Higgsfield videos for 9:16 / 1:1 / 16:9 instead of using reframe on one master.
+- Using generated video as the source for an App Preview reframe instead of real app footage.
+- Running reframe or personal_clipper without confirming spend with the founder and recording outputs in CONTENT_ASSETS.md.

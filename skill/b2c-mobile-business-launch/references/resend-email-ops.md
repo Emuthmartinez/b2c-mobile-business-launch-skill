@@ -186,6 +186,22 @@ Rules:
 - Monitor Automation runs for `running`, `completed`, `failed`, `cancelled`, and `skipped`.
 - Record where Resend automation state overlaps with PostHog, RevenueCat, Stripe, or your backend so users do not receive duplicate lifecycle emails.
 
+### 7a. Lifecycle Email Visual Assets
+
+Win-back, trial-reminder, and billing-recovery emails can carry Higgsfield-generated images:
+
+- **`hero_banner`** mode — wide email header art (use for top-of-email brand moment).
+- **`lifestyle_scene`** mode — product-in-context body image (use for mid-email engagement shot).
+
+Generate both via the `higgsfield-product-photoshoot` skill. See the **Seasonal restyle Refresh** and **Cheap-First Direction** recipes in `tool-recipes.md` for the generation workflow; use `--mode hero_banner` or `--mode lifestyle_scene` in the `higgsfield product-photoshoot create` call.
+
+Rules:
+- Every prompt must carry DESIGN.md brand tokens (palette, type mood, shapes, texture, banned aesthetics). DESIGN.md tokens are already pulled for email `LaunchEmailBrand.designSystem`; reuse the same token set.
+- Generated images are supporting art only. They must not substitute for truthful real UI or make product claims.
+- Confirm spend with the founder before each photoshoot run per `paid-tool-routing.md`; surface current credit balance.
+- Record every generated asset in `CONTENT_ASSETS.md` with `prompt_brief`, output path, intended email surface (`hero_banner` / `lifestyle_scene`), and approval gate.
+- Founder must approve assets before production sends. The founder approval gate in the Starter Template Pack rules applies here.
+
 ### 8. Webhooks
 
 Create a production HTTPS webhook and select the events the product needs:

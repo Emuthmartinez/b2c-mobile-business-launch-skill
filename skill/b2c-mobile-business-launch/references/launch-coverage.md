@@ -34,7 +34,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Store-console readiness | `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, build/version, IAP/subscriptions, privacy manifests, required reason APIs, SDK manifests/signatures, privacy labels/Data safety, review notes, account deletion, screenshots, optional `asc` CLI dry-runs | App Store Connect, Play Console, App Store Connect CLI, MobAI, XcodeBuildMCP fallback |
 | Apple signing/release | Apple Developer membership, Team ID, bundle ID/App ID, app record, capabilities, certificates/profiles, archive/export/upload/TestFlight status, founder-only gates | `APPLE_SIGNING.md`, Xcode, XcodeBuildMCP, ASC CLI, App Store Connect |
 | Revenue | RevenueCat/Stripe/app-store products, entitlement mapping, web checkout, restore, webhooks | `revenue-monetization.md` |
-| Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics | Cloudflare, Supabase, PostHog, Resend |
+| Funnel | landing, waitlist/preorder/checkout, referral, support/privacy email, analytics; landing-page hero/feature visual route in `CONTENT_ASSETS.md` | Cloudflare, Supabase, PostHog, Resend; Higgsfield (hero/feature imagery — see the **Cheap-First Direction (z_image → production model)** and **Seasonal restyle Refresh** recipes in `tool-recipes.md`) |
 | Paid user acquisition | `PAID_UA.md`, one-channel decision, creative cadence, baseline and blended report, RevenueCat LTV/CPA review, store destination, stop/scale rules, founder-only spend gates | `paid-user-acquisition.md`, PostHog, RevenueCat, ASC/Play, ad-network reports |
 | Viral growth loop | `VIRAL_GROWTH.md`, product-led referral/share loop, format lab, monetization timing, abuse controls, analytics proof, stop/scale rules | `viral-growth-loops.md`, PostHog, RevenueCat/Stripe, UGC/Fastlane |
 | GEO/SEO | metadata, schema, robots, sitemap, `llms.txt`, AI crawler access, citability | GEO skills, Firecrawl |
@@ -42,7 +42,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Analytics/attribution | current PostHog doc map, identity model, event catalog, attribution matrix, dashboards, experiments, replay/survey posture, QA | `ANALYTICS.md`, `analytics-plan.html`, PostHog, GA4, RevenueCat, ASC |
 | Crash/performance | crash reporting, release health, logs, alert routing, performance budget | Sentry, store crash reports |
 | Email/deliverability | Resend domains, SPF/DKIM/DMARC, API keys, sends, webhooks, contacts/topics, unsubscribe, inbound | `EMAIL_OPS.md`, Resend docs |
-| Lifecycle messaging | transactional email, push, onboarding nudges, trial/renewal/win-back, unsubscribe rules | Resend, provider docs, PostHog/Customer.io/Loops/FCM/APNs |
+| Lifecycle messaging | transactional email, push, onboarding nudges, trial/renewal/win-back, unsubscribe rules; win-back creative route in `CONTENT_ASSETS.md` | Resend, provider docs, PostHog/Customer.io/Loops/FCM/APNs; Higgsfield (win-back creative — see the **App Store URL → UGC Ad Batch (Click-to-Ad)** and **Soul-Once Founder-Face Ads** recipes in `tool-recipes.md`) |
 | Support/reputation | support inbox, refund path, review responses, help docs, incident escalation | email routing, support tool |
 | QA/beta/release | TestFlight/internal testing, smoke tests, device matrix, rollback/kill switch | store consoles, test skills, MobAI, XcodeBuildMCP fallback |
 | Security/abuse | RLS/auth rules, rate limits, secrets, PII minimization, admin access, bot defenses, app integrity, security contact route | `SECURITY.md`, `security-review.html`, security validator, repo audit, Supabase/Cloudflare |
@@ -100,6 +100,9 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 - `launch-cockpit.html` refreshed after each material provider, store, analytics, revenue, email, or readiness change
 - Compound Engineering `ce-proof` or `ce-demo-reel` artifacts for founder/reviewer inspection of shipped app behavior
 - Higgsfield-generated mascot, app icon, demo video, screenshot art, ad creative, and animation clips constrained by `DESIGN.md`
+- Higgsfield-generated landing-page hero and feature-section visuals (product-photoshoot `hero_banner` / `lifestyle_scene` / `ad_creative_pack` modes, DESIGN.md brief required); route recorded in `CONTENT_ASSETS.md` — see the **Cheap-First Direction (z_image → production model)** recipe in `tool-recipes.md`
+- Higgsfield-generated press/PR imagery (product-photoshoot `lifestyle_scene` or `conceptual_product` mode, or `gpt_image_2` for flat editorial art, DESIGN.md brief required); route recorded in `CONTENT_ASSETS.md` — see the **Cheap-First Direction (z_image → production model)** recipe in `tool-recipes.md`
+- Higgsfield win-back ad creative for lapsed/cancelled subscribers (marketing_studio_video `ugc` or `product_review` mode, or Soul-Once Founder-Face flow); route recorded in `CONTENT_ASSETS.md` — see the **Soul-Once Founder-Face Ads** and **App Store URL → UGC Ad Batch (Click-to-Ad)** recipes in `tool-recipes.md`
 - MobAI-backed screenshot capture matrix for real app screens before final store compositions
 - MobAI `mobile-recorder-skill` or `desktop-recorder-skill` for polished reproducible app-flow demos: `.mob` or `screenplay.json`, raw capture, edited export, captions, and upload copy
 - XcodeBuildMCP-backed Apple screenshot/test/video fallback after founder confirmation when MobAI is unavailable
@@ -154,6 +157,7 @@ Flag these aggressively:
 - `DESIGN.md` is missing, unlinted, or duplicated by conflicting design-token docs.
 - Visual direction exists only as prose, screenshots, or image files; no rendered HTML proof uses the design system.
 - Higgsfield was skipped for visuals/motion, or generated assets ignore the design system.
+- A generated-asset surface (win-back creative, landing-page hero/feature visuals, press/PR imagery) has no recorded Higgsfield route or approved fallback in `CONTENT_ASSETS.md`.
 - Onboarding has questions but no reason matrix, attribution capture, review-prompt gate, paywall timing, closing-offer decision, or activation event.
 - Stripe checkout works but does not grant a RevenueCat entitlement.
 - Store products exist but are not attached to the app version, offering, entitlement, or review notes.

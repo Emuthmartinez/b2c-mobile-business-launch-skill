@@ -16,7 +16,8 @@ Load `paid-user-acquisition.md` before using paid ads, Apple Search Ads, web-to-
 - 2. Monetization Decision Matrix
 - 3. RevenueCat Required Setup
 - 4. App Store And Play Product Gates
-- 4b. Paywall Timing, Plans, Trials, And Offers
+- 4b. Promotional Image Production (IAP And Subscription Art)
+- 4c. Paywall Timing, Plans, Trials, And Offers
 - 5. Stripe Required Setup
 - 6. RevenueCat Web Billing, Purchase Links, And Funnels
 - 7. Pricing And Disclosure Rules
@@ -119,7 +120,19 @@ These three gaps repeatedly shipped a broken paywall ("Purchases unavailable" / 
 
 **Debug-preview masking + Release smoke proof.** Debug builds often seed preview packages when RevenueCat returns nil/empty, which hides a broken *production* paywall from developer testing. Before any TestFlight upload is marked paywall-ready, run a **Release-scheme** smoke check (MobAI or XcodeBuildMCP against sandbox) confirming `currentOffering?.packages` is non-empty, and confirm no code path seeds packages when the RC fetch is empty in the Release target. Also confirm the RevenueCat public key actually injected into the compiled binary (`plutil -p <archive>/Products/Applications/<App>.app/Info.plist | grep -i revenuecat`) — a raw `$(VAR)` placeholder means the key never expanded. (Failure cards: `revenuecat-debug-preview-masking`; key injection is covered by `apple-pre-upload-preflight-skipped`.)
 
-## 4b. Paywall Timing, Plans, Trials, And Offers
+## 4b. Promotional Image Production (IAP And Subscription Art)
+
+Apple requires a **unique 1024x1024 promotional image** for each promoted IAP and subscription product. These are store-facing assets (App Store promoted IAP slots), not app UI screenshots, so Higgsfield output is eligible.
+
+Production route:
+- Write a DESIGN.md brief for each product's promotional image (palette, mood, banned aesthetics, intended surface: App Store promoted IAP).
+- Generate via `higgsfield generate create gpt_image_2 --prompt "<DESIGN.md brief>" --aspect_ratio 1:1 --wait`. See the **Cheap-First Direction (z_image → production model)** recipe in `tool-recipes.md` if spend-reduction drafts are needed first; cheap-first must be offered as an explicit spend option, never applied silently — confirm spend per `paid-tool-routing.md`.
+- Record every generated asset in `CONTENT_ASSETS.md` with `prompt_brief`, `source_job_id`, QA status, and approval gate. Cross-reference `app-store-listing-prep.md` for upload and metadata sequencing.
+- Gate: founder must approve each promotional image before upload. Do not upload while the product is still in `MISSING_METADATA` (see section 4a).
+
+**Paywall hero art:** Route paywall background/hero images through `higgsfield generate create soul_location` (the environment model; prompt-only) with a DESIGN.md brief, or `gpt_image_2` when on-image text is required. This produces environment/background art consistent with the visual system defined in `design-visual-system.md`. Record outputs in `CONTENT_ASSETS.md`; apply the same spend-confirmation and founder-approval gates. Higgsfield output must never substitute for truthful real app UI in store screenshots.
+
+## 4c. Paywall Timing, Plans, Trials, And Offers
 
 Load `onboarding-conversion.md` when paywall placement is part of the first-session flow.
 Load `viral-growth-loops.md` when the paywall is paired with referral/share alternatives, creator-code entry, social proof loops, or content-driven impulse purchase timing.

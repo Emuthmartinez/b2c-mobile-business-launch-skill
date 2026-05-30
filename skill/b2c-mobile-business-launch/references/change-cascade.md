@@ -33,6 +33,33 @@ For each change type, the surfaces most likely to need an update. Treat these as
 | **New / renamed IAP or subscription product** | RevenueCat product+entitlement+offering → App Store product display name/description/**promo image** → paywall copy → pricing/terms → analytics product IDs → review notes |
 | **Privacy / data / SDK change** | `PrivacyInfo.xcprivacy` + required-reason APIs → App Privacy answers → Play Data safety → privacy policy + terms → App Review notes (external services) → analytics/attribution |
 | **Domain / brand / company-name change** | everything in "lexicon" + email sender domains + legal entity references + landing footer + App Store seller/marketing URLs |
+| **Design token / feature / copy / pricing change affecting generated assets** | all Higgsfield-generated surfaces that carry the changed token → see **Generated-Asset Regeneration** below |
+
+## Generated-Asset Regeneration
+
+Higgsfield-generated assets embed design tokens, feature names, copy, and pricing at generation time. When any locked token changes, every previously-generated asset that carries it is **stale** and must be regenerated before the change is considered done.
+
+**Stale-trigger changes:** locked design token (palette, typography, illustration style), feature addition/removal/rename, brand vocabulary or copy change, pricing/offer change.
+
+**Surfaces that go stale:**
+
+| Surface | Regeneration path |
+| --- | --- |
+| **Ad creative** (UGC video, DTC static, Marketing Studio) | See the **App Store URL → UGC Ad Batch (Click-to-Ad)** and **Soul-Once Founder-Face Ads** recipes in `tool-recipes.md` |
+| **Screenshot supporting art** (backgrounds, mascots, illustration overlays — not the real-UI layer) | See the **Cheap-First Direction** recipe in `tool-recipes.md`; real-UI screenshot layer is re-rendered separately per the Visual/UI row in the cascade map |
+| **App Preview B-roll** (motion backdrops, intro/outro art — NOT the real app footage layer) | See the **Master → All Platforms** recipe in `tool-recipes.md`; real app footage source must remain unchanged |
+| **Promoted-IAP promotional images** | See the **Cheap-First Direction** recipe in `tool-recipes.md`; re-upload via `app-store-connect-cli.md` after founder approval |
+| **CPP and in-app-event art** | See the **Seasonal restyle Refresh** recipe in `tool-recipes.md` as a model; re-upload via `app-store-connect-cli.md` after founder approval |
+| **Viral share cards** | See the **Cheap-First Direction** recipe in `tool-recipes.md`; update `CONTENT_ASSETS.md` and linked `viral-growth-loops.md` surfaces |
+| **Lifecycle-email header art** | See the **Cheap-First Direction** recipe in `tool-recipes.md`; update `resend-email-ops.md` template references |
+
+**Guardrails that apply to every regeneration:**
+
+- Higgsfield output is supporting art only. It must **never substitute** for truthful real app UI in store screenshots or App Preview footage.
+- Every generation prompt must carry current `DESIGN.md` tokens. Regenerating without an updated brief defeats the purpose of a cascade.
+- Confirm spend with the founder per `paid-tool-routing.md` before each generation run. Surface current credit balance (`mcp__claude_ai_Higgsfield__balance`) at the confirmation prompt.
+- Record every new asset in `CONTENT_ASSETS.md` with updated `prompt_brief`, `source_job_id`, and `virality_score` fields, and mark prior entries `status:superseded`.
+- Store uploads, ad launches, and public posting remain **founder-gated** regardless of regeneration trigger.
 
 ## Process
 

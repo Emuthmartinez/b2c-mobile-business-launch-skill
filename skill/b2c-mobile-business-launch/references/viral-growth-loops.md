@@ -90,6 +90,20 @@ Before scaling creators or Fastlane, make formats testable:
 
 Use `ugc-creator-engine.md` when creators, payments, contracts, or UGC operations are in scope. Use `fastlane-growth-ops.md` after launch approval or public beta when Fastlane is the generation or scheduling engine. Use `remotion-content-assets.md` when repeatable local video/still variants are needed.
 
+### Share Artifact Production
+
+Personalized share cards (score result, milestone badge, referral-unlock reveal) are social artifacts — they are not store screenshots and do not trigger the real-screenshots-only store-truthfulness guardrail. Produce them via `higgsfield-generate` with the `gpt_image_2` model:
+
+- Embed on-image user data (score, badge label, referral unlock text) in the `--prompt` alongside the full `DESIGN.md` brief (palette, type mood, shapes, texture, banned aesthetics).
+- Generate 9:16 first (Stories/Reels primary surface); produce the 1:1 feed variant via the `mcp__claude_ai_Higgsfield__reframe` MCP tool — do not re-generate a separate 1:1 from scratch. Confirm exact reframe invocation via the `higgsfield-generate` skill or MCP tool help before running; see the **Master → All Platforms (reframe + personal_clipper)** recipe in `tool-recipes.md`.
+- For referral-reveal carousels, use `higgsfield product-photoshoot` with `--mode social_carousel`; see the `higgsfield-product-photoshoot` skill.
+
+Guardrails:
+- `DESIGN.md` brief is required on every generation; generating without it is a named failure mode.
+- Confirm spend with the founder before every paid generation run (reframe included) per `paid-tool-routing.md`; surface current credit balance first.
+- Record every generated share card in `CONTENT_ASSETS.md` with route, `prompt_brief`, output paths, and QA/approval status.
+- Public posting stays founder-gated; generating share cards for in-app display does not constitute posting.
+
 One viral post is not a format. Treat a format as scale-ready only after repeatable signal: 2-3 hits from the same structure, preferably across more than one account or creator, plus downstream install/referral/revenue evidence.
 
 ## Monetization Timing

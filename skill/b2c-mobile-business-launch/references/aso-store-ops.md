@@ -37,7 +37,7 @@ If an ASO skill pack is installed, delegate narrow work instead of re-creating i
 - Activation and retention: `onboarding-optimization`, `retention-optimization`, `referral-program`.
 - Ratings, reviews, and quality: `review-management`, `rating-prompt-strategy`, `crash-analytics`, `app-rejection-recovery`.
 - Analytics and first-party performance: `app-analytics`, `asc-metrics`.
-- Launch and publicity: `app-launch`, `creator-ugc-marketing`, `press-and-pr`.
+- Launch and publicity: `app-launch`, `creator-ugc-marketing`, `press-and-pr` (for press kit imagery: use `product-photoshoot --mode conceptual_product` for premium product art and `soul-id create --soul-cinematic` → marketing-studio avatar for founder editorial headshots; full brief required from DESIGN.md; gate behind spend confirmation per `references/paid-tool-routing.md`; record in `CONTENT_ASSETS.md` with license and approval gate before distribution).
 
 If these skills are not directly discoverable in the current runtime, search installed skill/plugin paths for the names above, read the matching `SKILL.md`, and proceed with the same output contract manually. Do not assume Claude and Codex expose the same installed plugin surface.
 
@@ -91,6 +91,7 @@ Checklist:
 - use current iPhone, iPad, Google Play, and app-target device sizes/upload wells required for the current platform
 - route App Icon work through `app-icon-optimization` or equivalent, and verify 1024x1024 output, no alpha, no rounded corners, thumbnail contrast, and category differentiation
 - route App Preview or Play promo videos through `app-preview-video` plus MobAI/Remotion/Higgsfield/owned-media production rules when video is in scope
+- for seasonal CPP background / event media / IAP promo art / seasonal icon treatment refreshes, see the **Seasonal restyle Refresh** recipe in `references/tool-recipes.md`; this lane uses `product-photoshoot --mode restyle` on LOCKED supporting/CPP art only — it must never touch the real-UI screenshot layer; gate behind spend confirmation per `references/paid-tool-routing.md`
 - ensure screenshots do not imply unavailable features, unsupported claims, free trials, prices, competitor comparisons, or endorsements without approval
 - localize screenshot copy when localized metadata is shipped
 - mark reference art separately from production upload assets
@@ -150,7 +151,7 @@ Google Play checklist:
 - privacy policy URL is active, public, non-geofenced, non-editable, and not a PDF
 - Data safety answers match actual collection, sharing, retention, deletion, security, and vendor behavior
 - account deletion web resource exists when accounts can be created
-- feature graphic, screenshots, short description, long description, and store listing experiments are prepared
+- feature graphic (1024x500), screenshots, short description, long description, and store listing experiments are prepared; produce the feature graphic via `product-photoshoot --mode hero_banner` with full DESIGN.md tokens — gate behind spend confirmation per `references/paid-tool-routing.md`; record in `CONTENT_ASSETS.md`; founder approval before upload
 - App content declarations, app access instructions, sensitive-permission declarations, and pre-launch report status are tracked before production release
 - staged rollout/managed publishing choice is explicit
 
@@ -240,6 +241,8 @@ Run a weekly loop for the first 6-8 weeks after launch:
 - subscription funnel: trial starts, conversion, cancels, refunds, yearly/monthly mix
 - competitor metadata, screenshot, ranking, ad, pricing, and review changes
 - localization opportunities by country revenue/downloads
+
+When keyword or CVR analysis flags a priority angle, produce a 3-5 slide social carousel via `product-photoshoot --mode social_carousel` (DESIGN.md brief required; gate behind spend confirmation per `references/paid-tool-routing.md`; record in `CONTENT_ASSETS.md`; founder approval required before distribution); add the produced carousel to the prioritized-experiments output below.
 
 Output:
 - weekly change log

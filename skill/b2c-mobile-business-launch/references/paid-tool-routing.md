@@ -48,7 +48,7 @@ If the founder says they have the tool, ask only for the minimum access/export n
 | AppKittie | app-store economics, competitor intelligence, downloads/revenue estimates, keyword difficulty, reviews, ad/creator signals | public App Store/Google Play pages, store search, public reviews, app websites, manual competitor spreadsheet, Apple/Google console data if the app exists |
 | XPOZ | Reddit, TikTok, X/Twitter, Instagram social-language and creator research | public web search, platform-native search in browser, Reddit search, YouTube comments, App Store/Play reviews, founder-provided screenshots/exports |
 | Firecrawl | competitor site crawling, pricing/policy/funnel extraction, SEO/GEO page discovery | browser inspection, web search, `curl`, `sitemap.xml`, `robots.txt`, Playwright/browser snapshots, manual page notes |
-| Higgsfield | generated visuals, app icons, mascots, mockups, animations, ad creative, demo clips | Remotion code-rendered videos/stills after license check, real app screenshots, founder-owned assets, hand-authored HTML/CSS/SVG/canvas, local screen recordings, free/public-domain assets with license notes |
+| Higgsfield | generated visuals, app icons, mascots, mockups, animations, ad creative, demo clips; also `brand-kits fetch`, `reframe` (aspect-ratio variants), and `personal_clipper` (long recording → short clips) — all three are paid/credit-consuming MCP operations and require the same spend confirmation as any generate run | Remotion code-rendered videos/stills after license check, real app screenshots, founder-owned assets, hand-authored HTML/CSS/SVG/canvas, local screen recordings, free/public-domain assets with license notes |
 | MobAI | paid mobile device automation, cross-device UI observation, screenshots, recordings, local testing | XcodeBuildMCP for Apple simulator/device build, run, UI automation, screenshots, logs, and video after confirmation; `xcodebuild`/`simctl` only if XcodeBuildMCP is unavailable; Android emulator/ADB for Android-only fallback |
 | Fastlane AI | post-launch organic content engine, Blitz generation, scheduling, analytics | manual content calendar, spreadsheet/JSON schedule, local prompts, platform-native drafts, no automated posting unless founder approves |
 | Paid ASO/MMP/ad tools | keyword ranks, paid attribution, SKAdNetwork/ad-network reporting, competitor tracking | AppKittie if available, public store search, store-console analytics, manual keyword sheet, Apple Search Ads/Google Ads native reports when accounts exist |
@@ -104,14 +104,25 @@ This lane needs AppKittie for keyword difficulty and competitor revenue/download
 This lane needs XPOZ for social-language and creator research. I did not find mcp__claude_ai_XPOZ__* tools callable in this runtime. Do you want to provision XPOZ, provide exported data, or approve the free fallback (platform-native browser search, public web search)? I will not spend time on the fallback unless you confirm.
 ```
 
-**Higgsfield (generated visuals, icons, mascots, ad creative, demo clips):**
+**Higgsfield (generated visuals, icons, mascots, ad creative, demo clips; also reframe, personal_clipper, brand-kits fetch):**
+
+Before presenting the prompt, call `mcp__claude_ai_Higgsfield__balance` and surface the result inline.
+
 ```text
-This lane needs Higgsfield for <visual job>. I see Higgsfield MCP tools present but want to confirm use before generating paid credits. Shall I proceed with Higgsfield, or would you prefer a different route? (Higgsfield is authenticated — this is a spend confirmation, not an access question.)
+This lane needs Higgsfield for <visual job>. I see Higgsfield MCP tools present but want to confirm use before generating paid credits.
+
+Current balance: X credits. This run will use approximately Y credits for Z assets. Proceed?
+
+Option: I can run a cheap-first pass (z_image draft tier) on this batch to confirm direction before committing to full-quality generation — this costs roughly A credits instead of B. Let me know if you want that as the first step. (Draft-tier runs are presented as a spend-reduction option; they are never applied silently.)
+
+Shall I proceed with Higgsfield, or would you prefer a different route? (Higgsfield is authenticated — this is a spend confirmation, not an access question.)
 ```
 If Higgsfield tools are absent from the runtime:
 ```text
 This lane needs Higgsfield for <visual job>. I did not find mcp__claude_ai_Higgsfield__* tools callable in this runtime. Do you want to provision Higgsfield, provide existing assets, or approve the free fallback (Remotion code-rendered stills, founder-owned assets)? I will not spend time on the fallback unless you confirm.
 ```
+
+Note: `reframe` and `personal_clipper` have no CLI equivalent — they are MCP-only (`mcp__claude_ai_Higgsfield__reframe`, `mcp__claude_ai_Higgsfield__personal_clipper_create`). Apply the same spend-confirmation prompt above before invoking them. See the **Master → All Platforms (reframe + personal_clipper)** recipe in `tool-recipes.md` for the full workflow.
 
 **Refero (UX pattern research, screen and flow references):**
 ```text

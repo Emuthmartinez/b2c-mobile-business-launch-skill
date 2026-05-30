@@ -184,6 +184,19 @@ Treat paywall close as a second conversion moment:
 
 RevenueCat's 2026 report calls the moment after paywall dismissal a high-leverage conversion point; encode it as an experiment, not a one-off trick.
 
+### In-App Visual Assets (Paywall Hero, Illustrations, Empty-State, Celebration)
+
+Route generated art by surface:
+
+- **Paywall hero / background art** — use `soul_location` (environment/scene, prompt-only) or `gpt_image_2` via the `higgsfield-generate` skill. These are decorative backgrounds embedded in HTML proofs; they are never substitutes for real app UI.
+- **Onboarding illustrations, empty-state art, and celebration frames** — use the `higgsfield-generate` skill. Every prompt must carry `DESIGN.md` tokens (palette, type mood, shapes, texture, banned aesthetics, intended surface); generating without the brief is a named failure mode.
+- **Direction iteration before committing production-model credits** — route through the **Cheap-First Direction** recipe in `tool-recipes.md`. Per that recipe's Rule-5 reconciliation, cheap-first is offered as a spend-reduction option at the `paid-tool-routing.md` spend-confirmation prompt — never applied silently.
+
+Guardrails:
+- Generated art is decoration embedded in HTML proofs; it is **never** a substitute for truthful real app UI in store screenshots or product claims.
+- Spend-confirmation applies before every generation run; confirm with the founder per `paid-tool-routing.md` and surface current balance when possible.
+- Record every generated asset in `CONTENT_ASSETS.md` with route, prompt brief (`DESIGN.md` tokens used), output paths, QA, and approval gate.
+
 ### Plan And Trial Mix
 
 Default candidate package set for subscription apps:
