@@ -405,6 +405,7 @@ function writeCompletePaidUserAcquisition(root: string): void {
       "Fit Gate: store destination, privacy, support, onboarding, paywall, RevenueCat entitlement, and founder-approved spend are ready for a limited test.",
       "Channel Choice: one-channel rule selects Meta Ads for the first test while TikTok, Google web-to-app, Apple Ads, and Apple Search Ads are rejected until one channel works.",
       "Creative Production: CONTENT_ASSETS.md owns 3-5 weekly creative assets, angle IDs, real app UI, product visibility, claim constraints, and the 11_STAR_EXPERIENCE.md V1 slice.",
+      "Creative Scoring Gate: score each video creative with the Virality Predictor (brain_activity) before paid distribution; record virality_score and hook_dmn_risk per creative.",
       "Tracking Baseline: ANALYTICS.md records PostHog events, ad-network SDK or native report route, App Store Connect or Google Play store metrics, self-reported attribution, and baseline uplift rules.",
       "RevenueCat Economics: REVENUE_OPS.md uses RevenueCat LTV, cohorts, trial starts, purchases, and entitlement data to compare CPA, CPI, ROAS, and payback window.",
       "Blended Report: growth/paid-ua-report.csv records spend, impressions, clicks, installs or app opens, paywall views, trials, purchases, entitlement active count, revenue, CPA, LTV window, winning angle, and next action.",
@@ -1202,6 +1203,58 @@ try {
   );
   runFixture("thin Remotion content manifest fails", thinContentManifest, "check-content-assets.ts", 1, "content_assets.manifest.assets.0.surface.missing");
 
+  const higgsfieldNoBrief = makeFixture("content-higgsfield-no-brief");
+  mkdirSync(path.join(higgsfieldNoBrief, "content-assets"), { recursive: true });
+  writeFileSync(
+    path.join(higgsfieldNoBrief, "content-assets", "CONTENT_ASSETS.md"),
+    [
+      "# Content Assets",
+      "Route Matrix",
+      "Higgsfield",
+      "Remotion",
+      "Founder approval recorded for fallback.",
+      "License status: Remotion license status checked before commercial use.",
+      "Source Inputs",
+      "Composition Manifest",
+      "Render Commands",
+      "Claim Review",
+      "Output Registry",
+      "Public Use Gates",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(higgsfieldNoBrief, "content-assets", "manifest.json"),
+    JSON.stringify(
+      {
+        assets: [
+          {
+            asset_id: "founder-ad",
+            surface: "meta_paid",
+            route: "higgsfield_marketing_studio",
+            status: "draft",
+            dimensions: "1080x1920",
+            inputs: ["DESIGN.md"],
+            outputs: ["content-assets/out/founder-ad.mp4"],
+            truth_constraints: ["real app UI remains truthful"],
+            approvals: ["founder approval before public posting"],
+            license_status: "Higgsfield account/credit route",
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+    "utf8",
+  );
+  runFixture(
+    "Higgsfield manifest asset without prompt_brief fails",
+    higgsfieldNoBrief,
+    "check-content-assets.ts",
+    1,
+    "content_assets.manifest.assets.0.prompt_brief.missing",
+  );
+
   const viralGrowthMissing = makeFixture("viral-growth-missing");
   rmSync(path.join(viralGrowthMissing, "growth"), { recursive: true, force: true });
   runFixture("missing viral growth packet fails", viralGrowthMissing, "check-viral-growth-loop.ts", 1, "viral_growth.markdown_missing");
@@ -1258,6 +1311,18 @@ try {
   writeCompletePaidUserAcquisition(paidUaDoneReportMissing);
   rmSync(path.join(paidUaDoneReportMissing, "growth", "paid-ua-report.csv"), { force: true });
   runFixture("done paid UA without report fails", paidUaDoneReportMissing, "check-paid-user-acquisition.ts", 1, "paid_ua.report_missing_done");
+
+  const paidUaNoVirality = makeFixture("paid-ua-no-virality");
+  writeCompletePaidUserAcquisition(paidUaNoVirality);
+  {
+    const paidUaPath = path.join(paidUaNoVirality, "growth", "PAID_UA.md");
+    const withoutVirality = readFileSync(paidUaPath, "utf8")
+      .split("\n")
+      .filter((line) => !line.includes("Virality Predictor"))
+      .join("\n");
+    writeFileSync(paidUaPath, withoutVirality, "utf8");
+  }
+  runFixture("paid UA without virality scoring gate fails", paidUaNoVirality, "check-paid-user-acquisition.ts", 1, "paid_ua.virality_gate.missing");
 
   const orchestrationNoPreflight = makeFixture("orchestration-no-preflight");
   const orchestrationNoPreflightState = readState(orchestrationNoPreflight);

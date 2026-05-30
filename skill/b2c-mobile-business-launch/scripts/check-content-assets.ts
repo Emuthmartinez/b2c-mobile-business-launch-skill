@@ -227,6 +227,29 @@ if (manifestText) {
       }
     }
 
+    if (route && (route.includes("higgsfield") || route.includes("marketing_studio"))) {
+      const promptBrief = asString(asset.prompt_brief) ?? "";
+      if (!promptBrief.trim()) {
+        issues.push(
+          issue(
+            "error",
+            `content_assets.manifest.assets.${index}.prompt_brief.missing`,
+            `Manifest asset ${index} uses a Higgsfield/Marketing Studio route but records no prompt_brief carrying the DESIGN.md tokens used for generation. Generating without the DESIGN.md brief is a named failure mode.`,
+            manifestText.relativePath,
+          ),
+        );
+      } else if (!/design\.md|design system|design token|palette|typography/i.test(promptBrief)) {
+        issues.push(
+          issue(
+            "warning",
+            `content_assets.manifest.assets.${index}.prompt_brief.no_design_reference`,
+            `Manifest asset ${index} prompt_brief should reference the DESIGN.md tokens (palette, typography, banned aesthetics) carried into the generation prompt.`,
+            manifestText.relativePath,
+          ),
+        );
+      }
+    }
+
     maybeRequireDoneOutputs(asset, index, manifestText.relativePath);
   }
 }

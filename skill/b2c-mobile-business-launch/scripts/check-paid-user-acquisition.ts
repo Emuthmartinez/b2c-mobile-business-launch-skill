@@ -114,6 +114,10 @@ if (markdown) {
     issues.push(issue("error", "paid_ua.spend_gate.missing", "Paid UA should keep ad spend, budget changes, and account connections as founder-only gates.", markdown.relativePath));
   }
 
+  if (!mentionsAny(markdown.text, ["Virality Predictor", "brain_activity", "virality score", "virality_score", "virality scoring not applicable"])) {
+    issues.push(issue("error", "paid_ua.virality_gate.missing", "Paid UA should score video creatives with the Virality Predictor (brain_activity) before paid distribution, or record an explicit \"virality scoring not applicable\" exception with a reason.", markdown.relativePath));
+  }
+
   if (status === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown.text)) {
     issues.push(issue("error", "paid_ua.placeholder_complete", "Paid UA cannot be done while TODO/TBD/unknown/placeholder/pending language remains.", markdown.relativePath));
   }
