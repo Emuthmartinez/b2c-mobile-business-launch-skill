@@ -35,6 +35,9 @@ This artifact defines the product's extreme experience, the feasible V1 slice, a
 - Product behavior:
 - Data/state/API requirements:
 - Design and motion requirements:
+  - Web delight (landing, funnel, web paywall, preview): tokenized framer-motion / `motion` micro-interactions and entrance/celebration moments.
+  - Mobile delight (shipped binary): native animation from `DesignTokens.Motion` (SwiftUI/Flutter/Reanimated) — no framer-motion.
+  - Reduced-motion fallback for every delight moment (`prefers-reduced-motion` / OS reduce-motion).
 - Analytics proof:
 - Production-readiness proof:
 

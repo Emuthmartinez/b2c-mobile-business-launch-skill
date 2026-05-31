@@ -1608,3 +1608,21 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-nextlevelbuilder-ui-ux-pro-max-skill
+    name: github.com
+    source_type: github
+    url: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: MIT-licensed UI/UX design-intelligence skill (styles, palettes, font pairings, UX guidelines, framer-motion/Magic UI motion patterns, anti-pattern checklists). Reference-only for web-surface UI and design-system reasoning; do not vendor its CSV data into templates or business repos.
+  - id: motion-dev-docs-react
+    name: motion.dev
+    source_type: docs
+    url: https://motion.dev/docs/react
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/design-visual-system.md
+    notes: Motion (framer-motion's successor, import from motion/react) React animation docs. Web-surface library used by the Design Room render app and launch web surfaces (landing, funnel); never used in the shipped mobile binary. Refresh before changing motion API/setup guidance.

@@ -34,6 +34,7 @@ When the design needs stronger direction, inspect the relevant source and summar
 - Taste-style review for visual distinctiveness and category fit
 - Layers-style product clarity before surface polish
 - Impeccable-style visual QA for typography, spacing, contrast, motion, responsive behavior, and UX writing
+- `ui-ux-pro-max` skill for senior-grade UI direction, palette/typography pairings, and motion/anti-pattern checklists when web-surface or design-system direction needs a stronger start (reference-only; adapt, do not copy its data)
 - Higgsfield for production-quality visuals when the founder approves paid/account-gated generation
 - Remotion for repeatable local rendered assets from real UI, captions, and tokens
 

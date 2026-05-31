@@ -49,6 +49,15 @@ Write content for both humans and AI answer engines:
 - keep brand/entity names consistent across site, App Store metadata, schema, `llms.txt`, and social profiles
 - avoid thin marketing pages that have no extractable factual answers
 
+## 3a. Landing Craft: Motion And UI Generation
+
+Landing pages and funnels are web surfaces, so framer-motion / the `motion` library and the `ui-ux-pro-max` skill apply directly here (unlike the shipped mobile binary). Use them to lift conversion without hurting GEO or performance:
+
+- Generate senior-grade landing and section layouts with the `ui-ux-pro-max` skill when available (reference-only; adapt, do not copy its data). Keep section copy answer-style and self-contained per section 3.
+- Animate hero, feature reveals, and CTAs with framer-motion reading the tokenized `--motion-*` scale (durations 150-300ms). Reuse the same `motion.*` tokens as the app so brand motion is consistent across surfaces.
+- Server-render or statically render the content; hydrate motion after. Entrance animations must not delay LCP/INP, hide text from crawlers, or gate first paint — motion is progressive enhancement.
+- Respect `prefers-reduced-motion` and keep above-the-fold content readable without JavaScript.
+
 ## 4. Copy Compliance Pre-Edit Scan
 
 Run this scan before writing or accepting any landing copy, not only before deploy. These are trust-breaking patterns that have required founder corrections after deployment.

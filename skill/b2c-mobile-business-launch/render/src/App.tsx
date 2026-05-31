@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion, type Variants } from "motion/react";
 import type { BusinessState, ThemeTokens } from "./types";
 
 interface LoadState {
@@ -9,6 +10,7 @@ interface LoadState {
 
 export function App() {
   const [loadState, setLoadState] = useState<LoadState>({});
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     Promise.all([
@@ -27,14 +29,44 @@ export function App() {
   if (loadState.error) {
     return <main className="shell">Design Room failed to load: {loadState.error}</main>;
   }
-  if (!loadState.business || !loadState.tokens) {
-    return <main className="shell">Loading Design Room...</main>;
-  }
 
-  return <DesignRoom business={loadState.business} tokens={loadState.tokens} />;
+  // AnimatePresence cross-fades skeleton -> Design Room so a re-render after a state
+  // mutation reads as "state changed". framer-motion lives only in this web preview;
+  // the shipped iOS/Flutter app consumes the same motion scale via DesignTokens.swift.
+  return (
+    <AnimatePresence mode="wait">
+      {!loadState.business || !loadState.tokens ? (
+        <motion.main
+          key="loading"
+          className="shell"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={transitionFor(reduceMotion)}
+        >
+          Loading Design Room...
+        </motion.main>
+      ) : (
+        <DesignRoom
+          key="room"
+          business={loadState.business}
+          tokens={loadState.tokens}
+          reduceMotion={Boolean(reduceMotion)}
+        />
+      )}
+    </AnimatePresence>
+  );
 }
 
-function DesignRoom({ business, tokens }: { business: BusinessState; tokens: ThemeTokens }) {
+function DesignRoom({
+  business,
+  tokens,
+  reduceMotion,
+}: {
+  business: BusinessState;
+  tokens: ThemeTokens;
+  reduceMotion: boolean;
+}) {
   const summaries = useMemo(() => {
     const appStore = business.surfaces.appStore;
     return [
@@ -50,8 +82,26 @@ function DesignRoom({ business, tokens }: { business: BusinessState; tokens: The
   }, [business]);
   const latest = business.designRoom.versionLog.at(-1);
 
+  const base = msToSeconds(tokens.tokens.motion?.durationBase, 0.22);
+  const stagger = reduceMotion ? 0 : 0.05;
+  const container: Variants = {
+    hidden: {},
+    visible: { transition: { staggerChildren: stagger } },
+  };
+  const item: Variants = reduceMotion
+    ? { hidden: { opacity: 0 }, visible: { opacity: 1 } }
+    : { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } };
+  const itemTransition = transitionFor(reduceMotion, base);
+  const tap = reduceMotion ? undefined : { scale: 0.985 };
+
   return (
-    <main className="shell">
+    <motion.main
+      className="shell"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={transitionFor(reduceMotion, base)}
+    >
       <header className="hero">
         <p className="eyebrow">Design Room</p>
         <h1>{business.business.name}</h1>
@@ -81,14 +131,20 @@ function DesignRoom({ business, tokens }: { business: BusinessState; tokens: The
           </div>
           <span className="stamp">{"STATE -> MUTATE -> VERSION -> RENDER"}</span>
         </div>
-        <div className="metrics">
+        <motion.div className="metrics" variants={container} initial="hidden" animate="visible">
           {summaries.map(([label, count]) => (
-            <article key={label} className="metric">
+            <motion.article
+              key={label}
+              className="metric"
+              variants={item}
+              transition={itemTransition}
+              whileTap={tap}
+            >
               <span>{label}</span>
               <strong>{count}</strong>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </section>
 
       <section className="grid three">
@@ -124,7 +180,7 @@ function DesignRoom({ business, tokens }: { business: BusinessState; tokens: The
           ))}
         </article>
       </section>
-    </main>
+    </motion.main>
   );
 }
 
@@ -141,6 +197,35 @@ function applyTokens(tokens: ThemeTokens) {
   }
   root.style.setProperty("--font-display", tokens.tokens.font.display.family);
   root.style.setProperty("--font-body", tokens.tokens.font.body.family);
+
+  // Inject the tokenized motion scale so every animation in the preview (and any
+  // landing/funnel surface built on these tokens) reads from one source of truth.
+  // Names mirror promote-design-tokens.ts so the runtime preview matches design-system/tokens.css.
+  const motionTokens = tokens.tokens.motion ?? {};
+  const motionVars: Array<readonly [string, string | undefined]> = [
+    ["--motion-duration-fast", motionTokens.durationFast],
+    ["--motion-duration-base", motionTokens.durationBase],
+    ["--motion-duration-slow", motionTokens.durationSlow],
+    ["--motion-duration-reduced", motionTokens.reducedMotionDuration],
+    ["--motion-easing", motionTokens.easing],
+  ];
+  for (const [name, value] of motionVars) {
+    if (value) {
+      root.style.setProperty(name, value);
+    }
+  }
+}
+
+function transitionFor(reduceMotion: boolean | null, durationSeconds = 0.22) {
+  return { duration: reduceMotion ? 0 : durationSeconds, ease: [0.2, 0, 0, 1] as const };
+}
+
+function msToSeconds(value: string | undefined, fallback: number): number {
+  if (!value) {
+    return fallback;
+  }
+  const milliseconds = Number.parseFloat(value.replace(/ms$/i, ""));
+  return Number.isFinite(milliseconds) ? milliseconds / 1000 : fallback;
 }
 
 function toKebab(value: string) {

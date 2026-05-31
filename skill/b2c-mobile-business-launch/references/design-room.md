@@ -19,7 +19,7 @@ In the business repo:
 
 ```text
 state/business.json       # identity, positioning, surfaces, Design Room version log, Control Plane panels
-state/theme.tokens.json   # semantic tokens used by every rendered surface
+state/theme.tokens.json   # semantic tokens (color/font/space/radius/motion) used by every rendered surface; motion.* promotes to web (--motion-* / framer-motion) and DesignTokens.Motion (SwiftUI)
 design-room.html          # static fallback render with design-state-hash
 dist/design-room/         # React/Vite build, when available
 ```

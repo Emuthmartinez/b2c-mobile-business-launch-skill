@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="design-state-hash" content="a070440002a7c737" />
+  <meta name="design-state-hash" content="feb979e05f6a0fc2" />
   <title>App Name Design Room</title>
   <style>
     :root {
@@ -20,7 +20,14 @@
       --radius-md: 8px;
       --space-md: 16px;
       --space-lg: 24px;
+      --motion-duration-fast: 120ms;
+      --motion-duration-base: 220ms;
+      --motion-easing: cubic-bezier(0.2, 0, 0, 1);
     }
+    @media (prefers-reduced-motion: no-preference) {
+      .deck .metric { animation: design-room-rise var(--motion-duration-base, 220ms) var(--motion-easing, ease) both; }
+    }
+    @keyframes design-room-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -59,7 +66,7 @@
     <div class="meta">
       <span class="pill">Stage: concept</span>
       <span class="pill">Theme: provisional</span>
-      <span class="pill">State hash: a070440002a7c737</span>
+      <span class="pill">State hash: feb979e05f6a0fc2</span>
     </div>
   </header>
   <main>

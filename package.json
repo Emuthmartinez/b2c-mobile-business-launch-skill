@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -54,6 +54,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.7.0",
     "ajv": "^8.20.0",
+    "motion": "^12.40.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "tsx": "^4.19.2",

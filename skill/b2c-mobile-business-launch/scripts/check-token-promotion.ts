@@ -45,6 +45,11 @@ if (loaded.tokens) {
         issues.push(issue("error", "token_promotion.css_var_missing", `tokens.css must include ${varName}.`, "design-system/tokens.css"));
       }
     }
+    for (const motionVar of ["--motion-duration-fast", "--motion-duration-base", "--motion-easing"]) {
+      if (!css.includes(motionVar)) {
+        issues.push(issue("error", "token_promotion.css_motion_missing", `tokens.css must promote ${motionVar} so web surfaces (framer-motion/motion, landing, funnel) share the tokenized motion scale.`, "design-system/tokens.css"));
+      }
+    }
   }
 
   if (existsSync(swiftPath)) {
@@ -54,6 +59,9 @@ if (loaded.tokens) {
     }
     if (!swift.includes("enum DesignTokens") || !swift.includes(String(getToken(loaded.tokens, "color.primary") ?? ""))) {
       issues.push(issue("error", "token_promotion.swift_contract_missing", "DesignTokens.swift must expose DesignTokens and the current primary color.", "design-system/DesignTokens.swift"));
+    }
+    if (!swift.includes("enum Motion") || !swift.includes("durationBase")) {
+      issues.push(issue("error", "token_promotion.swift_motion_missing", "DesignTokens.swift must expose a Motion enum so the shipped SwiftUI app shares the tokenized motion scale (durations/easing) with web surfaces.", "design-system/DesignTokens.swift"));
     }
   }
 }

@@ -22,6 +22,8 @@ Treat these repositories as live source material when the work depends on their 
 - Layers Skills: `https://github.com/jamiemill/layers-skills`
 - Refero MCP and Refero Styles: `https://doc.refero.design/llms.txt`, `https://api.refero.design/mcp`, `https://styles.refero.design/`
 - Higgsfield local skills: `higgsfield-generate`, `higgsfield-product-photoshoot`, `higgsfield-soul-id`, `higgsfield-marketplace-cards`
+- ui-ux-pro-max skill (senior-grade UI generation: 67 styles, 161 palettes, 57 font pairings, 99 UX guidelines, framer-motion/Magic UI motion patterns, and anti-pattern/pre-delivery checklists; MIT-licensed, reference-only — invoke it or adapt its guidance, do not copy its CSV data into this repo or business repos): `https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`
+- Motion (framer-motion's successor package, `motion/react`) for web-surface animation driven by the tokenized motion scale: `https://motion.dev/docs/react`
 
 If matching local skills are installed, load and use them. If Refero or Higgsfield is unavailable, load `paid-tool-routing.md` and ask before replacing it with local HTML/CSS/SVG/canvas, founder-owned assets, public-domain assets, public UX pattern libraries, bundled pattern templates, or real app screenshots. If the design-system source skills are not installed, apply the source workflow directly and cite the repository URL in the design notes.
 
@@ -131,6 +133,17 @@ Rules:
 - Label each asset as `direction`, `draft`, or `production`, with source model/tool, date, prompt summary, and permission/license caveats.
 - For app-store screenshots, combine real app UI with generated backgrounds/characters only when the underlying app screen remains truthful and readable.
 - For animations, create a storyboard in HTML first, generate the Higgsfield clip second, then include the clip or keyframes in the HTML proof with reduced-motion fallback notes.
+
+## Motion: Web Surfaces vs Mobile Binary
+
+Motion is a tokenized, cross-platform contract. Values live once in `state/theme.tokens.json` under `motion.*` (`durationFast`, `durationBase`, `durationSlow`, `reducedMotionDuration`, `easing`) and promote to `design-system/tokens.css` (`--motion-*` variables) and `DesignTokens.Motion` in `DesignTokens.swift`. `promote-design-tokens.ts` writes them and `check-token-promotion.ts` gates them.
+
+Where each tool applies:
+
+- **Web surfaces ship motion.** Landing pages, marketing funnels, web paywall, and the Design Room render app (`render/src/`) animate with framer-motion / the `motion` library (`import { motion } from "motion/react"`), reading durations from the promoted `--motion-*` variables. This is the natural home for framer-motion and for `ui-ux-pro-max`'s Magic UI / motion patterns (staggered reveals, `AnimatePresence`, `whileTap`, layout transitions).
+- **The shipped mobile binary does not use framer-motion.** SwiftUI uses `DesignTokens.Motion` with `.animation`; Flutter uses implicit/explicit animations; React Native uses Reanimated/Moti. All read the same token values so motion stays consistent across web and app.
+- **Reduced motion is mandatory everywhere.** Honor `prefers-reduced-motion` on web (`useReducedMotion()` plus reduced-motion CSS) and OS reduce-motion on device; degrade to opacity-only or instant changes and never block first paint on an animation.
+- **`ui-ux-pro-max` is reference-only (MIT).** Invoke the skill or adapt its motion/anti-pattern guidance (smooth 150-300ms transitions, visible focus states, reduced-motion support). Do not copy its CSV datasets into templates or business repos; independently authored WCAG values are fine.
 
 ## HTML Implementation Rules
 

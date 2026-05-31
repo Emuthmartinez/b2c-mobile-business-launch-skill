@@ -108,6 +108,17 @@ if (markdown) {
     }
   }
 
+  if (!/reduced[- ]motion/i.test(markdown.text)) {
+    issues.push(
+      issue(
+        "warning",
+        "eleven_star.reduced_motion.missing",
+        "V1 Scalable Slice should specify motion and reduced-motion behavior. Motion is a primary web-surface delight lever (landing, funnel, paywall, onboarding) via tokenized framer-motion/motion; the shipped mobile binary uses native animation from the same DesignTokens.Motion scale.",
+        markdown.relativePath,
+      ),
+    );
+  }
+
   if (experienceStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown.text)) {
     issues.push(issue("error", "eleven_star.placeholder_complete", "11-star experience cannot be done while TODO/TBD/unknown/placeholder/pending language remains.", markdown.relativePath));
   }

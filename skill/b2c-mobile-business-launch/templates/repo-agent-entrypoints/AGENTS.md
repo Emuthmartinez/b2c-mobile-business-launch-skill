@@ -74,7 +74,8 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 ## Design And UX
 
 - All design work follows STATE -> MUTATE -> VERSION -> RENDER. Mutate `state/business.json` and `state/theme.tokens.json`, render `design-room.html`, and version/baseline with git instead of creating one-off design proposal files.
-- `DESIGN.md` owns tokens, voice, components, and visual rules.
+- `DESIGN.md` owns tokens, voice, components, visual rules, and the tokenized `motion.*` scale.
+- Motion is tokenized and platform-split. Web surfaces (landing, funnels, web paywall, Design Room preview) ship motion with framer-motion / the `motion` library reading the promoted `--motion-*` CSS variables; the mobile binary (SwiftUI/Flutter/React Native) uses native animation from `DesignTokens.Motion` and must never import framer-motion. Honor reduced motion on every surface. When the `ui-ux-pro-max` skill is installed, use it (reference-only, do not copy its data) for senior-grade web UI, design-system reasoning, and motion/anti-pattern guidance.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
 - Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, ParthJadhav/app-store-screenshots or equivalent export-board routing, App Icon/App Preview routing, current device wells, validation, and visual QA.

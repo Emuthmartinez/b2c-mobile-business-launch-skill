@@ -93,6 +93,20 @@ Keep this sequence unless a named experiment is approved:
 - Account deletion exists in docs but not in the app/store console.
 - Mobile text fits in English but clips at larger accessibility sizes.
 - HTML proof uses different tokens than `DESIGN.md`.
+- Motion uses ad-hoc durations instead of the tokenized `motion.*` scale.
+- framer-motion / `motion` imports leak into the mobile binary (SwiftUI/Flutter) instead of staying on web surfaces.
+- Animations ignore `prefers-reduced-motion`.
+
+## Motion Consistency And Reduced Motion
+
+Motion is a tokenized contract, not per-screen improvisation. Every transition reads the shared motion scale in `state/theme.tokens.json` (`motion.durationFast | durationBase | durationSlow | easing`), promoted to `design-system/tokens.css` (`--motion-*` variables) and `DesignTokens.Motion` in `DesignTokens.swift`.
+
+- **Web surfaces (landing pages, funnels, web paywall, Design Room preview):** this is where motion ships. Animate with framer-motion / the `motion` library, reading durations from the promoted `--motion-*` CSS variables. Use entrance/stagger, `AnimatePresence` for route/state changes, and `whileTap` press feedback.
+- **Mobile binary (SwiftUI / Flutter / React Native):** do not import framer-motion. Use native animation (SwiftUI `.animation`, Flutter implicit/explicit animations, RN Reanimated/Moti) driven by the same `DesignTokens.Motion` values.
+- **Motion Consistency:** one duration/easing scale across every surface; no ad-hoc millisecond values; transitions in the 150-300ms range for standard UI feedback.
+- **Reduced Motion:** honor `prefers-reduced-motion` (web `useReducedMotion()` plus reduced-motion CSS; native reduce-motion settings). Replace transforms with instant or opacity-only changes and never block first paint on an animation.
+
+When the `ui-ux-pro-max` skill is available, adapt its senior-grade pattern, motion, and anti-pattern guidance (visible focus states, smooth 150-300ms transitions, reduced-motion support). Reference it; do not copy its data verbatim into this repo.
 
 ## Source Ledger
 

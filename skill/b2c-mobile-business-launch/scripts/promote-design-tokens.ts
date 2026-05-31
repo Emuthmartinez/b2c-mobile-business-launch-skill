@@ -54,6 +54,8 @@ function renderCss(tokens: unknown, tokenHash: string): string {
     ["space-xl", "space.xl"],
     ["motion-duration-fast", "motion.durationFast"],
     ["motion-duration-base", "motion.durationBase"],
+    ["motion-duration-slow", "motion.durationSlow"],
+    ["motion-duration-reduced", "motion.reducedMotionDuration"],
     ["motion-easing", "motion.easing"],
   ];
 
@@ -90,9 +92,28 @@ function renderSwift(tokens: unknown, tokenHash: string): string {
     `    static let md = "${String(getToken(tokens, "radius.md") ?? "")}"`,
     `    static let lg = "${String(getToken(tokens, "radius.lg") ?? "")}"`,
     "  }",
+    "  // Cross-platform motion contract. Durations are SwiftUI seconds (Double).",
+    "  // framer-motion/motion consumes the CSS-variable form; SwiftUI/Flutter consume these.",
+    "  enum Motion {",
+    `    static let durationFast: Double = ${msToSeconds(getToken(tokens, "motion.durationFast"))}`,
+    `    static let durationBase: Double = ${msToSeconds(getToken(tokens, "motion.durationBase"))}`,
+    `    static let durationSlow: Double = ${msToSeconds(getToken(tokens, "motion.durationSlow"))}`,
+    `    static let reducedMotionDuration: Double = ${msToSeconds(getToken(tokens, "motion.reducedMotionDuration"))}`,
+    `    static let easing = "${String(getToken(tokens, "motion.easing") ?? "")}"`,
+    "  }",
     "}",
     "",
   ].join("\n");
+}
+
+function msToSeconds(value: unknown): string {
+  const raw = String(value ?? "").trim();
+  const milliseconds = Number.parseFloat(raw.replace(/ms$/i, ""));
+  if (!Number.isFinite(milliseconds)) {
+    return "0";
+  }
+  const seconds = milliseconds / 1000;
+  return Number.isInteger(seconds) ? seconds.toFixed(1) : String(seconds);
 }
 
 function stringLiteral(value: string): string {

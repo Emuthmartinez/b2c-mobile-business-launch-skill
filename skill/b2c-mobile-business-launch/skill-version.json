@@ -1,11 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "updatedAt": "2026-05-31",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "Adds Compound Engineering routing enforcement for core app work.",
-    "Adds onboarding App Review popup enforcement immediately after first value.",
-    "Adds Control Plane, live-provider proof, artifact-template, agent-eval, and design-token promotion gates."
+    "Adds a cross-platform motion token contract: motion.durationSlow and motion.reducedMotionDuration promote to web CSS variables and a DesignTokens.Motion enum for SwiftUI.",
+    "Wires framer-motion (the motion package) into the Design Room render preview and documents framer-motion + ui-ux-pro-max as the web-surface motion/UI lane, with native animation kept for the shipped mobile binary.",
+    "Adds motion and reduced-motion gates to token promotion, UX patterns, the 11-star experience, and a WCAG contrast warning in the Design Room contract."
   ]
 }

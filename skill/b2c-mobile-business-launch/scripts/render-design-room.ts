@@ -113,7 +113,14 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
       --radius-md: ${cssToken(tokens, "radius.md")};
       --space-md: ${cssToken(tokens, "space.md")};
       --space-lg: ${cssToken(tokens, "space.lg")};
+      --motion-duration-fast: ${cssToken(tokens, "motion.durationFast")};
+      --motion-duration-base: ${cssToken(tokens, "motion.durationBase")};
+      --motion-easing: ${cssToken(tokens, "motion.easing")};
     }
+    @media (prefers-reduced-motion: no-preference) {
+      .deck .metric { animation: design-room-rise var(--motion-duration-base, 220ms) var(--motion-easing, ease) both; }
+    }
+    @keyframes design-room-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
     * { box-sizing: border-box; }
     body {
       margin: 0;

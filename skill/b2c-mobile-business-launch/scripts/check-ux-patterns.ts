@@ -40,6 +40,8 @@ if (markdown) {
     "Bug Traps",
     "Onboarding Playbook",
     "Do not copy",
+    "Motion Consistency",
+    "Reduced Motion",
   ];
   for (const phrase of requiredPhrases) {
     if (!markdown.text.toLowerCase().includes(phrase.toLowerCase())) {

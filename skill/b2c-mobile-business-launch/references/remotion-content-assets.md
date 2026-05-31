@@ -123,6 +123,8 @@ Relevant Remotion skill rules:
 
 Remotion animation must be frame-driven with `useCurrentFrame()`, `interpolate()`, `spring()`, `Sequence`, or related Remotion APIs. Do not rely on CSS transitions or CSS animations for render-critical motion.
 
+Keep render lanes distinct but visually consistent: Remotion (video/still render) stays frame-driven, while live web surfaces (landing pages, funnels, web paywall) use framer-motion / the `motion` library. Both should draw timing/easing from the same `motion.*` tokens (`design-system/tokens.css` `--motion-*`) so a Remotion ad and the landing page it drives to feel like one brand. Do not import framer-motion into Remotion compositions or into the shipped mobile binary.
+
 ## Composition Standards
 
 Create small, named compositions with explicit outputs:
