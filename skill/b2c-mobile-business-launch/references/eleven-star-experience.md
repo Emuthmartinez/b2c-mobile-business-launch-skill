@@ -65,6 +65,8 @@ Use this ladder shape. The star labels should be product-specific, not copied fr
 
 Add a visible `Line of Feasibility` between the current shippable target and the impossible levels. The line forces the team to name what can be built now and what remains inspiration.
 
+Reaching the 6-star ("better than expected") and 7-star ("made for me") levels is not a styling task — it is where engineered emotion lives. Use the Experience Cards in [`emotional-design-system.md`](emotional-design-system.md) and [`experience-cards.md`](experience-cards.md) to make these levels real, and produce `EMOTIONAL_DESIGN.md` before engineering handoff: Commitment and Variable Reward and Perceived Effort Delay typically elevate the 6-star level; Intent Mirroring and Identity/Mastery elevate the 7-star level. UX/onboarding audit findings should map to both a star level here and an Experience Card there.
+
 For each star level include:
 
 - short label

@@ -1,11 +1,12 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "updatedAt": "2026-05-31",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "Adds an optional designBrief block to the Design Room state schema, seeded from ui-ux-pro-max guidance (reference-only) and rendered in the Design Room.",
-    "Adds the seed:design-brief advisory helper that derives a ui-ux-pro-max query from positioning/audience without calling external tools.",
-    "Adds the check:template-safety gate that fails CI if framer-motion/motion imports leak into shipped template code (web-only library; mobile uses DesignTokens.Motion)."
+    "Adds the Emotional Experience System lane: an emotionally-intelligent consumer-product design layer grounded in behavioral science (Skinner, Schultz, Eyal, Fogg, Cialdini, Buell-Norton, Kahneman) with a 12-card Experience Card deck led by the four named cards — Commitment, Variable Reward, Perceived Effort Delay, and Intent Mirroring.",
+    "Ships a Producer path (charge a feature with engineered emotion → EMOTIONAL_DESIGN.md + emotional-design.html) and an Auditor path (walk every user journey on-device, score it through a six-lens review, and return a pathway to a better state → EMOTIONAL_AUDIT.md).",
+    "Adds the check:emotional-design validator enforcing the artifact contract plus a deterministic dark-pattern guardrail: high-risk cards (variable reward, streak, scarcity, urgency, social proof) require an ethics attestation, a user-control escape hatch, a counter-metric, and a mechanism-specific truthfulness proof; live copy is scanned for fake scarcity, fabricated social proof, confirmshaming, and commitment guilt.",
+    "Wires the lane into SKILL.md routing, launch-coverage, PROJECT_STATE.yaml (lanes.emotional_design), failure cards, and LaunchBench, and threads the cards through the 11-star 6/7-star levels, onboarding-conversion timing, and analytics-attribution events."
   ]
 }
