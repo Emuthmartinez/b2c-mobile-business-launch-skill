@@ -175,6 +175,8 @@ Flag these aggressively:
 - ASC CLI auth is missing or interactive, but the agent keeps attempting mutating app-record commands instead of recording the auth blocker and asking for the approved credential path.
 - Apple App Privacy and Google Play Data safety answers are not traceable to the same data inventory.
 - Screenshots are planned but not tied to actual device captures, display wells, final dimensions, locale, and upload status.
+- No app preview video is planned, even though app previews autoplay muted and precede screenshots at the top of the product page — leaving the highest-attention surface (the silent ~5-second autoplay hook) empty.
+- The app preview hook or screenshots are generic and knowledge-free: they do not draw on the Asset Knowledge Brief (target user/problem from `RESEARCH.md`, the magical moment from `11_STAR_EXPERIENCE.md`, the Emotional North Star and Experience Card from `EMOTIONAL_DESIGN.md`), or they were hand-composed instead of run through the screenshot ASO skill (`ParthJadhav/app-store-screenshots` / `ios-screenshots` / `app-preview-video`).
 - Web pricing mentions an intro offer but omits renewal price or monthly option.
 - Privacy/terms pages exist but contact emails are untested.
 - Resend domain exists but SPF/DKIM/DMARC, API key scope, webhook verification, idempotency keys, or unsubscribe handling are missing.
