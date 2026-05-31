@@ -73,11 +73,13 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
   const business = isRecord(state) && isRecord(state.business) ? state.business : {};
   const designRoom = isRecord(state) && isRecord(state.designRoom) ? state.designRoom : {};
   const appStore = isRecord(state) && isRecord(state.surfaces) && isRecord(state.surfaces.appStore) ? state.surfaces.appStore : {};
+  const controlPlane = isRecord(state) && isRecord(state.controlPlane) ? state.controlPlane : {};
   const latestVersion = asArray(designRoom.versionLog).at(-1);
   const summaries = summarizeSurfaces(state);
   const customPages = asArray(appStore.customProductPages);
   const ppoTests = asArray(appStore.productPageOptimizationTests);
   const inAppEvents = asArray(appStore.inAppEvents);
+  const panels = asArray(controlPlane.panels).filter(isRecord);
 
   const surfaceCards = summaries
     .map(
@@ -165,6 +167,24 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
     <section>
       <h2>Surface Coverage</h2>
       <div class="deck">${surfaceCards}</div>
+    </section>
+    <section>
+      <h2>Business Control Plane</h2>
+      <div class="list">
+        ${panels
+          .map((panel) => {
+            const stateRefs = asArray(panel.stateRefs).map((entry) => asString(entry)).filter(Boolean);
+            const artifacts = asArray(panel.renderedArtifacts).map((entry) => asString(entry)).filter(Boolean);
+            return `<article class="row">
+              <div>
+                <h3>${escapeHtml(panel.name ?? panel.id)}</h3>
+                <p class="muted">Reads ${escapeHtml(stateRefs.join(", ") || "no state refs")} and renders ${escapeHtml(artifacts.join(", ") || "no artifacts")}.</p>
+              </div>
+              <span class="status">${escapeHtml(panel.status ?? "unknown")}</span>
+            </article>`;
+          })
+          .join("")}
+      </div>
     </section>
     <section>
       <h2>App Store Marketing</h2>

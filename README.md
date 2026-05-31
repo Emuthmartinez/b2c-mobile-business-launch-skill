@@ -131,7 +131,13 @@ The scripts are intentionally simple:
 - `check-agent-entrypoints.ts` checks maintainer-only root docs and shipped business-repo `AGENTS.md`/`CLAUDE.md` templates stay separated and keep future agents on the launch skill workflow.
 - `check-workflow-adherence.ts` checks harness-style agent maps, subagent availability gates, Compound Engineering routing, and LaunchBench coverage for workflow adherence.
 - `check-skill-version.ts` checks whether the installed runtime is behind the latest local source copy and emits the AskUserQuestion upgrade gate when stale.
+- `check-version-discipline.ts` checks that meaningful skill changes bump `skill-version.json` in the same release commit.
 - `check-compound-engineering-routing.ts` blocks core engineering readiness when CE freshness, plan, work, review, test, and proof routing are missing or silently skipped.
+- `check-control-plane-contract.ts` checks that Design Room, analytics, monetization, store ops, and growth are modeled as Control Plane panels.
+- `check-live-provider-proof.ts` blocks provider-backed readiness claims until `PROVIDER_PROOF.md` has live evidence or founder-only gates.
+- `check-artifact-templates.ts` checks that every template `PROJECT_STATE.yaml` evidence path has a starter artifact.
+- `run-agent-evals.ts` validates behavior eval definitions for routing choices that deterministic validators cannot fully simulate.
+- `promote-design-tokens.ts` and `check-token-promotion.ts` promote `state/theme.tokens.json` into `design-system/` and block stale token handoff.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.

@@ -108,7 +108,7 @@ lanes:
     status: "partial"
     evidence:
       - "DESIGN.md"
-      - "design.md"
+      - "screen-design/design.md"
       - "UX_PATTERNS.md"
       - "design.html"
       - "ux-patterns.html"

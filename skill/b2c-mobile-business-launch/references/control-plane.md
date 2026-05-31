@@ -12,16 +12,16 @@ The Design Room is the first panel of a larger Business Control Plane: a founder
 
 This panel owns cross-surface design state: app screens, web funnels, marketing assets, App Store pages, Product Page Optimization tests, In-App Events, and shared theme tokens.
 
-## Future Panels
+## Modeled Panel Shells
 
-Do not build these until the Design Room loop is stable, but keep state extensible for:
+The Design Room is active now. The next Control Plane panels are modeled as state-backed shells now, with deeper implementation deferred until the Design Room loop remains stable:
 
 - **Analytics**: activation, attribution, conversion, retention, and experiment dashboards.
 - **Monetization**: RevenueCat/Stripe products, entitlements, paywalls, trials, refunds, and LTV/CPA evidence.
 - **Store Ops**: App Store Connect/Google Play readiness, screenshots, privacy answers, review notes, releases, CPPs, PPO, and In-App Events.
 - **Growth**: paid UA, creator/UGC, Fastlane, referral/share loops, and content cadence.
 
-Future panels should read the same state store and theme tokens rather than inventing parallel docs.
+Each shell must live in `state/business.json` under `controlPlane.panels`, include `stateRefs`, include `renderedArtifacts`, and appear in `design-room.html`. Future panel depth should read the same state store and theme tokens rather than inventing parallel docs.
 
 ## Architectural Rules
 
@@ -30,12 +30,14 @@ Future panels should read the same state store and theme tokens rather than inve
 - Keep panel-specific detail in references and scripts, not `SKILL.md`.
 - Let `PROJECT_STATE.yaml` remain the launch lane/status cockpit while `state/business.json` grows into the cross-surface business model.
 - Add validators before adding new panels so the Control Plane does not become another long prose checklist.
+- Run `check-control-plane-contract` whenever panel state changes.
 
 ## Promotion Path
 
 When a Design Room decision is accepted:
 
 1. Commit the state and render.
-2. Cascade the accepted decision to canonical business docs such as `DESIGN.md`, `design.md`, `APP_STORE_LISTING.md`, `ONBOARDING.md`, `CONTENT_ASSETS.md`, and `REVENUE_OPS.md` only when those files are in scope.
-3. Update `PROJECT_STATE.yaml` if launch readiness changed.
-4. Render both `design-room.html` and `launch-cockpit.html` when both state layers changed.
+2. Run `promote-design-tokens` when theme tokens changed, then commit `design-system/tokens.json`, `design-system/tokens.css`, and `design-system/DesignTokens.swift`.
+3. Cascade the accepted decision to canonical business docs such as `DESIGN.md`, `design.md`, `APP_STORE_LISTING.md`, `ONBOARDING.md`, `CONTENT_ASSETS.md`, and `REVENUE_OPS.md` only when those files are in scope.
+4. Update `PROJECT_STATE.yaml` if launch readiness changed.
+5. Render both `design-room.html` and `launch-cockpit.html` when both state layers changed.

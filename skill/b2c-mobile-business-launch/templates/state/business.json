@@ -61,14 +61,69 @@
       {
         "id": "design-room",
         "name": "Design Room",
-        "status": "active"
+        "status": "active",
+        "stateRefs": [
+          "state/business.json",
+          "state/theme.tokens.json"
+        ],
+        "renderedArtifacts": [
+          "design-room.html"
+        ]
+      },
+      {
+        "id": "analytics",
+        "name": "Analytics",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "ANALYTICS.md",
+          "analytics-plan.html"
+        ],
+        "renderedArtifacts": [
+          "analytics-plan.html"
+        ]
+      },
+      {
+        "id": "monetization",
+        "name": "Monetization",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "REVENUE_OPS.md"
+        ],
+        "renderedArtifacts": [
+          "revenue-plan.html"
+        ]
+      },
+      {
+        "id": "store-ops",
+        "name": "Store Ops",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "APP_STORE_LISTING.md",
+          "STORE_CONSOLE.md",
+          "SCREENSHOTS.md"
+        ],
+        "renderedArtifacts": [
+          "app-store-listing.html",
+          "store-console.html"
+        ]
+      },
+      {
+        "id": "growth",
+        "name": "Growth",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "growth/PAID_UA.md",
+          "growth/VIRAL_GROWTH.md"
+        ],
+        "renderedArtifacts": [
+          "growth-plan.html"
+        ]
       }
     ],
-    "futurePanels": [
-      "analytics",
-      "monetization",
-      "store_ops",
-      "growth"
-    ]
+    "futurePanels": []
   }
 }

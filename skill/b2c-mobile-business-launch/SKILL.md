@@ -28,6 +28,8 @@ For all design, visual-system, cross-surface, App Store creative, landing, onboa
 
 The user reviews the rendered Design Room. The agent edits the state. Load [`references/design-room.md`](references/design-room.md), [`references/surfaces-b2c.md`](references/surfaces-b2c.md), [`references/quality-lens.md`](references/quality-lens.md), and [`references/control-plane.md`](references/control-plane.md) when design or control-plane work is in scope.
 
+When theme tokens change and the design is accepted, run the token promotion path so `state/theme.tokens.json` flows into app-facing `design-system/` artifacts before implementation relies on the visual system.
+
 ## Autopilot Run Contract
 
 When this skill activates from a broad launch, business-prep, app-submission, or app-build request, keep running the launch workflow without asking the user to re-invoke this skill or another reference. Load the next needed reference yourself, create or update the artifact, update `PROJECT_STATE.yaml`, render `launch-cockpit.html` when state changes, and run the relevant validators before claiming readiness.
@@ -35,6 +37,8 @@ When this skill activates from a broad launch, business-prep, app-submission, or
 Do not stop with instructions like "now use the ASO skill", "next ask an agent to use RevenueCat", or "you should run the store-console workflow." Route to those references and tools directly. If another specialist skill is available and relevant, use it as part of the same task; if it is unavailable, record the blocked or founder-approved fallback route.
 
 Only pause for founder-only gates: credentials, secrets, account access, paid signups or spend, legal approval, pricing approval, domain purchases, public posting/scheduling, destructive actions, or final submission/release decisions. When paused, leave the lane state, blocker, proof, and exact next action in `PROJECT_STATE.yaml` and `launch-cockpit.html`.
+
+Provider-backed readiness must include live proof or explicit founder-only gates in `PROVIDER_PROOF.md`; setup prose alone cannot mark analytics, revenue, email, store, security, or engineering lanes done. Load [`references/provider-proof.md`](references/provider-proof.md) when any provider-backed lane approaches readiness.
 
 ## Start Here
 
@@ -81,6 +85,7 @@ Only pause for founder-only gates: credentials, secrets, account access, paid si
 - Cascade every change. A change to a launched app's feature, copy, brand vocabulary, pricing, products, or data behavior rarely lives on one surface. After any such change, run [`references/change-cascade.md`](references/change-cascade.md) to propagate it across in-app, App Store listing/keywords/screenshots/App Preview/products/localizations, RevenueCat, landing page + meta/JSON-LD, SEO/GEO, email, analytics, and legal — re-rendering derived assets and reconciling the lexicon before calling the change done.
 - Treat App Store Connect access as setup, not a wall. If the `asc` CLI is installed, never report "cannot access ASC"; run the auth-recovery ladder in [`references/app-store-connect-cli.md`](references/app-store-connect-cli.md) (keychain profiles, account-level keys, `asc auth init/login`) and report any missing app record/cert/RevenueCat app as a founder-gated setup step with the exact next command.
 - Treat design versioning as git state, not prose labels. For Design Room work, baselines, diffs, restores, and wipes operate on `state/` and the rendered Design Room.
+- Treat Control Plane, live-provider proof, behavior evals, artifact starters, and token promotion as mechanically enforced contracts; run their validators before claiming the skill or a generated launch package is complete.
 
 ## Default Phase Flow
 
@@ -152,6 +157,7 @@ A launch package is not complete until a future agent can pick it up without re-
 - Load `project-state.md`, `autonomy-modes.md`, and `parallel-agent-orchestration.md` at the start of multi-lane launch work, before continuing from a prior session, before provider/store mutations, before handoff, before subagent dispatch, or when rendering `launch-cockpit.html`.
 - Load `paid-tool-routing.md` before using or replacing any paid/account-gated third-party tool, before running a free fallback, or when a service is missing from the current runtime.
 - Load `secrets-management.md` and `provider-state-recipes.md` before adding API keys, environment variables, Doppler setup, service tokens, OAuth credentials, webhook signing secrets, store credentials, CI/deploy secrets, `.env` files, provider setup plans, or any command that needs secret injection. Refresh current Doppler/provider docs and local CLI help before install/setup/live-environment instructions.
+- Load `provider-proof.md` before marking analytics, revenue, email, store, security, or engineering lanes done when they depend on PostHog, RevenueCat, Resend, App Store Connect, Sentry, MobAI, Doppler, or another live provider.
 - Load `security-release-hardening.md` before threat modeling, security architecture, Claude Security/Codex Security routing, OWASP MASVS/ASVS checks, MobSF or scanner selection, Sentry/release-health setup, app-integrity decisions, `SECURITY.md`, `security-review.html`, public `security.txt`, or security launch-readiness claims.
 - Load `launch-coverage.md` when the user asks "what else is missing", "are all bases covered", "launch readiness", or when moving from planning to build/submission.
 - Load `artifact-contracts.md` when writing docs, handoff bundles, or acceptance criteria.

@@ -10,6 +10,16 @@ sources:
       - skill/b2c-mobile-business-launch/references/compound-engineering-routing.md
       - skill/b2c-mobile-business-launch/references/tool-recipes.md
     notes: Tracks latest Compound Engineering plugin releases for ce-update and local freshness checks.
+  - id: github-raw-b2c-launch-skill-version-main
+    name: b2c-mobile-business-launch skill version manifest
+    source_type: raw_manifest
+    url: https://raw.githubusercontent.com/Emuthmartinez/b2c-mobile-business-launch-skill/main/skill/b2c-mobile-business-launch/skill-version.json
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/skill-versioning.md
+      - skill/b2c-mobile-business-launch/scripts/check-skill-version.ts
+    notes: Remote manifest used when comparing installed runtime freshness against the pushed main branch.
   - id: anthropic-com-engineering-how-we-contain-claude
     name: Anthropic Claude containment
     source_type: official_docs

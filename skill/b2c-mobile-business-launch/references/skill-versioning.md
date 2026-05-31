@@ -22,6 +22,15 @@ From the source repo:
 
 ```bash
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch
+npm run check:version-discipline -- --repo-root . --skill-root skill/b2c-mobile-business-launch
+```
+
+When internet access is available and you need to compare against the pushed source of truth:
+
+```bash
+npm run check:skill-version -- \
+  --installed ~/.codex/skills/b2c-mobile-business-launch \
+  --remote-url https://raw.githubusercontent.com/Emuthmartinez/b2c-mobile-business-launch-skill/main/skill/b2c-mobile-business-launch/skill-version.json
 ```
 
 From the installed runtime:
@@ -54,6 +63,7 @@ diff -qr --exclude node_modules \
 
 - `skill-version.json` is the version source of truth for installed-runtime freshness.
 - `check-skill-version.ts` must return a nonzero status when the installed runtime is older than the source copy.
+- `check-version-discipline.ts` must pass before committing skill behavior changes; it enforces that meaningful skill edits and `skill-version.json` move together.
 - A stale installed runtime is a founder decision gate, not a silent warning.
-- If the source copy is unavailable, continue with the installed copy but report that latest-version verification could not be completed.
+- If the source copy or remote manifest is unavailable, continue with the installed copy but report that latest-version verification could not be completed.
 - Runtime upgrades must preserve user work: sync the skill directory only, exclude `node_modules`, reinstall dependencies, run audit, and verify the runtime diff.

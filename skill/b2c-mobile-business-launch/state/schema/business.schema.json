@@ -618,7 +618,9 @@
       "required": [
         "id",
         "name",
-        "status"
+        "status",
+        "stateRefs",
+        "renderedArtifacts"
       ],
       "properties": {
         "id": {
@@ -629,7 +631,27 @@
           "type": "string"
         },
         "status": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "active",
+            "planned",
+            "blocked",
+            "not_needed"
+          ]
+        },
+        "stateRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "renderedArtifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
         }
       }
     },

@@ -39,6 +39,7 @@ const knownValidators = new Set([
   "check-agent-entrypoints",
   "check-workflow-adherence",
   "check-skill-version",
+  "check-version-discipline",
   "check-compound-engineering-routing",
   "check-aso-metadata",
   "check-paid-tool-decisions",
@@ -46,6 +47,11 @@ const knownValidators = new Set([
   "validate-state",
   "render-design-room",
   "check-design-room-contract",
+  "check-control-plane-contract",
+  "check-live-provider-proof",
+  "check-artifact-templates",
+  "run-agent-evals",
+  "check-token-promotion",
   "render-launch-cockpit",
 ]);
 

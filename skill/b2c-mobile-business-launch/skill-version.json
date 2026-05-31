@@ -1,11 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.2.0",
-  "updatedAt": "2026-05-30",
+  "version": "0.3.0",
+  "updatedAt": "2026-05-31",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "Adds the Design Room STATE -> MUTATE -> VERSION -> RENDER workflow.",
-    "Adds React/Vite Design Room rendering with static HTML fallback.",
-    "Adds local runtime freshness checks before launch or design work continues."
+    "Adds Compound Engineering routing enforcement for core app work.",
+    "Adds onboarding App Review popup enforcement immediately after first value.",
+    "Adds Control Plane, live-provider proof, artifact-template, agent-eval, and design-token promotion gates."
   ]
 }

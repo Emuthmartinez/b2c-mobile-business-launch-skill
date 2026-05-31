@@ -31,7 +31,11 @@ const readinessArtifacts = [
   "PRODUCTION_READINESS.md",
   "engineering/PRODUCTION_READINESS.md",
 ].filter((candidate) => existsSync(path.join(args.root, candidate)));
-const engineeringInScope = engineeringLaneStatus === "done" || readinessArtifacts.length > 0;
+const compoundRoute = state ? asString(getPath(state, "compound_engineering.route")) : undefined;
+const engineeringInScope =
+  engineeringLaneStatus === "done" ||
+  (compoundRoute !== undefined && compoundRoute !== "not_evaluated" && compoundRoute !== "not_needed") ||
+  readinessArtifacts.some((artifact) => hasReadinessClaim(readText(args.root, artifact) ?? ""));
 
 const orchestration = firstText(["ORCHESTRATION.md", "orchestration/ORCHESTRATION.md"]);
 const engineeringPlan = firstText(["ENGINEERING_PLAN.md", "engineering/ENGINEERING_PLAN.md"]);
@@ -160,6 +164,13 @@ function requireTerms(text: string, terms: string[], filePath: string): void {
 
 function includesAny(text: string, terms: string[]): boolean {
   return terms.some((term) => text.includes(term));
+}
+
+function hasReadinessClaim(text: string): boolean {
+  if (!text.trim() || /Status:\s*partial until/i.test(text)) {
+    return false;
+  }
+  return /\b(done|ready|production[- ]ready|launch[- ]ready|implementation proof|ce-work completed)\b/i.test(text);
 }
 
 function normalizedStrings(value: unknown): string[] {

@@ -591,6 +591,28 @@ function writeCompleteCompoundEngineering(root: string): void {
   );
 }
 
+function writeCompleteProviderProof(root: string): void {
+  writeFileSync(
+    path.join(root, "PROVIDER_PROOF.md"),
+    [
+      "# Provider Proof",
+      "Status: evidence captured for this fixture.",
+      "Proof Ledger",
+      "| Provider | current status | proof command | evidence path | founder-only gate |",
+      "| --- | --- | --- | --- | --- |",
+      "| PostHog | event and person property captured | inspect dashboard/API | analytics/posthog-proof.md | founder-only account access |",
+      "| RevenueCat | sandbox purchase grants entitlement | sandbox purchase and entitlement check | revenue/revenuecat-proof.md | founder-only store product setup |",
+      "| Resend | domain and test send captured | send test email | email/resend-proof.md | founder-only DNS access |",
+      "| App Store Connect | app record and metadata inspected | asc validation commands | store/asc-proof.md | founder-only submission access |",
+      "| Sentry | release event captured | trigger handled test event | security/sentry-proof.md | founder-only project access |",
+      "| MobAI | target-user onboarding walkthrough captured | run mobile walkthrough | mobile/mobai-proof.md | founder-only device access |",
+      "| Doppler | runtime injection captured | doppler run -- printenv APP_ENV | secrets/doppler-proof.md | founder-only secrets access |",
+      "No raw secrets, private account screenshots, signing material, or credential screenshots are stored in proof artifacts.",
+    ].join("\n"),
+    "utf8",
+  );
+}
+
 function writeCompletePaidToolDecisions(root: string): void {
   writeFileSync(
     path.join(root, "TOOL_DECISIONS.md"),
@@ -669,6 +691,7 @@ try {
   writeCompleteViralGrowth(clean);
   writeCompletePaidUserAcquisition(clean);
   writeCompleteOrchestration(clean);
+  writeCompleteProviderProof(clean);
   runFixture("complete project state passes", clean, "validate-project-state.ts", 0);
   runFixture("complete attribution contract passes", clean, "check-attribution-contract.ts", 0);
   runFixture("clean secret routing passes", clean, "check-secret-routing.ts", 0);
@@ -679,6 +702,9 @@ try {
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
   runFixture("complete Design Room state passes", clean, "validate-state.ts", 0);
   runFixture("complete Design Room contract passes", clean, "check-design-room-contract.ts", 0);
+  runFixture("complete Control Plane contract passes", clean, "check-control-plane-contract.ts", 0);
+  runFixture("complete token promotion passes", clean, "check-token-promotion.ts", 0);
+  runFixture("complete provider proof passes", clean, "check-live-provider-proof.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete Apple App Store requirements packet passes", clean, "check-apple-app-store-requirements.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
@@ -689,6 +715,9 @@ try {
   runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
   runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
   runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
+  runFixture("current version discipline passes", skillRoot, "check-version-discipline.ts", 0, undefined, ["--repo-root", path.resolve(skillRoot, "../.."), "--skill-root", skillRoot]);
+  runFixture("artifact template coverage passes", path.join(skillRoot, "templates"), "check-artifact-templates.ts", 0, undefined, ["--skill-root", skillRoot]);
+  runFixture("agent behavior eval definitions pass", path.join(skillRoot, "evals/agent-behavior"), "run-agent-evals.ts", 0);
   runFixture("compound engineering not in scope passes", clean, "check-compound-engineering-routing.ts", 0);
   writeCompletePaidToolDecisions(clean);
   runFixture("complete paid-tool decisions packet passes", clean, "check-paid-tool-decisions.ts", 0);
@@ -794,6 +823,7 @@ try {
   missingContract["anonymous_reconciliation"] = true;
   missingContract["verified"] = true;
   writeState(attributionMissingImplementation, attributionMissingState);
+  writeFileSync(path.join(attributionMissingImplementation, "ANALYTICS.md"), "# Analytics\n\nAnalytics implementation details are intentionally absent in this fixture.\n", "utf8");
   runFixture("done attribution without implementation text fails", attributionMissingImplementation, "check-attribution-contract.ts", 1, "attribution.text.self_reported_source.not_found");
 
   const attributionNotNeeded = makeFixture("attribution-not-needed");
@@ -1572,6 +1602,11 @@ try {
   runFixture("complete Compound Engineering route passes", compoundComplete, "check-compound-engineering-routing.ts", 0);
 
   const compoundSkipped = makeFixture("compound-skipped");
+  {
+    const state = readState(compoundSkipped);
+    getLane(state, "engineering")["status"] = "done";
+    writeState(compoundSkipped, state);
+  }
   writeFileSync(path.join(compoundSkipped, "ENGINEERING_PLAN.md"), "# Engineering Plan\n\nGeneric implementation checklist.\n", "utf8");
   runFixture(
     "core engineering without Compound Engineering route fails",
@@ -1614,6 +1649,92 @@ try {
     "check-design-room-contract.ts",
     1,
     "design_room.freeform_design_artifact",
+  );
+
+  const controlPlaneMissing = makeFixture("control-plane-missing-panel");
+  {
+    const designStatePath = path.join(controlPlaneMissing, "state", "business.json");
+    const designState = JSON.parse(readFileSync(designStatePath, "utf8")) as MutableRecord;
+    const controlPlane = expectRecord(designState["controlPlane"], "controlPlane");
+    controlPlane["panels"] = [];
+    writeFileSync(designStatePath, `${JSON.stringify(designState, null, 2)}\n`, "utf8");
+  }
+  runFixture(
+    "Control Plane without required panels fails",
+    controlPlaneMissing,
+    "check-control-plane-contract.ts",
+    1,
+    "control_plane.design-room.missing",
+  );
+
+  const providerProofMissing = makeFixture("provider-proof-missing");
+  {
+    const state = readState(providerProofMissing);
+    const revenue = getLane(state, "revenue");
+    revenue["status"] = "done";
+    revenue["evidence"] = ["REVENUE_OPS.md"];
+    writeState(providerProofMissing, state);
+    rmSync(path.join(providerProofMissing, "PROVIDER_PROOF.md"), { force: true });
+  }
+  runFixture(
+    "provider-backed done lane without proof fails",
+    providerProofMissing,
+    "check-live-provider-proof.ts",
+    1,
+    "provider_proof.file_missing",
+  );
+
+  const providerProofContradiction = makeFixture("provider-proof-contradiction");
+  writeFileSync(
+    path.join(providerProofContradiction, "PROVIDER_PROOF.md"),
+    [
+      "# Provider Proof",
+      "Status: verified but pending founder-only blocker.",
+      "PostHog RevenueCat Resend App Store Connect Sentry MobAI Doppler current status proof command evidence path founder-only",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "provider proof ready claim with open blocker fails",
+    providerProofContradiction,
+    "check-live-provider-proof.ts",
+    1,
+    "provider_proof.ready_claim_with_blocker",
+  );
+
+  const artifactTemplateGap = makeFixture("artifact-template-gap");
+  {
+    const state = readState(artifactTemplateGap);
+    const design = getLane(state, "design");
+    design["evidence"] = ["MISSING_TEMPLATE_STARTER.md"];
+    writeState(artifactTemplateGap, state);
+  }
+  runFixture(
+    "template evidence without starter fails",
+    artifactTemplateGap,
+    "check-artifact-templates.ts",
+    1,
+    "artifact_templates.design.starter_missing",
+    ["--skill-root", skillRoot],
+  );
+
+  const agentEvalGap = makeEmptyFixture("agent-eval-gap");
+  runFixture("too few agent behavior evals fail", agentEvalGap, "run-agent-evals.ts", 1, "agent_evals.too_few");
+
+  const tokenPromotionStale = makeFixture("token-promotion-stale");
+  {
+    const tokensPath = path.join(tokenPromotionStale, "state", "theme.tokens.json");
+    const tokens = JSON.parse(readFileSync(tokensPath, "utf8")) as MutableRecord;
+    const tokenRoot = expectRecord(tokens["tokens"], "tokens");
+    expectRecord(tokenRoot["color"], "tokens.color")["primary"] = "#123456";
+    writeFileSync(tokensPath, `${JSON.stringify(tokens, null, 2)}\n`, "utf8");
+  }
+  runFixture(
+    "stale promoted design tokens fail",
+    tokenPromotionStale,
+    "check-token-promotion.ts",
+    1,
+    "token_promotion.json_stale",
   );
 
   const staleSkillVersion = makeEmptyFixture("stale-skill-version");

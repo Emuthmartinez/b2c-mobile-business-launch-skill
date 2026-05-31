@@ -32,6 +32,8 @@ scripts/validate-state.ts
 scripts/render-design-room.ts
 scripts/version.ts
 scripts/check-design-room-contract.ts
+scripts/promote-design-tokens.ts
+scripts/check-token-promotion.ts
 render/
 ```
 
@@ -45,6 +47,8 @@ Run from the installed skill or skill repo, passing the app repo with `--root`:
 npm run validate:design-state -- --root /path/to/app
 npm run render:design-room -- --root /path/to/app
 npm run check:design-room -- --root /path/to/app
+npm run promote:design-tokens -- --root /path/to/app
+npm run check:token-promotion -- --root /path/to/app
 ```
 
 Version operations:
@@ -70,6 +74,8 @@ Before editing state, choose the mutation boundary:
 - **Wipe mutation**: replaces `state/business.json` with the schema-valid empty skeleton and commits the reset.
 
 Each mutation should update `designRoom.versionLog` with a short summary, `statePaths`, and `renderedArtifacts`.
+
+Theme mutations that are accepted for implementation must also promote tokens into `design-system/tokens.json`, `design-system/tokens.css`, and `design-system/DesignTokens.swift`. Treat those files as generated handoff artifacts from the Design Room, not as a second source of truth.
 
 ## App Store Surfaces
 
@@ -100,4 +106,5 @@ Design work is ready for review only when:
 - `design-room.html` hash matches the current state.
 - React/Vite build exists when dependencies are installed, or the static fallback is explicitly recorded.
 - `check-design-room-contract` passes.
+- `check-token-promotion` passes when theme tokens changed or implementation is about to consume the design system.
 - If the design affects launch status, `PROJECT_STATE.yaml` and `launch-cockpit.html` are updated too.

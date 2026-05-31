@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill-runtime",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -28,9 +28,16 @@
     "check:workflow-adherence": "tsx scripts/check-workflow-adherence.ts --skill-root .",
     "check:autopilot": "tsx scripts/check-autopilot-contract.ts",
     "check:skill-version": "tsx scripts/check-skill-version.ts",
+    "check:version-discipline": "tsx scripts/check-version-discipline.ts",
     "check:compound-engineering": "tsx scripts/check-compound-engineering-routing.ts",
     "validate:design-state": "tsx scripts/validate-state.ts",
     "check:design-room": "tsx scripts/check-design-room-contract.ts",
+    "check:control-plane": "tsx scripts/check-control-plane-contract.ts",
+    "check:provider-proof": "tsx scripts/check-live-provider-proof.ts",
+    "check:artifact-templates": "tsx scripts/check-artifact-templates.ts",
+    "check:agent-evals": "tsx scripts/run-agent-evals.ts",
+    "check:token-promotion": "tsx scripts/check-token-promotion.ts",
+    "promote:design-tokens": "tsx scripts/promote-design-tokens.ts",
     "render:design-room": "tsx scripts/render-design-room.ts",
     "design:version": "tsx scripts/version.ts",
     "check:landing-funnel": "tsx scripts/check-landing-funnel.ts",
@@ -38,7 +45,7 @@
     "render:launch-cockpit": "tsx scripts/render-launch-cockpit.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run check:skill-version -- --source . --installed . && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run validate:design-state -- --root templates && npm run check:design-room -- --root templates && npm run check:compound-engineering -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:onboarding -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-ua -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-requirements -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html && npm run render:design-room -- --root templates --out /tmp/b2c-design-room.html --static-only",
+    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:autopilot && npm run check:skill-version -- --source . --installed . && npm run check:version-discipline -- --skill-root . && npm run check:artifact-templates -- --skill-root . && npm run check:agent-evals && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run validate:design-state -- --root templates && npm run check:design-room -- --root templates && npm run check:control-plane -- --root templates && npm run check:token-promotion -- --root templates && npm run check:provider-proof -- --root templates --state PROJECT_STATE.yaml && npm run check:compound-engineering -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:onboarding -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-ua -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-requirements -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html && npm run render:design-room -- --root templates --out /tmp/b2c-design-room.html --static-only",
     "check:aso-metadata": "tsx scripts/check-aso-metadata.ts"
   },
   "devDependencies": {

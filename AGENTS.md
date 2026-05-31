@@ -48,7 +48,13 @@ npm run check:source-registry
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed skill/b2c-mobile-business-launch
+npm run check:version-discipline -- --repo-root . --skill-root skill/b2c-mobile-business-launch
+npm run check:artifact-templates -- --skill-root skill/b2c-mobile-business-launch
+npm run check:agent-evals
 npm run check:compound-engineering -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:control-plane -- --root skill/b2c-mobile-business-launch/templates
+npm run check:provider-proof -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:token-promotion -- --root skill/b2c-mobile-business-launch/templates
 npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm pack --dry-run --json
 ```
