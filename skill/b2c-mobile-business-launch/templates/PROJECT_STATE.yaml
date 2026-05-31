@@ -99,6 +99,14 @@ lanes:
       - "11-star-experience/11_STAR_EXPERIENCE.md"
       - "11-star-experience/11-star-experience.html"
     blockers: []
+  emotional_design:
+    status: "partial"
+    evidence:
+      - "emotional-design/EMOTIONAL_DESIGN.md"
+      - "emotional-design/emotional-design.html"
+    blockers: []
+    audit_requested: false
+    deferred_cards: []
   product:
     status: "partial"
     evidence:
