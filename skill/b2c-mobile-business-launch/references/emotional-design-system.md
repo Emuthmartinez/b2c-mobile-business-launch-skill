@@ -144,7 +144,7 @@ Evidence required: the frontstage/backstage dependency table in `TECH_SPEC.md` f
 The Emotional Curve is a required output of the Emotional Review Framework. It is a plot of emotional intensity over the session or flow, derived from the Lens 3 journey table.
 
 Requirements:
-- Plot it in `design.html` using the project's design tokens (`--motion-*`, `DesignTokens.Motion`).
+- Plot it in `emotional-design.html` using the project's design tokens (`--motion-*`, `DesignTokens.Motion`).
 - The curve must peak at or before the paywall marker. This is a deterministic validator rule: a curve that peaks after the paywall fails the audit.
 - Mark the positions of each applied Experience Card on the curve.
 - Mark the App Review popup position (must be at or after the peak, per `onboarding-conversion.md`).
@@ -170,7 +170,7 @@ This protocol produces `EMOTIONAL_DESIGN.md` updates, card applications, measure
 
 4. **Select cards.** From the twelve-card deck, identify which cards apply to this feature and at which moments. The four required cards (Commitment, Variable Reward, Perceived Effort Delay, Intent Mirroring) are always evaluated — mark them not-applicable with a reason if genuinely inapplicable. Justify each selected additional card with a JTBD-level reason, not a "would be cool" reason.
 
-5. **Design the Emotional Curve.** Map the entry state, build, peak, resolve, and exit state for the flow. Verify the peak falls before the paywall. Render the curve in `design.html`.
+5. **Design the Emotional Curve.** Map the entry state, build, peak, resolve, and exit state for the flow. Verify the peak falls before the paywall. Render the curve in `emotional-design.html`.
 
 6. **Write card applications.** For each selected card, write the application block in `EMOTIONAL_DESIGN.md`:
    - trigger moment (screen name, state, user action)
@@ -270,8 +270,8 @@ For full regulatory detail, per-card risk tables, and the Guardrail Contract att
 
 Create or update before calling the emotional layer build-ready:
 
-- `EMOTIONAL_DESIGN.md`: the applied card deck for this product. Sections: Review Scores, Card Applications (one block per applied card), Emotional Curve (text representation; rendered in `design.html`), Ethics Attestations.
-- `design.html`: rendered Emotional Curve using design tokens; position markers for each card, paywall, and App Review popup.
+- `EMOTIONAL_DESIGN.md`: the applied card deck for this product. Sections: Review Scores, Card Applications (one block per applied card), Emotional Curve (text representation; rendered in `emotional-design.html`), Ethics Attestations.
+- `emotional-design.html`: rendered Emotional Curve using design tokens; position markers for each card, paywall, and App Review popup.
 - `ANALYTICS.md`: card-specific PostHog events added to the event catalog.
 - `DESIGN.md`: three-level emotional tone block; motion spec per card with reduce-motion fallback.
 - `TECH_SPEC.md`: frontstage/backstage dependency table for each card-carrying screen.
@@ -286,7 +286,7 @@ lanes:
     status: "partial"
     evidence:
       - "EMOTIONAL_DESIGN.md"
-      - "design.html"
+      - "emotional-design.html"
     blockers: []
 ```
 
@@ -331,8 +331,8 @@ Every card emits PostHog events. The events are named and specified in `emotiona
 Motion is a delight lever, not decoration. Rules:
 - Every card-level delight moment must reference a named `DesignTokens.Motion` token (for SwiftUI / Flutter / Reanimated native targets) or a `--motion-*` CSS variable (for web).
 - Every motion moment must declare a `prefers-reduced-motion` / OS reduce-motion fallback in `DESIGN.md`.
-- The Emotional Curve rendered in `design.html` uses the project's motion tokens for its own animation.
-- Generated or token-derived motion proofs must live in `design.html`, not in a standalone mood board.
+- The Emotional Curve rendered in `emotional-design.html` uses the project's motion tokens for its own animation.
+- Generated or token-derived motion proofs must live in `emotional-design.html`, not in a standalone mood board.
 
 ### Failure Cards (`failure-cards.md`)
 
@@ -342,7 +342,7 @@ Card-level failure shapes to open when violations are found:
 |---|---|---|
 | `emotional-card-missing-on-key-screen` | A required card (Commitment, Variable Reward, Perceived Effort Delay, Intent Mirroring) is absent on a screen that would benefit from it according to the JTBD and star-level target | Apply the card per the Producer Protocol; add PostHog event to `ANALYTICS.md`; run `check:emotional-design` |
 | `emotional-card-dark-line-crossed` | Any applied card fails the three-question bright-line test or uses a prohibited pattern from `ethics-guardrail.md §Non-Negotiable Prohibitions` | Stop implementation; remove or redesign the mechanism; run `check:emotional-design`; open as severity critical |
-| `emotional-curve-peaks-after-paywall` | The Emotional Curve plot in `EMOTIONAL_DESIGN.md` or `design.html` shows the emotional peak occurring after the paywall marker | Redesign the flow so the peak occurs before the paywall; re-render `design.html` |
+| `emotional-curve-peaks-after-paywall` | The Emotional Curve plot in `EMOTIONAL_DESIGN.md` or `emotional-design.html` shows the emotional peak occurring after the paywall marker | Redesign the flow so the peak occurs before the paywall; re-render `emotional-design.html` |
 | `emotional-card-no-posthog-event` | A card is applied in `EMOTIONAL_DESIGN.md` but no corresponding event exists in `ANALYTICS.md` | Add the event to `ANALYTICS.md` before implementation; verify with `check:attribution` |
 | `emotional-card-motion-no-fallback` | A card's motion moment is specified in `DESIGN.md` without a `prefers-reduced-motion` fallback | Add the fallback; re-run `check:token-promotion` |
 | `emotional-audit-unintegrated` | An audit (`EMOTIONAL_AUDIT.md`) exists but findings have not been converted to failure cards or `PROJECT_STATE.yaml` updates | Accept or reject each finding; open failure cards; update `PROJECT_STATE.yaml` |
@@ -373,7 +373,7 @@ When the founder says "turn this feature into an emotional experience", "charge 
 2. Update `ANALYTICS.md` with the new PostHog events.
 3. Update `DESIGN.md` with the three-level tone block and motion spec.
 4. Update `TECH_SPEC.md` with the frontstage/backstage dependency rows.
-5. Render or update `design.html` with the Emotional Curve.
+5. Render or update `emotional-design.html` with the Emotional Curve.
 6. Run `npm run check:emotional-design -- --root .`. Fix all errors before continuing.
 7. Update `PRODUCTION_READINESS.md` evidence rows.
 8. Update `PROJECT_STATE.yaml` `lanes.emotional_design`.
@@ -434,7 +434,7 @@ Do not move to engineering handoff for any feature with an emotional design comp
 
 - The "emotional design" pass produces only copy changes (warmer button labels) without engaging any card mechanism. The result is 5-star with nicer words.
 - Cards are named in `SPEC.md` but not specified: no trigger moment, no copy sketch, no PostHog event. Unnamed implementations are unmeasurable and untestable.
-- The Emotional Curve is described in prose but not rendered in `design.html`. The paywall-marker rule cannot be validated from prose.
+- The Emotional Curve is described in prose but not rendered in `emotional-design.html`. The paywall-marker rule cannot be validated from prose.
 - The Perceived Effort Delay stage labels are written for marketing impact, not accuracy. Fabricated labels ("Analyzing 47 data points…" for a cached lookup) are a compliance veto, not a copy problem.
 - Variable Reward motion is specced but has no reduce-motion fallback. Accessibility is a launch gate, not a polish task.
 - The Intent Mirroring Card copy uses generic filler ("Great job on your session!") rather than the user's own words from the Commitment Card. This is a 5-star implementation labeled as 7-star.

@@ -45,6 +45,16 @@ function makeEmptyFixture(name: string): string {
   return fixtureRoot;
 }
 
+function writeBusinessEntrypoints(root: string): void {
+  cpSync(path.join(skillRoot, "templates", "repo-agent-entrypoints", "AGENTS.md"), path.join(root, "AGENTS.md"));
+  cpSync(path.join(skillRoot, "templates", "repo-agent-entrypoints", "CLAUDE.md"), path.join(root, "CLAUDE.md"));
+  cpSync(path.join(skillRoot, "templates", "app-agent-roster", "APP_AGENTS.md"), path.join(root, "APP_AGENTS.md"));
+  cpSync(path.join(skillRoot, "templates", "app-agent-roster", "agents"), path.join(root, "agents"), { recursive: true });
+  cpSync(path.join(skillRoot, "templates", "ORCHESTRATION.md"), path.join(root, "ORCHESTRATION.md"));
+  cpSync(path.join(skillRoot, "templates", "orchestration.html"), path.join(root, "orchestration.html"));
+  writeFileSync(path.join(root, "launch-cockpit.html"), "<!doctype html><html><body>Launch cockpit fixture</body></html>", "utf8");
+}
+
 function expectRecord(value: unknown, label: string): MutableRecord {
   if (typeof value !== "object" || value === null || Array.isArray(value)) {
     throw new Error(`${label} must be an object.`);
@@ -532,15 +542,23 @@ function writeCompleteOrchestration(root: string): void {
   };
   const orchestrationLane = getLane(state, "orchestration");
   orchestrationLane["status"] = "done";
-  orchestrationLane["evidence"] = ["orchestration/ORCHESTRATION.md", "orchestration/orchestration.html", "orchestration/security-audit.md"];
+  orchestrationLane["evidence"] = ["ORCHESTRATION.md", "orchestration.html", "orchestration/security-audit.md"];
   orchestrationLane["blockers"] = [];
   writeState(root, state);
   writeFileSync(
-    path.join(root, "orchestration", "ORCHESTRATION.md"),
+    path.join(root, "ORCHESTRATION.md"),
     [
       "# Orchestration",
       "Orchestration Preflight: the orchestrator keeps state integration local while product and security audits run in parallel.",
       "Strategy: hybrid manager pattern with one orchestrator.",
+      "## Session Continuity",
+      "Last state review: 2026-05-31.",
+      "Continuity source set: AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, ORCHESTRATION.md, PRODUCTION_READINESS.md, FAILURE_CARDS.md.",
+      "Memory policy: Do not rely on chat memory or prior transcripts as source truth; repo state wins.",
+      "Git status reviewed: yes.",
+      "Drift risks or stale assumptions: none for this fixture.",
+      "Next action: continue with integrated validation.",
+      "State or cockpit rerender needed: no.",
       "Compound Engineering Routing: ce-update freshness checked v3.9.3 against latest release v3.9.3; ce-brainstorm skipped because product direction already decisive; ce-plan created ENGINEERING_PLAN.md; ce-work executed bounded units; ce-worktree was not needed; ce-code-review passed; ce-test-browser covered web proof; ce-proof produced proof artifact.",
       "Candidate Units: product-audit includes SPEC.md, 11_STAR_EXPERIENCE.md, ONBOARDING.md, and LAUNCH_TRACE.md; security-audit is read-only; state-integration is serialized.",
       "Parallel Safety Check: file-overlap check passed; actual modified files were compared after agent outputs returned.",
@@ -555,7 +573,7 @@ function writeCompleteOrchestration(root: string): void {
     ].join("\n"),
     "utf8",
   );
-  writeFileSync(path.join(root, "orchestration", "orchestration.html"), "<!doctype html><html><body>Orchestration board</body></html>", "utf8");
+  writeFileSync(path.join(root, "orchestration.html"), "<!doctype html><html><body>Orchestration board</body></html>", "utf8");
   writeFileSync(path.join(root, "orchestration", "security-audit.md"), "# Security Audit\n\nNo orchestration blocker remains.\n", "utf8");
 }
 
@@ -679,8 +697,25 @@ function runFixture(label: string, root: string, script: string, expectedCode: n
   });
 }
 
+function runScriptArgs(label: string, script: string, args: string[], expectedCode: number, expectedText?: string): void {
+  const result = spawnSync(tsxBin, [path.join("scripts", script), ...args], {
+    cwd: skillRoot,
+    encoding: "utf8",
+  });
+  const output = `${result.stdout}\n${result.stderr}`;
+  results.push({
+    label,
+    ok: result.status === expectedCode && (!expectedText || output.includes(expectedText)),
+    expectedCode,
+    actualCode: result.status,
+    expectedText,
+    output,
+  });
+}
+
 try {
   const clean = makeFixture("clean");
+  writeBusinessEntrypoints(clean);
   writeCompleteAttribution(clean);
   writeCompleteAppleSigning(clean);
   writeCompleteAppleRequirements(clean);
@@ -719,6 +754,16 @@ try {
   runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
   runFixture("current version discipline passes", skillRoot, "check-version-discipline.ts", 0, undefined, ["--repo-root", path.resolve(skillRoot, "../.."), "--skill-root", skillRoot]);
   runFixture("artifact template coverage passes", path.join(skillRoot, "templates"), "check-artifact-templates.ts", 0, undefined, ["--skill-root", skillRoot]);
+  runFixture("continuity contract templates pass", skillRoot, "check-continuity-contract.ts", 0, undefined, ["--skill-root", skillRoot]);
+  runFixture("generated business continuity contract passes", clean, "check-continuity-contract.ts", 0);
+  const emptyBusinessForContinuity = makeEmptyFixture("continuity-empty-business");
+  runScriptArgs(
+    "continuity root override after skill-root checks business root",
+    "check-continuity-contract.ts",
+    ["--skill-root", skillRoot, "--root", emptyBusinessForContinuity],
+    1,
+    "continuity.file_missing",
+  );
   runFixture("agent behavior eval definitions pass", path.join(skillRoot, "evals/agent-behavior"), "run-agent-evals.ts", 0);
   runFixture("compound engineering not in scope passes", clean, "check-compound-engineering-routing.ts", 0);
   writeCompletePaidToolDecisions(clean);
@@ -757,6 +802,35 @@ try {
     });
   }
 
+  const continuityMissingAgents = makeFixture("continuity-missing-agents");
+  writeBusinessEntrypoints(continuityMissingAgents);
+  writeFileSync(
+    path.join(continuityMissingAgents, "AGENTS.md"),
+    readFileSync(path.join(continuityMissingAgents, "AGENTS.md"), "utf8").replace(/## Session Continuity[\s\S]*?## Source Of Truth/, "## Source Of Truth"),
+    "utf8",
+  );
+  runFixture("generated business without continuity entrypoint fails", continuityMissingAgents, "check-continuity-contract.ts", 1, "continuity.term_missing");
+
+  const continuityMissingState = makeFixture("continuity-missing-state");
+  writeBusinessEntrypoints(continuityMissingState);
+  const stateWithoutContinuity = readState(continuityMissingState);
+  delete stateWithoutContinuity.continuity;
+  writeState(continuityMissingState, stateWithoutContinuity);
+  runFixture("project state without continuity block fails", continuityMissingState, "check-continuity-contract.ts", 1, "continuity.project_state_missing");
+
+  const continuityMissingSourceFile = makeFixture("continuity-missing-source-file");
+  writeBusinessEntrypoints(continuityMissingSourceFile);
+  rmSync(path.join(continuityMissingSourceFile, "PRODUCTION_READINESS.md"), { force: true });
+  runFixture("business continuity without source file fails", continuityMissingSourceFile, "check-continuity-contract.ts", 1, "continuity.source_file_missing");
+
+  const continuityMissingGitStatus = makeFixture("continuity-missing-git-status");
+  writeBusinessEntrypoints(continuityMissingGitStatus);
+  const stateWithoutGitStatus = readState(continuityMissingGitStatus);
+  const continuityWithoutGitStatus = expectRecord(stateWithoutGitStatus.continuity, "continuity");
+  delete continuityWithoutGitStatus.git_status_reviewed;
+  writeState(continuityMissingGitStatus, stateWithoutGitStatus);
+  runFixture("project state without git status continuity field fails", continuityMissingGitStatus, "check-continuity-contract.ts", 1, "continuity.project_state_git_status_missing");
+
   const missingEvidence = makeFixture("missing-evidence");
   const missingEvidenceState = readState(missingEvidence);
   const missingEvidenceDesign = getLane(missingEvidenceState, "design");
@@ -787,6 +861,24 @@ try {
   unreasonedRevenue["blockers"] = [];
   writeState(unreasonedNotNeeded, unreasonedState);
   runFixture("not_needed lane without evidence or blocker fails", unreasonedNotNeeded, "validate-project-state.ts", 1, "not_needed_without_reason");
+
+  const missingStateEmotionalLane = makeFixture("state-missing-emotional-lane");
+  {
+    const state = readState(missingStateEmotionalLane);
+    const lanes = expectRecord(state.lanes, "PROJECT_STATE.yaml lanes");
+    delete lanes.emotional_design;
+    writeState(missingStateEmotionalLane, state);
+  }
+  runFixture("project state without emotional design lane fails", missingStateEmotionalLane, "validate-project-state.ts", 1, "lanes.emotional_design.missing");
+
+  const unreasonedDeferredEmotional = makeFixture("unreasoned-deferred-emotional");
+  const unreasonedDeferredState = readState(unreasonedDeferredEmotional);
+  const unreasonedDeferredLane = getLane(unreasonedDeferredState, "emotional_design");
+  unreasonedDeferredLane["status"] = "deferred";
+  unreasonedDeferredLane["evidence"] = [];
+  unreasonedDeferredLane["blockers"] = [];
+  writeState(unreasonedDeferredEmotional, unreasonedDeferredState);
+  runFixture("deferred emotional design lane without reason fails", unreasonedDeferredEmotional, "validate-project-state.ts", 1, "deferred_without_reason");
 
   const partialAttribution = makeFixture("partial-attribution");
   runFixture("partial attribution contract fails", partialAttribution, "check-attribution-contract.ts", 1, "attribution.screen_early.incomplete");
@@ -1161,6 +1253,23 @@ try {
     "store_screenshots.app-store-screenshots.json.missing",
   );
 
+  const appPreviewOptional = makeFixture("app-preview-optional");
+  writeCompleteStoreConsole(appPreviewOptional);
+  writeCompleteStoreScreenshots(appPreviewOptional);
+  writeFileSync(
+    path.join(appPreviewOptional, "APP_STORE_LISTING.md"),
+    readFileSync(path.join(appPreviewOptional, "APP_STORE_LISTING.md"), "utf8") +
+      "\n| App Preview 1 | App Store search/product page | real in-app footage | Remotion | previews/ios-preview-1.mp4 | poster frame | optional |\n",
+    "utf8",
+  );
+  runFixture(
+    "optional first App Preview without founder deferral fails",
+    appPreviewOptional,
+    "check-store-screenshots.ts",
+    1,
+    "store_screenshots.app_preview_optional_without_deferral",
+  );
+
   const uxFallbackUnapproved = makeFixture("ux-fallback-unapproved");
   writeFileSync(
     path.join(uxFallbackUnapproved, "UX_PATTERNS.md"),
@@ -1227,6 +1336,61 @@ try {
   const emotionalDesignMissing = makeFixture("emotional-design-missing");
   rmSync(path.join(emotionalDesignMissing, "emotional-design"), { recursive: true, force: true });
   runFixture("missing emotional design contract fails", emotionalDesignMissing, "check-emotional-design.ts", 1, "emotional_design.contract_missing");
+
+  const emotionalDesignLaneAbsent = makeFixture("emotional-design-lane-absent");
+  {
+    const state = readState(emotionalDesignLaneAbsent);
+    const lanes = expectRecord(state.lanes, "PROJECT_STATE.yaml lanes");
+    delete lanes.emotional_design;
+    writeState(emotionalDesignLaneAbsent, state);
+  }
+  runFixture("missing emotional design lane fails", emotionalDesignLaneAbsent, "check-emotional-design.ts", 1, "emotional_design.lane_missing");
+
+  const emotionalDesignGenericHtml = makeFixture("emotional-design-generic-html");
+  rmSync(path.join(emotionalDesignGenericHtml, "emotional-design", "emotional-design.html"), { force: true });
+  runFixture("generic design.html does not satisfy emotional board", emotionalDesignGenericHtml, "check-emotional-design.ts", 1, "emotional_design.html_missing");
+
+  const emotionalSocialProofUnproven = makeFixture("emotional-social-proof-unproven");
+  {
+    const cardPath = path.join(emotionalSocialProofUnproven, "emotional-design", "EMOTIONAL_DESIGN.md");
+    const text = readFileSync(cardPath, "utf8");
+    writeFileSync(
+      cardPath,
+      `${text}
+
+experience_card:
+  card_id: social-proof-attested-elsewhere
+  mechanism: social_proof
+  trigger_moment: testimonial rail
+  bright_line: The claim helps users evaluate whether the app has real usage.
+  dark_line: The count must never be fabricated or borrowed from a different market.
+  guardrail: Only publish the testimonial rail when the count source is verified.
+  posthog_event: social_proof_viewed
+  ethics_attestation: The proof supports user confidence without manufacturing pressure.
+  counter_metric: Track social_proof_dismissed and complaint reports.
+  social_proof_truthfulness_proof: Verified from App Store and Google Play store data.
+`,
+      "utf8",
+    );
+    writeFileSync(
+      path.join(emotionalSocialProofUnproven, "ONBOARDING.md"),
+      [
+        "# Onboarding",
+        "First value / value-reveal step: the user sees a personalized plan before the paywall.",
+        "Join 999 users who already started today.",
+        "Paywall: present the RevenueCat offering after the plan.",
+        "Analytics: onboarding_started, personalized_plan_viewed, paywall_viewed.",
+      ].join("\n"),
+      "utf8",
+    );
+  }
+  runFixture(
+    "unrelated social proof card does not bless live copy",
+    emotionalSocialProofUnproven,
+    "check-emotional-design.ts",
+    1,
+    "emotional_design.fake_social_proof_phrase",
+  );
 
   const emotionalDesignUnguardedReward = makeFixture("emotional-design-unguarded-reward");
   {
@@ -1601,7 +1765,7 @@ try {
 
   const orchestrationPermissivePrompt = makeFixture("orchestration-permissive-prompt");
   writeFileSync(
-    path.join(orchestrationPermissivePrompt, "orchestration", "ORCHESTRATION.md"),
+    path.join(orchestrationPermissivePrompt, "ORCHESTRATION.md"),
     [
       "# Orchestration",
       "Orchestration Preflight",
@@ -1739,6 +1903,22 @@ try {
     "check-artifact-templates.ts",
     1,
     "artifact_templates.design.starter_missing",
+    ["--skill-root", skillRoot],
+  );
+
+  const artifactTemplatePathDrift = makeFixture("artifact-template-path-drift");
+  {
+    const state = readState(artifactTemplatePathDrift);
+    const design = getLane(state, "design");
+    design["evidence"] = ["UX_PATTERNS.md"];
+    writeState(artifactTemplatePathDrift, state);
+  }
+  runFixture(
+    "template evidence basename drift fails",
+    artifactTemplatePathDrift,
+    "check-artifact-templates.ts",
+    1,
+    "no exact starter template path",
     ["--skill-root", skillRoot],
   );
 

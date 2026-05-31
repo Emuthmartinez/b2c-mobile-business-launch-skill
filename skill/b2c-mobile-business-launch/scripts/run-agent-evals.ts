@@ -18,6 +18,19 @@ if (!existsSync(args.evalDir)) {
     issues.push(issue("error", "agent_evals.too_few", "Add at least four agent behavior evals covering stale skill, CE routing, Design Room, onboarding, and provider proof.", args.evalDir));
   }
 
+  requirePinnedEval(args.evalDir, "session-continuity-resume.yaml", [
+    "session-continuity-resume",
+    "Session Continuity",
+    "PROJECT_STATE.yaml",
+    "launch-cockpit.html",
+    "ORCHESTRATION.md",
+    "PRODUCTION_READINESS.md",
+    "FAILURE_CARDS.md",
+    "git status --short",
+    "APP_AGENTS.md",
+    "chat memory is not source truth",
+  ]);
+
   for (const file of files) {
     const fullPath = path.join(args.evalDir, file);
     const parsed = parseYaml(readFileSync(fullPath, "utf8"));
@@ -85,6 +98,21 @@ function parseArgs(argv: string[]): Args {
 function readResponse(responsesDir: string, id: string): string | undefined {
   const responsePath = path.join(responsesDir, `${id}.md`);
   return existsSync(responsePath) ? readFileSync(responsePath, "utf8") : undefined;
+}
+
+function requirePinnedEval(evalDir: string, fileName: string, terms: string[]): void {
+  const fullPath = path.join(evalDir, fileName);
+  if (!existsSync(fullPath)) {
+    issues.push(issue("error", `agent_evals.${fileName}.missing`, `${fileName} is required to cover continuity drift.`, fullPath));
+    return;
+  }
+
+  const text = readFileSync(fullPath, "utf8");
+  for (const term of terms) {
+    if (!text.includes(term)) {
+      issues.push(issue("error", `agent_evals.${fileName}.term_missing`, `${fileName} must include ${term}.`, fullPath));
+    }
+  }
 }
 
 function expandHome(value: string): string {

@@ -83,11 +83,14 @@ npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
 npm run check:onboarding -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
+npm run check:emotional-design -- --root /path/to/app
 npm run check:viral-growth -- --root /path/to/app
 npm run check:paid-ua -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
+npm run check:continuity-contract
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch
+npm run check:package-parity
 npm run check:compound-engineering -- --root /path/to/app
 npm run validate:design-state -- --root /path/to/app
 npm run render:design-room -- --root /path/to/app
@@ -127,11 +130,13 @@ The scripts are intentionally simple:
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
 - `check-onboarding-conversion.ts` checks `ONBOARDING.md` for the native App Review popup immediately after first value, native API timing, cooldown, analytics, and suppressed-prompt fallback.
 - `check-eleven-star-experience.ts` checks the 11-star experience ladder, line of feasibility, V1 scalable slice, surface matrix, visual board, and trace/build links.
+- `check-emotional-design.ts` checks the Emotional Experience System artifact contract, per-card guardrails, PostHog event mapping, reduced-motion fallbacks, and dark-pattern veto scans.
 - `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
 - `check-agent-entrypoints.ts` checks maintainer-only root docs and shipped business-repo `AGENTS.md`/`CLAUDE.md` templates stay separated and keep future agents on the launch skill workflow.
 - `check-workflow-adherence.ts` checks harness-style agent maps, subagent availability gates, Compound Engineering routing, and LaunchBench coverage for workflow adherence.
 - `check-skill-version.ts` checks whether the installed runtime is behind the latest local source copy and emits the AskUserQuestion upgrade gate when stale.
 - `check-version-discipline.ts` checks that meaningful skill changes bump `skill-version.json` in the same release commit.
+- `check-package-parity.ts` checks source-root and runtime package versions, lockfile versions, critical scripts, audit coverage, and runtime dependency parity.
 - `check-compound-engineering-routing.ts` blocks core engineering readiness when CE freshness, plan, work, review, test, and proof routing are missing or silently skipped.
 - `check-control-plane-contract.ts` checks that Design Room, analytics, monetization, store ops, and growth are modeled as Control Plane panels.
 - `check-live-provider-proof.ts` blocks provider-backed readiness claims until `PROVIDER_PROOF.md` has live evidence or founder-only gates.
@@ -162,13 +167,30 @@ Each template returns subject, preview, HTML, text, tags, reply-to, optional uns
 
 ## Install
 
-Clone the repo, then link the skill into the runtimes you use:
+Clone the repo, then install the skill into the Codex runtime copy. Keep Claude
+and Agents pointed at the Codex runtime copy so freshness checks can compare
+source against installed runtime instead of comparing a symlink to itself:
 
 ```bash
 mkdir -p ~/.codex/skills ~/.claude/skills ~/.agents/skills
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.codex/skills/b2c-mobile-business-launch
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.claude/skills/b2c-mobile-business-launch
-ln -sfn "$PWD/skill/b2c-mobile-business-launch" ~/.agents/skills/b2c-mobile-business-launch
+
+repo_root="$PWD"
+rsync -a --delete --exclude node_modules \
+  "$repo_root/skill/b2c-mobile-business-launch/" \
+  ~/.codex/skills/b2c-mobile-business-launch/
+
+(
+  cd ~/.codex/skills/b2c-mobile-business-launch
+  npm install
+  npm run audit
+)
+
+diff -qr --exclude node_modules \
+  "$repo_root/skill/b2c-mobile-business-launch" \
+  ~/.codex/skills/b2c-mobile-business-launch
+
+ln -sfn ~/.codex/skills/b2c-mobile-business-launch ~/.claude/skills/b2c-mobile-business-launch
+ln -sfn ~/.codex/skills/b2c-mobile-business-launch ~/.agents/skills/b2c-mobile-business-launch
 ```
 
 ## Layout
@@ -194,6 +216,8 @@ skill/
     templates/
       PROJECT_STATE.yaml
       state/
+      BRAND.md
+      DEMO_VIDEO.md
       11-star-experience/
       repo-agent-entrypoints/
       orchestration/

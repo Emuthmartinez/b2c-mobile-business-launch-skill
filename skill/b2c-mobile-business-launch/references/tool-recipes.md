@@ -830,7 +830,7 @@ Parallel rules:
 
 Record in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`:
 - CE availability, latest-version check, skills considered, selected route, and fallback reason if unavailable
-- selected strategy: `inline`, `serial_subagents`, `parallel_subagents`, `worktrees`, `hybrid`, `blocked`, or `not_needed`
+- selected strategy: `not_evaluated`, `inline`, `serial_subagents`, `parallel_subagents`, `worktrees`, `hybrid`, `blocked`, or `not_needed`
 - critical path kept local by the orchestrator
 - candidate units, roles, objectives, modes, files, shared resources, and safety decisions
 - spawned agents, forbidden actions, output paths, actual file collision check, and integration status

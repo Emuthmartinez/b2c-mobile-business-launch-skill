@@ -30,6 +30,7 @@ export const requiredLanes = [
   "experience",
   "product",
   "design",
+  "emotional_design",
   "content_assets",
   "analytics_attribution",
   "paid_user_acquisition",

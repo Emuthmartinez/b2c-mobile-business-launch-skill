@@ -56,7 +56,7 @@ const toolRecipesPath = path.join(skillRoot, "references", "tool-recipes.md");
 const compoundEngineeringPath = path.join(skillRoot, "references", "compound-engineering-routing.md");
 const templateAgentsPath = path.join(skillRoot, "templates", "repo-agent-entrypoints", "AGENTS.md");
 const templateClaudePath = path.join(skillRoot, "templates", "repo-agent-entrypoints", "CLAUDE.md");
-const orchestrationTemplatePath = path.join(skillRoot, "templates", "orchestration", "ORCHESTRATION.md");
+const orchestrationTemplatePath = path.join(skillRoot, "templates", "ORCHESTRATION.md");
 const projectStateTemplatePath = path.join(skillRoot, "templates", "PROJECT_STATE.yaml");
 const launchbenchDir = path.join(skillRoot, "evals", "launchbench");
 
@@ -140,6 +140,10 @@ requireTerms(
     "record why subagents are unavailable or unsafe",
     "record the fallback reason in `ORCHESTRATION.md`",
     "PROJECT_STATE.yaml` `compound_engineering`",
+    "Session Continuity",
+    "AGENTS.md",
+    "Do not rely on chat memory",
+    "git status --short",
   ],
   "business_agents_template",
   templateAgentsPath,
@@ -152,6 +156,8 @@ requireTerms(
     "For broad work, use subagents or record why they are unavailable or unsafe.",
     "Use Compound Engineering skills when available",
     "record unavailable routes rather than skipping them silently",
+    "Session Continuity",
+    "Do not rely on prior chat context",
   ],
   "business_claude_template",
   templateClaudePath,
@@ -160,7 +166,19 @@ requireTerms(
 
 requireTerms(
   orchestrationTemplate,
-  ["Subagent availability", "Compound Engineering Routing", "CE freshness check", "ce-code-review", "ce-proof", "Fallback reason if unavailable"],
+  [
+    "Subagent availability",
+    "Session Continuity",
+    "Continuity source set",
+    "Memory policy",
+    "Git status reviewed",
+    "Strategy: `not_evaluated`",
+    "Compound Engineering Routing",
+    "CE freshness check",
+    "ce-code-review",
+    "ce-proof",
+    "Fallback reason if unavailable",
+  ],
   "orchestration_template",
   orchestrationTemplatePath,
   issues,
@@ -168,18 +186,53 @@ requireTerms(
 
 requireTerms(
   projectStateTemplate,
-  ["compound_engineering:", "availability:", "latest_check:", "skills_considered:", "test_status:", "fallback_reason:"],
+  [
+    "continuity:",
+    "last_state_review:",
+    "source_files:",
+    "- \"AGENTS.md\"",
+    "git_status_reviewed:",
+    "next_action:",
+    "drift_risks:",
+    "strategy: \"not_evaluated\"",
+    "No orchestration preflight has been evaluated yet.",
+    "compound_engineering:",
+    "availability:",
+    "latest_check:",
+    "skills_considered:",
+    "test_status:",
+    "fallback_reason:",
+  ],
   "project_state_template",
   projectStateTemplatePath,
   issues,
 );
 
-for (const scenario of ["compound-routing-skipped.yaml", "compound-freshness-not-checked.yaml", "subagent-dispatch-skipped.yaml"]) {
+for (const scenario of [
+  "compound-routing-skipped.yaml",
+  "compound-freshness-not-checked.yaml",
+  "subagent-dispatch-skipped.yaml",
+  "continuity-drift-between-sessions.yaml",
+]) {
   const scenarioPath = path.join(launchbenchDir, scenario);
   if (!existsSync(scenarioPath)) {
     issues.push(issue("error", `workflow.launchbench.${scenario}.missing`, `${scenario} is required to cover workflow-adherence regressions.`, scenarioPath));
   } else {
-    requireTerms(readFileSync(scenarioPath, "utf8"), ["check-workflow-adherence", "must_catch", "should_say"], `launchbench_${scenario}`, scenarioPath, issues);
+    const scenarioText = readFileSync(scenarioPath, "utf8");
+    const requiredTerms = ["check-workflow-adherence", "must_catch", "should_say"];
+    if (scenario === "continuity-drift-between-sessions.yaml") {
+      requiredTerms.push(
+        "check-continuity-contract",
+        "PROJECT_STATE.yaml",
+        "launch-cockpit.html",
+        "ORCHESTRATION.md",
+        "PRODUCTION_READINESS.md",
+        "FAILURE_CARDS.md",
+        "git status",
+        "APP_AGENTS.md",
+      );
+    }
+    requireTerms(scenarioText, requiredTerms, `launchbench_${scenario}`, scenarioPath, issues);
   }
 }
 

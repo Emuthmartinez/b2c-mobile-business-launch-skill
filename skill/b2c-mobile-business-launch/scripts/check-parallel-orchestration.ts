@@ -19,7 +19,7 @@ const loaded = loadProjectState(args);
 const issues = [...loaded.issues];
 const state = loaded.state;
 
-const strategyValues = new Set(["inline", "serial_subagents", "parallel_subagents", "worktrees", "hybrid", "blocked", "not_needed"]);
+const strategyValues = new Set(["not_evaluated", "inline", "serial_subagents", "parallel_subagents", "worktrees", "hybrid", "blocked", "not_needed"]);
 
 function firstExistingText(candidates: string[]): { relativePath: string; text: string } | undefined {
   for (const candidate of candidates) {

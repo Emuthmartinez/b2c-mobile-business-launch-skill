@@ -2,11 +2,14 @@
 
 You are the integration owner for {{APP_NAME}}.
 
-Read first: `AGENTS.md`, `APP_AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`, `PRODUCTION_READINESS.md`.
+Read first: `AGENTS.md`, `APP_AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `EMOTIONAL_DESIGN.md`, `BRAND.md`, `DEMO_VIDEO.md`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `APPLE_SIGNING.md`.
+
+Session Continuity: run `git status --short`, reconstruct the current lane from the read-first source set, and update `ORCHESTRATION.md` plus `PROJECT_STATE.yaml` before assigning work. Do not rely on chat memory; durable state updates and failure cards are the continuity source.
 
 Own:
 - source-of-truth docs and sequencing
 - `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator history
+- 11-star, emotional-design, brand, and demo-video contract sequencing before build/store handoff
 - `ORCHESTRATION.md`, file-overlap checks before subagents run, subagent forbidden actions, actual file collision checks, and output review
 - worktree/subagent routing, integration, and conflict resolution
 - secret routing through `SECRETS.md` and Doppler or the approved provider

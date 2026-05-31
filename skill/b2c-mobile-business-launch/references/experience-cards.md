@@ -1438,7 +1438,7 @@ manufactured rankings, no fabricated statistics. Document the personalization fi
 `PRODUCTION_READINESS.md`. (2) Confirm the peak screen and the paywall/primary CTA are not on
 the same screen view — there must be at least one navigation step or a deliberate breathing
 pause between them. (3) Confirm the peak animation has a documented reduce-motion fallback in
-`TECH_SPEC.md`. (4) Run `npm run check:emotional-design -- --root . --dark-pattern-audit` and
+`TECH_SPEC.md`. (4) Run `npm run check:emotional-design -- --root .` and
 verify no peak-end dark-pattern flag is raised.
 
 ### Pairs With
@@ -1715,7 +1715,7 @@ confirming no guilt, countdown panic, or shame language appears in at-risk notif
 broken-streak screens, verified against `BRAND.md §Voice`; (4) confirmation that the
 `streak_incremented` event fires on core action completion, not on app open. If any of the
 four entries is absent, the streak card is non-compliant and must not ship. Run:
-`npm run check:emotional-design -- --root . --dark-pattern-audit`
+`npm run check:emotional-design -- --root .`
 
 ### Pairs With
 

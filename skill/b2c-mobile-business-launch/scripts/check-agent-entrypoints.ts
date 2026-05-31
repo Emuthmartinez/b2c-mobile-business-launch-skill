@@ -63,6 +63,20 @@ const templateAgentsPath = path.join(templateRoot, "AGENTS.md");
 const templateClaudePath = path.join(templateRoot, "CLAUDE.md");
 const templateAgents = requireFile(templateAgentsPath, "template_agents", issues);
 const templateClaude = requireFile(templateClaudePath, "template_claude", issues);
+const appAgentsPath = path.join(skillRoot, "templates", "app-agent-roster", "APP_AGENTS.md");
+const designGuruPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "design-guru.md");
+const productLeaderPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "product-leader.md");
+const marketingGuruPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "marketing-guru.md");
+const customerSuccessPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "customer-success.md");
+const engineeringLeaderPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "engineering-leader.md");
+const securityArchitectPath = path.join(skillRoot, "templates", "app-agent-roster", "agents", "security-architect.md");
+const appAgents = requireFile(appAgentsPath, "app_agents", issues);
+const designGuru = requireFile(designGuruPath, "design_guru", issues);
+const productLeader = requireFile(productLeaderPath, "product_leader", issues);
+const marketingGuru = requireFile(marketingGuruPath, "marketing_guru", issues);
+const customerSuccess = requireFile(customerSuccessPath, "customer_success", issues);
+const engineeringLeader = requireFile(engineeringLeaderPath, "engineering_leader", issues);
+const securityArchitect = requireFile(securityArchitectPath, "security_architect", issues);
 
 if (templateAgents) {
   requireTerms(
@@ -79,6 +93,11 @@ if (templateAgents) {
       "APP_AGENTS.md",
       "ORCHESTRATION.md",
       "PRODUCTION_READINESS.md",
+      "FAILURE_CARDS.md",
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "git status --short",
+      "role prompts",
       "SECRETS.md",
       "SECURITY.md",
       "LaunchBench",
@@ -88,6 +107,11 @@ if (templateAgents) {
       "MobAI",
       "RevenueCat",
       "PostHog",
+      "EMOTIONAL_DESIGN.md",
+      "EMOTIONAL_AUDIT.md",
+      "check:emotional-design",
+      "BRAND.md",
+      "DEMO_VIDEO.md",
       "app-store-connect-cli.md",
       "ASC CLI/skill routes can cover app creation",
       "ParthJadhav/app-store-screenshots",
@@ -113,6 +137,8 @@ if (templateClaude) {
       "Read `AGENTS.md` first",
       "b2c-mobile-business-launch",
       "Do not ask the founder to say \"use the skill\" again",
+      "Session Continuity",
+      "Do not rely on prior chat context",
       "APP_AGENTS.md",
       "ORCHESTRATION.md",
       "ASC CLI/skills",
@@ -128,6 +154,68 @@ if (templateClaude) {
     templateClaudePath,
     issues,
   );
+}
+
+if (appAgents) {
+  requireTerms(
+    appAgents,
+    [
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "role prompts",
+      "EMOTIONAL_DESIGN.md",
+      "EMOTIONAL_AUDIT.md",
+      "Experience Cards",
+      "check:emotional-design",
+      "BRAND.md",
+      "DEMO_VIDEO.md",
+    ],
+    "app_agents",
+    appAgentsPath,
+    issues,
+  );
+}
+
+if (designGuru) {
+  requireTerms(
+    designGuru,
+    ["Session Continuity", "Do not rely on chat memory", "EMOTIONAL_DESIGN.md", "EMOTIONAL_AUDIT.md", "Experience Card", "check:emotional-design", "BRAND.md", "DEMO_VIDEO.md"],
+    "design_guru",
+    designGuruPath,
+    issues,
+  );
+}
+
+if (productLeader) {
+  requireTerms(
+    productLeader,
+    ["Session Continuity", "Do not rely on chat memory", "EMOTIONAL_DESIGN.md", "EMOTIONAL_AUDIT.md", "Experience Card", "dark-pattern"],
+    "product_leader",
+    productLeaderPath,
+    issues,
+  );
+}
+
+if (marketingGuru) {
+  requireTerms(
+    marketingGuru,
+    ["Session Continuity", "Do not rely on chat memory", "EMOTIONAL_DESIGN.md", "Experience Cards", "BRAND.md", "DEMO_VIDEO.md"],
+    "marketing_guru",
+    marketingGuruPath,
+    issues,
+  );
+}
+
+if (customerSuccess) {
+  requireTerms(customerSuccess, ["Session Continuity", "Do not rely on chat memory"], "customer_success", customerSuccessPath, issues);
+}
+
+if (engineeringLeader) {
+  requireTerms(engineeringLeader, ["Session Continuity", "Do not rely on chat memory"], "engineering_leader", engineeringLeaderPath, issues);
+}
+
+if (securityArchitect) {
+  requireTerms(securityArchitect, ["Session Continuity", "Do not rely on chat memory"], "security_architect", securityArchitectPath, issues);
 }
 
 if (repoRoot) {

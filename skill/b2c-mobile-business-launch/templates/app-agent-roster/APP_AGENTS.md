@@ -4,9 +4,9 @@
 
 ## Source Docs
 
-- Product: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `LAUNCH_TRACE.md`, `RESEARCH.md`
+- Product: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `EMOTIONAL_DESIGN.md`, `EMOTIONAL_AUDIT.md`, `LAUNCH_TRACE.md`, `RESEARCH.md`
 - State: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
-- Design: `DESIGN.md`, `design.md`, `design.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`
+- Design: `BRAND.md`, `DESIGN.md`, `design.md`, `design.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `DEMO_VIDEO.md`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
 - Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`
 - Engineering: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`
@@ -23,6 +23,7 @@
 
 ## Operating Rules
 
+- Session Continuity: before role work after a new session, resume, status check, or handoff, the orchestrator reconstructs current state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`. Do not rely on chat memory; role prompts inherit this source set.
 - The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, active failure cards, sequencing, file-overlap checks, actual file collision checks, integration, git/release coordination, and `PRODUCTION_READINESS.md`.
 - Specialists review and propose by default. They implement only when assigned an isolated unit with paths and verification.
 - No role may stage, commit, release, submit app-store builds, publish social posts, spend money, change pricing, or connect accounts without founder approval and orchestrator assignment.
@@ -33,6 +34,7 @@
 ## Required Audit Before Launch-Ready
 
 - Product: 11-star V1 scalable slice, scope, onboarding, activation, and retention match evidence.
+- Emotional design: `EMOTIONAL_DESIGN.md` or `EMOTIONAL_AUDIT.md` maps applicable moments to Experience Cards, events, bright-line guardrails, reduced-motion fallbacks, and counter-metrics; `check:emotional-design` passes.
 - Marketing: ASO, store console, Apple pre-ASC requirements, claims, UGC/Fastlane, GEO/SEO, and attribution channels are ready.
 - Design: HTML proofs match `DESIGN.md`, no mobile clipping/overlap, `SCREENSHOTS.md` separates raw captures from composed iPhone/iPad/Play assets, and generated/rendered content assets are traceable in `CONTENT_ASSETS.md`.
 - Engineering: app, backend, revenue, email, analytics, provider, Apple signing/release, and device paths are verified.

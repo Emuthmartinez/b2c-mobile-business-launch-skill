@@ -18,6 +18,7 @@ function run(commandName: string, value?: string): void {
   if (commandName === "version") {
     const message = args.message ?? "design: update design room state";
     runSkillScript("validate-state.ts", ["--root", args.root]);
+    renderAndCheckDesignRoom(true);
     runChecked("git", ["add", "state/business.json", "state/theme.tokens.json", "design-room.html"], args.root);
     runChecked("git", ["commit", "-m", message], args.root);
     return;
@@ -45,7 +46,7 @@ function run(commandName: string, value?: string): void {
     }
     requireYes("restore");
     runChecked("git", ["checkout", normalizeBaseline(value), "--", "state/business.json", "state/theme.tokens.json"], args.root);
-    runSkillScript("render-design-room.ts", ["--root", args.root]);
+    renderAndCheckDesignRoom(false);
     return;
   }
 
@@ -56,10 +57,19 @@ function run(commandName: string, value?: string): void {
     }
     cpSync(args.emptyStatePath, args.statePath);
     runSkillScript("validate-state.ts", ["--root", args.root]);
-    runSkillScript("render-design-room.ts", ["--root", args.root]);
+    renderAndCheckDesignRoom(false);
     runChecked("git", ["add", "state/business.json", "state/theme.tokens.json", "design-room.html"], args.root);
     runChecked("git", ["commit", "-m", args.message ?? "design: wipe slate"], args.root);
   }
+}
+
+function renderAndCheckDesignRoom(staticOnly: boolean): void {
+  const renderArgs = ["--root", args.root];
+  if (staticOnly) {
+    renderArgs.push("--static-only");
+  }
+  runSkillScript("render-design-room.ts", renderArgs);
+  runSkillScript("check-design-room-contract.ts", ["--root", args.root]);
 }
 
 function runSkillScript(scriptName: string, scriptArgs: string[]): void {

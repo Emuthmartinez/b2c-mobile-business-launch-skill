@@ -27,10 +27,22 @@ autonomy:
     - "credentials, secrets, and account access"
     - "App Store or Google Play submission"
     - "public posting or scheduling"
+continuity:
+  last_state_review: "not_reviewed"
+  source_files:
+    - "AGENTS.md"
+    - "PROJECT_STATE.yaml"
+    - "launch-cockpit.html"
+    - "ORCHESTRATION.md"
+    - "PRODUCTION_READINESS.md"
+    - "FAILURE_CARDS.md"
+  git_status_reviewed: false
+  next_action: "Reconstruct state from the continuity source files before choosing work."
+  drift_risks: []
 orchestration:
   preflight_done: false
-  strategy: "inline"
-  rationale: "No parallel work has been evaluated yet."
+  strategy: "not_evaluated"
+  rationale: "No orchestration preflight has been evaluated yet."
   integration_owner: "orchestrator"
   manager_pattern: true
   file_overlap_checked: false
@@ -75,7 +87,7 @@ lanes:
   secrets:
     status: "partial"
     evidence:
-      - "SECRETS.md"
+      - "secrets/SECRETS.md"
     blockers: []
   security:
     status: "partial"
@@ -115,11 +127,12 @@ lanes:
   design:
     status: "partial"
     evidence:
+      - "BRAND.md"
       - "DESIGN.md"
       - "screen-design/design.md"
-      - "UX_PATTERNS.md"
+      - "ux-patterns/UX_PATTERNS.md"
       - "design.html"
-      - "ux-patterns.html"
+      - "ux-patterns/ux-patterns.html"
     blockers: []
   content_assets:
     status: "partial"
@@ -127,6 +140,7 @@ lanes:
       - "content-assets/CONTENT_ASSETS.md"
       - "content-assets/content-assets.html"
       - "content-assets/manifest.json"
+      - "DEMO_VIDEO.md"
     blockers: []
   analytics_attribution:
     status: "partial"
@@ -178,11 +192,11 @@ lanes:
     evidence:
       - "STORE_CONSOLE.md"
       - "store-console.html"
-      - "APP_STORE_LISTING.md"
-      - "app-store-listing.html"
-      - "app-privacy-questionnaire.html"
+      - "app-store-listing/APP_STORE_LISTING.md"
+      - "app-store-listing/app-store-listing.html"
+      - "app-store-listing/app-privacy-questionnaire.html"
       - "APPLE_APP_STORE_REQUIREMENTS.md"
-      - "SCREENSHOTS.md"
+      - "app-store-listing/SCREENSHOTS.md"
     blockers: []
   apple_signing:
     status: "partial"
@@ -205,8 +219,8 @@ lanes:
   orchestration:
     status: "partial"
     evidence:
-      - "orchestration/ORCHESTRATION.md"
-      - "orchestration/orchestration.html"
+      - "ORCHESTRATION.md"
+      - "orchestration.html"
     blockers: []
   engineering:
     status: "partial"

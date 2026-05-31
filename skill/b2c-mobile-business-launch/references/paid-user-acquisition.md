@@ -6,7 +6,7 @@ This reference factors in RevenueCat's May 2026 article, "How to build a UA syst
 
 Paid spend is a founder-only gate. Agents may prepare the system, docs, creative plan, dashboards, and stop/scale rules, but must not launch campaigns, connect ad accounts, change budgets, create paid trials, or commit spend without approval.
 
-Load `paid-tool-routing.md` before replacing paid ASO/MMP/ad tools, ad-network accounts, RevenueCat paid features, PostHog paid features, or App Store/Play/Google/Meta/TikTok account data with free or manual reporting. Load `analytics-attribution.md`, `revenue-monetization.md`, `app-store-listing-prep.md`, and `content-assets.md` or `remotion-content-assets.md` when paid UA touches tracking, LTV/CPA, store conversion, screenshots, or ad creative.
+Load `paid-tool-routing.md` before replacing paid ASO/MMP/ad tools, ad-network accounts, RevenueCat paid features, PostHog paid features, or App Store/Play/Google/Meta/TikTok account data with free or manual reporting. Load `analytics-attribution.md`, `revenue-monetization.md`, and `app-store-listing-prep.md` when paid UA touches tracking, LTV/CPA, store conversion, screenshots, or ad creative. Update `CONTENT_ASSETS.md`; load `remotion-content-assets.md` when Remotion-rendered ad creative or repeatable variants are involved.
 
 ## Contents
 

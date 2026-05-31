@@ -119,7 +119,7 @@ Rules:
 | Asset | Store surface | Source | Route | Output | QA | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | App Icon | App Store search, product page, device install | `DESIGN.md`, category/competitor icon audit | Higgsfield, designer/founder-owned asset, or approved fallback | `app-icon/app-icon-1024.png` | no alpha, no rounded corners, thumbnail contrast, category differentiation | blocked |
-| App Preview 1 | App Store search/product page | real in-app footage | MobAI recording + Remotion edit, or approved route | `previews/ios-preview-1.mp4` | muted readability, poster frame, in-app footage only, no unsupported CTA | optional |
+| App Preview 1 | App Store search/product page | real in-app footage | MobAI recording + Remotion edit, or approved founder-deferred route | `previews/ios-preview-1.mp4` | muted readability, poster frame, in-app footage only, no unsupported CTA | blocked |
 | Google Play promo | Play Store product page | real app footage or approved marketing footage | Remotion, Higgsfield, or owned media | YouTube URL pending | Play metadata compliance, captions, thumbnail | optional |
 
 ## Custom Product Pages

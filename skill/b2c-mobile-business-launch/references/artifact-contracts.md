@@ -44,7 +44,7 @@ orchestration.html        # optional founder-facing orchestration board
 ENGINEERING_PLAN.md       # Compound Engineering plan or implementation plan when actual app build is in scope
 PRODUCTION_READINESS.md   # end-to-end proof across frontend, backend, mobile device, providers, and release gates
 LAUNCHBENCH.md            # optional eval/check history for known launch-grade failure modes
-FAILURE_CARDS.md          # optional expanded failure cards for recurring or unresolved launch risks
+FAILURE_CARDS.md          # recurring or unresolved launch risks that must survive session handoff
 PROMPTS.md                # sequenced builder/Rork prompts
 RESEARCH.md               # AppKittie, XPOZ, Firecrawl, review, keyword, and competitor evidence
 SPEC.md                   # research-grounded product spec

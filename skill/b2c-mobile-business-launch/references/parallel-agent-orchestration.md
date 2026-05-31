@@ -28,7 +28,7 @@ Current synthesis for this skill:
 
 ## Required Preflight
 
-Before substantial launch work starts, write or update `ORCHESTRATION.md` and the `orchestration` block in `PROJECT_STATE.yaml`.
+Before substantial launch work starts, write or update `ORCHESTRATION.md` and the `orchestration` block in `PROJECT_STATE.yaml`. At the start of a new session, resume, status check, or handoff, also update the Session Continuity block from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`; chat memory is not source truth.
 
 The orchestrator must answer:
 
@@ -54,6 +54,7 @@ Use the smallest strategy that fits the work:
 - `hybrid`: parallel read-only audits plus serialized implementation, or worktrees for code and one serialized device/provider owner.
 - `blocked`: orchestration would help, but access, repo state, or missing source truth prevents safe dispatch.
 - `not_needed`: the app has no real build, audit, or multi-lane launch work in scope.
+- `not_evaluated`: no orchestration preflight has happened yet; do not treat this as approval to run broad work inline.
 
 Default for broad B2C launch work is `hybrid`: the orchestrator continues the critical path locally while read-only or isolated specialists inspect independent lanes. Do not silently run broad multi-lane work fully inline when a subagent-capable runtime is available.
 
@@ -145,10 +146,22 @@ Specialists review and propose by default. They implement only with an explicit 
 Add this top-level block to `PROJECT_STATE.yaml`:
 
 ```yaml
+continuity:
+  last_state_review: "not_reviewed"
+  source_files:
+    - "AGENTS.md"
+    - "PROJECT_STATE.yaml"
+    - "launch-cockpit.html"
+    - "ORCHESTRATION.md"
+    - "PRODUCTION_READINESS.md"
+    - "FAILURE_CARDS.md"
+  git_status_reviewed: false
+  next_action: "Reconstruct state from durable repo artifacts before choosing work."
+  drift_risks: []
 orchestration:
   preflight_done: false
-  strategy: "inline"
-  rationale: "No parallel work has been evaluated yet."
+  strategy: "not_evaluated"
+  rationale: "No orchestration preflight has been evaluated yet."
   integration_owner: "orchestrator"
   manager_pattern: true
   file_overlap_checked: false

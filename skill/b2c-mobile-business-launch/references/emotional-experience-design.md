@@ -220,7 +220,7 @@ Habit formation check: does this action fit into a daily routine the user alread
 
 ## Emotional Curve Artifact
 
-The Emotional Curve is a required artifact for any feature or journey reviewed with this framework. It is produced from the Lens 3 journey map and must be rendered in `design.html` or the journey's dedicated design surface.
+The Emotional Curve is a required artifact for any feature or journey reviewed with this framework. It is produced from the Lens 3 journey map and must be rendered in `emotional-design.html` or the journey's dedicated design surface.
 
 **Format.** A line chart where:
 - X axis: ordered journey steps (screen labels or step IDs).
@@ -233,7 +233,7 @@ The Emotional Curve is a required artifact for any feature or journey reviewed w
 
 **Acceptance rule.** The curve must peak at or before the paywall marker. A curve that first crosses above +2 after the paywall is a conversion design failure: the user is asked to buy before they feel the value.
 
-**How to produce.** Run Lens 3 on a real device, fill in the emotional journey table, assign numeric valence scores to each step, and plot the curve. Embed it in `design.html` using the project's design tokens (CSS variables from `DESIGN.md`). Do not leave it as a text table — it must be a visible rendered chart inspectable by the founder.
+**How to produce.** Run Lens 3 on a real device, fill in the emotional journey table, assign numeric valence scores to each step, and plot the curve. Embed it in `emotional-design.html` using the project's design tokens (CSS variables from `DESIGN.md`). Do not leave it as a text table; it must be a visible rendered chart inspectable by the founder.
 
 **Reduced-motion fallback.** If the rendered Emotional Curve uses animation to draw the line, implement `prefers-reduced-motion` / OS reduce-motion check. Static chart is the fallback.
 
@@ -325,7 +325,7 @@ evidence:
   - "PRODUCTION_READINESS.md"
 impact: "One or more Experience Cards cross the bright line into manipulation. Platform policy violation risk and skill-level compliance veto."
 next_action: "Identify which card crosses the bright line using the checklist in emotional-experience-design.md §Bright Line. Fix or remove the mechanic. Record resolution in PRODUCTION_READINESS.md."
-validator: "npm run check:emotional-design -- --root . --dark-pattern-audit"
+validator: "npm run check:emotional-design -- --root ."
 ```
 
 ```yaml
@@ -334,9 +334,9 @@ severity: "medium"
 owner: "design-guru"
 status: "open"
 evidence:
-  - "design.html"
+  - "emotional-design.html"
 impact: "Emotional journey not mapped for key feature or onboarding flow. Peak placement relative to paywall is unknown."
-next_action: "Run Lens 3 (Emotional Journey) from the Six-Lens Design Review on a real device for the affected feature. Produce the Emotional Curve in design.html. Verify curve peaks before the paywall marker."
+next_action: "Run Lens 3 (Emotional Journey) from the Six-Lens Design Review on a real device for the affected feature. Produce the Emotional Curve in emotional-design.html. Verify curve peaks before the paywall marker."
 validator: "npm run check:11-star -- --root ."
 ```
 
@@ -373,7 +373,7 @@ Before any feature using an Experience Card is called build-ready:
 - [ ] All four Experience Cards are implemented or explicitly deferred with a founder-approved rationale in `PROJECT_STATE.yaml`.
 - [ ] Each implemented card emits its named PostHog event with required properties. Events are present in `ANALYTICS.md` before implementation.
 - [ ] Each card's bright-line compliance check passed. Evidence recorded in `PRODUCTION_READINESS.md`.
-- [ ] The Emotional Curve artifact exists in `design.html` for each reviewed feature or journey.
+- [ ] The Emotional Curve artifact exists in `emotional-design.html` for each reviewed feature or journey.
 - [ ] The Emotional Curve peaks at or before the paywall marker.
 - [ ] Every animated card moment has a `prefers-reduced-motion` / OS reduce-motion fallback. Documented in `TECH_SPEC.md`.
 - [ ] Web animations use `motion/react` with tokenized values from `state/theme.tokens.json`. Mobile uses `DesignTokens.Motion`.

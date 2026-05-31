@@ -20,8 +20,6 @@ if (!existsSync(args.templatesRoot)) {
   const templateFiles = collectTemplateFiles(args.templatesRoot);
   const exactPaths = new Set(templateFiles.map((file) => path.relative(args.templatesRoot, file)));
   const lowerExactPaths = new Set(Array.from(exactPaths).map((file) => file.toLowerCase()));
-  const basenames = new Set(templateFiles.map((file) => path.basename(file)));
-  const lowerBasenames = new Set(Array.from(basenames).map((file) => file.toLowerCase()));
 
   if (!isRecord(state) || !isRecord(state.lanes)) {
     issues.push(issue("error", "artifact_templates.lanes_missing", "Template PROJECT_STATE.yaml must include lanes.", path.relative(args.skillRoot, statePath)));
@@ -36,19 +34,14 @@ if (!existsSync(args.templatesRoot)) {
       }
       for (const evidencePath of evidence) {
         const normalized = evidencePath.replaceAll("\\", "/");
-        if (
-          exactPaths.has(normalized) ||
-          lowerExactPaths.has(normalized.toLowerCase()) ||
-          basenames.has(path.basename(normalized)) ||
-          lowerBasenames.has(path.basename(normalized).toLowerCase())
-        ) {
+        if (exactPaths.has(normalized) || lowerExactPaths.has(normalized.toLowerCase())) {
           continue;
         }
         issues.push(
           issue(
             "error",
             `artifact_templates.${laneName}.starter_missing`,
-            `${laneName} evidence ${evidencePath} has no matching starter template.`,
+            `${laneName} evidence ${evidencePath} has no exact starter template path. Keep PROJECT_STATE.yaml evidence aligned to templates/ paths instead of relying on basename matches.`,
             "templates/PROJECT_STATE.yaml",
           ),
         );

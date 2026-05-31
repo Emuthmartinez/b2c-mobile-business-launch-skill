@@ -506,7 +506,7 @@ A sequenced list of fixes from current state to the target state for this app. O
 
 | # | Finding | Fix | Owner | Validator |
 | --- | --- | --- | --- | --- |
-| 1.1 | Pending | Pending | Pending | `npm run check:emotional-design -- --root . --dark-pattern-audit` |
+| 1.1 | Pending | Pending | Pending | `npm run check:emotional-design -- --root .` |
 
 ### Phase 2: Critical Journey Improvements (Complete Before Soft Launch)
 

@@ -448,7 +448,7 @@ Fields:
 - app icon
 - feature graphic
 - screenshots by device class
-- preview video, optional
+- preview video: required for iOS App Preview 1 unless explicitly founder-deferred; optional for Google Play promo video based on channel plan
 - phone/tablet/Chromebook/Wear/TV/Auto assets when applicable
 
 Rules:

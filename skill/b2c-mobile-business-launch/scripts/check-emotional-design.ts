@@ -17,10 +17,10 @@
  *      card blocks) for fake scarcity, fabricated social proof, confirmshaming,
  *      and commitment-guilt copy.
  *
- * Lane skip: when lanes.emotional_design.status is not_needed/deferred, or the
- * lane is absent (project predates the system), artifact checks are skipped so
- * legacy launches are never broken. The ethics phrase scans always run when the
- * artifacts exist.
+ * Lane skip: only explicit lanes.emotional_design.status not_needed/deferred
+ * skips artifact checks. Missing lanes are errors so migrated and new repos
+ * cannot bypass the emotional-design contract accidentally. The ethics phrase
+ * scans always run when the artifacts exist.
  */
 
 import {
@@ -287,23 +287,42 @@ const COMMITMENT_GUILT_PATTERNS = [
 const SPEND_KEYWORDS = /\b(paywall|purchase|upgrade now|subscribe|buy now|unlock for|renew now|start (your )?(trial|subscription))\b/i;
 const REWARD_STREAK_KEYWORDS = /\b(streak|variable reward|reward reveal|reward screen|loss aversion|streak[- ]break)\b/i;
 
-// Derived once from parsed card blocks (NOT from stripped text — a fenced card's
-// proof field is removed by stripFencedBlocks, so a text scan would false-negative).
-function scanLiveCopy(relativePath: string, rawText: string, hasScarcityProof: boolean, hasSocialProof: boolean, spendScan: boolean): void {
-  const text = stripFencedBlocks(rawText);
+const LOCAL_SCARCITY_PROOF_PATTERN =
+  /\b(scarcity_enforcement_proof|backend[- ]enforced|server[- ]enforced|real[- ]time (inventory|capacity|slots?)|database[- ]backed|founder[- ]verified|source:|evidence:|as of \d{4}-\d{2}-\d{2})\b/i;
+const LOCAL_SOCIAL_PROOF_PATTERN =
+  /\b(social_proof_truthfulness_proof|App Store|Google Play|store data|verified (count|source)|source:|evidence:|as of \d{4}-\d{2}-\d{2})\b|\b(PostHog|analytics)\b.{0,48}\b(count|users|members|downloads|source|verified)\b/i;
 
-  for (const pattern of FAKE_SCARCITY_PATTERNS) {
-    if (pattern.test(text) && !hasScarcityProof) {
-      issues.push(issue("error", "emotional_design.fake_scarcity_phrase", `${relativePath} contains scarcity/urgency copy matching /${pattern.source}/ outside a card block with "scarcity_enforcement_proof". Back it with real backend enforcement or remove the claim.`, relativePath));
-      break;
+function hasLocalProof(lines: string[], lineIndex: number, proofPattern: RegExp): boolean {
+  const start = Math.max(0, lineIndex - 2);
+  const end = Math.min(lines.length, lineIndex + 3);
+  return proofPattern.test(lines.slice(start, end).join("\n"));
+}
+
+function findUnprovenClaim(lines: string[], patterns: RegExp[], proofPattern: RegExp): { pattern: RegExp; line: number } | undefined {
+  for (const pattern of patterns) {
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+      if (pattern.test(lines[lineIndex] ?? "") && !hasLocalProof(lines, lineIndex, proofPattern)) {
+        return { pattern, line: lineIndex + 1 };
+      }
     }
   }
-  for (const pattern of FAKE_SOCIAL_PROOF_PATTERNS) {
-    if (pattern.test(text) && !hasSocialProof) {
-      issues.push(issue("error", "emotional_design.fake_social_proof_phrase", `${relativePath} contains social-proof copy matching /${pattern.source}/ outside a card block with "social_proof_truthfulness_proof". Source every count from real store data or remove it.`, relativePath));
-      break;
-    }
+  return undefined;
+}
+
+function scanLiveCopy(relativePath: string, rawText: string, spendScan: boolean): void {
+  const text = stripFencedBlocks(rawText);
+  const lines = text.split("\n");
+
+  const unprovenScarcity = findUnprovenClaim(lines, FAKE_SCARCITY_PATTERNS, LOCAL_SCARCITY_PROOF_PATTERN);
+  if (unprovenScarcity) {
+    issues.push(issue("error", "emotional_design.fake_scarcity_phrase", `${relativePath}:${unprovenScarcity.line} contains scarcity/urgency copy matching /${unprovenScarcity.pattern.source}/ without adjacent real enforcement proof. Back the exact claim with live inventory/capacity evidence or remove it.`, relativePath));
   }
+
+  const unprovenSocialProof = findUnprovenClaim(lines, FAKE_SOCIAL_PROOF_PATTERNS, LOCAL_SOCIAL_PROOF_PATTERN);
+  if (unprovenSocialProof) {
+    issues.push(issue("error", "emotional_design.fake_social_proof_phrase", `${relativePath}:${unprovenSocialProof.line} contains social-proof copy matching /${unprovenSocialProof.pattern.source}/ without adjacent real source proof. Source the exact count from store data, analytics, or a verified source, or remove it.`, relativePath));
+  }
+
   for (const pattern of CONFIRMSHAMING_PATTERNS) {
     if (pattern.test(text)) {
       issues.push(issue("error", "emotional_design.confirmshaming_phrase", `${relativePath} contains a confirmshaming opt-out label matching /${pattern.source}/. Use a neutral, non-self-deprecating label.`, relativePath));
@@ -320,7 +339,6 @@ function scanLiveCopy(relativePath: string, rawText: string, hasScarcityProof: b
   // Spend prompt co-located with a streak/reward moment (ethics-guardrail.md Non-Negotiable
   // Prohibition: "spend prompts inside streak-break grief screens"). Heuristic → warning.
   if (spendScan) {
-    const lines = text.split("\n");
     const rewardLines: number[] = [];
     const spendLines: number[] = [];
     lines.forEach((line, index) => {
@@ -340,20 +358,18 @@ function scanLiveCopy(relativePath: string, rawText: string, hasScarcityProof: b
 
 const laneStatus = state ? asString(getPath(state, "lanes.emotional_design.status")) : undefined;
 const laneAbsent = state ? getPath(state, "lanes.emotional_design") === undefined : true;
-const skip = laneStatus === "not_needed" || laneStatus === "deferred" || laneAbsent;
+const skip = laneStatus === "not_needed" || laneStatus === "deferred";
 
 const design = firstExistingText(["EMOTIONAL_DESIGN.md", "emotional-design/EMOTIONAL_DESIGN.md"]);
-const designHtml = existsAny(["emotional-design.html", "emotional-design/emotional-design.html", "design.html"]);
+const designHtml = existsAny(["emotional-design.html", "emotional-design/emotional-design.html"]);
 const audit = firstExistingText(["EMOTIONAL_AUDIT.md", "emotional-design/EMOTIONAL_AUDIT.md"]);
 
-// Parse card blocks once; derive scarcity/social-proof attestation from the BLOCKS
-// (not from stripped text). A project that attests a real scarcity/social-proof card
-// in EMOTIONAL_DESIGN.md earns the right to use that copy anywhere.
 const designBlocks = design ? extractCardBlocks(design.relativePath, design.text) : [];
 const auditCardBlocks = audit ? extractCardBlocks(audit.relativePath, audit.text) : [];
-const allCardBlocks = [...designBlocks, ...auditCardBlocks];
-const hasScarcityProof = allCardBlocks.some((b) => field(b, "scarcity_enforcement_proof").length >= 8);
-const hasSocialProof = allCardBlocks.some((b) => field(b, "social_proof_truthfulness_proof").length >= 8);
+
+if (!skip && laneAbsent) {
+  issues.push(issue("error", "emotional_design.lane_missing", "PROJECT_STATE.yaml must include lanes.emotional_design unless the emotional design lane is explicitly not_needed or deferred with founder-approved rationale.", "PROJECT_STATE.yaml"));
+}
 
 if (!skip && !design) {
   issues.push(issue("error", "emotional_design.contract_missing", "EMOTIONAL_DESIGN.md is required to define the Emotional North Star, target emotional journey, card application map, ethics attestation, and measurement plan.", "EMOTIONAL_DESIGN.md"));
@@ -395,7 +411,7 @@ if (design) {
     checkCardBlock(block);
   }
 
-  scanLiveCopy(design.relativePath, design.text, hasScarcityProof, hasSocialProof, false);
+  scanLiveCopy(design.relativePath, design.text, false);
 
   if (laneStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending|\[fill)\b/i.test(stripFencedBlocks(design.text))) {
     issues.push(issue("error", "emotional_design.placeholder_complete", "The emotional_design lane cannot be done while TODO/TBD/unknown/placeholder/pending/[fill language remains in EMOTIONAL_DESIGN.md.", design.relativePath));
@@ -403,7 +419,7 @@ if (design) {
 }
 
 if (!skip && !designHtml) {
-  issues.push(issue("error", "emotional_design.html_missing", "emotional-design.html (or design.html) should render the emotional curve and card application map for founder review.", "emotional-design.html"));
+  issues.push(issue("error", "emotional_design.html_missing", "emotional-design.html should render the emotional curve and card application map for founder review. A generic design.html proof does not satisfy the emotional design board.", "emotional-design.html"));
 }
 
 if (designHtml) {
@@ -439,7 +455,7 @@ if (audit) {
   for (const block of auditBlocks) {
     checkCardBlock(block);
   }
-  scanLiveCopy(audit.relativePath, audit.text, hasScarcityProof, hasSocialProof, false);
+  scanLiveCopy(audit.relativePath, audit.text, false);
 }
 
 // Live-copy docs (actual app/store copy) — scan for dark patterns INCLUDING the
@@ -448,7 +464,7 @@ if (!skip) {
   for (const doc of ["ONBOARDING.md", "SPEC.md", "APP_STORE_LISTING.md", "app-store-listing/APP_STORE_LISTING.md", "PAYWALL.md"]) {
     const liveText = readText(args.root, doc);
     if (liveText) {
-      scanLiveCopy(doc, liveText, hasScarcityProof, hasSocialProof, true);
+      scanLiveCopy(doc, liveText, true);
     }
   }
 }

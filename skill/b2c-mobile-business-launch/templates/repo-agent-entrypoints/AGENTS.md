@@ -15,24 +15,20 @@ Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue
 
 ## Read First
 
-1. `PROJECT_STATE.yaml`
-2. `launch-cockpit.html`
-3. `state/business.json`
-4. `state/theme.tokens.json`
-5. `design-room.html`
-6. `SPEC.md`
-7. `LAUNCH_TRACE.md`
-8. `11_STAR_EXPERIENCE.md`
-9. `TECH_SPEC.md`
-10. `DESIGN.md`
-11. `ANALYTICS.md`
-12. `SECRETS.md`
-13. `SECURITY.md`
-14. `ORCHESTRATION.md`
-15. `PRODUCTION_READINESS.md`
-16. `APP_AGENTS.md`
+- State and cockpit: `PROJECT_STATE.yaml`, `launch-cockpit.html`
+- Design Room: `state/business.json`, `state/theme.tokens.json`, `design-room.html`
+- Product and trace: `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `EMOTIONAL_DESIGN.md`, `BRAND.md`
+- Build and operations: `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `SECRETS.md`, `SECURITY.md`
+- Orchestration and readiness: `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `APP_AGENTS.md`
 
 If a listed file does not exist yet, create or update it through the relevant `b2c-mobile-business-launch` reference instead of inventing a one-off replacement.
+
+## Session Continuity
+
+- At the start of every new session, resume, status check, or handoff, reconstruct state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short` before choosing work.
+- Do not rely on chat memory or prior transcripts as source truth; if they conflict with repo state, repo state wins.
+- For broad work, route through `APP_AGENTS.md` and role prompts, or record why subagents are unavailable or unsafe in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`.
+- After material changes, update state/readiness/failure cards and rerender `launch-cockpit.html` before pausing.
 
 ## Source Of Truth
 
@@ -40,9 +36,9 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 
 - State and blockers: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `FAILURE_CARDS.md`, `LAUNCHBENCH.md`
 - Design Room state: `state/business.json`, `state/theme.tokens.json`, `design-room.html`, and `dist/design-room/`
-- Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`
+- Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `EMOTIONAL_DESIGN.md`, `EMOTIONAL_AUDIT.md`
 - Implementation: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`
-- Design and content: `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`
+- Design and content: `BRAND.md`, `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`, `DEMO_VIDEO.md`
 - Growth and stores: `LAUNCH.md`, `GEO_SEO.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`, `APP_STORE_LISTING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `SCREENSHOTS.md`, `STORE_CONSOLE.md`, `APPLE_SIGNING.md`
 - Revenue, lifecycle, and trust: `REVENUE_OPS.md`, `ANALYTICS.md`, `EMAIL_OPS.md`, `PRIVACY.md`, `TERMS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`
 - Role routing: `APP_AGENTS.md` and `agents/`
@@ -57,9 +53,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 
 ## Scope
 
-- V1 scope: {{V1_SCOPE}}
-- V2/V3 scope: {{FUTURE_SCOPE}}
-- Banned scope: {{BANNED_SCOPE}}
+V1 scope: {{V1_SCOPE}}. Future scope: {{FUTURE_SCOPE}}. Banned scope: {{BANNED_SCOPE}}.
 
 Do not let builders or agents add product behavior that is not traced from `LAUNCH_TRACE.md`, the 11-star V1 scalable slice, or an explicit founder-approved scope change.
 
@@ -79,7 +73,10 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - The optional `state.designBrief` (seed it with `npm run seed:design-brief`, then adapt ui-ux-pro-max output) records recommended style, palette/typography mood, key effects, and anti-patterns, and renders in `design-room.html`. `check:template-safety` fails CI if framer-motion/`motion` is imported from app/template code; keep it on web surfaces only.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
+- When the 11-star target is 6-star or higher, `EMOTIONAL_DESIGN.md` owns the Experience Card map, ethics guardrails, PostHog events, reduced-motion fallbacks, and counter-metrics. Run `npm run check:emotional-design -- --root .` before build or store handoff, and use `EMOTIONAL_AUDIT.md` for existing-app emotional UX audits.
+- `BRAND.md` owns voice, owned words, banned language, and claim boundaries; do not let copy rewrites, screenshots, app previews, lifecycle email, or support responses drift from it.
 - Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, ParthJadhav/app-store-screenshots or equivalent export-board routing, App Icon/App Preview routing, current device wells, validation, and visual QA.
+- Demo/app-preview video work needs `DEMO_VIDEO.md`: choreography, raw capture, edited export, captions, upload copy, rerender path, and truth/accessibility QA must be recorded before public use.
 - iOS App Store upload readiness needs `APPLE_APP_STORE_REQUIREMENTS.md`: `PrivacyInfo.xcprivacy`, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload warnings are checked before a build is pushed into App Store Connect.
 
 ## Store Ops
@@ -127,6 +124,9 @@ npm run check:store-screenshots -- --root /path/to/{{APP_SLUG}} --state PROJECT_
 npm run check:apple-signing -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:apple-requirements -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:store-console -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:11-star -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:emotional-design -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:content-assets -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:paid-ua -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run render:launch-cockpit -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml --out /path/to/{{APP_SLUG}}/launch-cockpit.html
 ```

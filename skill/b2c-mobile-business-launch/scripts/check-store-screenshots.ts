@@ -118,6 +118,27 @@ function checkFinalPaths(text: string, file: string): void {
   }
 }
 
+function checkAppPreviewRequired(text: string, file: string): void {
+  for (const line of text.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|") || !/\b(App Preview 1|iOS Preview 1|autoplay hook)\b/i.test(trimmed)) {
+      continue;
+    }
+    const optional = /\boptional\b/i.test(trimmed);
+    const founderDeferred = /\b(deferred|founder-approved deferral|founder approved deferral)\b/i.test(trimmed);
+    if (optional && !founderDeferred) {
+      issues.push(
+        issue(
+          "error",
+          "store_screenshots.app_preview_optional_without_deferral",
+          `The first iOS App Preview is required for iOS launch unless explicitly deferred with founder approval: "${trimmed}"`,
+          file,
+        ),
+      );
+    }
+  }
+}
+
 const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
@@ -193,6 +214,7 @@ if (screenshotPacket) {
   checkRawOnlyReadiness(screenshotPacket.text, screenshotPacket.relativePath, storeStatus);
   checkReadyDeviceRows(screenshotPacket.text, screenshotPacket.relativePath);
   checkFinalPaths(screenshotPacket.text, screenshotPacket.relativePath);
+  checkAppPreviewRequired(screenshotPacket.text, screenshotPacket.relativePath);
 
   const usesAppStoreScreenshots = /ParthJadhav\/app-store-screenshots|app-store-screenshots/i.test(screenshotPacket.text);
   if (storeStatus === "done" && usesAppStoreScreenshots && !appStoreScreenshotsState && !screenshotHtml) {
@@ -237,6 +259,7 @@ if (shouldCheck && appListing) {
     "app_store_listing.screenshot_contract",
     appListing.relativePath,
   );
+  checkAppPreviewRequired(appListing.text, appListing.relativePath);
 }
 
 reportAndExit("Store screenshots packet check", issues);

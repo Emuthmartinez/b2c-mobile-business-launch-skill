@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,6 +17,7 @@ interface VersionArgs {
   source: string;
   installed: string;
   remoteUrl?: string;
+  sourceExplicit: boolean;
 }
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
@@ -27,6 +28,20 @@ const issues: Issue[] = [];
 const installed = loadManifest(args.installed, "installed");
 const latest = args.remoteUrl ? loadRemoteManifest(args.remoteUrl) : loadManifest(args.source, "latest");
 issues.push(...installed.issues, ...latest.issues);
+
+if (!args.remoteUrl && samePath(args.source, args.installed) && !args.sourceExplicit) {
+  issues.push(
+    issue(
+      "warning",
+      "skill_version.source_unresolved",
+      [
+        "No explicit --source or --remote-url was provided, and the latest source resolved to the installed runtime itself.",
+        "This only proves the runtime can read its own manifest; pass --source /path/to/source/skill or --remote-url before substantial launch/design/store/revenue/build work.",
+      ].join(" "),
+      path.relative(process.cwd(), path.join(args.installed, "skill-version.json")),
+    ),
+  );
+}
 
 if (installed.manifest && latest.manifest) {
   if (installed.manifest.skill !== latest.manifest.skill) {
@@ -81,12 +96,14 @@ function parseArgs(argv: string[]): VersionArgs {
   let source = process.env.B2C_SKILL_SOURCE ? path.resolve(process.env.B2C_SKILL_SOURCE) : findDefaultSource();
   let installed = process.env.B2C_SKILL_INSTALLED ? path.resolve(process.env.B2C_SKILL_INSTALLED) : skillRoot;
   let remoteUrl: string | undefined;
+  let sourceExplicit = Boolean(process.env.B2C_SKILL_SOURCE);
 
   for (let index = 0; index < argv.length; index += 1) {
     const token = argv[index];
     const value = argv[index + 1];
     if ((token === "--source" || token === "--latest") && value) {
       source = path.resolve(expandHome(value));
+      sourceExplicit = true;
       index += 1;
     } else if ((token === "--installed" || token === "--runtime") && value) {
       installed = path.resolve(expandHome(value));
@@ -100,7 +117,7 @@ function parseArgs(argv: string[]): VersionArgs {
     }
   }
 
-  return { source, installed, remoteUrl };
+  return { source, installed, remoteUrl, sourceExplicit };
 }
 
 function findDefaultSource(): string {
@@ -119,6 +136,18 @@ function expandHome(value: string): string {
     return path.join(process.env.HOME ?? "", value.slice(2));
   }
   return value;
+}
+
+function samePath(left: string, right: string): boolean {
+  return normalizePath(left) === normalizePath(right);
+}
+
+function normalizePath(value: string): string {
+  try {
+    return realpathSync(value);
+  } catch {
+    return path.resolve(value);
+  }
 }
 
 function loadManifest(root: string, label: "installed" | "latest"): { manifest?: VersionManifest; issues: Issue[] } {

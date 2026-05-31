@@ -29,6 +29,7 @@ Use `templates/repo-agent-entrypoints/` for the repo-root `AGENTS.md` and `CLAUD
 The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents. `AGENTS.md` remains the business-specific canonical guide and must explicitly tell future agents to continue using the `b2c-mobile-business-launch` workflow instead of asking the founder to re-invoke it.
 
 - Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, actual file collision checks, integration, git/release coordination, and final production-readiness proof.
+- Orchestrator owns Session Continuity at the start of a new session, resume, status check, or handoff: read `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`; do not rely on chat memory over durable state.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
 - Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, Apple signing/release gates, observability, tests, and readiness gates.
 - Security architect owns `SECURITY.md`, threat model, security tool routing, mobile platform hardening, app integrity, entitlement/webhook abuse controls, supply-chain checks, accepted risks, and incident response.
@@ -71,6 +72,7 @@ If any item is missing, do not call attribution wired, complete, or launch-ready
 - `APP_AGENTS.md` points to canonical docs and states the orchestrator is the integration owner.
 - `AGENTS.md` and `CLAUDE.md` are filled for the current business, not copied from this skill repo's maintainer docs.
 - `AGENTS.md` tells future agents to keep using `b2c-mobile-business-launch`, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run validators until a founder-only gate.
+- `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, `ORCHESTRATION.md`, and `PROJECT_STATE.yaml` encode the Session Continuity source set and next-action handoff.
 - Seven role files exist and remain short enough to be used.
 - Each role has clear responsibilities, forbidden actions, founder-only gates, and output shape.
 - The roster gives future agents a clean way to audit and continue the app without duplicating product truth.
