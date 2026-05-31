@@ -643,7 +643,7 @@ Must include:
 - attribution question and answer taxonomy with stable stored keys, display labels, `other` free text, analytics event properties, PostHog person properties, backend/profile fields, and anonymous-to-identified reconciliation
 - mascot/guide plan with Higgsfield source assets, emotion states, and accessibility fallback when used
 - demo-video plan, including aha moment, duration, source UI, captions/no-audio fallback, and Higgsfield generation/scoring path or Remotion render path when used
-- review prompt trigger, native platform API, cooldown, compliance notes, and fallback when the prompt is not shown
+- App Review popup trigger immediately after the first value/value-reveal screen, native platform API, automatic mounted-screen timing, cooldown, analytics, compliance notes, and fallback when the prompt is not shown
 - hard/soft paywall decision, paywall placement, RevenueCat offering/experiment, restore path, and product package matrix
 - closing-offer or reverse-trial behavior after paywall dismissal, if used
 - first-session activation task and Day 0 cancellation prevention notes
@@ -651,7 +651,7 @@ Must include:
 Acceptance:
 - Every onboarding question has a reason beyond "engagement".
 - Self-reported attribution is visible early in the rendered flow and passes the analytics/backend data contract; it is not just a local UI choice.
-- Review prompt behavior is native-platform compliant and not incentivized.
+- App Review popup behavior is native-platform compliant, not incentivized, and placed immediately after first value before paywall or activation detours.
 - Paywall, pricing, trial, and closing offer match `REVENUE_OPS.md`, `TERMS.md`, store products, and analytics events.
 
 ## `onboarding.html`
@@ -660,7 +660,7 @@ Use this as the visual proof for onboarding and paywall flow. It can be a standa
 
 Must include:
 - all onboarding screens at mobile dimensions
-- mascot states, question UI, personalized plan, demo video placeholder/clip, review prompt placeholder, paywall, closing offer, loading/error/offline states, and post-paywall activation
+- mascot states, question UI, personalized plan or first-value reveal, demo video placeholder/clip, App Review popup placeholder immediately after first value, paywall, closing offer, loading/error/offline states, and post-paywall activation
 - CSS variables from `DESIGN.md`
 - embedded Higgsfield assets, Remotion outputs, or local references with `direction`, `draft`, or `production` labels
 - reduced-motion and no-video fallback notes

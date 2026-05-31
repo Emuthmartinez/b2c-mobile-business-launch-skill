@@ -51,10 +51,19 @@ orchestration:
 compound_engineering:
   availability: "unknown"
   route: "not_evaluated"
+  latest_check:
+    status: "not_checked"
+    checked_at: ""
+    installed_version: ""
+    latest_version: ""
+    source: ""
+  skills_considered: []
   brainstorm_status: "not_evaluated"
   plan_status: "not_evaluated"
   work_status: "not_evaluated"
+  worktree_status: "not_evaluated"
   review_status: "not_evaluated"
+  test_status: "not_evaluated"
   proof_status: "not_evaluated"
   fallback_reason: ""
 lanes:

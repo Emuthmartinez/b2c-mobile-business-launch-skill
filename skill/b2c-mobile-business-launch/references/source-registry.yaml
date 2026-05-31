@@ -1,5 +1,15 @@
 schema_version: 1
 sources:
+  - id: github-com-everyinc-compound-engineering-plugin-releases
+    name: Compound Engineering plugin releases
+    source_type: release_feed
+    url: https://github.com/EveryInc/compound-engineering-plugin/releases
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/compound-engineering-routing.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Tracks latest Compound Engineering plugin releases for ce-update and local freshness checks.
   - id: anthropic-com-engineering-how-we-contain-claude
     name: Anthropic Claude containment
     source_type: official_docs

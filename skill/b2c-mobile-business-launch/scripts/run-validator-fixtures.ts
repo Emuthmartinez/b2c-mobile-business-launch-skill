@@ -265,7 +265,21 @@ function writeCompleteElevenStar(root: string): void {
   for (const [file, text] of [
     ["SPEC.md", "# Spec\n\n## 11-Star Experience\n\nSource: 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
     ["DESIGN.md", "# Design\n\nThis design expresses the 11-star V1 slice from 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
-    ["ONBOARDING.md", "# Onboarding\n\nThe onboarding preview carries the 11-star magical moment from 11_STAR_EXPERIENCE.md. Trace: EXP-001.\n"],
+    [
+      "ONBOARDING.md",
+      [
+        "# Onboarding",
+        "",
+        "The onboarding preview carries the 11-star magical moment from 11_STAR_EXPERIENCE.md. Trace: EXP-001.",
+        "First value / value-reveal step: the user sees a personalized plan that explains the context-aware next step before paywall or activation detours.",
+        "App Review popup: immediately after the first value/value-reveal screen, automatically request the native review prompt after the screen is fully displayed and visible with a 1-2 second async delay.",
+        "Native API: iOS uses SKStoreReviewController.requestReview(in:) and Android uses Google Play In-App Review / ReviewManager.",
+        "Trigger guard: do not bind the prompt to an acceptance tap or navigation action that dismisses the screen.",
+        "Cooldown: one eligible request per major value milestone, with platform frequency caps respected.",
+        "Analytics: emit review_prompt_eligible before the request and review_prompt_requested when the native API is called.",
+        "Fallback: the platform may not show the review sheet; continue onboarding to paywall or activation without blocking the user.",
+      ].join("\n"),
+    ],
     ["TECH_SPEC.md", "# Tech Spec\n\nThe state, API, analytics, and fixture contracts implement EXP-001 from 11_STAR_EXPERIENCE.md.\n"],
     ["LAUNCH_TRACE.md", "# Launch Trace\n\nEXP-001 maps research to 11_STAR_EXPERIENCE.md, SPEC.md, DESIGN.md, ONBOARDING.md, TECH_SPEC.md, and proof.\n"],
   ] as const) {
@@ -495,6 +509,26 @@ function writeCompleteOrchestration(root: string): void {
     focused_validators_run: ["npm run check:security -- --root .", "npm run check:orchestration -- --root ."],
     full_suites_run: ["npm run audit"],
   };
+  state["compound_engineering"] = {
+    availability: "available",
+    route: "ce_full_pipeline",
+    latest_check: {
+      status: "checked",
+      checked_at: "2026-05-30",
+      installed_version: "3.9.3",
+      latest_version: "3.9.3",
+      source: "gh release list --repo EveryInc/compound-engineering-plugin",
+    },
+    skills_considered: ["ce-update", "ce-brainstorm", "ce-plan", "ce-work", "ce-worktree", "ce-code-review", "ce-test-browser", "ce-proof"],
+    brainstorm_status: "skipped_with_reason",
+    plan_status: "used",
+    work_status: "used",
+    worktree_status: "not_needed",
+    review_status: "used",
+    test_status: "used",
+    proof_status: "used",
+    fallback_reason: "",
+  };
   const orchestrationLane = getLane(state, "orchestration");
   orchestrationLane["status"] = "done";
   orchestrationLane["evidence"] = ["orchestration/ORCHESTRATION.md", "orchestration/orchestration.html", "orchestration/security-audit.md"];
@@ -506,6 +540,7 @@ function writeCompleteOrchestration(root: string): void {
       "# Orchestration",
       "Orchestration Preflight: the orchestrator keeps state integration local while product and security audits run in parallel.",
       "Strategy: hybrid manager pattern with one orchestrator.",
+      "Compound Engineering Routing: ce-update freshness checked v3.9.3 against latest release v3.9.3; ce-brainstorm skipped because product direction already decisive; ce-plan created ENGINEERING_PLAN.md; ce-work executed bounded units; ce-worktree was not needed; ce-code-review passed; ce-test-browser covered web proof; ce-proof produced proof artifact.",
       "Candidate Units: product-audit includes SPEC.md, 11_STAR_EXPERIENCE.md, ONBOARDING.md, and LAUNCH_TRACE.md; security-audit is read-only; state-integration is serialized.",
       "Parallel Safety Check: file-overlap check passed; actual modified files were compared after agent outputs returned.",
       "File Ownership: the orchestrator owns PROJECT_STATE.yaml, launch-cockpit.html, PRODUCTION_READINESS.md, git, and releases.",
@@ -521,6 +556,39 @@ function writeCompleteOrchestration(root: string): void {
   );
   writeFileSync(path.join(root, "orchestration", "orchestration.html"), "<!doctype html><html><body>Orchestration board</body></html>", "utf8");
   writeFileSync(path.join(root, "orchestration", "security-audit.md"), "# Security Audit\n\nNo orchestration blocker remains.\n", "utf8");
+}
+
+function writeCompleteCompoundEngineering(root: string): void {
+  writeCompleteOrchestration(root);
+  const state = readState(root);
+  const engineeringLane = getLane(state, "engineering");
+  engineeringLane["status"] = "done";
+  engineeringLane["evidence"] = ["TECH_SPEC.md", "ENGINEERING_PLAN.md", "PRODUCTION_READINESS.md"];
+  engineeringLane["blockers"] = [];
+  writeState(root, state);
+  writeFileSync(path.join(root, "TECH_SPEC.md"), "# Tech Spec\n\nImplementation contracts are traced from LAUNCH_TRACE.md.\n", "utf8");
+  writeFileSync(
+    path.join(root, "ENGINEERING_PLAN.md"),
+    [
+      "# Engineering Plan",
+      "Compound Engineering: ce-plan produced this plan after product direction already decisive; ce-brainstorm was skipped with rationale.",
+      "ce-work will execute bounded implementation units and ce-worktree is reserved for isolated parallel lanes.",
+      "Review, test, and proof gates require ce-code-review, ce-test-browser or ce-test-xcode when applicable, MobAI for mobile E2E, and ce-proof before readiness.",
+    ].join("\n"),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(root, "PRODUCTION_READINESS.md"),
+    [
+      "# Production Readiness",
+      "Implementation proof: ce-work completed the planned units.",
+      "Review proof: ce-code-review passed against requirements.",
+      "Test route: ce-test-browser covered the web funnel and MobAI E2E proof covers mobile flows where relevant.",
+      "Proof artifact: ce-proof produced the founder-visible inspection artifact.",
+      "Remaining blockers and founder-only gates: none for this fixture.",
+    ].join("\n"),
+    "utf8",
+  );
 }
 
 function writeCompletePaidToolDecisions(root: string): void {
@@ -616,10 +684,12 @@ try {
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete store screenshots packet passes", clean, "check-store-screenshots.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
+  runFixture("complete onboarding conversion packet passes", clean, "check-onboarding-conversion.ts", 0);
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
   runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
   runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
   runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
+  runFixture("compound engineering not in scope passes", clean, "check-compound-engineering-routing.ts", 0);
   writeCompletePaidToolDecisions(clean);
   runFixture("complete paid-tool decisions packet passes", clean, "check-paid-tool-decisions.ts", 0);
 
@@ -1077,6 +1147,47 @@ try {
   );
   runFixture("Refero fallback without founder approval fails", uxFallbackUnapproved, "check-ux-patterns.ts", 1, "ux_patterns.refero_fallback_unapproved");
 
+  const onboardingNoReview = makeFixture("onboarding-no-review");
+  writeFileSync(
+    path.join(onboardingNoReview, "ONBOARDING.md"),
+    [
+      "# Onboarding",
+      "First value / value-reveal step: the user sees a personalized plan before the paywall.",
+      "Paywall: present the RevenueCat offering after the plan.",
+      "Analytics: onboarding_started, personalized_plan_viewed, paywall_viewed.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "onboarding without App Review popup after first value fails",
+    onboardingNoReview,
+    "check-onboarding-conversion.ts",
+    1,
+    "onboarding.app_review_after_first_value.missing",
+  );
+
+  const onboardingReviewBeforeValue = makeFixture("onboarding-review-before-value");
+  writeFileSync(
+    path.join(onboardingReviewBeforeValue, "ONBOARDING.md"),
+    [
+      "# Onboarding",
+      "App Review popup: immediately request SKStoreReviewController.requestReview(in:) on app open.",
+      "First value / value-reveal step: the user sees the personalized plan after the review sheet.",
+      "Automatic timing: the screen is visible with a 1-2 second delay.",
+      "Cooldown: one eligible request per milestone.",
+      "Analytics: review_prompt_eligible and review_prompt_requested.",
+      "Fallback: the platform may not show the review sheet.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "onboarding review prompt before first value fails",
+    onboardingReviewBeforeValue,
+    "check-onboarding-conversion.ts",
+    1,
+    "onboarding.app_review_before_first_value",
+  );
+
   const elevenStarMissing = makeFixture("eleven-star-missing");
   rmSync(path.join(elevenStarMissing, "11-star-experience"), { recursive: true, force: true });
   runFixture("missing 11-star experience packet fails", elevenStarMissing, "check-eleven-star-experience.ts", 1, "eleven_star.markdown_missing");
@@ -1455,6 +1566,37 @@ try {
     "utf8",
   );
   runFixture("subagent git authority in prompt fails", orchestrationPermissivePrompt, "check-parallel-orchestration.ts", 1, "orchestration.subagent_git_authority");
+
+  const compoundComplete = makeFixture("compound-complete");
+  writeCompleteCompoundEngineering(compoundComplete);
+  runFixture("complete Compound Engineering route passes", compoundComplete, "check-compound-engineering-routing.ts", 0);
+
+  const compoundSkipped = makeFixture("compound-skipped");
+  writeFileSync(path.join(compoundSkipped, "ENGINEERING_PLAN.md"), "# Engineering Plan\n\nGeneric implementation checklist.\n", "utf8");
+  runFixture(
+    "core engineering without Compound Engineering route fails",
+    compoundSkipped,
+    "check-compound-engineering-routing.ts",
+    1,
+    "compound_engineering.not_evaluated",
+  );
+
+  const compoundFreshnessMissing = makeFixture("compound-freshness-missing");
+  writeCompleteCompoundEngineering(compoundFreshnessMissing);
+  {
+    const state = readState(compoundFreshnessMissing);
+    const compound = expectRecord(state["compound_engineering"], "compound_engineering");
+    const latestCheck = expectRecord(compound["latest_check"], "compound_engineering.latest_check");
+    latestCheck["status"] = "not_checked";
+    writeState(compoundFreshnessMissing, state);
+  }
+  runFixture(
+    "Compound Engineering route without freshness check fails",
+    compoundFreshnessMissing,
+    "check-compound-engineering-routing.ts",
+    1,
+    "compound_engineering.latest_check.not_checked",
+  );
 
   const sourceRegistryMissing = makeEmptyFixture("source-registry-missing-url");
   writeSourceRegistryFixture(sourceRegistryMissing, false);

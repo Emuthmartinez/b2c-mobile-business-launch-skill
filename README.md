@@ -81,12 +81,14 @@ npm run check:apple-signing -- --root /path/to/app
 npm run check:apple-requirements -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:ux-patterns -- --root /path/to/app
+npm run check:onboarding -- --root /path/to/app
 npm run check:11-star -- --root /path/to/app
 npm run check:viral-growth -- --root /path/to/app
 npm run check:paid-ua -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch
+npm run check:compound-engineering -- --root /path/to/app
 npm run validate:design-state -- --root /path/to/app
 npm run render:design-room -- --root /path/to/app
 npm run check:design-room -- --root /path/to/app
@@ -123,11 +125,13 @@ The scripts are intentionally simple:
 - `check-apple-app-store-requirements.ts` checks `APPLE_APP_STORE_REQUIREMENTS.md`, privacy manifests, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report reconciliation, App Privacy URLs/labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload gates before ASC readiness.
 - `check-store-console-packet.ts` checks App Store Connect/Google Play packet coverage and founder-facing console requirements.
 - `check-ux-patterns.ts` checks Refero or approved-fallback UX pattern packets, flow maps, state matrices, and HTML proof routing.
+- `check-onboarding-conversion.ts` checks `ONBOARDING.md` for the native App Review popup immediately after first value, native API timing, cooldown, analytics, and suppressed-prompt fallback.
 - `check-eleven-star-experience.ts` checks the 11-star experience ladder, line of feasibility, V1 scalable slice, surface matrix, visual board, and trace/build links.
 - `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
 - `check-agent-entrypoints.ts` checks maintainer-only root docs and shipped business-repo `AGENTS.md`/`CLAUDE.md` templates stay separated and keep future agents on the launch skill workflow.
 - `check-workflow-adherence.ts` checks harness-style agent maps, subagent availability gates, Compound Engineering routing, and LaunchBench coverage for workflow adherence.
 - `check-skill-version.ts` checks whether the installed runtime is behind the latest local source copy and emits the AskUserQuestion upgrade gate when stale.
+- `check-compound-engineering-routing.ts` blocks core engineering readiness when CE freshness, plan, work, review, test, and proof routing are missing or silently skipped.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.

@@ -22,13 +22,20 @@ If broad work is kept inline, record why subagents are unavailable, unsafe, or n
 
 Availability:
 
+CE freshness check:
+
+CE skill inventory:
+
 Route:
 
+- `ce-update` or latest-release fallback:
 - `ce-brainstorm`:
 - `ce-plan`:
 - `ce-work`:
 - `ce-worktree`:
-- review/proof:
+- `ce-code-review`:
+- `ce-test-browser` / `ce-test-xcode` / MobAI:
+- `ce-proof` / `ce-demo-reel`:
 
 Fallback reason if unavailable:
 

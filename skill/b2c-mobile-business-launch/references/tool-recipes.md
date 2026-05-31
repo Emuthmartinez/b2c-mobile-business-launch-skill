@@ -804,9 +804,12 @@ Use `engineering-orchestration.md` before:
 - deciding whether to use product brainstorm, planning, parallel agents, or worktrees
 - declaring beta, store-submission, or production readiness
 
+Load `compound-engineering-routing.md` before core engineering. It is the enforceable CE route and state contract; this section is the quick recipe.
+
 Use `parallel-agent-orchestration.md` before any subagent dispatch or multi-lane launch run. The default runtime habit should be: keep the critical path local, identify safe sidecar agents, serialize shared resources, and write the preflight before claiming speed from parallelism.
 
 Delegate:
+- `ce-update` in Claude Code, or a recorded local inventory/latest-release fallback, before a substantial engineering run.
 - `ce-brainstorm` after AppKittie/XPOZ/Firecrawl research when product shape, onboarding, paywall, core loop, activation, or scope still has multiple defensible directions.
 - `ce-plan` when launch docs are stable enough to become an implementation plan.
 - `ce-work` for bounded execution from a concrete plan.
@@ -826,6 +829,7 @@ Parallel rules:
 - After parallel work returns, compare modified files, resolve collisions, run focused tests, then run integration/E2E checks.
 
 Record in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`:
+- CE availability, latest-version check, skills considered, selected route, and fallback reason if unavailable
 - selected strategy: `inline`, `serial_subagents`, `parallel_subagents`, `worktrees`, `hybrid`, `blocked`, or `not_needed`
 - critical path kept local by the orchestrator
 - candidate units, roles, objectives, modes, files, shared resources, and safety decisions

@@ -27,6 +27,8 @@ This file is for maintaining this skill repo itself. Do not copy these instructi
 
 Use the skill-creator guidance when changing skill structure, trigger text, references, bundled scripts, or validation behavior.
 
+Use Compound Engineering for non-trivial repo maintenance: check CE freshness (`ce-update` or latest-release fallback), use `ce-plan` or `ce-brainstorm` when scope or product/engineering direction is ambiguous, execute bounded work with `ce-work`, route isolated lanes through `ce-worktree` when useful, and finish behavior changes with CE review/test/proof skills where applicable. If CE is unavailable, record the fallback reason in the work summary and keep validator/eval coverage as the readiness gate.
+
 When changing generated business-repo guidance, edit the shipped templates and validators under `skill/b2c-mobile-business-launch/` first; only update this root file for repo-maintenance practices.
 
 ## Agent Legibility
@@ -46,6 +48,8 @@ npm run check:source-registry
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed skill/b2c-mobile-business-launch
+npm run check:compound-engineering -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm pack --dry-run --json
 ```
 

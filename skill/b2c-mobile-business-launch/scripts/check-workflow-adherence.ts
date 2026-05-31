@@ -53,6 +53,7 @@ const issues: Issue[] = [];
 const parallelPath = path.join(skillRoot, "references", "parallel-agent-orchestration.md");
 const engineeringPath = path.join(skillRoot, "references", "engineering-orchestration.md");
 const toolRecipesPath = path.join(skillRoot, "references", "tool-recipes.md");
+const compoundEngineeringPath = path.join(skillRoot, "references", "compound-engineering-routing.md");
 const templateAgentsPath = path.join(skillRoot, "templates", "repo-agent-entrypoints", "AGENTS.md");
 const templateClaudePath = path.join(skillRoot, "templates", "repo-agent-entrypoints", "CLAUDE.md");
 const orchestrationTemplatePath = path.join(skillRoot, "templates", "orchestration", "ORCHESTRATION.md");
@@ -62,6 +63,7 @@ const launchbenchDir = path.join(skillRoot, "evals", "launchbench");
 const parallel = readRequired(parallelPath, "parallel_agent_reference", issues);
 const engineering = readRequired(engineeringPath, "engineering_orchestration_reference", issues);
 const toolRecipes = readRequired(toolRecipesPath, "tool_recipes_reference", issues);
+const compoundEngineering = readRequired(compoundEngineeringPath, "compound_engineering_reference", issues);
 const templateAgents = readRequired(templateAgentsPath, "business_agents_template", issues);
 const templateClaude = readRequired(templateClaudePath, "business_claude_template", issues);
 const orchestrationTemplate = readRequired(orchestrationTemplatePath, "orchestration_template", issues);
@@ -84,6 +86,7 @@ requireTerms(
 requireTerms(
   engineering,
   [
+    "Load `compound-engineering-routing.md` first",
     "If Compound Engineering skills are unavailable",
     "do not silently skip them",
     "ce-brainstorm",
@@ -98,8 +101,27 @@ requireTerms(
 );
 
 requireTerms(
+  compoundEngineering,
+  [
+    "Required Loop",
+    "ce-update",
+    "ce-plan",
+    "ce-work",
+    "ce-code-review",
+    "ce-proof",
+    "https://github.com/EveryInc/compound-engineering-plugin/releases",
+    "compound_engineering:",
+  ],
+  "compound_engineering_reference",
+  compoundEngineeringPath,
+  issues,
+);
+
+requireTerms(
   toolRecipes,
   [
+    "Load `compound-engineering-routing.md` before core engineering",
+    "CE availability, latest-version check, skills considered",
     "If Compound Engineering is unavailable",
     "do not let agents skip directly from docs to readiness",
     "active plans, validators, and failure cards",
@@ -117,6 +139,7 @@ requireTerms(
     "validators, LaunchBench, and failure cards",
     "record why subagents are unavailable or unsafe",
     "record the fallback reason in `ORCHESTRATION.md`",
+    "PROJECT_STATE.yaml` `compound_engineering`",
   ],
   "business_agents_template",
   templateAgentsPath,
@@ -137,7 +160,7 @@ requireTerms(
 
 requireTerms(
   orchestrationTemplate,
-  ["Subagent availability", "Compound Engineering Routing", "Fallback reason if unavailable"],
+  ["Subagent availability", "Compound Engineering Routing", "CE freshness check", "ce-code-review", "ce-proof", "Fallback reason if unavailable"],
   "orchestration_template",
   orchestrationTemplatePath,
   issues,
@@ -145,13 +168,13 @@ requireTerms(
 
 requireTerms(
   projectStateTemplate,
-  ["compound_engineering:", "availability:", "fallback_reason:"],
+  ["compound_engineering:", "availability:", "latest_check:", "skills_considered:", "test_status:", "fallback_reason:"],
   "project_state_template",
   projectStateTemplatePath,
   issues,
 );
 
-for (const scenario of ["compound-routing-skipped.yaml", "subagent-dispatch-skipped.yaml"]) {
+for (const scenario of ["compound-routing-skipped.yaml", "compound-freshness-not-checked.yaml", "subagent-dispatch-skipped.yaml"]) {
   const scenarioPath = path.join(launchbenchDir, scenario);
   if (!existsSync(scenarioPath)) {
     issues.push(issue("error", `workflow.launchbench.${scenario}.missing`, `${scenario} is required to cover workflow-adherence regressions.`, scenarioPath));

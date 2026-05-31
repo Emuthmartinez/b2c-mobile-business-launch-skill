@@ -67,7 +67,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 
 - Stack: {{STACK_SUMMARY}}
 - Run commands through the repo's package manager and scripts when available. Record exact verification in `PRODUCTION_READINESS.md`.
-- Use Compound Engineering routes when available: `ce-brainstorm` for unresolved product shape, `ce-plan` for implementation planning, `ce-work` for bounded execution, `ce-worktree` for isolated lanes, and review/proof skills before readiness claims. If unavailable, record the fallback reason in `ORCHESTRATION.md` and keep the lane partial until equivalent plan/work/review proof exists.
+- Use Compound Engineering routes when available: `ce-update` or latest-release fallback, `ce-brainstorm` for unresolved product shape, `ce-plan` for implementation planning, `ce-work` for bounded execution, `ce-worktree` for isolated lanes, `ce-code-review`, applicable CE test skills, and `ce-proof`/`ce-demo-reel` before readiness claims. Record the route in `PROJECT_STATE.yaml` `compound_engineering`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md`. If unavailable, record the fallback reason in `ORCHESTRATION.md` and keep the lane partial until equivalent plan/work/review/test/proof exists.
 - Use `ORCHESTRATION.md` before parallel work. Parallel agents are for independent audits or isolated file ownership only; serialize shared files, migrations, provider/account mutations, device control, git, releases, pricing/legal/public posting, submissions, and final readiness.
 - Backend/frontend proof must show real data, provider state, analytics events, entitlement state, email delivery, or store/signing state where those lanes are in scope.
 

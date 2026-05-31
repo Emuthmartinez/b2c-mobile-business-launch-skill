@@ -19,6 +19,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - store screenshot work treats raw device captures as final App Store upload artwork without composed iPhone/iPad assets, copy overlays, device-well validation, icon/preview routing, and visual QA
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice
+- onboarding reaches first value, a personalized plan, or a value-reveal screen but omits the native App Review popup immediately after that first-value moment
 - design work produces a freeform `design-proposal.html`, mood board, or Markdown version label instead of mutating `state/business.json`/`state/theme.tokens.json`, rendering `design-room.html`, and versioning state with git
 - paid growth is marked ready from ad-channel ideas without `PAID_UA.md`, one-channel focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, stop/scale rules, and founder spend approval
 - social growth is marked ready from UGC ideas, views, or TikTok hooks without `VIRAL_GROWTH.md`, product-loop contract, abuse controls, monetization timing, analytics proof, and stop/scale rules
@@ -37,6 +38,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - parallel agents are marked safe while sharing files, provider accounts, devices, migrations, git actions, or final readiness decisions
 - spawned agents are allowed to stage, commit, push, mutate providers, control devices, run project-wide suites, or make founder-only decisions
 - subagent findings are not reviewed, reconciled into `PROJECT_STATE.yaml`, converted into failure cards, or verified by focused and full-suite validators
+- core engineering starts without a Compound Engineering freshness check, `ce-plan`, `ce-work`, review, test, and proof routing or an unavailable-with-reason fallback
 - landing page is declared ready after a curl/API test while the live URL was never opened in a browser, a form field was never filled and submitted, and the success state was never visually confirmed
 - wrangler deploy runs with an uncommitted working tree, an outdated major version, or a token whose scope was never verified with `wrangler whoami`
 - Alpine.js is used with a strict CSP but the @alpinejs/csp build and x-model elimination are not confirmed before deploy, causing browser-only form failures that curl cannot detect

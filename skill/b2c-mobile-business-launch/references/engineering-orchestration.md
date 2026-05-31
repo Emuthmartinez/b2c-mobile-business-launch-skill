@@ -22,7 +22,9 @@ The goal is to turn the launch package into shippable software without losing st
 
 ## 1. Compound Engineering Routing
 
-Prefer Compound Engineering skills for engineering-heavy work when available:
+Load `compound-engineering-routing.md` first for the enforceable route, state contract, freshness check, and artifact requirements.
+
+Use Compound Engineering skills for non-trivial engineering-heavy work when available:
 
 - `ce-brainstorm`: use after research when product shape, user behavior, scope boundaries, or success criteria are still ambiguous.
 - `ce-plan`: use when research/spec/design/analytics docs are ready and the app needs an implementation plan.
@@ -33,7 +35,7 @@ Prefer Compound Engineering skills for engineering-heavy work when available:
 - `ce-test-xcode`: use for iOS build/test verification when applicable.
 - `ce-proof` or `ce-demo-reel`: use when a visual or behavioral proof artifact helps the founder or reviewer inspect what shipped.
 
-Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive.
+Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive. For core engineering work, record the route in `PROJECT_STATE.yaml` `compound_engineering`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md`.
 
 If Compound Engineering skills are unavailable in the current runtime, do not silently skip them. Record the unavailable route and equivalent fallback in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`, then keep the engineering lane partial until the fallback has comparable plan, work, review, and proof.
 

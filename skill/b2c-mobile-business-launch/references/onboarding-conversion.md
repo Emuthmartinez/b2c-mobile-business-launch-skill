@@ -34,7 +34,7 @@ Load `viral-growth-loops.md` before using referral unlocks, share-to-unlock mech
 
 Create or update `ONBOARDING.md` when an app has more than one setup screen, asks personalization questions, uses a mascot/demo, has a paywall, or relies on first-session conversion.
 
-Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, compliant review prompt timing, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
+Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, the native App Review popup immediately after first value, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
 
 Recommended Refero searches when access is available:
 - `refero_search_flows`: `signup onboarding`, `subscription onboarding paywall`, `permission request onboarding`, `subscription cancellation with retention offer`, `restore purchases`
@@ -50,7 +50,7 @@ Recommended Refero searches when access is available:
 - data collection matrix: question, answer options, personalization use, attribution use, lifecycle-message use, privacy/legal note, and whether it is required
 - attribution question: "How did you hear about us?" options, UTM/referrer capture, and free-text/other handling
 - attribution source mapping to `ANALYTICS.md`: stored key, display label, PostHog person property, event property, lifecycle-message use, and privacy note
-- review prompt gate: platform, trigger condition, native API, cooldown, analytics, and fallback if prompt does not show
+- App Review popup gate: first-value/value-reveal trigger, native platform API, automatic mounted-screen timing, cooldown, analytics, and fallback if the platform does not show the prompt
 - paywall placement and access model: hard paywall, soft paywall, reverse trial, freemium limit, or no paywall yet
 - closing-offer behavior after paywall dismissal, if any
 - pricing/trial package matrix and RevenueCat offering/experiment names
@@ -147,9 +147,11 @@ Attribution answers should be treated as first-class launch learning:
 - persist the answer to the backend/profile record and reconcile anonymous answers after identify/signup
 - avoid using the answer to make unsupported public claims about channel performance without enough volume
 
-### Review Prompt
+### App Review Popup After First Value
 
-Prompt only after a real delight moment or completed action. "Mid-onboarding" is acceptable only if the user has already experienced enough of the app/prototype/demo to give meaningful feedback.
+For apps with onboarding, the native App Review popup is part of onboarding by default. It belongs immediately after the first value moment: the first personalized plan, analysis, demo result, aha moment, or other value-reveal screen the user can actually judge.
+
+Do not leave the review prompt as a vague later lifecycle idea. `ONBOARDING.md` must show the sequence: value promise/demo -> useful questions -> first value/value reveal -> App Review popup eligibility/request -> paywall or activation. If a product truly has no first-value moment in onboarding, record that as an experiment or blocker instead of silently dropping the prompt.
 
 **Canonical placement — value-reveal screen, automatic trigger:**
 - Fire the native review request automatically after the value-reveal screen is fully displayed (plan, analysis, demo result, or aha moment is visible on screen), with a 1-2 second async delay so the screen remains mounted and visible.
@@ -162,6 +164,7 @@ Rules:
 - never reward, unlock, or discount in exchange for a rating or review
 - assume the platform may choose not to show the prompt; keep the onboarding flow functional with or without the sheet appearing
 - log prompt eligibility, request attempt, and post-prompt continuation without trying to infer private rating content
+- record `review_prompt_eligible` before requesting, `review_prompt_requested` when the native API is called, the cooldown/frequency cap, and the fallback continuation when the sheet is suppressed
 
 ### Paywall Timing
 
@@ -242,7 +245,8 @@ Include dimensions: step_id, answer_key, attribution_source, source_key, source_
 - Higgsfield asset plan exists for mascot, icons, demo video, screenshot frames, and animations when visuals are not already final.
 - If Higgsfield is unavailable, the founder confirmed the free/local visual fallback and limitations are recorded.
 - `EMAIL_OPS.md` covers any onboarding resume, welcome, trial, payment recovery, or win-back emails triggered by the flow.
-- Review prompt timing is platform-compliant, not incentivized, and uses the canonical value-reveal placement: auto-trigger after the value-reveal screen mounts with a 1-2s delay, not bound to an acceptance tap or to any navigation action that dismisses the screen.
+- App Review popup is inside onboarding immediately after first value/value reveal, uses the native platform API, is not incentivized, auto-triggers after the value-reveal screen mounts with a 1-2s delay, and is not bound to an acceptance tap or to any navigation action that dismisses the screen.
+- `npm run check:onboarding -- --root <app>` passes before onboarding or build handoff is called ready.
 - Paywall placement, product IDs, offerings, prices, trial, and closing offer match `REVENUE_OPS.md`.
 - Privacy/terms links and data-use explanations match the data collection matrix.
 - Analytics events are named before implementation, and every proposed event name is present in `ANALYTICS.md`; no event name is invented during implementation without a prior `ANALYTICS.md` entry.
