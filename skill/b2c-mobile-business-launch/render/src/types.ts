@@ -12,6 +12,7 @@ export interface BusinessState {
     tokensPath: string;
     status: string;
   };
+  designBrief?: DesignBrief;
   designRoom: {
     status: string;
     renderPath: string;
@@ -60,6 +61,19 @@ export interface ThemeTokens {
     space: Record<string, string>;
     motion: Record<string, string>;
   };
+}
+
+export interface DesignBrief {
+  source: string;
+  productType?: string;
+  recommendedStyle?: string;
+  paletteMood?: string;
+  typographyMood?: string;
+  keyEffects?: string[];
+  antiPatterns?: string[];
+  motionNotes?: string;
+  generatedAt?: string;
+  notes?: string;
 }
 
 export interface Surface {

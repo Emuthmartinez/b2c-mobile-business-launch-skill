@@ -12,6 +12,18 @@
     "tokensPath": "state/theme.tokens.json",
     "status": "provisional"
   },
+  "designBrief": {
+    "source": "ui-ux-pro-max",
+    "productType": "{{PRODUCT_TYPE}}",
+    "recommendedStyle": "",
+    "paletteMood": "",
+    "typographyMood": "",
+    "keyEffects": [],
+    "antiPatterns": [],
+    "motionNotes": "Web surfaces animate with framer-motion from the motion.* tokens; the mobile binary uses native animation; honor reduced motion.",
+    "generatedAt": "",
+    "notes": "Run `npm run seed:design-brief`, then the ui-ux-pro-max skill, to fill recommendedStyle, paletteMood, typographyMood, keyEffects, and antiPatterns. Reference-only: adapt its guidance, do not paste its data."
+  },
   "designRoom": {
     "status": "not_started",
     "renderPath": "design-room.html",

@@ -1,11 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "updatedAt": "2026-05-31",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "Adds a cross-platform motion token contract: motion.durationSlow and motion.reducedMotionDuration promote to web CSS variables and a DesignTokens.Motion enum for SwiftUI.",
-    "Wires framer-motion (the motion package) into the Design Room render preview and documents framer-motion + ui-ux-pro-max as the web-surface motion/UI lane, with native animation kept for the shipped mobile binary.",
-    "Adds motion and reduced-motion gates to token promotion, UX patterns, the 11-star experience, and a WCAG contrast warning in the Design Room contract."
+    "Adds an optional designBrief block to the Design Room state schema, seeded from ui-ux-pro-max guidance (reference-only) and rendered in the Design Room.",
+    "Adds the seed:design-brief advisory helper that derives a ui-ux-pro-max query from positioning/audience without calling external tools.",
+    "Adds the check:template-safety gate that fails CI if framer-motion/motion imports leak into shipped template code (web-only library; mobile uses DesignTokens.Motion)."
   ]
 }

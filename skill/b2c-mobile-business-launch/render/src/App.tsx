@@ -123,6 +123,40 @@ function DesignRoom({
         </article>
       </section>
 
+      {business.designBrief ? (
+        <motion.section
+          className="panel"
+          initial={{ opacity: 0, y: reduceMotion ? 0 : 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={transitionFor(reduceMotion, base)}
+        >
+          <div className="sectionHead">
+            <div>
+              <p className="eyebrow">Design Brief</p>
+              <h2>{business.designBrief.recommendedStyle || "Style not set"}</h2>
+            </div>
+            <span className="stamp">source: {business.designBrief.source}</span>
+          </div>
+          {business.designBrief.paletteMood ? (
+            <p>
+              <strong>Palette:</strong> {business.designBrief.paletteMood}
+            </p>
+          ) : null}
+          {business.designBrief.typographyMood ? (
+            <p>
+              <strong>Type:</strong> {business.designBrief.typographyMood}
+            </p>
+          ) : null}
+          {business.designBrief.keyEffects && business.designBrief.keyEffects.length > 0 ? (
+            <div className="pills">
+              {business.designBrief.keyEffects.map((effect) => (
+                <span key={effect}>{effect}</span>
+              ))}
+            </div>
+          ) : null}
+        </motion.section>
+      ) : null}
+
       <section className="panel">
         <div className="sectionHead">
           <div>

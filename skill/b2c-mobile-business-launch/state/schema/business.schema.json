@@ -84,6 +84,51 @@
         }
       }
     },
+    "designBrief": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "productType": {
+          "type": "string"
+        },
+        "recommendedStyle": {
+          "type": "string"
+        },
+        "paletteMood": {
+          "type": "string"
+        },
+        "typographyMood": {
+          "type": "string"
+        },
+        "keyEffects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "antiPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "motionNotes": {
+          "type": "string"
+        },
+        "generatedAt": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
     "designRoom": {
       "type": "object",
       "additionalProperties": false,

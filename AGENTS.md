@@ -55,6 +55,7 @@ npm run check:compound-engineering -- --root skill/b2c-mobile-business-launch/te
 npm run check:control-plane -- --root skill/b2c-mobile-business-launch/templates
 npm run check:provider-proof -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:token-promotion -- --root skill/b2c-mobile-business-launch/templates
+npm run check:template-safety
 npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm pack --dry-run --json
 ```

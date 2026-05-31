@@ -12,6 +12,18 @@
     "tokensPath": "state/theme.tokens.json",
     "status": "provisional"
   },
+  "designBrief": {
+    "source": "ui-ux-pro-max",
+    "productType": "consumer mobile app",
+    "recommendedStyle": "Editorial minimalism on warm paper",
+    "paletteMood": "Warm cream base, deep green primary, coral accent",
+    "typographyMood": "Fraunces display over Source Sans body",
+    "keyEffects": ["soft shadows", "150-300ms transitions", "staggered card reveals"],
+    "antiPatterns": ["AI purple/pink gradients", "neon on dark", "blocking first-paint animation"],
+    "motionNotes": "Web preview and landing animate with framer-motion from the motion.* tokens; reduced motion falls back to opacity-only.",
+    "generatedAt": "2026-05-31",
+    "notes": "Worked example brief: a reference-only adaptation of ui-ux-pro-max guidance, not copied data."
+  },
   "designRoom": {
     "status": "not_started",
     "renderPath": "design-room.html",

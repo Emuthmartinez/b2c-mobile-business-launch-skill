@@ -71,6 +71,7 @@ function resolveViteBin(): string | undefined {
 
 function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): string {
   const business = isRecord(state) && isRecord(state.business) ? state.business : {};
+  const designBrief = isRecord(state) && isRecord(state.designBrief) ? state.designBrief : undefined;
   const designRoom = isRecord(state) && isRecord(state.designRoom) ? state.designRoom : {};
   const appStore = isRecord(state) && isRecord(state.surfaces) && isRecord(state.surfaces.appStore) ? state.surfaces.appStore : {};
   const controlPlane = isRecord(state) && isRecord(state.controlPlane) ? state.controlPlane : {};
@@ -171,6 +172,15 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
         <article class="panel"><h3>Latest Mutation</h3><p>${escapeHtml(isRecord(latestVersion) ? latestVersion.summary : "No mutation recorded")}</p></article>
       </div>
     </section>
+    ${designBrief ? `<section>
+      <h2>Design Brief</h2>
+      <p class="muted">source: ${escapeHtml(designBrief.source)} · web surfaces animate with framer-motion from motion.* tokens; mobile uses native animation</p>
+      <div class="grid">
+        <article class="panel"><h3>Style</h3><p>${escapeHtml(designBrief.recommendedStyle) || "<span class=\"muted\">Not set</span>"}</p></article>
+        <article class="panel"><h3>Palette</h3><p>${escapeHtml(designBrief.paletteMood) || "<span class=\"muted\">Not set</span>"}</p></article>
+        <article class="panel"><h3>Typography</h3><p>${escapeHtml(designBrief.typographyMood) || "<span class=\"muted\">Not set</span>"}</p></article>
+      </div>
+    </section>` : ""}
     <section>
       <h2>Surface Coverage</h2>
       <div class="deck">${surfaceCards}</div>

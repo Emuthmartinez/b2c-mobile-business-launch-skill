@@ -49,6 +49,8 @@ npm run render:design-room -- --root /path/to/app
 npm run check:design-room -- --root /path/to/app
 npm run promote:design-tokens -- --root /path/to/app
 npm run check:token-promotion -- --root /path/to/app
+npm run seed:design-brief -- --root /path/to/app
+npm run check:template-safety
 ```
 
 Version operations:
@@ -68,6 +70,7 @@ npm run design:version -- wipe --root /path/to/app --yes --message "design: wipe
 Before editing state, choose the mutation boundary:
 
 - **Theme mutation**: changes semantic tokens in `state/theme.tokens.json`; rerender all panels.
+- **Brief mutation**: sets or updates the optional `designBrief` in `state/business.json` (recommended style, palette/typography mood, key effects, anti-patterns, motion notes). Seed it from ui-ux-pro-max guidance with `npm run seed:design-brief` (reference-only; adapt, do not paste its data). It renders in `design-room.html`.
 - **Surface mutation**: adds or changes a web funnel, landing page, marketing asset, mobile app screen/flow, App Store page, PPO test, or In-App Event in `state/business.json`.
 - **Positioning mutation**: changes business promise, audience, or surface claims; cascade to affected surfaces instead of changing only one page.
 - **Baseline mutation**: tags the current commit as `baseline/<name>` after validation and render pass.
