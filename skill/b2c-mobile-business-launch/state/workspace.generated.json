@@ -1,0 +1,192 @@
+{
+  "schemaVersion": "0.1.0",
+  "updatedAt": "2026-05-30",
+  "product": {
+    "name": "Business Control",
+    "subtitle": "Local-first control plane for repo-backed businesses"
+  },
+  "businesses": [
+    {
+      "id": "app-name",
+      "name": "App Name",
+      "type": "IOS launch",
+      "updated": "2026-05-30",
+      "badge": "Concept",
+      "mark": "AN",
+      "subtitle": "One-sentence promise still to be defined.",
+      "metrics": [
+        {
+          "label": "Stage",
+          "value": "Concept",
+          "note": "concept"
+        },
+        {
+          "label": "Lanes",
+          "value": "0/21",
+          "note": "0 blocked"
+        },
+        {
+          "label": "Artifacts",
+          "value": "50",
+          "note": "evidence refs"
+        },
+        {
+          "label": "Risk",
+          "value": "1",
+          "note": "blockers + drift + cards"
+        }
+      ],
+      "readiness": [
+        {
+          "status": "amber",
+          "label": "Continuity state reviewed",
+          "tag": "Needed"
+        },
+        {
+          "status": "amber",
+          "label": "Git status reviewed before work",
+          "tag": "Needed"
+        },
+        {
+          "status": "amber",
+          "label": "Orchestration preflight",
+          "tag": "Needed"
+        },
+        {
+          "status": "amber",
+          "label": "Design Room render",
+          "tag": "Not Started"
+        },
+        {
+          "status": "amber",
+          "label": "Compound Engineering route",
+          "tag": "Not Evaluated"
+        }
+      ],
+      "agents": [
+        {
+          "name": "Orchestrator",
+          "summary": "Owns integration through orchestrator and reconciles lane outputs into source state."
+        },
+        {
+          "name": "Continuity sentinel",
+          "summary": "Reviews AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, ORCHESTRATION.md before selecting work."
+        },
+        {
+          "name": "Design Room scout",
+          "summary": "Audits state/business.json, state/theme.tokens.json and rendered Design Room proof."
+        },
+        {
+          "name": "Launch lane auditor",
+          "summary": "Checks 21 launch lanes and surfaces 0 blocked lane(s)."
+        }
+      ],
+      "lanes": [
+        {
+          "title": "Design Room",
+          "summary": "Design Room is Active and reads state/business.json, state/theme.tokens.json.",
+          "path": "design-room.html",
+          "status": "Ready"
+        },
+        {
+          "title": "Analytics",
+          "summary": "Analytics is Planned and reads PROJECT_STATE.yaml, ANALYTICS.md, analytics-plan.html.",
+          "path": "analytics-plan.html",
+          "status": "Draft"
+        },
+        {
+          "title": "Monetization",
+          "summary": "Monetization is Planned and reads PROJECT_STATE.yaml, REVENUE_OPS.md.",
+          "path": "revenue-plan.html",
+          "status": "Draft"
+        },
+        {
+          "title": "Store Ops",
+          "summary": "Store Ops is Planned and reads PROJECT_STATE.yaml, APP_STORE_LISTING.md, STORE_CONSOLE.md, SCREENSHOTS.md.",
+          "path": "app-store-listing.html",
+          "status": "Draft"
+        },
+        {
+          "title": "Growth",
+          "summary": "Growth is Planned and reads PROJECT_STATE.yaml, growth/PAID_UA.md, growth/VIRAL_GROWTH.md.",
+          "path": "growth-plan.html",
+          "status": "Draft"
+        },
+        {
+          "title": "Launch Cockpit",
+          "summary": "0 launch lane(s) done, 0 blocked, 21 tracked.",
+          "path": "launch-cockpit.html",
+          "status": "Watch"
+        },
+        {
+          "title": "Continuity",
+          "summary": "Reconstruct state from the continuity source files before choosing work.",
+          "path": "PROJECT_STATE.yaml",
+          "status": "Gate"
+        },
+        {
+          "title": "Failure Cards",
+          "summary": "1 active failure card(s) tracked for future agents.",
+          "path": "FAILURE_CARDS.md",
+          "status": "Active"
+        }
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "name": "B2C Mobile Launch",
+      "summary": "Design Room, Launch Cockpit, App Store Ops, RevenueCat, PostHog, onboarding, retention, and failure-card evals.",
+      "included": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "Evals"
+      ]
+    },
+    {
+      "name": "Business Control Plane",
+      "summary": "Top-level portfolio, business drill-downs, artifact registry, agent routing, source-of-truth docs, and runtime sync.",
+      "included": [
+        "Workspace",
+        "Adapters",
+        "Schemas"
+      ]
+    },
+    {
+      "name": "Commerce Growth",
+      "summary": "Offer pages, pricing parity, subscription gates, Android/iOS releases, analytics, and Cloudflare deploy proof.",
+      "included": [
+        "Pricing",
+        "Revenue",
+        "Deploy"
+      ]
+    },
+    {
+      "name": "Workspace Platform",
+      "summary": "Public/private route separation, tenant business routes, artifact storage, security checks, and local sync.",
+      "included": [
+        "Routes",
+        "Artifacts",
+        "Security"
+      ]
+    },
+    {
+      "name": "Personal Brand Funnel",
+      "summary": "Offer architecture, multilingual SEO/GEO, content pillars, lead capture, and private ICP docs.",
+      "included": [
+        "Offers",
+        "SEO",
+        "ICP"
+      ]
+    },
+    {
+      "name": "AI App Audit",
+      "summary": "Target-user walkthroughs, native build proof, onboarding issues, paywall checks, and release follow-through.",
+      "included": [
+        "Audit",
+        "Build",
+        "Proof"
+      ]
+    }
+  ]
+}

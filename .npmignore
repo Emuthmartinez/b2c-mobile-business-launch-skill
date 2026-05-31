@@ -3,6 +3,7 @@ skill/b2c-mobile-business-launch/node_modules/
 .git/
 .DS_Store
 *.log
+.playwright-mcp/
 .venv/
 dist/
 build/

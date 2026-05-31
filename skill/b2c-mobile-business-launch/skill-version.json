@@ -1,9 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "updatedAt": "2026-05-31",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
+    "Adds the Business Control workspace read-model schema plus a deterministic renderer/checker that adapts state/business.json and PROJECT_STATE.yaml into state/workspace.generated.json, validated by check:business-control-plane-workspace.",
+    "Wires the Business Control workspace adapter into root/runtime package scripts, audit gates, README/AGENTS/control-plane docs, and prototype query-param loading so JSON-backed local experiments stay reproducible.",
     "Adds validator-backed Session Continuity: generated business AGENTS.md/CLAUDE.md/APP_AGENTS.md/orchestrator prompts now force resume/status/handoff work to reconstruct state from PROJECT_STATE.yaml, launch-cockpit.html, ORCHESTRATION.md, PRODUCTION_READINESS.md, FAILURE_CARDS.md, and git status before choosing work. Adds continuity state fields, ORCHESTRATION.md continuity handoff slots, check-continuity-contract, validator fixtures, LaunchBench coverage, and an agent-behavior eval for continuity drift.",
     "Post-commit audit hardening: restores source-root maintainer parity for 11-star/emotional-design checks, adds package/version parity enforcement, makes emotional_design a required state lane, tightens emotional-design board and live-claim proof validation, makes Design Room versioning render/check before commit, requires exact template evidence paths, makes iOS App Preview 1 founder-deferral explicit, wires BRAND.md and DEMO_VIDEO.md into starter artifacts and agent entrypoints, refreshes runtime-install documentation, and removes stale command/reference drift.",
     "In-depth audit pass (5-dimension review): hardens check-emotional-design.ts (derives scarcity/social-proof attestation from parsed card blocks instead of stripped text, fixing a false positive; implements the previously-undocumented spend-prompt-near-reward scan; extends dark-pattern phrase scans to ONBOARDING/SPEC/APP_STORE_LISTING; expands confirmshaming/commitment-guilt patterns; reads EMOTIONAL_DESIGN.md in the children scan and makes under-13 an error). Fixes check-store-screenshots.ts (unreachable board-missing check now gated to done; count regex matches 'N screenshots').",

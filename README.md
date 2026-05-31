@@ -95,6 +95,8 @@ npm run check:compound-engineering -- --root /path/to/app
 npm run validate:design-state -- --root /path/to/app
 npm run render:design-room -- --root /path/to/app
 npm run check:design-room -- --root /path/to/app
+npm run render:business-control-plane-workspace -- --root /path/to/app --out /path/to/workspace.json
+npm run check:business-control-plane-workspace
 npm run design:version -- baseline onboarding-v1 --root /path/to/app
 npm run check:source-registry
 npm run refresh:source-freshness
@@ -139,6 +141,7 @@ The scripts are intentionally simple:
 - `check-package-parity.ts` checks source-root and runtime package versions, lockfile versions, critical scripts, audit coverage, and runtime dependency parity.
 - `check-compound-engineering-routing.ts` blocks core engineering readiness when CE freshness, plan, work, review, test, and proof routing are missing or silently skipped.
 - `check-control-plane-contract.ts` checks that Design Room, analytics, monetization, store ops, and growth are modeled as Control Plane panels.
+- `render-business-control-plane-workspace.ts` adapts `state/business.json` plus `PROJECT_STATE.yaml` into the portable Business Control workspace read model and validates it against `state/schema/workspace.schema.json`; `check:business-control-plane-workspace` fails when the committed generated model is stale.
 - `check-live-provider-proof.ts` blocks provider-backed readiness claims until `PROVIDER_PROOF.md` has live evidence or founder-only gates.
 - `check-artifact-templates.ts` checks that every template `PROJECT_STATE.yaml` evidence path has a starter artifact.
 - `run-agent-evals.ts` validates behavior eval definitions for routing choices that deterministic validators cannot fully simulate.

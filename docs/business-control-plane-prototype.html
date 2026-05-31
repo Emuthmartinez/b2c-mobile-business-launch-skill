@@ -1,0 +1,1398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="data:," />
+  <title>Business Control Plane Prototype</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --panel-soft: #f4f1ea;
+      --ink: #172033;
+      --muted: #64748b;
+      --quiet: #94a3b8;
+      --line: #e2e8f0;
+      --line-blue: #dbeafe;
+      --blue: #1e40af;
+      --blue-2: #3b82f6;
+      --amber: #d97706;
+      --clay: #cf7654;
+      --clay-dark: #b85f40;
+      --green: #15803d;
+      --red: #b91c1c;
+      --shadow: 0 12px 34px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+      --mono: "Fira Code", "SFMono-Regular", Consolas, monospace;
+      --sans: "Fira Sans", "Avenir Next", "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(90deg, rgba(226, 232, 240, 0.55) 1px, transparent 1px) 0 0 / 56px 56px,
+        linear-gradient(180deg, #fffdf9 0%, var(--bg) 42%, #ffffff 100%);
+      color: var(--ink);
+      font-family: var(--sans);
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      min-height: 100vh;
+      grid-template-columns: 396px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      border-right: 1px solid var(--line);
+      background: rgba(250, 250, 247, 0.88);
+      backdrop-filter: blur(18px);
+      padding: 36px 32px 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border: 2px solid var(--clay);
+      border-radius: 50%;
+      color: var(--clay);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f8f6ef;
+      color: #736c60;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .brand-subtitle {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: end;
+      margin: 0 0 -1px;
+    }
+
+    .mode-tab {
+      height: 34px;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      background: transparent;
+      color: #77716a;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .mode-tab.active {
+      border-color: var(--line);
+      border-radius: 7px 7px 0 0;
+      background: var(--panel);
+      color: var(--ink);
+    }
+
+    .creator-panel,
+    .system-card {
+      border: 1px solid var(--line);
+      border-radius: 0 0 var(--radius) var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .creator-panel {
+      padding: 24px 20px 20px;
+    }
+
+    .panel-heading {
+      margin: 0 0 16px;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .input {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--ink);
+      outline: 0;
+      padding: 0 12px;
+    }
+
+    .input:focus {
+      border-color: var(--blue-2);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+    }
+
+    .template-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 12px;
+    }
+
+    .template-option {
+      display: grid;
+      min-height: 92px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfaf6;
+      color: var(--muted);
+      padding: 10px;
+      text-align: left;
+    }
+
+    .template-option.active {
+      border-color: var(--blue-2);
+      box-shadow: inset 0 0 0 2px var(--blue-2);
+      color: var(--ink);
+    }
+
+    .template-wire {
+      width: 100%;
+      max-width: 116px;
+      border: 2px solid #dfddd7;
+      border-radius: 7px;
+      background: #fff;
+      padding: 8px;
+    }
+
+    .wire-row {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 7px;
+    }
+
+    .wire-line {
+      height: 8px;
+      flex: 1;
+      border-radius: 8px;
+      background: #d8d5cf;
+    }
+
+    .wire-block {
+      height: 26px;
+      border: 2px dashed #ddd8cf;
+      border-radius: 6px;
+    }
+
+    .template-labels {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      color: #7c766e;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .primary-action,
+    .secondary-action {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 38px;
+      border-radius: 7px;
+      color: #fff;
+      font-weight: 850;
+      margin-top: 16px;
+      box-shadow: 0 8px 18px rgba(184, 95, 64, 0.22);
+    }
+
+    .primary-action {
+      background: #e5b9a8;
+    }
+
+    .primary-action.ready {
+      background: var(--clay);
+    }
+
+    .secondary-action {
+      background: var(--clay);
+    }
+
+    .privacy-note {
+      margin: 14px 0 22px;
+      color: #8b867e;
+      font-size: 12px;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .system-card {
+      border-radius: var(--radius);
+      padding: 24px 20px 20px;
+      color: #716b63;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .system-card p {
+      margin: 0 0 18px;
+    }
+
+    .sidebar-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .main {
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      min-height: 78px;
+      grid-template-columns: minmax(0, 1fr) 288px;
+      align-items: center;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(18px);
+      padding: 0 36px;
+    }
+
+    .main-tabs {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      height: 78px;
+    }
+
+    .main-tab {
+      position: relative;
+      height: 78px;
+      background: transparent;
+      color: #6f6a63;
+      font-size: 14px;
+      font-weight: 850;
+    }
+
+    .main-tab.active {
+      color: var(--ink);
+    }
+
+    .main-tab.active::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 2px;
+      background: var(--ink);
+      content: "";
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--quiet);
+      padding: 0 12px;
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+    }
+
+    .canvas {
+      padding: 26px 36px 48px;
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 232px));
+      gap: 16px;
+      align-items: stretch;
+      margin-bottom: 28px;
+    }
+
+    .business-card,
+    .lesson-card,
+    .metric-card,
+    .artifact-card,
+    .template-card,
+    .agent-card,
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .business-card,
+    .lesson-card {
+      overflow: hidden;
+      min-height: 214px;
+      text-align: left;
+    }
+
+    .card-art {
+      display: grid;
+      height: 126px;
+      place-items: center;
+      border-bottom: 1px solid #edf0f5;
+      background:
+        linear-gradient(135deg, rgba(219, 234, 254, 0.7), rgba(255, 255, 255, 0.2)),
+        #edf6ff;
+      color: #222;
+      font-family: var(--mono);
+      font-size: 40px;
+      font-weight: 800;
+    }
+
+    .business-card:nth-child(2) .card-art {
+      background: #efede6;
+    }
+
+    .business-card:nth-child(3) .card-art {
+      background: #f6eadf;
+    }
+
+    .business-card:nth-child(4) .card-art {
+      background: #e8f2ec;
+    }
+
+    .card-body {
+      padding: 14px 14px 16px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 900;
+      line-height: 1.14;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #7a746d;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #f3f1eb;
+      color: #7a746d;
+      font-size: 10px;
+      font-weight: 900;
+      padding: 3px 7px;
+      white-space: nowrap;
+    }
+
+    .status.green {
+      background: #dcfce7;
+      color: var(--green);
+    }
+
+    .status.blue {
+      background: #dbeafe;
+      color: var(--blue);
+    }
+
+    .status.amber {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .business-card.active {
+      border-color: var(--blue-2);
+      box-shadow: inset 0 0 0 2px var(--blue-2), 0 14px 28px rgba(30, 64, 175, 0.13);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(340px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 8px;
+    }
+
+    .breadcrumb button {
+      background: transparent;
+      color: var(--blue);
+      font-weight: 900;
+      padding: 0;
+    }
+
+    .business-heading {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .business-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.45;
+      max-width: 720px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .tool-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 850;
+      padding: 0 10px;
+    }
+
+    .tool-button.primary {
+      border-color: var(--blue);
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .panel-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+    }
+
+    .panel-tab {
+      min-height: 31px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      padding: 0 12px;
+    }
+
+    .panel-tab.active {
+      background: #dbeafe;
+      color: var(--blue);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .metric-card {
+      padding: 14px;
+    }
+
+    .metric-label {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .metric-value {
+      margin: 0;
+      font-family: var(--mono);
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .metric-note {
+      margin: 7px 0 0;
+      color: var(--quiet);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .lane-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .artifact-card {
+      padding: 15px;
+    }
+
+    .artifact-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .artifact-copy {
+      margin: 0;
+      min-height: 48px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .path {
+      display: block;
+      margin-top: 12px;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .side-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .checklist li {
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--quiet);
+      box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+    }
+
+    .dot.green {
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(21, 128, 61, 0.14);
+    }
+
+    .dot.amber {
+      background: var(--amber);
+      box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.14);
+    }
+
+    .dot.red {
+      background: var(--red);
+      box-shadow: 0 0 0 4px rgba(185, 28, 28, 0.12);
+    }
+
+    .template-library {
+      display: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .template-library.active {
+      display: grid;
+    }
+
+    .template-card {
+      padding: 18px;
+    }
+
+    .template-card h3,
+    .agent-card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .template-card p,
+    .agent-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .agent-card {
+      padding: 16px;
+    }
+
+    .mini-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .code-strip {
+      border: 1px solid #bfdbfe;
+      border-radius: 7px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.6;
+      margin-top: 14px;
+      overflow: auto;
+      padding: 12px;
+      white-space: nowrap;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 1180px) {
+      .app {
+        grid-template-columns: 340px minmax(0, 1fr);
+      }
+
+      .home-grid {
+        grid-template-columns: repeat(2, minmax(180px, 232px));
+      }
+
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics,
+      .lane-grid,
+      .template-library.active {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 820px) {
+      .app {
+        display: block;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        padding: 24px 18px;
+      }
+
+      .topbar {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 0 18px 14px;
+      }
+
+      .main-tabs {
+        gap: 16px;
+        overflow-x: auto;
+      }
+
+      .canvas {
+        padding: 20px 18px 34px;
+      }
+
+      .home-grid,
+      .metrics,
+      .lane-grid,
+      .template-library.active,
+      .agent-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-header {
+        display: block;
+      }
+
+      .toolbar {
+        justify-content: flex-start;
+        margin-top: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Business creation">
+      <div class="brand">
+        <div class="brand-mark">bc</div>
+        <div>
+          <h1 class="brand-title">Business Control <span class="pill">Local Preview</span></h1>
+          <p class="brand-subtitle">by Compound Launch Systems</p>
+        </div>
+      </div>
+
+      <nav class="mode-tabs" aria-label="Creation mode">
+        <button class="mode-tab active" type="button" data-mode="business">Business</button>
+        <button class="mode-tab" type="button" data-mode="template">Template</button>
+        <button class="mode-tab" type="button" data-mode="import">Import</button>
+        <button class="mode-tab" type="button" data-mode="system">System</button>
+      </nav>
+
+      <section class="creator-panel" aria-live="polite">
+        <h2 class="panel-heading" id="creator-title">New business workspace</h2>
+        <input class="input" id="business-name" placeholder="Business name" value="" />
+
+        <div class="template-grid" aria-label="Business template choices">
+          <button class="template-option active" type="button" data-template="mobile">
+            <div class="template-wire" aria-hidden="true">
+              <div class="wire-row">
+                <div class="wire-line"></div>
+                <div class="wire-line"></div>
+              </div>
+              <div class="wire-block"></div>
+            </div>
+          </button>
+          <button class="template-option" type="button" data-template="control">
+            <div class="template-wire" aria-hidden="true">
+              <div class="wire-row">
+                <div class="wire-line"></div>
+              </div>
+              <div class="wire-row">
+                <div class="wire-line"></div>
+                <div class="wire-line"></div>
+                <div class="wire-line"></div>
+              </div>
+              <div class="wire-block"></div>
+            </div>
+          </button>
+        </div>
+
+        <div class="template-labels">
+          <span>B2C mobile app</span>
+          <span>Business control plane</span>
+        </div>
+
+        <button class="primary-action" id="create-button" type="button">+ Create local workspace</button>
+      </section>
+
+      <p class="privacy-note">Only local agents and files can see your workspace by default.</p>
+
+      <section class="system-card">
+        <p>Create a business system so future agents inherit the source-of-truth docs, templates, control-plane panels, and current launch state.</p>
+        <button class="secondary-action" type="button" id="system-button">Set up business system</button>
+      </section>
+
+      <div class="sidebar-footer" aria-label="Local identity">
+        <span class="pill">admin@local.business</span>
+        <span class="pill">Docs</span>
+        <span class="pill">Eduardo</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <nav class="main-tabs" aria-label="Workspace view">
+          <button class="main-tab active" type="button" data-view="recent">Recent</button>
+          <button class="main-tab" type="button" data-view="businesses">Your businesses</button>
+          <button class="main-tab" type="button" data-view="templates">Templates</button>
+          <button class="main-tab" type="button" data-view="systems">Systems</button>
+        </nav>
+        <label class="search">
+          <span aria-hidden="true">⌕</span>
+          <input id="search" type="search" placeholder="Search..." />
+        </label>
+      </header>
+
+      <section class="canvas">
+        <div id="home-view">
+          <div class="home-grid" id="business-grid" aria-label="Recent businesses"></div>
+
+          <section class="workspace">
+            <article class="panel">
+              <div class="panel-header">
+                <div>
+                  <div class="breadcrumb">
+                    <button type="button" id="home-breadcrumb">Home</button>
+                    <span>/</span>
+                    <span id="breadcrumb-business">Shade Diary</span>
+                  </div>
+                  <h2 class="business-heading" id="business-title">Shade Diary</h2>
+                  <p class="business-subtitle" id="business-subtitle"></p>
+                </div>
+                <div class="toolbar">
+                  <button class="tool-button" type="button">Open repo</button>
+                  <button class="tool-button" type="button">Render design room</button>
+                  <button class="tool-button primary" type="button">Resume launch</button>
+                </div>
+              </div>
+
+              <nav class="panel-tabs" aria-label="Business review panels">
+                <button class="panel-tab active" type="button" data-panel="overview">Overview</button>
+                <button class="panel-tab" type="button" data-panel="design">Design Room</button>
+                <button class="panel-tab" type="button" data-panel="launch">Launch</button>
+                <button class="panel-tab" type="button" data-panel="store">Store Ops</button>
+                <button class="panel-tab" type="button" data-panel="revenue">Revenue</button>
+                <button class="panel-tab" type="button" data-panel="agents">Agents</button>
+              </nav>
+
+              <div id="panel-content"></div>
+            </article>
+
+            <aside class="side-stack">
+              <section class="panel">
+                <div class="panel-header">
+                  <div>
+                    <h2 class="panel-heading">Readiness Ledger</h2>
+                    <p class="business-subtitle">The local truth future agents should check before acting.</p>
+                  </div>
+                  <span class="status blue" id="ledger-status">Active</span>
+                </div>
+                <ul class="checklist" id="readiness-list"></ul>
+              </section>
+
+              <section class="panel">
+                <h2 class="panel-heading">Agent Orchestration</h2>
+                <div class="agent-grid" id="agent-grid"></div>
+              </section>
+            </aside>
+          </section>
+        </div>
+
+        <div class="template-library" id="template-view" aria-label="Business templates"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    let businesses = {
+      shade: {
+        name: "Shade Diary",
+        type: "B2C mobile app",
+        updated: "Today",
+        badge: "Launch",
+        mark: "SD",
+        subtitle: "A mobile launch lane with Design Room, Launch Cockpit, onboarding proof, App Store tasks, attribution, and retention work in one local workspace.",
+        metrics: [
+          ["Stage", "Beta", "TestFlight + funnel"],
+          ["Artifacts", "18", "docs, prompts, renderers"],
+          ["Risk", "2", "provider proof + continuity"],
+          ["Next lane", "ASC", "store proof"]
+        ],
+        readiness: [
+          ["green", "PROJECT_STATE.yaml is current", "Fresh"],
+          ["green", "Design Room render exists", "Ready"],
+          ["amber", "PostHog attribution proof", "Founder"],
+          ["amber", "Continuity drift eval", "Needed"],
+          ["green", "Subagent routing required", "Enforced"]
+        ],
+        agents: [
+          ["Design Room scout", "Audits state, theme tokens, screenshots, and visual proof."],
+          ["Store Ops auditor", "Checks App Store evidence, What to Test, screenshots, and release notes."],
+          ["Continuity sentinel", "Compares handoff, current state, git, and installed runtime before work starts."],
+          ["Revenue analyst", "Reviews pricing, RevenueCat state, provider proof, and paywall claims."]
+        ],
+        lanes: [
+          ["Design Room", "Review product, market, audience, promise, screenshots, and visual direction from state files.", "design-room.html", "Ready"],
+          ["Launch Cockpit", "See launch stage, blockers, milestones, provider proof, and next agent actions.", "launch-cockpit.html", "Ready"],
+          ["Store Ops", "Inspect ASC metadata, screenshots, TestFlight notes, and release-readiness proof.", "templates/store/", "Watch"],
+          ["Growth", "Review viral loops, referral assets, paid UA notes, and source freshness.", "references/PAID_UA.md", "Draft"],
+          ["Analytics", "Check PostHog event contract, attribution status, retention events, and red/yellow gates.", "scripts/check-provider-proof.ts", "Gate"],
+          ["Failure Cards", "Known misses and eval-backed regressions future agents should avoid.", "evals/launchbench/", "Active"]
+        ]
+      },
+      ocho: {
+        name: "Ocho",
+        type: "Native mobile app",
+        updated: "Yesterday",
+        badge: "Review",
+        mark: "O8",
+        subtitle: "A focused app-control workspace for app audit findings, native build status, RevenueCat state, onboarding, and launch follow-through.",
+        metrics: [
+          ["Stage", "QA", "native proof"],
+          ["Artifacts", "12", "audit + app docs"],
+          ["Risk", "1", "store metadata"],
+          ["Next lane", "Build", "simulator proof"]
+        ],
+        readiness: [
+          ["green", "Native repo mapped", "Ready"],
+          ["green", "Audit notes attached", "Ready"],
+          ["amber", "RevenueCat proof", "Watch"],
+          ["green", "Build lane known", "Ready"],
+          ["amber", "Store copy refresh", "Needed"]
+        ],
+        agents: [
+          ["Native app auditor", "Walks the real target-user flow before making code claims."],
+          ["Revenue proof scout", "Checks entitlement, paywall, and provider handoff status."],
+          ["Build release runner", "Keeps build numbers, simulator proof, and ASC state aligned."],
+          ["Continuity sentinel", "Blocks stale handoff assumptions before resuming work."]
+        ],
+        lanes: [
+          ["Experience Audit", "Target-user walkthrough, onboarding gaps, AI-stack flow, and release risks.", "audits/ocho/", "Ready"],
+          ["Native Build", "Xcode generation, build number, simulator, and TestFlight proof.", "code/rork-ocho", "Ready"],
+          ["Revenue", "RevenueCat entitlement checks and paywall alignment.", "templates/revenue/", "Watch"],
+          ["Store Ops", "ASC validation, What to Test, screenshots, and metadata.", "templates/store/", "Gate"],
+          ["Analytics", "Activation and retention events for the first real cohort.", "templates/analytics/", "Draft"],
+          ["Failure Cards", "Known launch regressions and proof expectations.", "evals/launchbench/", "Active"]
+        ]
+      },
+      clothing: {
+        name: "Clueless Clothing",
+        type: "Commerce",
+        updated: "May 29",
+        badge: "Revenue",
+        mark: "CC",
+        subtitle: "A commerce cockpit for offer pages, subscription gating, Android builds, pricing alignment, and Cloudflare deploy proof.",
+        metrics: [
+          ["Stage", "Live", "site + app"],
+          ["Artifacts", "15", "offers + builds"],
+          ["Risk", "3", "pricing + gating"],
+          ["Next lane", "Web", "offer proof"]
+        ],
+        readiness: [
+          ["green", "Website deploy path known", "Ready"],
+          ["amber", "Subscription gating", "Watch"],
+          ["green", "Android build lane", "Ready"],
+          ["amber", "Pricing copy parity", "Needed"],
+          ["green", "Remote handoff clean", "Ready"]
+        ],
+        agents: [
+          ["Offer page auditor", "Checks public pricing, SEO/GEO, and deploy evidence."],
+          ["Subscription debugger", "Reviews client/server entitlement behavior."],
+          ["Android release runner", "Builds and packages release candidates."],
+          ["Continuity sentinel", "Keeps dirty worktrees isolated from quick ships."]
+        ],
+        lanes: [
+          ["Offer Pages", "Public pricing, copy, route, and Cloudflare Pages proof.", "web/src/pages/", "Ready"],
+          ["Subscription", "RevenueCat gating, account identity, and entitlement checks.", "flutter/lib/", "Watch"],
+          ["Android Build", "AAB generation, versioning, and Play upload handoff.", "scripts/build-android", "Ready"],
+          ["Analytics", "Checkout intent, purchase events, and retention reporting.", "templates/analytics/", "Draft"],
+          ["Support", "Customer-facing docs, receipts, and account recovery.", "templates/support/", "Draft"],
+          ["Failure Cards", "Repeated pricing and entitlement misses.", "evals/launchbench/", "Active"]
+        ]
+      },
+      creations: {
+        name: "Clueless Creations",
+        type: "Workspace platform",
+        updated: "Apr 23",
+        badge: "Owner",
+        mark: "CL",
+        subtitle: "A private workspace and public website split with business routes, artifact registry, custom-domain hardening, and local sync.",
+        metrics: [
+          ["Stage", "Platform", "workspace"],
+          ["Artifacts", "21", "routes + registry"],
+          ["Risk", "2", "surface split"],
+          ["Next lane", "R2", "artifact sync"]
+        ],
+        readiness: [
+          ["green", "Public/private split documented", "Ready"],
+          ["green", "Business route model exists", "Ready"],
+          ["amber", "Artifact sync proof", "Watch"],
+          ["amber", "Custom-domain hardening", "Needed"],
+          ["green", "Submodule map known", "Ready"]
+        ],
+        agents: [
+          ["Workspace architect", "Reviews business routes, private workspace, and artifact registry."],
+          ["Security hardener", "Checks Worker routing, public config, and domain boundaries."],
+          ["Artifact sync runner", "Moves local deliverables into durable storage with proof."],
+          ["Continuity sentinel", "Prevents public site and private workspace drift."]
+        ],
+        lanes: [
+          ["Workspace", "Private business routes, control plane, and authenticated surfaces.", "workspace.clueless-creations.com", "Ready"],
+          ["Public Site", "Public funnel, personal/agency split, and SEO/GEO assets.", "clueless-creations", "Ready"],
+          ["Artifacts", "R2/Supabase registry, local sync, and proof links.", "scripts/workspace-sync", "Watch"],
+          ["Security", "Worker hardening, public config, and custom domain rules.", "workers/", "Gate"],
+          ["Knowledge", "Business specs, generated docs, and repo handoff state.", "businesses/", "Ready"],
+          ["Failure Cards", "Known surface-blur mistakes and validator targets.", "evals/launchbench/", "Active"]
+        ]
+      }
+    };
+
+    const panelCopy = {
+      overview: "The overview keeps executive signal visible first: stage, risk, next lane, artifacts, and the most important review surfaces.",
+      design: "The Design Room panel would render from state/business.json and theme.tokens.json, then show product promise, audience, positioning, visual direction, and screenshots.",
+      launch: "The Launch panel would render from PROJECT_STATE.yaml and show milestones, blockers, launch lane ownership, source freshness, and proof gates.",
+      store: "Store Ops gathers App Store Connect, Google Play, screenshots, What to Test, compliance notes, and release evidence.",
+      revenue: "Revenue gathers RevenueCat, Stripe, pricing, paywall, attribution, and provider-proof gates without faking founder-owned setup.",
+      agents: "Agents shows the exact subagents and continuity checks required before work starts, so the workflow is enforced mechanically."
+    };
+
+    let templateLibrary = [
+      ["B2C Mobile Launch", "Design Room, Launch Cockpit, App Store Ops, RevenueCat, PostHog, onboarding, retention, and failure-card evals."],
+      ["Business Control Plane", "Top-level portfolio, business drill-downs, artifact registry, agent routing, source-of-truth docs, and runtime sync."],
+      ["Commerce Growth", "Offer pages, pricing parity, subscription gates, Android/iOS releases, analytics, and Cloudflare deploy proof."],
+      ["Workspace Platform", "Public/private route separation, tenant business routes, artifact storage, security checks, and local sync."],
+      ["Personal Brand Funnel", "Offer architecture, multilingual SEO/GEO, content pillars, lead capture, and private ICP docs."],
+      ["AI App Audit", "Target-user walkthroughs, native build proof, onboarding issues, paywall checks, and release follow-through."]
+    ];
+
+    let selectedBusiness = "shade";
+    let selectedPanel = "overview";
+
+    const businessGrid = document.getElementById("business-grid");
+    const templateView = document.getElementById("template-view");
+    const panelContent = document.getElementById("panel-content");
+    const readinessList = document.getElementById("readiness-list");
+    const agentGrid = document.getElementById("agent-grid");
+
+    function normalizeWorkspaceBusiness(entry) {
+      return {
+        name: entry.name,
+        type: entry.type,
+        updated: entry.updated,
+        badge: entry.badge,
+        mark: entry.mark,
+        subtitle: entry.subtitle,
+        metrics: entry.metrics.map((metric) => [metric.label, metric.value, metric.note]),
+        readiness: entry.readiness.map((item) => [item.status, item.label, item.tag]),
+        agents: entry.agents.map((agent) => [agent.name, agent.summary]),
+        lanes: entry.lanes.map((lane) => [lane.title, lane.summary, lane.path, lane.status])
+      };
+    }
+
+    async function loadWorkspaceState() {
+      const workspacePath = new URLSearchParams(location.search).get("workspace") || "./fixtures/business-control-plane-workspace.json";
+      const response = await fetch(workspacePath, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error(`Workspace state failed to load: ${response.status}`);
+      }
+
+      const workspace = await response.json();
+      businesses = Object.fromEntries(
+        workspace.businesses.map((business) => [business.id, normalizeWorkspaceBusiness(business)])
+      );
+      templateLibrary = workspace.templates.map((template) => [
+        template.name,
+        template.summary,
+        template.included
+      ]);
+
+      document.querySelector(".brand-title").firstChild.textContent = `${workspace.product.name} `;
+      document.querySelector(".brand-subtitle").textContent = workspace.product.subtitle;
+    }
+
+    function renderBusinessCards() {
+      businessGrid.innerHTML = Object.entries(businesses).map(([id, business]) => `
+        <button class="business-card ${id === selectedBusiness ? "active" : ""}" type="button" data-business="${id}" aria-label="Open ${business.name}">
+          <div class="card-art">${business.mark}</div>
+          <div class="card-body">
+            <h3 class="card-title">${business.name}<span class="status ${business.badge === "Owner" ? "" : "blue"}">${business.badge}</span></h3>
+            <div class="card-meta"><span>${business.type}</span><span>·</span><span>${business.updated}</span></div>
+          </div>
+        </button>
+      `).join("");
+
+      businessGrid.querySelectorAll("[data-business]").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedBusiness = button.dataset.business;
+          selectedPanel = "overview";
+          renderBusiness();
+          location.hash = `business=${selectedBusiness}&panel=${selectedPanel}`;
+        });
+      });
+    }
+
+    function renderMetrics(business) {
+      return `
+        <div class="metrics">
+          ${business.metrics.map(([label, value, note]) => `
+            <article class="metric-card">
+              <p class="metric-label">${label}</p>
+              <p class="metric-value">${value}</p>
+              <p class="metric-note">${note}</p>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderLanes(business) {
+      return `
+        <div class="lane-grid">
+          ${business.lanes.map(([title, copy, path, status]) => `
+            <article class="artifact-card">
+              <h3 class="artifact-title">${title}<span class="status ${status === "Ready" ? "green" : status === "Gate" ? "amber" : "blue"}">${status}</span></h3>
+              <p class="artifact-copy">${copy}</p>
+              <code class="path">${path}</code>
+            </article>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function renderPanel(business) {
+      const agentPanel = `
+        <div class="agent-grid">
+          ${business.agents.map(([name, copy]) => `
+            <article class="agent-card">
+              <h3>${name}</h3>
+              <p>${copy}</p>
+              <span class="status blue">Subagent lane</span>
+            </article>
+          `).join("")}
+        </div>
+        <div class="code-strip">enforce: continuity_sentinel -> lane_subagents -> orchestrator_integration -> validator/eval proof</div>
+      `;
+
+      if (selectedPanel === "agents") {
+        panelContent.innerHTML = agentPanel;
+        return;
+      }
+
+      const panelFilter = selectedPanel === "overview"
+        ? business.lanes
+        : business.lanes.filter(([title]) => title.toLowerCase().includes(selectedPanel.split(" ")[0]) || selectedPanel === "launch");
+
+      const lanes = selectedPanel === "overview" ? business.lanes : (panelFilter.length ? panelFilter : business.lanes.slice(0, 3));
+
+      panelContent.innerHTML = `
+        <p class="business-subtitle" style="margin-bottom: 16px;">${panelCopy[selectedPanel]}</p>
+        ${renderMetrics(business)}
+        <div class="lane-grid">
+          ${lanes.map(([title, copy, path, status]) => `
+            <article class="artifact-card">
+              <h3 class="artifact-title">${title}<span class="status ${status === "Ready" ? "green" : status === "Gate" ? "amber" : "blue"}">${status}</span></h3>
+              <p class="artifact-copy">${copy}</p>
+              <code class="path">${path}</code>
+            </article>
+          `).join("")}
+        </div>
+        <div class="code-strip">local route: /businesses/${business.name.toLowerCase().replaceAll(" ", "-")}/${selectedPanel}</div>
+      `;
+    }
+
+    function renderReadiness(business) {
+      readinessList.innerHTML = business.readiness.map(([color, label, status]) => `
+        <li><span class="dot ${color}"></span><span>${label}</span><span class="status ${color === "green" ? "green" : color === "amber" ? "amber" : ""}">${status}</span></li>
+      `).join("");
+    }
+
+    function renderAgents(business) {
+      agentGrid.innerHTML = business.agents.slice(0, 2).map(([name, copy]) => `
+        <article class="agent-card">
+          <h3>${name}</h3>
+          <p>${copy}</p>
+          <button class="tool-button" type="button">Inspect lane</button>
+        </article>
+      `).join("");
+    }
+
+    function renderBusiness() {
+      const business = businesses[selectedBusiness];
+      document.getElementById("breadcrumb-business").textContent = business.name;
+      document.getElementById("business-title").textContent = business.name;
+      document.getElementById("business-subtitle").textContent = business.subtitle;
+      document.getElementById("ledger-status").textContent = business.badge;
+      document.querySelectorAll("[data-panel]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.panel === selectedPanel);
+      });
+      renderBusinessCards();
+      renderPanel(business);
+      renderReadiness(business);
+      renderAgents(business);
+    }
+
+    function renderTemplates() {
+      templateView.innerHTML = templateLibrary.map(([name, copy, included = ["AGENTS.md", "CLAUDE.md", "Evals"]]) => `
+        <article class="template-card">
+          <h3>${name}</h3>
+          <p>${copy}</p>
+          <button class="tool-button primary" type="button">Use template</button>
+          <div class="mini-actions">
+            ${included.map((item, index) => `<span class="status ${index === 0 ? "blue" : index === 2 ? "amber" : ""}">${item}</span>`).join("")}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    document.querySelectorAll("[data-panel]").forEach((button) => {
+      button.addEventListener("click", () => {
+        selectedPanel = button.dataset.panel;
+        renderBusiness();
+        location.hash = `business=${selectedBusiness}&panel=${selectedPanel}`;
+      });
+    });
+
+    document.querySelectorAll("[data-view]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const view = button.dataset.view;
+        document.querySelectorAll("[data-view]").forEach((tab) => tab.classList.toggle("active", tab === button));
+        document.getElementById("home-view").classList.toggle("hidden", view === "templates");
+        templateView.classList.toggle("active", view === "templates");
+      });
+    });
+
+    document.querySelectorAll("[data-mode]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-mode]").forEach((tab) => tab.classList.toggle("active", tab === button));
+        const title = {
+          business: "New business workspace",
+          template: "Start from a template",
+          import: "Import existing business",
+          system: "New operating system"
+        }[button.dataset.mode];
+        document.getElementById("creator-title").textContent = title;
+      });
+    });
+
+    document.querySelectorAll("[data-template]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-template]").forEach((option) => option.classList.toggle("active", option === button));
+        document.getElementById("create-button").classList.add("ready");
+      });
+    });
+
+    document.getElementById("business-name").addEventListener("input", (event) => {
+      document.getElementById("create-button").classList.toggle("ready", event.target.value.trim().length > 0);
+    });
+
+    document.getElementById("search").addEventListener("input", (event) => {
+      const query = event.target.value.trim().toLowerCase();
+      document.querySelectorAll("[data-business]").forEach((card) => {
+        const business = businesses[card.dataset.business];
+        card.style.display = business.name.toLowerCase().includes(query) || business.type.toLowerCase().includes(query) ? "" : "none";
+      });
+    });
+
+    function hydrateFromHash() {
+      const hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+      if (businesses[hash.get("business")]) {
+        selectedBusiness = hash.get("business");
+      }
+      if (panelCopy[hash.get("panel")]) {
+        selectedPanel = hash.get("panel");
+      }
+    }
+
+    async function boot() {
+      try {
+        await loadWorkspaceState();
+      } catch (error) {
+        console.warn("Using embedded demo workspace state.", error);
+      }
+
+      hydrateFromHash();
+      if (!businesses[selectedBusiness]) {
+        selectedBusiness = Object.keys(businesses)[0];
+      }
+      renderTemplates();
+      renderBusiness();
+    }
+
+    boot();
+  </script>
+</body>
+</html>

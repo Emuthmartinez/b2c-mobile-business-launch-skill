@@ -10,6 +10,13 @@ The Design Room is the first panel of a larger Business Control Plane: a founder
 - `state/theme.tokens.json`
 - `state/schema/business.schema.json`
 
+The portable workspace read model renders from:
+
+- `state/business.json`
+- `PROJECT_STATE.yaml`
+- `state/schema/workspace.schema.json`
+- `scripts/render-business-control-plane-workspace.ts`
+
 This panel owns cross-surface design state: app screens, web funnels, marketing assets, App Store pages, Product Page Optimization tests, In-App Events, and shared theme tokens.
 
 ## Modeled Panel Shells
@@ -29,8 +36,9 @@ Each shell must live in `state/business.json` under `controlPlane.panels`, inclu
 - Render views from state; do not hand-author dashboard HTML.
 - Keep panel-specific detail in references and scripts, not `SKILL.md`.
 - Let `PROJECT_STATE.yaml` remain the launch lane/status cockpit while `state/business.json` grows into the cross-surface business model.
+- Let `render-business-control-plane-workspace.ts` adapt both files into the open Business Control workspace schema instead of teaching UI code to scrape each source directly.
 - Add validators before adding new panels so the Control Plane does not become another long prose checklist.
-- Run `check-control-plane-contract` whenever panel state changes.
+- Run `check-control-plane-contract` and `check:business-control-plane-workspace` whenever panel state changes.
 
 ## Promotion Path
 
@@ -41,3 +49,4 @@ When a Design Room decision is accepted:
 3. Cascade the accepted decision to canonical business docs such as `DESIGN.md`, `design.md`, `APP_STORE_LISTING.md`, `ONBOARDING.md`, `CONTENT_ASSETS.md`, and `REVENUE_OPS.md` only when those files are in scope.
 4. Update `PROJECT_STATE.yaml` if launch readiness changed.
 5. Render both `design-room.html` and `launch-cockpit.html` when both state layers changed.
+6. Re-render the Business Control workspace read model and run `check:business-control-plane-workspace` before calling it maintained.

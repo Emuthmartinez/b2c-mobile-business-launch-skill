@@ -88,7 +88,7 @@ Provider-backed readiness must include live proof or explicit founder-only gates
 - Cascade every change. A change to a launched app's feature, copy, brand vocabulary, pricing, products, or data behavior rarely lives on one surface. After any such change, run [`references/change-cascade.md`](references/change-cascade.md) to propagate it across in-app, App Store listing/keywords/screenshots/App Preview/products/localizations, RevenueCat, landing page + meta/JSON-LD, SEO/GEO, email, analytics, and legal — re-rendering derived assets and reconciling the lexicon before calling the change done.
 - Treat App Store Connect access as setup, not a wall. If the `asc` CLI is installed, never report "cannot access ASC"; run the auth-recovery ladder in [`references/app-store-connect-cli.md`](references/app-store-connect-cli.md) (keychain profiles, account-level keys, `asc auth init/login`) and report any missing app record/cert/RevenueCat app as a founder-gated setup step with the exact next command.
 - Treat design versioning as git state, not prose labels. For Design Room work, baselines, diffs, restores, and wipes operate on `state/` and the rendered Design Room.
-- Treat Control Plane, live-provider proof, behavior evals, artifact starters, and token promotion as mechanically enforced contracts; run their validators before claiming the skill or a generated launch package is complete.
+- Treat Control Plane, the Business Control workspace read model, live-provider proof, behavior evals, artifact starters, and token promotion as mechanically enforced contracts; run their validators before claiming the skill or a generated launch package is complete.
 
 ## Default Phase Flow
 
