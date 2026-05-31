@@ -230,9 +230,9 @@ Every emotional moment must be measurable. These events are required in `ANALYTI
 
 | Event Name | Fires When | Required Properties |
 |---|---|---|
-| `commitment_goal_set` | User completes Commitment Card step | `goal_text` (hashed or category), `goal_cadence`, `onboarding_step_index` |
-| `variable_reward_reveal` | Variable reward surfaces | `reward_type` (tribe/hunt/self), `trigger_action`, `reveal_animation_shown` (bool) |
-| `perceived_effort_complete` | Perceived effort sequence finishes | `stage_count`, `total_duration_ms`, `feature_context` |
+| `commitment_made` | User completes Commitment Card step | `goal_text` (hashed or category), `goal_cadence`, `onboarding_step_index` |
+| `variable_reward_revealed` | Variable reward surfaces | `reward_type` (tribe/hunt/self), `trigger_action`, `reveal_animation_shown` (bool) |
+| `perceived_effort_completed` | Perceived effort sequence finishes | `stage_count`, `total_duration_ms`, `feature_context` |
 | `intent_mirror_shown` | Intent Mirroring Card surfaces | `trigger_context` (onboarding/session_end/post_value), `user_phrase_source` (committed_goal/last_action) |
 | `intent_mirror_dismissed` | User dismisses the mirror | `time_to_dismiss_ms` |
 | `ai_result_trust_signal_shown` | AI attribution copy renders on result screen | `feature_context` |

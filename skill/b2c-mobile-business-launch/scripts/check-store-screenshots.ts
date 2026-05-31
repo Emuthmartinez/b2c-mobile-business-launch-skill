@@ -54,11 +54,11 @@ function checkReadyDeviceRows(text: string, file: string): void {
     if (!/\b(ASC device_type|device_type|IPHONE_[A-Z0-9_]+|IPAD_[A-Z0-9_]+)\b/i.test(trimmed)) {
       issues.push(issue("error", "store_screenshots.ready_well_device_type_missing", `Ready Apple screenshot row needs ASC device_type or equivalent: "${trimmed}"`, file));
     }
-    const countMatch = trimmed.match(/\b(?:count|screenshots?)\s*:?\s*(\d{1,2})\b/i);
+    const countMatch = trimmed.match(/\b(\d{1,2})\s+screenshots?\b|\b(?:count|screenshots?)\s*:?\s*(\d{1,2})\b/i);
     if (!countMatch) {
       issues.push(issue("error", "store_screenshots.ready_well_count_missing", `Ready Apple screenshot row needs screenshot count between 1 and 10: "${trimmed}"`, file));
     } else {
-      const count = Number(countMatch[1]);
+      const count = Number(countMatch[1] ?? countMatch[2]);
       if (!Number.isInteger(count) || count < 1 || count > 10) {
         issues.push(issue("error", "store_screenshots.ready_well_count_invalid", `Apple screenshot count must be 1-10: "${trimmed}"`, file));
       }
@@ -195,12 +195,12 @@ if (screenshotPacket) {
   checkFinalPaths(screenshotPacket.text, screenshotPacket.relativePath);
 
   const usesAppStoreScreenshots = /ParthJadhav\/app-store-screenshots|app-store-screenshots/i.test(screenshotPacket.text);
-  if (usesAppStoreScreenshots && !appStoreScreenshotsState && !screenshotHtml && !includes(screenshotPacket.text, "app-store-screenshots.json")) {
+  if (storeStatus === "done" && usesAppStoreScreenshots && !appStoreScreenshotsState && !screenshotHtml) {
     issues.push(
       issue(
         "error",
         "store_screenshots.app_store_screenshots_board_missing",
-        "When ParthJadhav/app-store-screenshots is used, SCREENSHOTS.md should name the saved board/state path such as app-store-screenshots.json or screenshots/index.html.",
+        "A done screenshot lane that uses ParthJadhav/app-store-screenshots must have a saved board/state file present (app-store-screenshots.json or screenshots/index.html), not just a reference to it.",
         screenshotPacket.relativePath,
       ),
     );

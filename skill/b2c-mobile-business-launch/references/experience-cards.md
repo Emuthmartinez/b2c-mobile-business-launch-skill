@@ -644,20 +644,20 @@ actions after the user has already seen the card multiple times in the same sess
    on native; framer-motion/motion on web. Result screen must surface the user's own language
    in its hero copy.
 6. **Add the opt-out affordance.** Include a visible "Skip" or "Continue without waiting"
-   control. Log skip events as `effort_delay_cancelled`.
-7. **Instrument all events.** Wire `effort_delay_started` (with `computation_type`),
-   `effort_delay_step_shown` (per step, with `step_copy_key` and `inputs_personalized: bool`),
-   `effort_delay_completed`, `effort_delay_cancelled`, `effort_delay_result_engaged`, and
-   `effort_delay_result_dismissed`. Set person properties `plan_built_at`,
+   control. Log skip events as `perceived_effort_cancelled`.
+7. **Instrument all events.** Wire `perceived_effort_started` (with `computation_type`),
+   `perceived_effort_step_shown` (per step, with `step_copy_key` and `inputs_personalized: bool`),
+   `perceived_effort_completed`, `perceived_effort_cancelled`, `perceived_effort_result_engaged`, and
+   `perceived_effort_result_dismissed`. Set person properties `plan_built_at`,
    `plan_inputs_count`, `plan_effort_steps_seen`.
 8. **Implement reduced-motion fallback.** Read the OS-level preference before starting any
    animation. When reduce-motion is active: remove all transitions and step-fade animations;
    display narration steps as a static list that auto-advances via text change only.
 9. **Validate computation type.** Before any experiment is enabled, a code reviewer must
-   confirm every `effort_delay_started` event tagged `computation_type: ui_composition` or
+   confirm every `perceived_effort_started` event tagged `computation_type: ui_composition` or
    `real_data_processing` has a corresponding real operation — not a sleep timer. Log in
    `TECH_SPEC.md`. This is the guardrail gate.
-10. **Run the A/B experiment.** Deploy the `exp_effort_delay_<app_slug>_<YYYYMM>` flag with
+10. **Run the A/B experiment.** Deploy the `exp_perceived_effort_<app_slug>_<YYYYMM>` flag with
     three variants: control (generic spinner), personalized steps, personalized steps + visible
     progress count. Primary metric: `paywall_viewed → trial_started` or `purchase_completed`.
 
@@ -667,13 +667,13 @@ actions after the user has already seen the card multiple times in the same sess
 - Processing screen shows narration steps that reference the user's own inputs by name or
   category — not generic steps like "Loading…" or "Please wait…"
 - Each narration step has a stable `copy_key` in the codebase
-- `effort_delay_started` event fires with `computation_type` populated and
+- `perceived_effort_started` event fires with `computation_type` populated and
   `user_inputs_referenced_count > 0`
-- `effort_delay_step_shown` fires per step with `inputs_personalized: true` for at least the
+- `perceived_effort_step_shown` fires per step with `inputs_personalized: true` for at least the
   first step
 - A visible Skip or Cancel affordance exists on the processing screen
 - Result reveal screen surfaces the user's own language in the hero copy
-- `reduce_motion_active` property is set in `effort_delay_started` and fallback rendering is
+- `reduce_motion_active` property is set in `perceived_effort_started` and fallback rendering is
   verified in device accessibility settings
 - `computation_type` is documented in `TECH_SPEC.md` with no arbitrary sleep timers beyond
   a documented UX hold minimum
@@ -682,7 +682,7 @@ actions after the user has already seen the card multiple times in the same sess
 - Processing screen shows a generic spinner with no narration
 - Narration steps reference system-internal steps ("Connecting to servers…") rather than user
   inputs
-- `effort_delay_started` fires but `user_inputs_referenced_count = 0`
+- `perceived_effort_started` fires but `user_inputs_referenced_count = 0`
 - No Skip / Cancel affordance on the processing screen
 - Result reveal screen shows a generic output header with no user-language echo
 - No reduced-motion fallback
@@ -705,12 +705,12 @@ actions after the user has already seen the card multiple times in the same sess
 
 | Event | What it proves | Required properties |
 |---|---|---|
-| `effort_delay_started` | Card fired; `computation_type` confirms delay is honest | `computation_type`, `user_inputs_referenced_count`, `flow_id`, `variant_id` |
-| `effort_delay_step_shown` | Each narration step reached the user | `step_copy_key`, `inputs_personalized: bool`, `step_index` |
-| `effort_delay_completed` | User saw the full processing sequence | `actual_duration_ms`, `target_duration_ms`, `reduce_motion_active: bool` |
-| `effort_delay_cancelled` | User chose to skip | `time_to_cancel_ms`, `step_at_cancel` |
-| `effort_delay_result_engaged` | User found the result worth acting on | `time_to_first_engagement_ms` |
-| `effort_delay_result_dismissed` | Counter-metric | `time_to_dismiss_ms` (< 1000 ms is the clearest signal wait wasn't worth it) |
+| `perceived_effort_started` | Card fired; `computation_type` confirms delay is honest | `computation_type`, `user_inputs_referenced_count`, `flow_id`, `variant_id` |
+| `perceived_effort_step_shown` | Each narration step reached the user | `step_copy_key`, `inputs_personalized: bool`, `step_index` |
+| `perceived_effort_completed` | User saw the full processing sequence | `actual_duration_ms`, `target_duration_ms`, `reduce_motion_active: bool` |
+| `perceived_effort_cancelled` | User chose to skip | `time_to_cancel_ms`, `step_at_cancel` |
+| `perceived_effort_result_engaged` | User found the result worth acting on | `time_to_first_engagement_ms` |
+| `perceived_effort_result_dismissed` | Counter-metric | `time_to_dismiss_ms` (< 1000 ms is the clearest signal wait wasn't worth it) |
 | `emotion_card_fired` | System-level card registry event | `card_id: perceived_effort_delay` |
 | `emotion_card_abandoned` | User exited during or immediately after the card | `rage_tap_detected: bool` |
 
@@ -750,13 +750,13 @@ regardless of real computation stages (a fake progress bar). A discovered fake d
 a trust collapse worse than no delay at all, triggers "just a spinner" and "doesn't actually
 analyze" review clusters, and is a compliance veto.
 
-**Guardrail.** Before any `effort_delay_started` event is instrumented, the code reviewer
+**Guardrail.** Before any `perceived_effort_started` event is instrumented, the code reviewer
 must confirm in `TECH_SPEC.md`: (1) `computation_type` is one of `real_api_call`,
 `real_data_processing`, or `ui_composition` — no sleep-timer-only path; (2) the minimum UX
 hold (if any) is documented with exact milliseconds and a code comment; (3) narration steps
 are driven by real async milestones, not a fixed timer sequence; (4) at least one narration
 step references a real user input by value or category. Run `npm run check:emotional-design
--- --root .`. If `computation_type = ui_composition` and `effort_delay_cancelled` rate exceeds
+-- --root .`. If `computation_type = ui_composition` and `perceived_effort_cancelled` rate exceeds
 10% in any variant, halt the experiment and file the emotional-card-dark-line-crossed failure
 card immediately.
 
@@ -2483,7 +2483,7 @@ must be yes. Record attestation in `PRODUCTION_READINESS.md`. Run
 
 - Commitment Card — `commitment_value` captured during onboarding is the source material for
   the personalized fresh-start echo; these two cards share a data dependency:
-  `commitment_captured` must precede `fresh_start_triggered` in the user's lifecycle
+  `commitment_made` must precede `fresh_start_triggered` in the user's lifecycle
 - Intent Mirroring Card — a fresh-start re-entry moment is a natural trigger for an intent
   mirror; constraint: the intent mirror must fire after the fresh-start CTA is tapped, not as
   a gate before the CTA

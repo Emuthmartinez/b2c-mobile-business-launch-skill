@@ -102,7 +102,7 @@ A micro-choice or micro-investment moment that the app visibly acknowledges. The
 | Event | When It Fires | Required Properties |
 | --- | --- | --- |
 | `commitment_card_initiated` | User is shown the commitment-capture UI (goal-setting, first-choice, pledge, or onboarding answer that will be mirrored back) | `commitment_type` (`goal` / `preference` / `pledge` / `first_action`), `surface`, `flow_id`, `step_id`, `variant_id` |
-| `commitment_captured` | User submits their commitment input (typed goal, selected option, completed micro-step) | Same as above plus `commitment_input_type` (`text` / `selection` / `action`), `commitment_length_chars` (for text; no raw text), `has_prior_session_commitment` (bool) |
+| `commitment_made` | User submits their commitment input (typed goal, selected option, completed micro-step) | Same as above plus `commitment_input_type` (`text` / `selection` / `action`), `commitment_length_chars` (for text; no raw text), `has_prior_session_commitment` (bool) |
 | `commitment_echo_shown` | App displays the commitment back to the user (e.g. "Your goal: run 3x/week" on paywall or activation screen) | `commitment_type`, `echo_surface` (paywall / activation / dashboard / notification), `variant_id` |
 | `commitment_echo_engaged` | User taps or interacts with the echoed commitment (expands, edits, shares) | Same as above plus `engagement_type` |
 | `commitment_reinforced` | App surfaces the commitment again at a later session (streak screen, return notification body, lifecycle email subject) | `commitment_type`, `session_number`, `days_since_capture`, `channel` (`push` / `in_app` / `email`) |
@@ -117,7 +117,7 @@ A micro-choice or micro-investment moment that the app visibly acknowledges. The
 | `activation_task_completed` | Up — goal-gradient effect: user has "already started" | First-session activation |
 | Streak length (median days) | Up — reinforced commitment reduces streak abandonment | Retention |
 
-Person property to set after `commitment_captured`: `commitment_type`, `commitment_captured_at`, `commitment_flow_id`. These properties allow cohort analysis: do users who captured a commitment retain better?
+Person property to set after `commitment_made`: `commitment_type`, `commitment_made_at`, `commitment_flow_id`. These properties allow cohort analysis: do users who captured a commitment retain better?
 
 ### (c) Counter-Metrics (Dark-Pattern Backfire Signals)
 
@@ -166,7 +166,7 @@ A moment of deliberate anticipation before a reward is revealed. The user takes 
 | Event | When It Fires | Required Properties |
 | --- | --- | --- |
 | `variable_reward_trigger` | User takes the action that initiates the variable-reward loop (e.g. completes a session, submits content, finishes a challenge) | `reward_pool_id` (which pool of possible rewards), `trigger_action`, `surface`, `flow_id`, `variant_id` |
-| `variable_reward_anticipation_start` | Anticipation UI begins (countdown, animation, "calculating," "unlocking") | `anticipation_duration_ms` (target), `animation_type`, `reduce_motion_active` (bool) |
+| `variable_reward_anticipation_started` | Anticipation UI begins (countdown, animation, "calculating," "unlocking") | `anticipation_duration_ms` (target), `animation_type`, `reduce_motion_active` (bool) |
 | `variable_reward_revealed` | Reward is shown to user | `reward_type` (tribal / hunt / self / streak / badge / content / discount / feature_unlock), `reward_rarity` (`common` / `uncommon` / `rare`), `anticipation_actual_duration_ms`, `is_reduced_motion_fallback` (bool) |
 | `variable_reward_engaged` | User taps, shares, or further interacts with the reward | `reward_type`, `engagement_action` (`shared` / `saved` / `viewed` / `dismissed`) |
 | `variable_reward_dismissed` | User closes or skips the reward without engagement | `reward_type`, `time_to_dismiss_ms` |
@@ -232,12 +232,12 @@ A visible, narrated processing moment that communicates _what the system is doin
 
 | Event | When It Fires | Required Properties |
 | --- | --- | --- |
-| `effort_delay_started` | Personalized processing UI begins | `surface`, `flow_id`, `step_id`, `computation_type` (`real_api_call` / `real_data_processing` / `ui_composition`), `user_inputs_referenced_count` (how many of the user's prior inputs are displayed), `target_duration_ms`, `variant_id` |
-| `effort_delay_step_shown` | Each narration step ("Analyzing your pace…", "Calibrating intensity…") is displayed | `step_index`, `step_copy_key` (stable key, not raw copy), `inputs_personalized` (bool) |
-| `effort_delay_completed` | Processing UI ends and result is revealed | `actual_duration_ms`, `steps_shown`, `user_cancelled` (bool), `reduce_motion_active` (bool) |
-| `effort_delay_cancelled` | User cancels during the delay | `time_to_cancel_ms`, `step_at_cancel` |
-| `effort_delay_result_engaged` | User interacts with the revealed result (saves, shares, starts using) | `result_type`, `time_to_first_engagement_ms` |
-| `effort_delay_result_dismissed` | User closes the result without engagement | `time_to_dismiss_ms` |
+| `perceived_effort_started` | Personalized processing UI begins | `surface`, `flow_id`, `step_id`, `computation_type` (`real_api_call` / `real_data_processing` / `ui_composition`), `user_inputs_referenced_count` (how many of the user's prior inputs are displayed), `target_duration_ms`, `variant_id` |
+| `perceived_effort_step_shown` | Each narration step ("Analyzing your pace…", "Calibrating intensity…") is displayed | `step_index`, `step_copy_key` (stable key, not raw copy), `inputs_personalized` (bool) |
+| `perceived_effort_completed` | Processing UI ends and result is revealed | `actual_duration_ms`, `steps_shown`, `user_cancelled` (bool), `reduce_motion_active` (bool) |
+| `perceived_effort_cancelled` | User cancels during the delay | `time_to_cancel_ms`, `step_at_cancel` |
+| `perceived_effort_result_engaged` | User interacts with the revealed result (saves, shares, starts using) | `result_type`, `time_to_first_engagement_ms` |
+| `perceived_effort_result_dismissed` | User closes the result without engagement | `time_to_dismiss_ms` |
 
 ### (b) Leading Behavioral Metrics
 
@@ -255,16 +255,16 @@ Person property to set: `plan_built_at`, `plan_inputs_count`, `plan_effort_steps
 
 | Counter-Metric | What It Reveals | Threshold |
 | --- | --- | --- |
-| `effort_delay_cancelled` rate | Delay is too long or users sense it is fake | > 10 % → reduce duration or add cancel affordance |
-| `effort_delay_result_dismissed` with `time_to_dismiss_ms < 1000` | Result did not feel worth the wait | > 20 % → review result quality and copy |
-| Rage-tap during `effort_delay_started` or step transitions | Animation / pacing causing frustration | > 2 % |
-| `refund_detected` or `subscription_cancelled` within 48 h of `effort_delay_completed` where `computation_type = ui_composition` | User discovered delay was cosmetic, felt deceived | Any spike → compliance review; may warrant removing that computation_type |
-| Support contact (`support_contact_clicked`) cohorted to users whose `effort_delay_actual_duration_ms > target + 3000` | Real computation taking too long, users assume failure | > 5 % → add timeout fallback |
+| `perceived_effort_cancelled` rate | Delay is too long or users sense it is fake | > 10 % → reduce duration or add cancel affordance |
+| `perceived_effort_result_dismissed` with `time_to_dismiss_ms < 1000` | Result did not feel worth the wait | > 20 % → review result quality and copy |
+| Rage-tap during `perceived_effort_started` or step transitions | Animation / pacing causing frustration | > 2 % |
+| `refund_detected` or `subscription_cancelled` within 48 h of `perceived_effort_completed` where `computation_type = ui_composition` | User discovered delay was cosmetic, felt deceived | Any spike → compliance review; may warrant removing that computation_type |
+| Support contact (`support_contact_clicked`) cohorted to users whose `perceived_effort_actual_duration_ms > target + 3000` | Real computation taking too long, users assume failure | > 5 % → add timeout fallback |
 | Negative review text: "fake" / "just a spinner" / "doesn't actually analyze" | Labor illusion perceived as manipulation | Any cluster → design review |
 
 ### (d) A/B Experiment Design
 
-**Flag key**: `exp_effort_delay_<app_slug>_<YYYYMM>`
+**Flag key**: `exp_perceived_effort_<app_slug>_<YYYYMM>`
 
 | Variant | Description |
 | --- | --- |
@@ -272,13 +272,13 @@ Person property to set: `plan_built_at`, `plan_inputs_count`, `plan_effort_steps
 | `personalized_steps` | Narrated steps that reference user's own inputs (e.g. their named goal, their answer count) |
 | `personalized_steps_with_count` | Same as above plus a visible progress count or percentage |
 
-**Exposure event**: `effort_delay_started`
+**Exposure event**: `perceived_effort_started`
 
 **Primary metric**: `paywall_viewed` → `trial_started` or `purchase_completed` conversion within the same session
 
 **Secondary metric**: `activation_task_completed` rate within first session
 
-**Counter-metric**: `effort_delay_cancelled` rate AND `effort_delay_result_dismissed` (< 1 s) rate
+**Counter-metric**: `perceived_effort_cancelled` rate AND `perceived_effort_result_dismissed` (< 1 s) rate
 
 **Guardrail**: If `computation_type = ui_composition` and cancel rate exceeds 10 % in any variant, halt, set computation_type to `real_api_call` only or reduce duration, file failure card.
 
@@ -299,7 +299,7 @@ A deliberate, brief pause at a high-stakes moment (pre-purchase, first core acti
 | Event | When It Fires | Required Properties |
 | --- | --- | --- |
 | `intent_mirror_shown` | Intent mirroring UI is displayed | `surface` (pre_purchase / pre_first_action / milestone / re_engagement), `intent_type` (user's intent category, not raw text), `intent_source` (`onboarding_answer` / `user_set_goal` / `prior_session_action`), `mirror_copy_key` (stable key), `variant_id` |
-| `intent_mirror_confirmed` | User taps the primary CTA (proceed, yes, start, commit) | `intent_type`, `time_to_confirm_ms` |
+| `intent_mirror_continued` | User taps the primary CTA (proceed, yes, start, commit) | `intent_type`, `time_to_confirm_ms` |
 | `intent_mirror_edited` | User taps "edit my goal" or equivalent to revise their intent before proceeding | `intent_type`, `edit_surface` |
 | `intent_mirror_dismissed` | User closes without confirming (back / close / timeout) | `intent_type`, `dismiss_reason` (`back` / `close` / `timeout`), `time_to_dismiss_ms` |
 | `intent_mirror_re_engagement` | Intent mirror used for a return session after N-day absence | `days_absent`, `intent_type`, `session_number` |
@@ -308,7 +308,7 @@ A deliberate, brief pause at a high-stakes moment (pre-purchase, first core acti
 
 | Metric | How Intent Mirroring Should Move It | Notes |
 | --- | --- | --- |
-| `trial_started` or `purchase_completed` immediately after `intent_mirror_confirmed` | Up — the mirror reframes purchase as "honoring my own intent" | Cialdini commitment |
+| `trial_started` or `purchase_completed` immediately after `intent_mirror_continued` | Up — the mirror reframes purchase as "honoring my own intent" | Cialdini commitment |
 | `activation_task_completed` after first intent mirror | Up — implementation intention created in-product | Gollwitzer |
 | D7 / D30 retention for users who received a return-session mirror | Up — the pause creates a memorable peak | Kahneman peak-end |
 | Review prompt acceptance rate (`review_prompt_continued` / `review_prompt_requested`) | Up — if mirror fires just before the native review prompt | Peak-end effect raises willingness to rate positively |
@@ -360,10 +360,10 @@ Create a PostHog dashboard named "Emotional Experience — Card Signals." Includ
 | Card Completion vs. Abandon | Funnel | `emotion_card_fired` → `emotion_card_completed` / `emotion_card_abandoned`, broken down by `card_id` |
 | Rage-Tap Rate By Card | Trend line | `emotion_card_abandoned` where `rage_tap_detected = true`, by `card_id`, weekly |
 | Opt-Out Rate By Card | Trend line | `emotion_card_opt_out` count / `emotion_card_fired` count, by `card_id`, weekly |
-| Commitment → Paywall Conversion | Funnel | `commitment_captured` → `paywall_viewed` → `trial_started` or `purchase_completed` |
+| Commitment → Paywall Conversion | Funnel | `commitment_made` → `paywall_viewed` → `trial_started` or `purchase_completed` |
 | Variable Reward → D7 Retention | Retention | Cohort by `variable_reward_trigger` (day 0), retention at D1/D3/D7 |
-| Effort Delay → Activation | Funnel | `effort_delay_completed` → `activation_task_completed` within 10 min |
-| Intent Mirror → Purchase | Funnel | `intent_mirror_shown` → `intent_mirror_confirmed` → `trial_started` or `purchase_completed` |
+| Effort Delay → Activation | Funnel | `perceived_effort_completed` → `activation_task_completed` within 10 min |
+| Intent Mirror → Purchase | Funnel | `intent_mirror_shown` → `intent_mirror_continued` → `trial_started` or `purchase_completed` |
 | Dark-Pattern Watch | Trend | `emotion_card_abandoned` where `abandon_reason = rage_tap` + `notification_disabled` (48-h cohort) + `subscription_cancelled` within 24 h of any card fire. Weekly. Alert if any metric exceeds threshold. |
 
 Dashboard description should state: "This dashboard is the audit surface. If any metric in Dark-Pattern Watch exceeds its threshold for two consecutive weeks, file `emotional-card-dark-line-crossed` and pause the relevant card variant."
@@ -400,7 +400,7 @@ Add these checks to the standard analytics QA from `analytics-attribution.md`.
 
 - All four card-level events (`emotion_card_fired`, `emotion_card_completed`, `emotion_card_abandoned`, `emotion_card_opt_out`) appear in PostHog activity on a test run of each card.
 - `card_id` values are stable string constants defined in a typed enum or constant file — not inline strings.
-- `reduce_motion_active` property is set correctly by reading OS-level reduce-motion preference before firing `variable_reward_anticipation_start` and `effort_delay_started`. Verify the fallback animation (or no animation) renders when reduce-motion is on.
+- `reduce_motion_active` property is set correctly by reading OS-level reduce-motion preference before firing `variable_reward_anticipation_started` and `perceived_effort_started`. Verify the fallback animation (or no animation) renders when reduce-motion is on.
 - Opt-out paths exist in the UI for each card where the user can disable the mechanic. Verify `emotion_card_opt_out` fires when used.
 - No emotional card fires on error screens, payment failure screens, or cancel/unsubscribe flows. Verify with a code audit before any experiment is enabled.
 - Each card's computation_type is documented and verified: Perceived Effort Delay steps reference only real computation or real UI composition, not arbitrary sleep timers.

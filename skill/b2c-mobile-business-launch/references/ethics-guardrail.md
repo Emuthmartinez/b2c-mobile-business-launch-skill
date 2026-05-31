@@ -80,7 +80,7 @@ principle; foot-in-the-door technique)
 
 **Variable Reward Card** (basis: B.F. Skinner, operant conditioning, variable-ratio
 reinforcement schedules; Wolfram Schultz, dopamine reward-prediction-error — reward signal
-fires on anticipation, not receipt, *Neuron*, 1997; Nir Eyal, *Hooked*, 2014 — Hook Model
+fires on anticipation, not receipt, *Science*, 1997; Nir Eyal, *Hooked*, 2014 — Hook Model
 rewards of tribe/hunt/self)
 - Bright: unpredictable positive feedback varies the emotional quality of app interactions,
   keeping the user curious and engaged with their own progress. The user can always see what
@@ -182,6 +182,13 @@ Agents must not cross these lines. Attribute-uncertain items are flagged.
 
 See section 4 for the full children/teen guardrail.
 
+### AI-Powered Manipulation And Design-Code Duties
+
+Two further regimes apply when the app uses AI or is reachable by minors — verify current text before relying on it:
+
+- **EU AI Act, Article 5(1)(a) (prohibited practices, applicable from Feb 2025):** bans AI systems that deploy "subliminal techniques beyond a person's consciousness" or purposefully manipulative/deceptive techniques that "materially distort behaviour" and cause significant harm. Variable-Reward near-miss engineering and Intent-Mirroring on cancel paths in an AI-powered app are the highest-risk intersection. If the app personalizes emotional triggers via AI, document that no card relies on beyond-conscious manipulation.
+- **California Age-Appropriate Design Code (AB 2273) and similar state design codes:** require a Data Protection Impact Assessment (DPIA) for features likely to be accessed by under-18 users, with "best interests of the child" as the default. Any HIGH-risk card in an app reachable by minors needs a recorded DPIA before ship; `attribution-uncertain` flags are acceptable where the legal status is contested, but the duty must be acknowledged, not skipped.
+
 ---
 
 ## 3. Per-Mechanism Risk Table
@@ -191,10 +198,15 @@ Required attestation fields are listed — these are enforced by the validator.
 
 | Mechanism | Risk Tier | Primary Risk | Bright-Line Test | Required Attestation Fields |
 |---|---|---|---|---|
-| Variable Reward | HIGH | Compulsion loop, gambling-adjacent | User can always stop; no near-miss engineering; no spend compulsion | `bright_line`, `dark_line`, `guardrail`, `user_control_escape_hatch`, `ethics_attestation` |
-| Streak / Loss Aversion | HIGH | Coercive retention; grief/fear exploitation | Streak break is recoverable; no punitive streak-loss spend gates | `bright_line`, `dark_line`, `guardrail`, `user_control_escape_hatch`, `ethics_attestation` |
-| Scarcity / Urgency | HIGH | Fake scarcity; countdown clock manipulation | Scarcity is real and enforced; countdown reflects actual offer end | `bright_line`, `dark_line`, `guardrail`, `scarcity_enforcement_proof`, `ethics_attestation` |
-| Social Proof | HIGH | Fabricated counts; review solicitation manipulation | Every count is real; no soliciting only positive reviews | `bright_line`, `dark_line`, `guardrail`, `social_proof_truthfulness_proof`, `ethics_attestation` |
+| Variable Reward | HIGH | Compulsion loop, gambling-adjacent | User can always stop; no near-miss engineering; no spend compulsion | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `user_control_escape_hatch`, `ethics_attestation`, `counter_metric`, `reward_variation_proof` |
+| Streak / Loss Aversion | HIGH | Coercive retention; grief/fear exploitation | Streak break is recoverable; no punitive streak-loss spend gates | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `user_control_escape_hatch`, `ethics_attestation`, `counter_metric`, `streak_recovery_mechanism` |
+| Scarcity / Urgency | HIGH | Fake scarcity; countdown clock manipulation | Scarcity is real and enforced; countdown reflects actual offer end | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `ethics_attestation`, `counter_metric`, `scarcity_enforcement_proof` |
+| Social Proof | HIGH | Fabricated counts; review solicitation manipulation | Every count is real; no soliciting only positive reviews | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `ethics_attestation`, `counter_metric`, `social_proof_truthfulness_proof` |
+| Perceived Effort Delay | MEDIUM | Fake labor / sleep-timer illusion | ≥50% steps map to real computation; delay capped | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `effort_truthfulness_attestation`, `computation_type` (∈ real_api_call \| real_data_processing \| ui_composition), `max_delay_ms` |
+| Intent Mirroring | MEDIUM | Retention friction on cancel; reflected-text injection | Never on cancel/downgrade; free text sanitized | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `prohibited_surfaces` (must list cancel/downgrade), `free_text_sanitization` when reflecting free text |
+| Endowed Progress | LOW | Fabricated head start | Progress reflects real inputs/actions | `bright_line`, `dark_line`, `guardrail`, `posthog_event`, `progress_sourcing_attestation` |
+| Commitment / Intent Mirroring / Peak-End and other motion cards | — | Missing reduced-motion fallback | Every animated beat has a reduce-motion fallback | base fields + a `prefers-reduced-motion` / `reduced_motion` declaration in `guardrail` |
+| All other deck cards (Reciprocity, Identity, Fresh Start, Mastery, Recovery, Rating Prompt) | LOW–MEDIUM | Card-specific (see `experience-cards.md`) | The card's own bright-line test | base fields (`bright_line`, `dark_line`, `guardrail`, `posthog_event`); rating_prompt also requires `platform_api_used` |
 | Commitment Card | MEDIUM | Confirmshaming; phantom opt-in; cancellation friction | Exit path is frictionless; commitment is user-owned, not app-owned | `bright_line`, `dark_line`, `guardrail` |
 | Perceived Effort Delay | MEDIUM | Fake labor illusion; deceptive spinner | Display reflects real computation or real personalization work | `bright_line`, `dark_line`, `guardrail`, `effort_truthfulness_attestation` |
 | Intent Mirroring | LOW-MEDIUM | Cancellation friction disguised as confirmation | Pause serves the user's interest, not the app's retention metric | `bright_line`, `dark_line`, `guardrail` |
@@ -294,25 +306,27 @@ experience_card:
 The `check:emotional-design` script enforces the following. Any violation is an `error`
 unless marked as `warning`.
 
-| Rule ID | Level | Description |
+All codes are emitted by `scripts/check-emotional-design.ts` with the prefix `emotional_design.` (audit-artifact codes use `emotional_audit.`).
+
+| Rule ID (prefix `emotional_design.`) | Level | Description |
 |---|---|---|
-| `ethics.card_missing_bright_line` | error | Applied card block is present but `bright_line` field is empty or absent |
-| `ethics.card_missing_dark_line` | error | Applied card block is present but `dark_line` field is empty or absent |
-| `ethics.card_missing_guardrail` | error | Applied card block is present but `guardrail` field is empty or absent |
-| `ethics.high_risk_missing_ethics_attestation` | error | HIGH-tier mechanism card (variable_reward, streak, scarcity, social_proof) lacks `ethics_attestation` field |
-| `ethics.high_risk_missing_escape_hatch` | error | HIGH-tier variable_reward or streak card lacks `user_control_escape_hatch` field |
-| `ethics.scarcity_missing_enforcement_proof` | error | Scarcity/urgency card lacks `scarcity_enforcement_proof` field |
-| `ethics.social_proof_missing_truthfulness_proof` | error | Social proof card lacks `social_proof_truthfulness_proof` field |
-| `ethics.effort_display_missing_truthfulness_attestation` | error | Perceived effort delay card lacks `effort_truthfulness_attestation` field |
-| `ethics.rating_prompt_missing_platform_api` | error | Rating prompt card lacks `platform_api_used` field |
-| `ethics.fake_scarcity_phrase` | error | Artifact text contains `limited spots`, `only X left`, `selling out`, or similar countdown language without a corresponding `scarcity_enforcement_proof` in a card block |
-| `ethics.fake_social_proof_phrase` | error | Artifact text contains `thousands of users`, `millions of people`, `join X users` without a `social_proof_truthfulness_proof` card block |
-| `ethics.confirmshaming_phrase` | error | Artifact text contains confirmshaming patterns: `No thanks, I prefer`, `No, I don't want`, `I'll stay bad at` or equivalent self-deprecating opt-out labels |
-| `ethics.children_tracking_unreviewed` | warning | App targets under-18 audience (per `business.json` `audience.age_range`) and no COPPA/Children's Code review is noted in `ETHICS.md` or `PRIVACY.md` |
-| `ethics.spend_prompt_after_reward` | warning | An artifact documents a spend prompt (paywall, IAP, upgrade) on the same screen or within a single user flow step as a variable reward reveal — highest-risk pattern |
-| `ethics.reduced_motion_missing` | error | A motion-bearing delight moment is specified in a card but no prefers-reduced-motion or OS reduce-motion fallback is declared |
-| `ethics.no_ethics_doc` | warning | Experience card blocks are present in artifacts but no `ETHICS.md` or `ETHICS_ATTESTATION.md` exists in the project root |
-| `ethics.card_posthog_event_missing` | error | Applied card block specifies `applied_to` but `posthog_event` is empty — every emotional moment must be measurable |
+| `card_missing_mechanism` / `card_missing_bright_line` / `card_missing_dark_line` / `card_missing_guardrail` | error | An applied `experience_card:` block lacks its mechanism, bright-line, dark-line, or guardrail. |
+| `card_missing_posthog_event` | error | A card block has no `posthog_event` — every emotional moment must be measurable. |
+| `card_missing_reduced_motion` | error | A motion-bearing card (commitment, variable_reward, perceived_effort_delay, intent_mirroring, peak_end) declares no prefers-reduced-motion / OS reduce-motion fallback in `guardrail` or `reduced_motion`. |
+| `variable_reward_missing_<field>` | error | A `variable_reward` card lacks `ethics_attestation`, `user_control_escape_hatch`, `counter_metric`, or `reward_variation_proof`. |
+| `streak_missing_<field>` (and `streak_loss_aversion_*`, `loss_aversion_*`) | error | A streak card lacks `ethics_attestation`, `user_control_escape_hatch`, `counter_metric`, or `streak_recovery_mechanism`. |
+| `scarcity_missing_<field>` / `urgency_missing_<field>` | error | A scarcity/urgency card lacks `ethics_attestation`, `counter_metric`, or `scarcity_enforcement_proof`. |
+| `social_proof_missing_<field>` | error | A social-proof card lacks `ethics_attestation`, `counter_metric`, or `social_proof_truthfulness_proof`. |
+| `perceived_effort_delay_missing_<field>` / `perceived_effort_bad_computation_type` / `perceived_effort_delay_too_long` | error | A perceived-effort card lacks `effort_truthfulness_attestation` or `computation_type`, sets `computation_type` outside {real_api_call, real_data_processing, ui_composition}, or sets `max_delay_ms` over the cap (15s ui_composition / 90s otherwise). |
+| `intent_mirroring_missing_prohibited_surfaces` / `intent_mirror_prohibited_surfaces_weak` | error | An intent-mirroring card omits `prohibited_surfaces` or fails to bar cancel/downgrade/unsubscribe flows. |
+| `intent_mirror_free_text_unsanitized` | warning | An intent mirror reflects free-text user input with no `free_text_sanitization` approach. |
+| `endowed_progress_unsourced` | warning | An endowed-progress card lacks `progress_sourcing_attestation`. |
+| `rating_prompt_missing_platform_api_used` | error | A rating-prompt card does not name the native StoreKit / Play In-App Review API. |
+| `fake_scarcity_phrase` / `fake_social_proof_phrase` | error | Live copy (EMOTIONAL_DESIGN.md, EMOTIONAL_AUDIT.md, ONBOARDING.md, SPEC.md, APP_STORE_LISTING.md) contains scarcity/social-proof copy with no attested scarcity/social-proof card block in EMOTIONAL_DESIGN.md. |
+| `confirmshaming_phrase` / `commitment_guilt_phrase` | error | Live copy contains a confirmshaming opt-out label or commitment-guilt copy (e.g. "are you sure you want to cancel", "remember why you started"). |
+| `spend_prompt_after_reward` | warning | Live copy co-locates a spend prompt with a streak/reward moment — review for same-screen placement. |
+| `children_unreviewed` | error (under-13, the COPPA boundary) / warning (13–17) | The audience includes minors and no COPPA / UK AADC review is documented in `ETHICS.md`, `PRIVACY.md`, or `PRIVACY_POLICY.md`. |
+| `contract_missing` / `section_<name>_missing` / `ref_<file>_missing` / `no_card_blocks` / `html_missing` / `placeholder_complete` | error | EMOTIONAL_DESIGN.md is missing, lacks a required section, omits a required cross-reference (11_STAR_EXPERIENCE.md / ANALYTICS.md / DESIGN.md / ONBOARDING.md), has no card blocks, has no rendered board, or still has placeholder language while the lane is `done`. The required **Ethics Attestation** section is what satisfies the centralized-attestation rule — no separate `ETHICS.md` is required. |
 
 ### Non-Negotiable Prohibitions (Automatic Compliance Veto)
 
