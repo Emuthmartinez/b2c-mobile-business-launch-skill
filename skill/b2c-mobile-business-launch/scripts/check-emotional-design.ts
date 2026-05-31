@@ -32,6 +32,7 @@ import {
   readText,
   reportAndExit,
   type Issue,
+  type Severity,
 } from "./lib/launch-state.js";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -269,20 +270,27 @@ const FAKE_SOCIAL_PROOF_PATTERNS = [
   /\bthousands of (users|people) (just )?(like you|started)\b/i,
 ];
 const CONFIRMSHAMING_PATTERNS = [
-  /no thanks,?\s+i (prefer|like|want|don't)\b/i,
+  /no thanks,?\s+i (prefer|like|want|don't|won't|wouldn't)\b/i,
+  /no,?\s+i (don't|won't|wouldn't|do not) want\b/i,
   /i prefer to (fail|lose|remain|stay)\b/i,
+  /i'?ll (stay|remain|keep being|keep|be) (bad|terrible|worse|stuck|behind|unfit|unhealthy)\b/i,
+  /i'?d rather (not|stay|remain|fail)\b/i,
 ];
 const COMMITMENT_GUILT_PATTERNS = [
   /you said this (matters|mattered|was important)/i,
   /don'?t let yourself down/i,
   /you committed to\b/i,
-  /are you sure you want to (quit|give up)/i,
+  /are you sure you want to (quit|give up|stop|cancel|leave)/i,
+  /remember why you started/i,
+  /don'?t give up now/i,
 ];
+const SPEND_KEYWORDS = /\b(paywall|purchase|upgrade now|subscribe|buy now|unlock for|renew now|start (your )?(trial|subscription))\b/i;
+const REWARD_STREAK_KEYWORDS = /\b(streak|variable reward|reward reveal|reward screen|loss aversion|streak[- ]break)\b/i;
 
-function scanLiveCopy(relativePath: string, rawText: string): void {
+// Derived once from parsed card blocks (NOT from stripped text — a fenced card's
+// proof field is removed by stripFencedBlocks, so a text scan would false-negative).
+function scanLiveCopy(relativePath: string, rawText: string, hasScarcityProof: boolean, hasSocialProof: boolean, spendScan: boolean): void {
   const text = stripFencedBlocks(rawText);
-  const hasScarcityProof = text.includes("scarcity_enforcement_proof");
-  const hasSocialProof = text.includes("social_proof_truthfulness_proof");
 
   for (const pattern of FAKE_SCARCITY_PATTERNS) {
     if (pattern.test(text) && !hasScarcityProof) {
@@ -308,6 +316,22 @@ function scanLiveCopy(relativePath: string, rawText: string): void {
       break;
     }
   }
+
+  // Spend prompt co-located with a streak/reward moment (ethics-guardrail.md Non-Negotiable
+  // Prohibition: "spend prompts inside streak-break grief screens"). Heuristic → warning.
+  if (spendScan) {
+    const lines = text.split("\n");
+    const rewardLines: number[] = [];
+    const spendLines: number[] = [];
+    lines.forEach((line, index) => {
+      if (REWARD_STREAK_KEYWORDS.test(line)) rewardLines.push(index);
+      if (SPEND_KEYWORDS.test(line)) spendLines.push(index);
+    });
+    const tooClose = rewardLines.some((r) => spendLines.some((s) => Math.abs(r - s) <= 4));
+    if (tooClose) {
+      issues.push(issue("warning", "emotional_design.spend_prompt_after_reward", `${relativePath} places a spend prompt (paywall/purchase/subscribe) within a few lines of a streak or reward moment. Spend prompts inside streak-break or reward screens are a non-negotiable dark pattern — separate them by at least one user interaction and confirm they are not on the same screen.`, relativePath));
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -321,6 +345,15 @@ const skip = laneStatus === "not_needed" || laneStatus === "deferred" || laneAbs
 const design = firstExistingText(["EMOTIONAL_DESIGN.md", "emotional-design/EMOTIONAL_DESIGN.md"]);
 const designHtml = existsAny(["emotional-design.html", "emotional-design/emotional-design.html", "design.html"]);
 const audit = firstExistingText(["EMOTIONAL_AUDIT.md", "emotional-design/EMOTIONAL_AUDIT.md"]);
+
+// Parse card blocks once; derive scarcity/social-proof attestation from the BLOCKS
+// (not from stripped text). A project that attests a real scarcity/social-proof card
+// in EMOTIONAL_DESIGN.md earns the right to use that copy anywhere.
+const designBlocks = design ? extractCardBlocks(design.relativePath, design.text) : [];
+const auditCardBlocks = audit ? extractCardBlocks(audit.relativePath, audit.text) : [];
+const allCardBlocks = [...designBlocks, ...auditCardBlocks];
+const hasScarcityProof = allCardBlocks.some((b) => field(b, "scarcity_enforcement_proof").length >= 8);
+const hasSocialProof = allCardBlocks.some((b) => field(b, "social_proof_truthfulness_proof").length >= 8);
 
 if (!skip && !design) {
   issues.push(issue("error", "emotional_design.contract_missing", "EMOTIONAL_DESIGN.md is required to define the Emotional North Star, target emotional journey, card application map, ethics attestation, and measurement plan.", "EMOTIONAL_DESIGN.md"));
@@ -348,7 +381,7 @@ if (design) {
     }
   }
 
-  const blocks = extractCardBlocks(design.relativePath, design.text);
+  const blocks = designBlocks;
   if (blocks.length === 0) {
     issues.push(issue("error", "emotional_design.no_card_blocks", "EMOTIONAL_DESIGN.md has no experience_card: attestation blocks. Each applied card needs a machine-checkable block under Ethics Attestation.", design.relativePath));
   }
@@ -362,7 +395,7 @@ if (design) {
     checkCardBlock(block);
   }
 
-  scanLiveCopy(design.relativePath, design.text);
+  scanLiveCopy(design.relativePath, design.text, hasScarcityProof, hasSocialProof, false);
 
   if (laneStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending|\[fill)\b/i.test(stripFencedBlocks(design.text))) {
     issues.push(issue("error", "emotional_design.placeholder_complete", "The emotional_design lane cannot be done while TODO/TBD/unknown/placeholder/pending/[fill language remains in EMOTIONAL_DESIGN.md.", design.relativePath));
@@ -397,7 +430,7 @@ if (audit) {
       issues.push(issue("error", `emotional_audit.section_${codeFor(phrase)}_missing`, `EMOTIONAL_AUDIT.md should include ${phrase} so every journey is enumerated, scored, and given a concrete upgrade path.`, audit.relativePath));
     }
   }
-  const auditBlocks = extractCardBlocks(audit.relativePath, audit.text);
+  const auditBlocks = auditCardBlocks;
   const namedCards = ["Commitment Card", "Variable Reward Card", "Perceived Effort Delay Card", "Intent Mirroring Card"];
   const allNamed = namedCards.every((c) => audit.text.includes(c));
   if (auditBlocks.length === 0 && !allNamed) {
@@ -406,23 +439,41 @@ if (audit) {
   for (const block of auditBlocks) {
     checkCardBlock(block);
   }
-  scanLiveCopy(audit.relativePath, audit.text);
+  scanLiveCopy(audit.relativePath, audit.text, hasScarcityProof, hasSocialProof, false);
 }
 
-// Children audience check — business.json field plus age-language in scope docs.
+// Live-copy docs (actual app/store copy) — scan for dark patterns INCLUDING the
+// spend-near-reward co-location, which the guardrail names ONBOARDING/SPEC/listing as targets for.
+if (!skip) {
+  for (const doc of ["ONBOARDING.md", "SPEC.md", "APP_STORE_LISTING.md", "app-store-listing/APP_STORE_LISTING.md", "PAYWALL.md"]) {
+    const liveText = readText(args.root, doc);
+    if (liveText) {
+      scanLiveCopy(doc, liveText, hasScarcityProof, hasSocialProof, true);
+    }
+  }
+}
+
+// Children audience check — business.json field plus age-language in scope docs (incl. EMOTIONAL_DESIGN.md).
 const ageRange = state
   ? asString(getPath(state, "business.audience.age_range")) ?? asString(getPath(state, "audience.age_range"))
   : undefined;
-const scopeText = [readText(args.root, "SPEC.md"), readText(args.root, "ONBOARDING.md"), readText(args.root, "APP_STORE_LISTING.md")]
-  .filter(Boolean)
-  .join("\n");
-const targetsMinors = (ageRange && /teen|child|kid|under.?1[38]|youth|school|student|\b(13|14|15|16|17)\b/i.test(ageRange)) ||
-  /\b(teens?|tweens?|kids|under 18|under-18|ages 13|K-12|high school|middle school)\b/i.test(scopeText);
+const scopeText = [
+  ageRange ?? "",
+  readText(args.root, "SPEC.md"),
+  readText(args.root, "ONBOARDING.md"),
+  readText(args.root, "APP_STORE_LISTING.md"),
+  design?.text,
+].filter(Boolean).join("\n");
+// Under-13 is the COPPA hard legal boundary → error. 13-17 (teen) → warning.
+const under13 = /\b(under.?1[0-3]|for kids|for children|kids app|children'?s app|coppa|ages? [4-9]\b|ages 1[0-2]\b)\b/i.test(scopeText);
+const targetsMinors = under13 ||
+  /\b(teens?|tweens?|kids|youth|minors?|under.?1[4-8]|under-1[4-8]|ages 1[3-7]|13-17|K-12|high[- ]school|middle[- ]school|family app|parental controls|for teens)\b/i.test(scopeText);
 if (!skip && design && targetsMinors) {
-  const privacy = (readText(args.root, "ETHICS.md") ?? "") + (readText(args.root, "PRIVACY.md") ?? "") + design.text;
-  const reviewed = /COPPA|Children'?s Code|Age-Appropriate Design|under 13|under-13/i.test(privacy);
+  const privacy = (readText(args.root, "ETHICS.md") ?? "") + (readText(args.root, "PRIVACY.md") ?? "") + (readText(args.root, "PRIVACY_POLICY.md") ?? "") + design.text;
+  const reviewed = /COPPA|Children'?s Code|Age-Appropriate Design|AADC|under 13|under-13/i.test(privacy);
   if (!reviewed) {
-    issues.push(issue("warning", "emotional_design.children_unreviewed", "The audience appears to include minors, but no COPPA / UK Age-Appropriate Design Code review is documented. High-risk cards (variable reward, streak) need a children's-compliance review before ship.", design.relativePath));
+    const severity: Severity = under13 ? "error" : "warning";
+    issues.push(issue(severity, "emotional_design.children_unreviewed", `The audience appears to include minors${under13 ? " under 13 (the COPPA hard legal boundary)" : ""}, but no COPPA / UK Age-Appropriate Design Code review is documented. High-risk cards (variable reward, streak) and any beyond-conscious persuasion need a children's-compliance review (and DPIA where required) before ship.`, design.relativePath));
   }
 }
 

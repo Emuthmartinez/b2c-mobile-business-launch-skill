@@ -268,7 +268,7 @@ Add all events below to `ANALYTICS.md` before implementation. Do not invent name
 | `perceived_effort_completed` | Processing UI ends | `surface`, `effort_type`, `step_count`, `total_duration_ms`, `real_step_ratio` | Labor illusion proof |
 | `intent_mirror_shown` | Mirror pause displayed | `surface`, `mirror_type`, `source_field`, `trigger_context`, `variant_id` | Primary |
 | `intent_mirror_continued` | User taps primary CTA | `surface`, `next_action`, `time_to_confirm_ms` | Conversion signal |
-| `emotional_peak_reached` | Curve step reaches valence ≥ +3 | `surface`, `step_id`, `emotional_target`, `score_contribution` | Experience quality |
+| `peak_moment_reached` | Curve step reaches valence ≥ +3 | `surface`, `step_id`, `emotional_target`, `score_contribution` | Experience quality |
 
 ### Counter-Metrics (Dark-Pattern Backfire Signals)
 
@@ -281,7 +281,7 @@ These metrics detect whether an emotional card is serving users or extracting fr
 | `variable_reward_opt_out` rate | Variable Reward | > 15% | Review mechanic design |
 | `variable_reward_revealed` dismissed in < 500ms | Variable Reward | > 25% | Reduce intrusion |
 | Negative review cluster: "addictive" / "slot machine" / "gambling" | Variable Reward | Any 3+ reviews | Immediate design review |
-| `effort_delay_cancelled` rate | Perceived Effort Delay | > 10% | Reduce duration or add cancel affordance |
+| `perceived_effort_cancelled` rate | Perceived Effort Delay | > 10% | Reduce duration or add cancel affordance |
 | Result dismissed in < 1000ms after `perceived_effort_completed` | Perceived Effort Delay | > 20% | Review result quality |
 | Negative review cluster: "fake" / "just a spinner" / "doesn't actually analyze" | Perceived Effort Delay | Any 3+ reviews | Compliance review |
 | `intent_mirror_dismissed` with `surface = pre_purchase` | Intent Mirroring | > 30% dismiss | Investigate if dismiss path suppressed |
@@ -298,10 +298,10 @@ Create dashboard named **"Emotional Experience — Card Signals"** before any ca
 2. Card Completion vs Abandon — funnel `emotion_card_fired` → `emotion_card_completed` / `emotion_card_abandoned`
 3. Rage-Tap Rate By Card — `emotion_card_abandoned` where `rage_tap_detected = true`, weekly by `card_id`
 4. Opt-Out Rate By Card — `emotion_card_opt_out` / `emotion_card_fired`, weekly
-5. Commitment → Paywall Conversion — `commitment_captured` → `paywall_viewed` → `trial_started`
-6. Variable Reward → D7 Retention — cohort by `variable_reward_trigger` at D0, retention D1/D3/D7
-7. Effort Delay → Activation — `effort_delay_completed` → `activation_task_completed` within 10 min
-8. Intent Mirror → Purchase — `intent_mirror_shown` → `intent_mirror_confirmed` → `trial_started`
+5. Commitment → Paywall Conversion — `commitment_made` → `paywall_viewed` → `trial_started`
+6. Variable Reward → D7 Retention — cohort by `variable_reward_revealed` at D0, retention D1/D3/D7
+7. Effort Delay → Activation — `perceived_effort_completed` → `activation_task_completed` within 10 min
+8. Intent Mirror → Purchase — `intent_mirror_shown` → `intent_mirror_continued` → `trial_started`
 9. **Dark-Pattern Watch** — `emotion_card_abandoned` (rage tap) + `notification_disabled` (48 h cohort) + `subscription_cancelled` within 24 h of any card fire. Alert if any metric breaches threshold for 2 consecutive weeks.
 
 ---

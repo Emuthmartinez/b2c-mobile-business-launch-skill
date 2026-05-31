@@ -164,7 +164,7 @@ For every HIGH-risk card the app applies (Variable Reward, Streak, Scarcity, Urg
 | --- | --- | --- | --- |
 | Variable Reward Card | `variable_reward_opt_out` rate; sub-500ms reveal dismissal; reviews mentioning "addictive"/"slot machine" | >15% opt-out; >25% fast-dismiss; any 3+ reviews | Pending |
 | Streak (if applied) | streak-break churn; `notification_disabled` 48h cohort | any churn spike on break | Pending |
-| Perceived Effort Delay | `effort_delay_cancelled`; reviews mentioning "fake"/"just a spinner" | >10% cancel; any 3+ reviews | Pending |
+| Perceived Effort Delay | `perceived_effort_cancelled`; reviews mentioning "fake"/"just a spinner" | >10% cancel; any 3+ reviews | Pending |
 | Intent Mirroring | `subscription_cancelled` within 24h of `intent_mirror_shown` on a cancel surface | any spike | Pending |
 
 ---
@@ -448,7 +448,7 @@ For each card-present or card-missing finding in the Per-Journey table, verify t
 | --- | --- | --- | --- | --- | --- | --- |
 | J-01 | 3 | Commitment Card | `commitment_made` | commitment_type, commitment_value, flow_id, step_id | Pending | Pending |
 | J-01 | 4 | Commitment Card | `commitment_echoed` | surface, commitment_type, commitment_value | Pending | Pending |
-| J-01 | 5 | Perceived Effort Delay | `effort_delay_started` | computation_type, user_inputs_referenced_count, reduce_motion_active | Pending | Pending |
+| J-01 | 5 | Perceived Effort Delay | `perceived_effort_started` | computation_type, user_inputs_referenced_count, reduce_motion_active | Pending | Pending |
 | J-01 | 6 | Variable Reward | `variable_reward_anticipation_started` | surface, reward_type, flow_id | Pending | Pending |
 | J-01 | 6 | Variable Reward | `variable_reward_revealed` | surface, reward_type, reward_variant, anticipation_duration_ms | Pending | Pending |
 | J-01 | 7 | Intent Mirroring | `intent_mirror_shown` | surface, mirror_type, source_field, trigger_context | Pending | Pending |

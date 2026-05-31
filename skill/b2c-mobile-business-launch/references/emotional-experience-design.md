@@ -67,7 +67,7 @@ For each card: implement the pattern, emit the named PostHog event, verify the b
 
 ### Perceived Effort Delay Card
 
-**Psychological basis.** Labor illusion / operational transparency: customers who can see effort being done on their behalf are more satisfied with the outcome and willing to pay more, even when the actual processing time is identical (Ryan Buell & Michael Norton, _Management Science_, 2011). IKEA effect: users value outcomes more when they participated in producing them (Norton, Mochon & Ariely, _Journal of Marketing Research_, 2012). Peak-end rule: the emotional peak of an experience and its end dominate the overall memory of it (Kahneman & Fredrickson, _Psychological Science_, 1993).
+**Psychological basis.** Labor illusion / operational transparency: customers who can see effort being done on their behalf are more satisfied with the outcome and willing to pay more, even when the actual processing time is identical (Ryan Buell & Michael Norton, _Management Science_, 2011). IKEA effect: users value outcomes more when they participated in producing them (Norton, Mochon & Ariely, _Journal of Consumer Psychology_, 2012). Peak-end rule: the emotional peak of an experience and its end dominate the overall memory of it (Kahneman & Fredrickson, _Psychological Science_, 1993).
 
 **What it is.** A deliberate, honest display of processing, assembly, or effort that makes the user perceive the output as crafted for them — not instantly auto-generated. The product shows its work: scanning steps, building a plan, analyzing data, assembling pieces. The actual time is tuned to feel earned, not slow. The delay can be real (slow computation) or designed (real processing re-paced with visible stepwise progress). It is honest if the displayed steps correspond to real operations; it is deceptive if the steps are cosmetic progress bars over pre-computed results.
 
@@ -252,10 +252,10 @@ perceived_effort_started   surface, effort_type, step_count
 perceived_effort_completed surface, effort_type, step_count, total_duration_ms, real_step_ratio
 intent_mirror_shown        surface, mirror_type, source_field, trigger_context
 intent_mirror_continued    surface, next_action
-emotional_peak_reached     surface, step_id, emotional_target, score_contribution
+peak_moment_reached     surface, step_id, emotional_target, score_contribution
 ```
 
-Cross-reference the existing catalog in `analytics-attribution.md` before adding. `emotional_peak_reached` should fire when a screen reaches a +3 or above valence point in the Emotional Curve; use the step_id and emotional_target from the Lens 3 journey map.
+Cross-reference the existing catalog in `analytics-attribution.md` before adding. `peak_moment_reached` should fire when a screen reaches a +3 or above valence point in the Emotional Curve; use the step_id and emotional_target from the Lens 3 journey map.
 
 ---
 
