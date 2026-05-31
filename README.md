@@ -27,7 +27,8 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 
 | Lane | Output |
 | --- | --- |
-| State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, autonomy mode, lane statuses, provider state, proof, and failure cards |
+| State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, `skill-version.json`, runtime freshness checks, autonomy mode, lane statuses, provider state, proof, and failure cards |
+| Design Room | `state/business.json`, `state/theme.tokens.json`, `design-room.html`, React/Vite `dist/design-room/`, git-backed versions, baselines, diffs, restores, and wipe-slate operations |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Experience | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, and surface translation |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
@@ -85,6 +86,11 @@ npm run check:viral-growth -- --root /path/to/app
 npm run check:paid-ua -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
+npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch
+npm run validate:design-state -- --root /path/to/app
+npm run render:design-room -- --root /path/to/app
+npm run check:design-room -- --root /path/to/app
+npm run design:version -- baseline onboarding-v1 --root /path/to/app
 npm run check:source-registry
 npm run refresh:source-freshness
 npm run check:autopilot
@@ -121,6 +127,7 @@ The scripts are intentionally simple:
 - `check-source-freshness.ts` checks that external docs, tools, and websites referenced by the skill are registered for weekly freshness tracking.
 - `check-agent-entrypoints.ts` checks maintainer-only root docs and shipped business-repo `AGENTS.md`/`CLAUDE.md` templates stay separated and keep future agents on the launch skill workflow.
 - `check-workflow-adherence.ts` checks harness-style agent maps, subagent availability gates, Compound Engineering routing, and LaunchBench coverage for workflow adherence.
+- `check-skill-version.ts` checks whether the installed runtime is behind the latest local source copy and emits the AskUserQuestion upgrade gate when stale.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
@@ -164,11 +171,19 @@ skill/
     tsconfig.json
     agents/openai.yaml
     evals/launchbench/
+    state/
+      business.json
+      theme.tokens.json
+      schema/business.schema.json
+    render/
+      index.html
+      src/
     references/
       source-registry.yaml
     scripts/
     templates/
       PROJECT_STATE.yaml
+      state/
       11-star-experience/
       repo-agent-entrypoints/
       orchestration/
@@ -186,6 +201,12 @@ skill/
 ```bash
 npm install
 npm run audit
+```
+
+Before broad launch/design work, compare the installed runtime to the source skill:
+
+```bash
+npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch
 ```
 
 This skill is intentionally guardrail-heavy. Its job is to prevent launch drift across research, design, build, revenue, legal, store, email, growth, and verification surfaces.

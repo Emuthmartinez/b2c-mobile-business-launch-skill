@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="design-state-hash" content="ab2d1f427393ce04" />
+  <title>App Name Design Room</title>
+  <style>
+    :root {
+      --color-background: #f7f3ec;
+      --color-surface: #fffdfa;
+      --color-surface-elevated: #ffffff;
+      --color-primary: #0c7c59;
+      --color-accent: #ff6f5c;
+      --color-text: #161512;
+      --color-muted: #686159;
+      --color-border: #d8d0c3;
+      --font-display: Fraunces, Georgia, serif;
+      --font-body: Source Sans 3, Avenir Next, sans-serif;
+      --radius-md: 8px;
+      --space-md: 16px;
+      --space-lg: 24px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 10%, color-mix(in srgb, var(--color-accent) 22%, transparent), transparent 28%),
+        linear-gradient(135deg, var(--color-background), color-mix(in srgb, var(--color-primary) 12%, var(--color-background)));
+      color: var(--color-text);
+      font: 15px/1.45 var(--font-body);
+    }
+    header { padding: 36px clamp(18px, 5vw, 56px) 28px; border-bottom: 1px solid var(--color-border); }
+    h1 { margin: 0; font: 700 clamp(36px, 8vw, 84px)/0.92 var(--font-display); letter-spacing: 0; max-width: 900px; }
+    h2 { margin: 0 0 14px; font: 700 22px/1.1 var(--font-display); letter-spacing: 0; }
+    h3 { margin: 0 0 8px; font-size: 15px; }
+    p { margin: 0; }
+    main { display: grid; gap: 18px; padding: 24px clamp(18px, 5vw, 56px) 56px; }
+    section { background: color-mix(in srgb, var(--color-surface) 94%, white); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 18px; overflow: hidden; }
+    .deck { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+    .metric, .panel { border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface-elevated); padding: 14px; min-height: 104px; }
+    .metric span, .eyebrow { color: var(--color-muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .metric strong { display: block; font-size: 32px; line-height: 1; margin: 8px 0; }
+    .metric small, .muted { color: var(--color-muted); }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .pill { border: 1px solid var(--color-border); background: var(--color-surface); border-radius: 999px; padding: 7px 10px; }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .list { display: grid; gap: 10px; }
+    .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; border-bottom: 1px solid var(--color-border); padding: 10px 0; }
+    .row:last-child { border-bottom: 0; }
+    .status { color: var(--color-primary); font-weight: 700; }
+    @media (max-width: 680px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Design Room</p>
+    <h1>App Name</h1>
+    <div class="meta">
+      <span class="pill">Stage: concept</span>
+      <span class="pill">Theme: provisional</span>
+      <span class="pill">State hash: ab2d1f427393ce04</span>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>Business Frame</h2>
+      <div class="grid">
+        <article class="panel"><h3>Positioning</h3><p>One-sentence promise still to be defined.</p></article>
+        <article class="panel"><h3>Audience</h3><p>Primary consumer segment still to be defined.</p></article>
+        <article class="panel"><h3>Latest Mutation</h3><p>Empty Design Room state seeded from the skill template.</p></article>
+      </div>
+    </section>
+    <section>
+      <h2>Surface Coverage</h2>
+      <div class="deck"><article class="metric">
+        <span>Web funnels</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>Landing pages</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>Marketing assets</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>App screens</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>App flows</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>Custom product pages</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>PPO tests</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article><article class="metric">
+        <span>In-App Events</span>
+        <strong>0</strong>
+        <small>0 ready / 0 blocked / 0 draft</small>
+      </article></div>
+    </section>
+    <section>
+      <h2>App Store Marketing</h2>
+      <div class="grid">
+        <article class="panel"><h3>Custom Product Pages</h3><p>0 / 70 planned</p><p class="muted">Each page needs an audience, traffic source, media, keywords, URL, and measurement reason.</p></article>
+        <article class="panel"><h3>PPO Tests</h3><p>0 planned</p><p class="muted">Treatments are limited to alternate icon, screenshots, and app previews.</p></article>
+        <article class="panel"><h3>In-App Events</h3><p>0 / 15 approved slots modeled</p><p class="muted">Only real timed in-app content should enter this lane.</p></article>
+      </div>
+    </section>
+    <section>
+      <h2>Theme Tokens</h2>
+      <div class="deck">
+        <article class="metric"><span>color.background</span><strong style="font-size:18px">#f7f3ec</strong></article><article class="metric"><span>color.primary</span><strong style="font-size:18px">#0c7c59</strong></article><article class="metric"><span>color.accent</span><strong style="font-size:18px">#ff6f5c</strong></article><article class="metric"><span>color.text</span><strong style="font-size:18px">#161512</strong></article><article class="metric"><span>color.border</span><strong style="font-size:18px">#d8d0c3</strong></article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

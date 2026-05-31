@@ -6,6 +6,7 @@ Use this when starting, continuing, auditing, or handing off a launch. The goal 
 
 - `PROJECT_STATE.yaml`: compact source of truth for phase, autonomy mode, orchestration strategy, lane statuses, paid-tool routing, secrets, provider setup, proof, open questions, and active failure cards.
 - `launch-cockpit.html`: founder-visible rendered view of the same state.
+- `state/business.json`, `state/theme.tokens.json`, and `design-room.html`: separate Design Room state/render artifacts for cross-surface design. Update these through `design-room.md` when design changes affect launch surfaces.
 - `LAUNCHBENCH.md` or `proof.launchbench` in `PROJECT_STATE.yaml`: eval/check history for known failure modes.
 
 Use `templates/PROJECT_STATE.yaml` as the starting point. Keep it names-only for secrets and credentials.
@@ -34,6 +35,7 @@ Update `PROJECT_STATE.yaml`:
 - after any build is archived, exported, or uploaded to App Store Connect or Google Play — update the `apple_signing` lane evidence, build number, upload status, and `updated_at` before committing
 - after any store-ops event (custom product page created, in-app event attempted or submitted, iPad/new-platform target enabled, TestFlight group added, app record mutated) — update the affected lane status/evidence before committing
 - after validation or LaunchBench runs
+- after any Design Room mutation that changes launch surfaces, App Store creative, onboarding, paywalls, landing pages, or marketing assets
 - before final handoff or commit
 
 If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write it to the file in that session — do not defer the write. Verbal or in-chat readiness notes that are not written to `PRODUCTION_READINESS.md` are not counted as evidence by validators. (Failure card: `project-state-stale-after-upload`.)

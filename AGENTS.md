@@ -8,7 +8,10 @@ This file is for maintaining this skill repo itself. Do not copy these instructi
 
 - `README.md`: public overview and maintainer commands.
 - `skill/b2c-mobile-business-launch/SKILL.md`: skill entrypoint and progressive-disclosure routing.
+- `skill/b2c-mobile-business-launch/skill-version.json`: installed-runtime freshness manifest.
 - `skill/b2c-mobile-business-launch/references/`: detailed launch, provider, source freshness, and maintenance references.
+- `skill/b2c-mobile-business-launch/state/`: Design Room seed state, theme tokens, and JSON schema.
+- `skill/b2c-mobile-business-launch/render/`: React/Vite Design Room renderer; `scripts/render-design-room.ts` also writes the static fallback.
 - `skill/b2c-mobile-business-launch/templates/`: reusable launch artifacts copied into app repos.
 - `skill/b2c-mobile-business-launch/templates/repo-agent-entrypoints/`: business-repo `AGENTS.md` and `CLAUDE.md` templates that keep future agents on the launch skill workflow.
 - `skill/b2c-mobile-business-launch/scripts/`: deterministic validators, renderers, LaunchBench harness, and source freshness tooling.
@@ -42,6 +45,7 @@ npm run test:validators
 npm run check:source-registry
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
+npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed skill/b2c-mobile-business-launch
 npm pack --dry-run --json
 ```
 
@@ -73,6 +77,8 @@ ls -ld ~/.codex/skills/b2c-mobile-business-launch \
 ## Runtime Sync
 
 Edit the repo source first. Before claiming the skill is installed, mirror the current checkout's `skill/b2c-mobile-business-launch/` into `~/.codex/skills/b2c-mobile-business-launch/`, run the runtime audit there, and verify Claude/Agents symlinks. On this machine, `~/.claude/skills/b2c-mobile-business-launch` and `~/.agents/skills/b2c-mobile-business-launch` point to the Codex runtime copy.
+
+Broad launch/design/store/revenue/build work should first run `npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed ~/.codex/skills/b2c-mobile-business-launch` from the source repo, or the equivalent command from the installed runtime. If the installed copy is stale, use AskUserQuestion or a plain founder choice before continuing the original request.
 
 ## Source Freshness
 

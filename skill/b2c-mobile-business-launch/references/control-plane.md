@@ -1,0 +1,41 @@
+# Business Control Plane
+
+The Design Room is the first panel of a larger Business Control Plane: a founder-facing layer above the actual business where state, decisions, proof, blockers, and rendered views stay connected.
+
+## Current Panel
+
+`design-room.html` and `dist/design-room/` render the Design Room from:
+
+- `state/business.json`
+- `state/theme.tokens.json`
+- `state/schema/business.schema.json`
+
+This panel owns cross-surface design state: app screens, web funnels, marketing assets, App Store pages, Product Page Optimization tests, In-App Events, and shared theme tokens.
+
+## Future Panels
+
+Do not build these until the Design Room loop is stable, but keep state extensible for:
+
+- **Analytics**: activation, attribution, conversion, retention, and experiment dashboards.
+- **Monetization**: RevenueCat/Stripe products, entitlements, paywalls, trials, refunds, and LTV/CPA evidence.
+- **Store Ops**: App Store Connect/Google Play readiness, screenshots, privacy answers, review notes, releases, CPPs, PPO, and In-App Events.
+- **Growth**: paid UA, creator/UGC, Fastlane, referral/share loops, and content cadence.
+
+Future panels should read the same state store and theme tokens rather than inventing parallel docs.
+
+## Architectural Rules
+
+- Use JSON state when humans need line-level git diffs, baselines, and restore.
+- Render views from state; do not hand-author dashboard HTML.
+- Keep panel-specific detail in references and scripts, not `SKILL.md`.
+- Let `PROJECT_STATE.yaml` remain the launch lane/status cockpit while `state/business.json` grows into the cross-surface business model.
+- Add validators before adding new panels so the Control Plane does not become another long prose checklist.
+
+## Promotion Path
+
+When a Design Room decision is accepted:
+
+1. Commit the state and render.
+2. Cascade the accepted decision to canonical business docs such as `DESIGN.md`, `design.md`, `APP_STORE_LISTING.md`, `ONBOARDING.md`, `CONTENT_ASSETS.md`, and `REVENUE_OPS.md` only when those files are in scope.
+3. Update `PROJECT_STATE.yaml` if launch readiness changed.
+4. Render both `design-room.html` and `launch-cockpit.html` when both state layers changed.

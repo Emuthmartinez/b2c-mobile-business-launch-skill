@@ -609,6 +609,8 @@ try {
   runFixture("complete viral growth packet passes", clean, "check-viral-growth-loop.ts", 0);
   runFixture("complete paid UA packet passes", clean, "check-paid-user-acquisition.ts", 0);
   runFixture("complete orchestration packet passes", clean, "check-parallel-orchestration.ts", 0);
+  runFixture("complete Design Room state passes", clean, "validate-state.ts", 0);
+  runFixture("complete Design Room contract passes", clean, "check-design-room-contract.ts", 0);
   runFixture("complete Apple signing packet passes", clean, "check-apple-signing-packet.ts", 0);
   runFixture("complete Apple App Store requirements packet passes", clean, "check-apple-app-store-requirements.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
@@ -617,6 +619,7 @@ try {
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
   runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
   runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
+  runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
   writeCompletePaidToolDecisions(clean);
   runFixture("complete paid-tool decisions packet passes", clean, "check-paid-tool-decisions.ts", 0);
 
@@ -1456,6 +1459,44 @@ try {
   const sourceRegistryMissing = makeEmptyFixture("source-registry-missing-url");
   writeSourceRegistryFixture(sourceRegistryMissing, false);
   runFixture("unregistered external source fails source freshness", sourceRegistryMissing, "check-source-freshness.ts", 1, "source_freshness.url_unregistered");
+
+  const designRoomMissingRender = makeFixture("design-room-missing-render");
+  rmSync(path.join(designRoomMissingRender, "design-room.html"), { force: true });
+  runFixture("Design Room state without render fails", designRoomMissingRender, "check-design-room-contract.ts", 1, "design_room.render_missing");
+
+  const designRoomFreeform = makeFixture("design-room-freeform-proposal");
+  writeFileSync(path.join(designRoomFreeform, "design-proposal.html"), "<!doctype html><html><body>New idea</body></html>", "utf8");
+  runFixture(
+    "freeform design proposal fails Design Room contract",
+    designRoomFreeform,
+    "check-design-room-contract.ts",
+    1,
+    "design_room.freeform_design_artifact",
+  );
+
+  const staleSkillVersion = makeEmptyFixture("stale-skill-version");
+  const latestSkillRoot = path.join(staleSkillVersion, "latest");
+  const installedSkillRoot = path.join(staleSkillVersion, "installed");
+  mkdirSync(latestSkillRoot, { recursive: true });
+  mkdirSync(installedSkillRoot, { recursive: true });
+  writeFileSync(
+    path.join(latestSkillRoot, "skill-version.json"),
+    JSON.stringify({ skill: "b2c-mobile-business-launch", version: "0.2.0", updatedAt: "2026-05-30" }, null, 2),
+    "utf8",
+  );
+  writeFileSync(
+    path.join(installedSkillRoot, "skill-version.json"),
+    JSON.stringify({ skill: "b2c-mobile-business-launch", version: "0.1.0", updatedAt: "2026-05-01" }, null, 2),
+    "utf8",
+  );
+  runFixture(
+    "stale installed skill version fails",
+    staleSkillVersion,
+    "check-skill-version.ts",
+    1,
+    "skill_version.stale",
+    ["--source", latestSkillRoot, "--installed", installedSkillRoot],
+  );
 } finally {
   rmSync(tempRoot, { recursive: true, force: true });
 }

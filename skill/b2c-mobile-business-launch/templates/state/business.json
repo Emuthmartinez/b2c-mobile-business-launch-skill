@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-05-30",
+  "business": {
+    "name": "App Name",
+    "slug": "app-name",
+    "stage": "concept",
+    "positioning": "One-sentence promise still to be defined.",
+    "targetAudience": "Primary consumer segment still to be defined."
+  },
+  "theme": {
+    "tokensPath": "state/theme.tokens.json",
+    "status": "provisional"
+  },
+  "designRoom": {
+    "status": "not_started",
+    "renderPath": "design-room.html",
+    "versionLog": [
+      {
+        "id": "initial-state",
+        "createdAt": "2026-05-30",
+        "summary": "Empty Design Room state seeded from the skill template.",
+        "statePaths": [
+          "state/business.json",
+          "state/theme.tokens.json"
+        ],
+        "renderedArtifacts": [
+          "design-room.html"
+        ]
+      }
+    ],
+    "baselines": []
+  },
+  "surfaces": {
+    "webFunnels": [],
+    "landingPages": [],
+    "marketingAssets": [],
+    "mobileApp": {
+      "platforms": [
+        "ios"
+      ],
+      "screens": [],
+      "flows": []
+    },
+    "appStore": {
+      "defaultProductPage": {
+        "status": "not_started",
+        "positioning": "",
+        "screenshotCount": 0,
+        "appPreviewCount": 0,
+        "promotionalText": "",
+        "keywords": []
+      },
+      "customProductPages": [],
+      "productPageOptimizationTests": [],
+      "inAppEvents": []
+    }
+  },
+  "controlPlane": {
+    "panels": [
+      {
+        "id": "design-room",
+        "name": "Design Room",
+        "status": "active"
+      }
+    ],
+    "futurePanels": [
+      "analytics",
+      "monetization",
+      "store_ops",
+      "growth"
+    ]
+  }
+}

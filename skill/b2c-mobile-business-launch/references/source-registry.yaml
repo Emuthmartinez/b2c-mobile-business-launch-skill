@@ -356,7 +356,26 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/references/surfaces-b2c.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-help-app-store-connect-create-product-page-optimization-tes
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/create-product-page-optimization-tests/overview-of-product-page-optimization
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/surfaces-b2c.md
+    notes: Official Apple documentation for Product Page Optimization test scope and availability.
+  - id: developer-apple-com-help-app-store-connect-view-app-analytics-view-product-page
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/help/app-store-connect/view-app-analytics/view-product-page-optimization-results
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/surfaces-b2c.md
+    notes: Official Apple documentation for Product Page Optimization results, confidence, and applying winners.
   - id: developer-apple-com-help-app-store-connect-create-an-app-record-add-a-new-app
     name: developer.apple.com
     source_type: official_docs
@@ -376,7 +395,17 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/app-store-listing-prep.md
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
+      - skill/b2c-mobile-business-launch/references/surfaces-b2c.md
     notes: Auto-discovered from recently added repository content.
+  - id: developer-apple-com-app-store-in-app-events
+    name: developer.apple.com
+    source_type: official_docs
+    url: https://developer.apple.com/app-store/in-app-events
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/surfaces-b2c.md
+    notes: Official Apple marketing overview for In-App Events, approved/published limits, and candidate guidance.
   - id: developer-apple-com-help-app-store-connect-manage-app-accessibility-manage-acces
     name: developer.apple.com
     source_type: official_docs
@@ -747,6 +776,15 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
     notes: Auto-discovered from recently added repository content.
+  - id: json-schema-org-draft-2020-12-schema
+    name: json-schema.org
+    source_type: docs
+    url: https://json-schema.org/draft/2020-12/schema
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/state/schema/business.schema.json
+    notes: JSON Schema dialect used by the Design Room business state schema.
   - id: github-com-mobai-app
     name: github.com
     source_type: github

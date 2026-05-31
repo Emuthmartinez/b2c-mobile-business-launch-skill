@@ -17,17 +17,20 @@ Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue
 
 1. `PROJECT_STATE.yaml`
 2. `launch-cockpit.html`
-3. `SPEC.md`
-4. `LAUNCH_TRACE.md`
-5. `11_STAR_EXPERIENCE.md`
-6. `TECH_SPEC.md`
-7. `DESIGN.md`
-8. `ANALYTICS.md`
-9. `SECRETS.md`
-10. `SECURITY.md`
-11. `ORCHESTRATION.md`
-12. `PRODUCTION_READINESS.md`
-13. `APP_AGENTS.md`
+3. `state/business.json`
+4. `state/theme.tokens.json`
+5. `design-room.html`
+6. `SPEC.md`
+7. `LAUNCH_TRACE.md`
+8. `11_STAR_EXPERIENCE.md`
+9. `TECH_SPEC.md`
+10. `DESIGN.md`
+11. `ANALYTICS.md`
+12. `SECRETS.md`
+13. `SECURITY.md`
+14. `ORCHESTRATION.md`
+15. `PRODUCTION_READINESS.md`
+16. `APP_AGENTS.md`
 
 If a listed file does not exist yet, create or update it through the relevant `b2c-mobile-business-launch` reference instead of inventing a one-off replacement.
 
@@ -36,6 +39,7 @@ If a listed file does not exist yet, create or update it through the relevant `b
 This file is a map, not a product spec. Keep durable product truth in the files below, keep active plans in `PROJECT_STATE.yaml` and `ORCHESTRATION.md`, and keep mechanical enforcement in validators, LaunchBench, and failure cards.
 
 - State and blockers: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `FAILURE_CARDS.md`, `LAUNCHBENCH.md`
+- Design Room state: `state/business.json`, `state/theme.tokens.json`, `design-room.html`, and `dist/design-room/`
 - Product and evidence: `RESEARCH.md`, `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`
 - Implementation: `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`
 - Design and content: `DESIGN.md`, `design.md`, `design.html`, `UX_PATTERNS.md`, `CONTENT_ASSETS.md`
@@ -69,6 +73,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 
 ## Design And UX
 
+- All design work follows STATE -> MUTATE -> VERSION -> RENDER. Mutate `state/business.json` and `state/theme.tokens.json`, render `design-room.html`, and version/baseline with git instead of creating one-off design proposal files.
 - `DESIGN.md` owns tokens, voice, components, and visual rules.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.

@@ -1,0 +1,11 @@
+{
+  "skill": "b2c-mobile-business-launch",
+  "version": "0.2.0",
+  "updatedAt": "2026-05-30",
+  "sourcePath": "skill/b2c-mobile-business-launch",
+  "releaseNotes": [
+    "Adds the Design Room STATE -> MUTATE -> VERSION -> RENDER workflow.",
+    "Adds React/Vite Design Room rendering with static HTML fallback.",
+    "Adds local runtime freshness checks before launch or design work continues."
+  ]
+}

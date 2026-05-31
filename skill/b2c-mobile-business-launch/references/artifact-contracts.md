@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -23,6 +23,10 @@ CLAUDE.md                 # optional tool-specific addendum that points back to 
 APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
 PROJECT_STATE.yaml        # compact machine-readable phase, autonomy, lane, provider, proof, blocker, and failure-card state
 launch-cockpit.html       # rendered founder-visible dashboard over PROJECT_STATE.yaml
+state/business.json       # Design Room source of truth for business identity, surfaces, version log, and control-plane panels
+state/theme.tokens.json   # semantic design tokens consumed by Design Room render and downstream surfaces
+design-room.html          # static rendered Design Room with design-state-hash
+dist/design-room/         # React/Vite Design Room build when available
 TOOL_DECISIONS.md         # paid/account-gated tool access, confirmed fallbacks, limitations, and blocked routes
 SECRETS.md                # Doppler or approved secret-provider inventory, command map, CI/deploy routing, and proof notes
 SECURITY.md               # threat model, security tool routing, mobile/backend/revenue/email hardening, monitoring, accepted risks, release proof
