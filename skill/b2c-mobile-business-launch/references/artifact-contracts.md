@@ -7,7 +7,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 - Canonical File Map
 - Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
-- Conversion docs: `ONBOARDING.md`, `onboarding.html`
+- Conversion docs: `ONBOARDING.md`, `onboarding.html`, `COPY_BRIEF.md`, `CRO_AUDIT.md`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
 - Business ops: `EMAIL_OPS.md`, `REVENUE_OPS.md`, `GEO_SEO.md`, `PRIVACY.md`, `TERMS.md`, `LEGAL_REVIEW.md`
 - Engineering docs: `TECH_SPEC.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
@@ -55,6 +55,8 @@ design.md                 # screen-by-screen implementation design spec
 design.html               # rendered visual system, components, and screen proofs
 ONBOARDING.md             # onboarding, personalization, review prompt, paywall timing, and activation contract
 onboarding.html           # rendered onboarding/paywall/review/offer flow proof
+COPY_BRIEF.md             # conversion copy source of truth: value proposition, message hierarchy, voice-of-customer phrase bank, per-surface copy blocks, claims ledger
+CRO_AUDIT.md              # public-funnel conversion structure: one goal, above-the-fold promise/CTA/proof, section order, trust placement, friction audit, ranked test queue
 LAUNCH.md                 # ASO, screenshots, ads, launch sequence, metrics
 APPLE_SIGNING.md          # Apple Developer account, Team ID, bundle ID/App ID, signing, archive/export/upload, and TestFlight gates
 APPLE_APP_STORE_REQUIREMENTS.md # Apple pre-ASC requirements: privacy manifest, required reason APIs, SDK manifests/signatures, App Privacy labels, purpose strings, ATT, review notes, upload warnings

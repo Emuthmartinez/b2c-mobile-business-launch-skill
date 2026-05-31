@@ -1626,3 +1626,32 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
     notes: Motion (framer-motion's successor, import from motion/react) React animation docs. Web-surface library used by the Design Room render app and launch web surfaces (landing, funnel); never used in the shipped mobile binary. Refresh before changing motion API/setup guidance.
+  - id: github-com-coreyhaines31-marketingskills
+    name: github.com
+    source_type: skill_pack
+    url: https://github.com/coreyhaines31/marketingskills
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/conversion-copy.md
+      - skill/b2c-mobile-business-launch/references/cro-landing.md
+      - skill/b2c-mobile-business-launch/references/analytics-attribution.md
+    notes: MIT-licensed marketing skill pack (© Corey Haines 2025). Conversion-copywriting/copy-editing craft, landing-page CRO discipline, and A/B-testing experiment-design honesty adapted with attribution and reframed for B2C mobile surfaces. Reference-and-adapt only; do not vendor its skill files into templates or business repos. Most other skills in the pack (paid ads, referrals, onboarding, ASO, email, social, SEO/GEO, pricing) are already covered by deeper B2C-mobile references here and were intentionally not duplicated; B2B skills (cold-email, prospecting, revops, sales-enablement) are out of scope.
+  - id: support-google-com-play-developer-listing-policy
+    name: support.google.com
+    source_type: support_docs
+    url: https://support.google.com/googleplay/android-developer/answer/9859455
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/conversion-copy.md
+    notes: Google Play store listing metadata policy (title/description constraints, prohibited promotional/keyword-stuffing patterns). Refresh before locking Play listing copy rules.
+  - id: web-dev-articles-vitals
+    name: web.dev
+    source_type: docs
+    url: https://web.dev/articles/vitals
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/cro-landing.md
+    notes: Core Web Vitals (LCP/INP/CLS) current thresholds; slow landing pages cap conversion. Refresh before quoting specific vitals targets in CRO guidance.
