@@ -35,9 +35,21 @@ Status: partial until the flow is product-specific and visually verified.
 - Analytics: emit `review_prompt_eligible` before the request and `review_prompt_requested` when the native API is called.
 - Fallback: the platform may not show the review sheet; continue the onboarding flow without blocking, inferring rating content, or incentivizing reviews.
 
+## Emotional Card Timing
+
+Onboarding is where most Experience Cards fire. When the 11-star target is 6-star or higher, mirror the card-timing contract from `references/emotional-design-system.md §Integration §Onboarding Conversion` and record each moment in the `EMOTIONAL_DESIGN.md` Card Application Map with a PostHog event:
+
+- **Commitment Card** — at the first personalization / goal question; echoed (not used as friction) on the plan reveal and paywall. Event: `commitment_made`.
+- **Perceived Effort Delay Card** — at plan / result generation, narrating real computation (≥50% real-step ratio). Event: `perceived_effort_started` / `perceived_effort_completed`.
+- **Intent Mirroring Card** — after first value and immediately before the paywall; never on the paywall screen itself or any cancel flow. Event: `intent_mirror_shown`.
+- **App Review popup** — at or just after the emotional peak (the first value/value-reveal), per the App Review Popup section below.
+
+The onboarding emotional curve must cross positive (+2) at or before the paywall; a curve that first turns positive after the paywall is a conversion-design failure. Every animated card moment needs a `prefers-reduced-motion` fallback.
+
 ## Build Handoff Gates
 
 - `onboarding.html` shows the value-reveal screen followed by the App Review popup placeholder.
 - `ANALYTICS.md` includes all onboarding, attribution, review prompt, paywall, and activation events.
+- `EMOTIONAL_DESIGN.md` Card Application Map covers the onboarding card moments above with a measurement event each (when the emotional_design lane is in scope).
 - `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`, and support links match the flow before implementation.
 - `npm run check:onboarding -- --root <app>` passes.

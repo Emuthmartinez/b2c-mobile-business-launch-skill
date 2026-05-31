@@ -38,6 +38,27 @@ Per-surface implementation:
 - **The mobile binary does not use framer-motion** — SwiftUI uses `DesignTokens.Motion` with `.animation`; Flutter uses implicit/explicit animations; React Native uses Reanimated/Moti. All read the same token values.
 - **Reduced motion is required everywhere** — honor `prefers-reduced-motion` on web and the OS reduce-motion setting on device; fall back to opacity-only or instant changes.
 
+## Emotional Tone And Card Motion
+
+Required when `EMOTIONAL_DESIGN.md` is in scope. Translate the Emotional North Star into Norman's three levels, then bind each Experience Card moment to a motion token and a reduced-motion fallback. Web surfaces animate with `motion/react` reading `--motion-*` variables; the mobile binary uses `DesignTokens.Motion`. See `references/emotional-design-system.md §Integration §Design Room`.
+
+**Three-level tone (fill product-specific):**
+
+- **Visceral** (first 500ms impression): the feeling before reading — color, weight, imagery.
+- **Behavioral** (in-use): how the core loop feels — pace, feedback, friction.
+- **Reflective** (afterward): the story the user retells — the Emotional North Star.
+
+**Card motion spec:**
+
+| Card moment | Motion token | Web (`motion/react`) | Reduced-motion fallback |
+| --- | --- | --- | --- |
+| Commitment echo | `motion.durationFast` | opacity/position highlight | instant static text, no fade |
+| Perceived Effort step transitions | `motion.durationBase` + final `motion.durationSlow` reveal | staged step list + spring reveal | static step list, count only |
+| Variable Reward anticipation → reveal | `motion.durationBase` loop + `motion.durationSlow` spring | anticipation loop then reveal | instant plain-text result |
+| Intent Mirror entrance | `motion.durationSlow` | deliberate fade-in | static block appears instantly |
+
+Every animated card moment must declare its `prefers-reduced-motion` / OS reduce-motion behavior here and in `TECH_SPEC.md`.
+
 ## Screen Spec
 
 Screen-level implementation guidance lives in `screen-design/design.md` so this case-insensitive filesystem can still ship both the canonical visual-system file and the lowercase screen spec convention.

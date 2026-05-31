@@ -171,7 +171,11 @@ For every HIGH-risk card the app applies (Variable Reward, Streak, Scarcity, Urg
 
 ## Per-Journey Audit Table
 
-One table per audited journey. Copy this block for each journey in the Audit Scope.
+One block per audited journey. Walk each on a real device (see Device Walk Protocol). The compact table is the per-step read; the **Findings & Pathway** block under each table carries the observed emotion, the friction, and the concrete **Pathway to Better State** for any step that needs one — keeping the table readable while still meeting the six-part pathway contract above.
+
+- **Score / Band:** 0–3 Broken · 3.1–5.9 Functional · 6–7.9 Competent · 8–10 Elevated. A single step caps at **7-star** (see Scoring Rubric); the 10/11-star designation is whole-product only.
+- **Valence:** −5 … +5 — this column is the data source for that journey's Emotional Curve.
+- **Dark Flag:** note any bright-line concern to verify (e.g. "Check: not on same screen as paywall CTA"); a confirmed crossing opens an `experience-card-dark-pattern` failure card.
 
 ### Journey J-01: First-Launch Onboarding
 
@@ -179,16 +183,16 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Prerequisite before walking:** MobAI bridge active on the target device. Screenshot every screen transition. Assign emotional valence (−5 to +5) to each step for the Emotional Curve.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Splash / Value Promise | Understand what this app does for me | Curiosity, intrigue | Pending | Pending | None | None observed | None | 0 | Pending | Pending |
-| 2 | Attribution Question | Tell where I heard about this | Neutral / cooperative | Pending | Pending | None | None observed | None | 0 | Pending | Pending |
-| 3 | Goal / Commitment Question | Declare my intent | Ownership, investment | Pending | Pending | Commitment Card | — | None | +1 | Pending | Pending |
-| 4 | Personalization Q2–Q4 | Answer questions about my situation | Relevance, being understood | Pending | Pending | Commitment Card (echo) | — | None | +1 | Pending | Pending |
-| 5 | Effort / Processing Screen | See the system work on my behalf | Trust, anticipation | Pending | Pending | Perceived Effort Delay | — | None | +2 | Pending | Pending |
-| 6 | Personalized Plan Reveal | See a plan that reflects my answers | Delight, recognition | Pending | Pending | Variable Reward, Intent Mirror | — | None | +3 | Pending | Pending |
-| 7 | Intent Mirror Screen | Have my goal reflected back to me | Recognition, resonance | Pending | Pending | Intent Mirroring | — | Check: not on same screen as paywall CTA | +4 | Pending | Pending |
-| 8 | Paywall | Decide whether to unlock full value | Confidence, momentum | Pending | Pending | None (intentionally) | — | Check: paywall after value peak | +2 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Splash / Value Promise | Understand what this app does for me → Curiosity, intrigue | None | None observed | None | 0 | Pending |
+| 2 | Attribution Question | Tell where I heard about this → Neutral / cooperative | None | None observed | None | 0 | Pending |
+| 3 | Goal / Commitment Question | Declare my intent → Ownership, investment | Commitment Card | — | None | +1 | Pending |
+| 4 | Personalization Q2–Q4 | Answer questions about my situation → Relevance, being understood | Commitment Card (echo) | — | None | +1 | Pending |
+| 5 | Effort / Processing Screen | See the system work on my behalf → Trust, anticipation | Perceived Effort Delay | — | None | +2 | Pending |
+| 6 | Personalized Plan Reveal | See a plan that reflects my answers → Delight, recognition | Variable Reward, Intent Mirror | — | None | +3 | Pending |
+| 7 | Intent Mirror Screen | Have my goal reflected back to me → Recognition, resonance | Intent Mirroring | — | Check: not on same screen as paywall CTA | +4 | Pending |
+| 8 | Paywall | Decide whether to unlock full value → Confidence, momentum | None (intentionally) | — | Check: paywall after value peak | +2 | Pending |
 
 **Six-Lens Summary for J-01**
 
@@ -201,6 +205,9 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 | L5 Experience Quality | Pending | Pending | — |
 | L6 Service Design | Pending | Pending | — |
 
+**Findings & Pathway — J-01.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
+
 **Journey J-01 Score:** Pending
 
 ---
@@ -209,13 +216,16 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User triggers the core-loop action. System processes. Result is revealed. Card sequence: Perceived Effort Delay → Variable Reward.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Core Action Trigger | Begin the thing I came here for | Readiness, agency | Pending | Pending | None | None | None | 0 | Pending | Pending |
-| 2 | Processing Screen | Trust the system is working on my inputs | Anticipation, trust | Pending | Pending | Perceived Effort Delay | — | None | +2 | Pending | Pending |
-| 3 | Anticipation Window | The moment before result reveal | Suspense, excitement | Pending | Pending | Variable Reward (anticipation) | — | None | +3 | Pending | Pending |
-| 4 | Result Reveal | Receive a result that feels made for me | Delight, discovery | Pending | Pending | Variable Reward (reveal) | — | None | +4 | Pending | Pending |
-| 5 | Post-Result / Next Action | Know what to do next | Confidence, momentum | Pending | Pending | None | None | None | +2 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Core Action Trigger | Begin the thing I came here for → Readiness, agency | None | None | None | 0 | Pending |
+| 2 | Processing Screen | Trust the system is working on my inputs → Anticipation, trust | Perceived Effort Delay | — | None | +2 | Pending |
+| 3 | Anticipation Window | The moment before result reveal → Suspense, excitement | Variable Reward (anticipation) | — | None | +3 | Pending |
+| 4 | Result Reveal | Receive a result that feels made for me → Delight, discovery | Variable Reward (reveal) | — | None | +4 | Pending |
+| 5 | Post-Result / Next Action | Know what to do next → Confidence, momentum | None | None | None | +2 | Pending |
+
+**Findings & Pathway — J-02.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-02 Score:** Pending
 
@@ -225,12 +235,15 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User completes first meaningful action. System acknowledges the completion. Session-close state is reached.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | First Action Screen | Do the thing I signed up for | Focus, readiness | Pending | Pending | None | None | None | +1 | Pending | Pending |
-| 2 | In-Progress State | See I am making progress | Commitment, momentum | Pending | Pending | Commitment Card (echo) | — | None | +2 | Pending | Pending |
-| 3 | Completion Confirmation | Hear that I succeeded | Pride, satisfaction | Pending | Pending | Peak-End Card (if applicable) | — | None | +4 | Pending | Pending |
-| 4 | Session Close / Summary | Remember this session positively | Satisfaction, return intent | Pending | Pending | Peak-End Card | — | None | +3 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | First Action Screen | Do the thing I signed up for → Focus, readiness | None | None | None | +1 | Pending |
+| 2 | In-Progress State | See I am making progress → Commitment, momentum | Commitment Card (echo) | — | None | +2 | Pending |
+| 3 | Completion Confirmation | Hear that I succeeded → Pride, satisfaction | Peak-End Card (if applicable) | — | None | +4 | Pending |
+| 4 | Session Close / Summary | Remember this session positively → Satisfaction, return intent | Peak-End Card | — | None | +3 | Pending |
+
+**Findings & Pathway — J-03.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-03 Score:** Pending
 
@@ -240,11 +253,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** Paywall appears mid-session or at end of onboarding. User evaluates the offer and either converts, starts a trial, or dismisses.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Paywall Entry | Understand what I get and for how much | Confidence, fairness | Pending | Pending | None | Check: no Experience Card should trigger here | Confirm no card CTA coupled to purchase | 0 | Pending | Pending |
-| 2 | Trial Start or Purchase | Make a safe, reversible choice | Trust, relief | Pending | Pending | None | None | None | +1 | Pending | Pending |
-| 3 | Post-Purchase / Trial Confirmation | Know my choice landed | Confidence, excitement | Pending | Pending | Commitment Card (echo of goal at unlock) | — | None | +2 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Paywall Entry | Understand what I get and for how much → Confidence, fairness | None | Check: no Experience Card should trigger here | Confirm no card CTA coupled to purchase | 0 | Pending |
+| 2 | Trial Start or Purchase | Make a safe, reversible choice → Trust, relief | None | None | None | +1 | Pending |
+| 3 | Post-Purchase / Trial Confirmation | Know my choice landed → Confidence, excitement | Commitment Card (echo of goal at unlock) | — | None | +2 | Pending |
+
+**Findings & Pathway — J-04.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-04 Score:** Pending
 
@@ -254,11 +270,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User returns within the D1–D3 window. Product must re-establish the commitment, minimize re-entry friction, and drive the user to complete a core action.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Home / Dashboard | Pick up where I left off | Continuity, comfort | Pending | Pending | Commitment Card (echo), Streak Card if applicable | — | None | +1 | Pending | Pending |
-| 2 | Re-entry Prompt / Push-Tap | Be reminded why I started | Recognition | Pending | Pending | Intent Mirroring (return-session trigger) | — | None | +2 | Pending | Pending |
-| 3 | Core Action Entry | Begin today's session | Readiness | Pending | Pending | None | None | None | +1 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Home / Dashboard | Pick up where I left off → Continuity, comfort | Commitment Card (echo), Streak Card if applicable | — | None | +1 | Pending |
+| 2 | Re-entry Prompt / Push-Tap | Be reminded why I started → Recognition | Intent Mirroring (return-session trigger) | — | None | +2 | Pending |
+| 3 | Core Action Entry | Begin today's session → Readiness | None | None | None | +1 | Pending |
+
+**Findings & Pathway — J-05.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-05 Score:** Pending
 
@@ -268,11 +287,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User views their streak, progress indicator, or level state on the home screen or dashboard.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Home/Dashboard Streak View | See my progress at a glance | Pride, accountability | Pending | Pending | Streak / Loss Aversion Card | — | Check: no countdown panic language | +1 | Pending | Pending |
-| 2 | Streak Milestone Trigger | Celebrate a real achievement | Pride, reinforcement | Pending | Pending | Streak Card (milestone), Peak-End Card | — | None | +4 | Pending | Pending |
-| 3 | Streak At-Risk State | Be nudged, not shamed | Concern without guilt | Pending | Pending | Streak Card (at-risk), Fresh Start Card | — | Check: no guilt framing | −1 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Home/Dashboard Streak View | See my progress at a glance → Pride, accountability | Streak / Loss Aversion Card | — | Check: no countdown panic language | +1 | Pending |
+| 2 | Streak Milestone Trigger | Celebrate a real achievement → Pride, reinforcement | Streak Card (milestone), Peak-End Card | — | None | +4 | Pending |
+| 3 | Streak At-Risk State | Be nudged, not shamed → Concern without guilt | Streak Card (at-risk), Fresh Start Card | — | Check: no guilt framing | −1 | Pending |
+
+**Findings & Pathway — J-06.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-06 Score:** Pending
 
@@ -282,12 +304,15 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User has been inactive for N or more days. Product attempts re-engagement via push, email, or in-app fresh-start moment.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Push / Email Re-Entry | Understand why I am being contacted | Safety, no shame | Pending | Pending | Fresh Start Card | — | Check: no gap-duration shaming | 0 | Pending | Pending |
-| 2 | Fresh Start Screen | Begin fresh without penalty | Relief, agency | Pending | Pending | Fresh Start Card, Intent Mirroring (return type) | — | Check: no paywall on this screen | +2 | Pending | Pending |
-| 3 | Re-Commitment Prompt | Recommit on my own terms | Ownership, investment | Pending | Pending | Commitment Card (edit / re-commit), Identity Card | — | Check: no guilt language | +3 | Pending | Pending |
-| 4 | Core Action Entry | Begin immediately | Momentum | Pending | Pending | None | None | None | +2 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Push / Email Re-Entry | Understand why I am being contacted → Safety, no shame | Fresh Start Card | — | Check: no gap-duration shaming | 0 | Pending |
+| 2 | Fresh Start Screen | Begin fresh without penalty → Relief, agency | Fresh Start Card, Intent Mirroring (return type) | — | Check: no paywall on this screen | +2 | Pending |
+| 3 | Re-Commitment Prompt | Recommit on my own terms → Ownership, investment | Commitment Card (edit / re-commit), Identity Card | — | Check: no guilt language | +3 | Pending |
+| 4 | Core Action Entry | Begin immediately → Momentum | None | None | None | +2 | Pending |
+
+**Findings & Pathway — J-07.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-07 Score:** Pending
 
@@ -297,11 +322,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User encounters a network error, payment failure, or crash. Product must acknowledge, recover, and maintain trust.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Error State | Understand what went wrong | Safety, clarity | Pending | Pending | Recovery and Trust Repair Card | — | Check: no paywall or spend prompt on error screen | −2 | Pending | Pending |
-| 2 | Recovery Action | Do something concrete to fix it | Agency, trust | Pending | Pending | Recovery and Trust Repair Card | — | None | 0 | Pending | Pending |
-| 3 | Restorative Gesture (if applicable) | Receive a goodwill signal | Relief, goodwill | Pending | Pending | Recovery and Trust Repair Card (gesture) | — | Check: gesture is unconditional | +1 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Error State | Understand what went wrong → Safety, clarity | Recovery and Trust Repair Card | — | Check: no paywall or spend prompt on error screen | −2 | Pending |
+| 2 | Recovery Action | Do something concrete to fix it → Agency, trust | Recovery and Trust Repair Card | — | None | 0 | Pending |
+| 3 | Restorative Gesture (if applicable) | Receive a goodwill signal → Relief, goodwill | Recovery and Trust Repair Card (gesture) | — | Check: gesture is unconditional | +1 | Pending |
+
+**Findings & Pathway — J-08.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-08 Score:** Pending
 
@@ -311,11 +339,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User navigates to billing settings, views subscription details, and either continues or initiates cancellation.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Settings / Billing Entry | Manage my subscription clearly | Transparency, safety | Pending | Pending | None | None | None | 0 | Pending | Pending |
-| 2 | Cancel Intent Screen | See my options without pressure | Autonomy, respect | Pending | Pending | None | Check: no Experience Card should trigger on cancel flow | Confirm no Intent Mirror or Fresh Start on cancel as retention friction | −1 | Pending | Pending |
-| 3 | Confirmation / Exit | Complete the action cleanly | Closure, relief | Pending | Pending | None | None | None | 0 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Settings / Billing Entry | Manage my subscription clearly → Transparency, safety | None | None | None | 0 | Pending |
+| 2 | Cancel Intent Screen | See my options without pressure → Autonomy, respect | None | Check: no Experience Card should trigger on cancel flow | Confirm no Intent Mirror or Fresh Start on cancel as retention friction | −1 | Pending |
+| 3 | Confirmation / Exit | Complete the action cleanly → Closure, relief | None | None | None | 0 | Pending |
+
+**Findings & Pathway — J-09.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-09 Score:** Pending
 
@@ -325,11 +356,14 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 **Journey brief:** User crosses a mastery or achievement threshold. Product delivers a peak moment.
 
-| Step | Screen Label | Human Goal | Emotional Goal | Current Emotion (observed on device) | Friction Observed | Cards Present | Cards Missing or Misused | Dark-Pattern Flag | Emotional Curve Point | Score (0–10) | Pathway to Better State |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Milestone Trigger | Have my effort acknowledged | Pride, validation | Pending | Pending | Mastery and Status Card, Peak-End Card | — | None | +4 | Pending | Pending |
-| 2 | Level-Up Reveal | Experience the peak moment | Delight, status | Pending | Pending | Mastery and Status Card, Variable Reward | — | Check: no paywall on same screen | +5 | Pending | Pending |
-| 3 | Share / Continue | Act on the peak (share or continue) | Generosity, momentum | Pending | Pending | Identity and Self-Expression Card | — | None | +3 | Pending | Pending |
+| Step | Screen | Human → Emotional Goal | Cards Present | Cards Missing / Misused | Dark Flag | Valence | Score / Band |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Milestone Trigger | Have my effort acknowledged → Pride, validation | Mastery and Status Card, Peak-End Card | — | None | +4 | Pending |
+| 2 | Level-Up Reveal | Experience the peak moment → Delight, status | Mastery and Status Card, Variable Reward | — | Check: no paywall on same screen | +5 | Pending |
+| 3 | Share / Continue | Act on the peak (share or continue) → Generosity, momentum | Identity and Self-Expression Card | — | None | +3 | Pending |
+
+**Findings & Pathway — J-10.** Per step: record observed emotion + friction. For any step scoring < 6 or with a missing/misused card, write a pathway entry in the six-part shape (card · lens fixed · trigger · copy sketch · `event` · artifact · +★):
+- _Step N — observed: [emotion]; friction: [note]. Pathway to better state → apply **[Card]** ([lens it fixes]); trigger [screen + user state]; sketch "[copy in the user's goal language]"; event `[posthog_event]`; update `[EMOTIONAL_DESIGN.md / ANALYTICS.md / TECH_SPEC.md]`; gain [+N★]._
 
 **Journey J-10 Score:** Pending
 
@@ -337,28 +371,30 @@ One table per audited journey. Copy this block for each journey in the Audit Sco
 
 ## Emotional Curve
 
-One curve per journey. Each curve must be rendered in `design.html` using design tokens from `DESIGN.md` (CSS variables). The static table below is the data source. Transfer it to a line chart in `design.html`.
+One curve per journey, plotted from the **Valence** column of that journey's per-journey table — so curve data is collected automatically during every walk, not as a separate step. Render one line chart per journey in `emotional-design.html` / `design.html` using design tokens from `DESIGN.md` (CSS variables).
 
-**Acceptance Rule:** The curve must cross +2 (emotional value threshold) at or before the paywall marker step. Any journey where the first +2 crossing occurs after the paywall is a conversion design failure. Open an `emotional-curve-missing` or `emotional-curve-peak-after-paywall` failure card.
+**Acceptance Rule:** the curve must cross **+2** (emotional value threshold) at or before that journey's paywall / spend marker. A journey whose first +2 crossing occurs after the paywall is a conversion design failure → open `emotional-curve-peak-after-paywall`. A journey with no rendered curve → open `emotional-curve-missing`.
 
-**Reduced-Motion Rule:** If the `design.html` curve uses animation to draw the line, a `prefers-reduced-motion` check must render a static chart instead.
+**Reduced-Motion Rule:** if the rendered curve animates the line draw, a `prefers-reduced-motion` check must render a static chart instead.
 
-### Emotional Curve Data Table — J-01: First-Launch Onboarding
+### Per-Journey Curve Markers
 
-| Step ID | Screen Label | Valence (−5 to +5) | Marker |
-| --- | --- | --- | --- |
-| 1 | Splash / Value Promise | Pending | — |
-| 2 | Attribution Question | Pending | — |
-| 3 | Goal / Commitment Question | Pending | — |
-| 4 | Personalization Q2–Q4 | Pending | — |
-| 5 | Processing Screen | Pending | — |
-| 6 | Plan Reveal | Pending | peak |
-| 7 | Intent Mirror | Pending | — |
-| 8 | Paywall | Pending | paywall |
+Fill from each per-journey table. Every journey gets a row; the peak/paywall check is what gates the journey. (Return/lapse journeys mark their re-engagement paywall or any spend prompt as the paywall marker; journeys with no spend surface mark it `n/a`.)
 
-**Paywall marker step:** Step 8. Peak must be at or before Step 8.
+| Journey | Steps | Peak Step (highest valence) | First +2 Crossing | Paywall / Spend Marker | Peak before paywall? | Valley (if negative) |
+| --- | --- | --- | --- | --- | --- | --- |
+| J-01 First-Launch Onboarding | 8 | Step 7 (target) | Pending | Step 8 | Pending | — |
+| J-02 Plan / Result Generation | 5 | Step 4 (target) | Pending | n/a | Pending | — |
+| J-03 First Core-Loop Completion | 4 | Step 3 (target) | Pending | n/a | Pending | — |
+| J-04 Paywall (Direct) | 3 | Step 3 (target) | Pending | Step 1 | Pending | — |
+| J-05 Return Session (D1–3) | 3 | Step 2 (target) | Pending | n/a | Pending | — |
+| J-06 Streak / Progress | 3 | Step 2 (target) | Pending | n/a | Pending | Step 3 (at-risk) |
+| J-07 Lapse Re-Engagement | 4 | Step 3 (target) | Pending | n/a | Pending | — |
+| J-08 Failure / Error Recovery | 3 | Step 3 (target) | Pending | n/a | Pending | Step 1 (error) |
+| J-09 Subscription Management | 3 | Step 1 (target) | Pending | n/a | Pending | Step 2 (cancel) |
+| J-10 Milestone / Level-Up | 3 | Step 2 (target) | Pending | n/a | Pending | — |
 
-Repeat this table for each journey. Label one step `paywall` if applicable. Label the highest-valence step `peak`. Label the lowest-valence step `valley` if it is negative.
+Label the highest-valence step `peak`, the paywall/spend step `paywall`, and any negative step `valley` in the journey's own table. Add rows for app-specific journeys discovered in the Journey Discovery step.
 
 ---
 
@@ -426,7 +462,7 @@ Add rows for each missing event discovered during the audit. Cross-reference the
 
 ## Open Failure Cards
 
-List all failure cards opened during this audit. Mirror these into `PROJECT_STATE.yaml` under the `experience` lane blockers.
+List all failure cards opened during this audit. Mirror these into `PROJECT_STATE.yaml` under the `emotional_design` lane blockers.
 
 ```yaml
 # Copy each card below into PROJECT_STATE.yaml
@@ -496,16 +532,17 @@ A sequenced list of fixes from current state to the target state for this app. O
 
 Before marking this audit complete and the emotional design lane ready:
 
+- [ ] App-specific journeys beyond the 10 defaults are enumerated in the Audit Scope (Journey Discovery step) before the device walk begins.
 - [ ] All journeys in the Audit Scope have been walked on a real device via MobAI with screenshots attached.
-- [ ] Every step in every Critical journey has a completed score in the Per-Journey table.
-- [ ] No Critical journey has a step below 4.0 without an open failure card.
-- [ ] Emotional Curve data tables are filled for all Critical journeys. Curves are rendered in `design.html`.
-- [ ] All Emotional Curves for Critical journeys peak at or before the paywall marker.
+- [ ] Every step in every Critical AND High journey has a completed score in the Per-Journey table. At least 80% of steps in Medium journeys are scored; any gap is documented with a rationale.
+- [ ] No Critical or High journey has a step below 4.0 without an open failure card.
+- [ ] The Per-Journey Curve Markers table is filled for every journey (peak step + paywall/spend marker), and curves are rendered in `emotional-design.html` / `design.html`.
+- [ ] Every journey with a paywall/spend marker peaks (first +2 crossing) at or before that marker.
 - [ ] All Dark-Pattern Findings have an answer for each of the six bright-line checklist items.
 - [ ] No dark-pattern finding has a "Compliance Veto? Yes" item without an open `critical` failure card.
 - [ ] All required PostHog events for all implemented cards are confirmed in the PostHog activity view.
 - [ ] All missing events have an `experience-card-event-missing` failure card open in `PROJECT_STATE.yaml`.
-- [ ] All open failure cards from this audit are mirrored in `PROJECT_STATE.yaml` under the `experience` lane blockers.
+- [ ] All open failure cards from this audit are mirrored in `PROJECT_STATE.yaml` under the `emotional_design` lane blockers.
 - [ ] Top Opportunities matrix is complete with at least 3 prioritized rows.
 - [ ] Prioritized Pathway Phase 1 (compliance) is complete or has an open failure card blocking launch.
 - [ ] `npm run check:emotional-design -- --root .` passes or its failures are accounted for in open failure cards.
