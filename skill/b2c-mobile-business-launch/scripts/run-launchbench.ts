@@ -32,6 +32,7 @@ const knownValidators = new Set([
   "check-paid-user-acquisition",
   "check-parallel-orchestration",
   "check-eleven-star-experience",
+  "check-emotional-design",
   "check-source-freshness",
   "check-ux-patterns",
   "check-onboarding-conversion",

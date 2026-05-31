@@ -19,6 +19,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - store screenshot work treats raw device captures as final App Store upload artwork without composed iPhone/iPad assets, copy overlays, device-well validation, icon/preview routing, and visual QA
 - weekly source refresh treats auto-discovered links as accepted launch policy without review
 - product/design/build handoff starts without `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, a line of feasibility, and a V1 scalable slice
+- product, onboarding, core-loop, or paywall work proceeds without `EMOTIONAL_DESIGN.md` when the 11-star target is 6-star or higher; or a HIGH-risk card (variable reward, streak, scarcity, urgency, social proof) ships without an Ethics Attestation, a `user_control_escape_hatch`, a `counter_metric`, and a truthfulness proof; or an emotional/UX audit returns prose with no per-journey card mapping or pathway to a better state
 - onboarding reaches first value, a personalized plan, or a value-reveal screen but omits the native App Review popup immediately after that first-value moment
 - design work produces a freeform `design-proposal.html`, mood board, or Markdown version label instead of mutating `state/business.json`/`state/theme.tokens.json`, rendering `design-room.html`, and versioning state with git
 - paid growth is marked ready from ad-channel ideas without `PAID_UA.md`, one-channel focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, stop/scale rules, and founder spend approval

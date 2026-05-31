@@ -712,6 +712,7 @@ try {
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
   runFixture("complete onboarding conversion packet passes", clean, "check-onboarding-conversion.ts", 0);
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
+  runFixture("complete emotional design packet passes", clean, "check-emotional-design.ts", 0);
   runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
   runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
   runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
@@ -1221,6 +1222,28 @@ try {
   const elevenStarMissing = makeFixture("eleven-star-missing");
   rmSync(path.join(elevenStarMissing, "11-star-experience"), { recursive: true, force: true });
   runFixture("missing 11-star experience packet fails", elevenStarMissing, "check-eleven-star-experience.ts", 1, "eleven_star.markdown_missing");
+
+  const emotionalDesignMissing = makeFixture("emotional-design-missing");
+  rmSync(path.join(emotionalDesignMissing, "emotional-design"), { recursive: true, force: true });
+  runFixture("missing emotional design contract fails", emotionalDesignMissing, "check-emotional-design.ts", 1, "emotional_design.contract_missing");
+
+  const emotionalDesignUnguardedReward = makeFixture("emotional-design-unguarded-reward");
+  {
+    const cardPath = path.join(emotionalDesignUnguardedReward, "emotional-design", "EMOTIONAL_DESIGN.md");
+    const text = readFileSync(cardPath, "utf8");
+    // Rename the variable_reward escape-hatch + counter-metric keys so the HIGH-tier gate fires.
+    const stripped = text
+      .replace("  user_control_escape_hatch: >", "  removed_escape_hatch: >")
+      .replace("  counter_metric: >", "  removed_counter_metric: >");
+    writeFileSync(cardPath, stripped, "utf8");
+  }
+  runFixture(
+    "variable reward card without escape hatch fails",
+    emotionalDesignUnguardedReward,
+    "check-emotional-design.ts",
+    1,
+    "emotional_design.variable_reward_missing_user_control_escape_hatch",
+  );
 
   const elevenStarThin = makeFixture("eleven-star-thin");
   writeFileSync(

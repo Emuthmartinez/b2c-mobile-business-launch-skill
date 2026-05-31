@@ -174,6 +174,7 @@ Store and mobile caveats:
 
 Rules:
 - Use snake_case event names in this skill, even though PostHog examples often show object-verb names with spaces.
+- Emotion Card events: when the Emotional Experience System is in scope (see [`emotional-design-system.md`](emotional-design-system.md) and [`emotional-experience-measurement.md`](emotional-experience-measurement.md)), register the system-level envelope events `emotion_card_fired`, `emotion_card_completed`, `emotion_card_abandoned`, and `emotion_card_opt_out`, plus the per-card events (`commitment_made`, `variable_reward_revealed`, `perceived_effort_started`/`perceived_effort_completed`, `intent_mirror_shown`/`intent_mirror_continued`). Every card applied in `EMOTIONAL_DESIGN.md` must name one of these here before implementation, and the HIGH-risk counter-metrics feed a "Dark-Pattern Watch" insight (rage-tap abandons, opt-outs, sub-500ms dismissals, cancels within 24h of a card fire).
 - Keep event names stable; change display labels in dashboards, not emitted names.
 - Every event must have: owner, surface, trigger, required properties, optional properties, privacy note, QA method, dashboard usage.
 - Prefer semantic events for key decisions and allow autocapture/web analytics for exploratory web behavior.

@@ -36,6 +36,8 @@ Create or update `ONBOARDING.md` when an app has more than one setup screen, ask
 
 Use Refero as evidence, not as replacement doctrine. The onboarding playbook in this file remains the default conversion contract. Refero should help find concrete examples for sequencing, copy density, state handling, and recovery paths; it should not remove early self-reported attribution, the native App Review popup immediately after first value, paywall proof, restore purchases, privacy/terms links, or backend attribution persistence unless a deliberate experiment is documented.
 
+Onboarding is where most of the Experience Cards fire. When the 11-star target is 6-star or higher, load [`emotional-design-system.md`](emotional-design-system.md) for the card-timing contract and reflect it here: the Commitment Card fires at the first personalization/goal question; the Perceived Effort Delay Card fires at plan/result generation; the Intent Mirroring Card fires after first value and immediately before the paywall (never on the paywall screen itself or any cancel flow); the native App Review popup fires at or just after the emotional peak. These moments belong in `EMOTIONAL_DESIGN.md`'s Card Application Map with a PostHog event each, and the onboarding curve must cross positive before the paywall.
+
 Recommended Refero searches when access is available:
 - `refero_search_flows`: `signup onboarding`, `subscription onboarding paywall`, `permission request onboarding`, `subscription cancellation with retention offer`, `restore purchases`
 - `refero_search_screens`: `ios onboarding progress question`, `ios paywall annual weekly lifetime`, `ios restore purchases settings`, `web pricing annual monthly toggle`
