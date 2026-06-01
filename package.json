@@ -1,10 +1,11 @@
 {
   "name": "b2c-mobile-business-launch-skill",
-  "version": "0.5.5",
-  "private": true,
+  "version": "0.5.6",
+  "private": false,
+  "license": "MIT",
   "type": "module",
   "scripts": {
-    "validate:skill": "uv run --with pyyaml python ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py skill/b2c-mobile-business-launch",
+    "validate:skill": "f=\"$HOME/.codex/skills/.system/skill-creator/scripts/quick_validate.py\"; if [ -f \"$f\" ]; then uv run --with pyyaml python \"$f\" skill/b2c-mobile-business-launch; else echo 'skill-creator quick_validate not installed; skipping maintainer-only skill lint (expected outside the author machine)'; fi",
     "validate:launch-state": "tsx skill/b2c-mobile-business-launch/scripts/validate-project-state.ts",
     "check:attribution": "tsx skill/b2c-mobile-business-launch/scripts/check-attribution-contract.ts",
     "check:apple-signing": "tsx skill/b2c-mobile-business-launch/scripts/check-apple-signing-packet.ts",
