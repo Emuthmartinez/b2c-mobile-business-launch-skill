@@ -37,24 +37,25 @@ From the installed runtime:
 
 ```bash
 cd ~/.codex/skills/b2c-mobile-business-launch
-npm run check:skill-version -- --source /Users/eduardomuthmartinez/code/b2c-mobile-business-launch-skill/skill/b2c-mobile-business-launch --installed .
+# replace the --source path with your local clone of this repo
+npm run check:skill-version -- --source "$HOME/code/b2c-mobile-business-launch-skill/skill/b2c-mobile-business-launch" --installed .
 ```
 
 When the founder approves an upgrade on this machine:
 
 ```bash
-repo_root="/Users/eduardomuthmartinez/code/b2c-mobile-business-launch-skill"
+repo_root="$HOME/code/b2c-mobile-business-launch-skill"  # path to your local clone of this repo
 rsync -a --delete --exclude node_modules \
   "$repo_root/skill/b2c-mobile-business-launch/" \
-  /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch/
+  ~/.codex/skills/b2c-mobile-business-launch/
 (
-  cd /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch
+  cd ~/.codex/skills/b2c-mobile-business-launch
   npm install
   npm run audit
 )
 diff -qr --exclude node_modules \
   "$repo_root/skill/b2c-mobile-business-launch" \
-  /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch
+  ~/.codex/skills/b2c-mobile-business-launch
 ```
 
 `~/.claude/skills/b2c-mobile-business-launch` and `~/.agents/skills/b2c-mobile-business-launch` should point at the same Codex runtime copy on this machine. Verify symlinks after every runtime sync.

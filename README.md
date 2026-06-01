@@ -4,6 +4,22 @@ A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript,
 
 This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
 
+> **Status:** Public, actively maintained. Licensed under [MIT](LICENSE).
+
+## Who this is for & what you need
+
+This skill is **highly opinionated** and built for **subscription / freemium consumer apps** — not one-time purchases, and it does not (yet) cover ad-based monetization. It encodes proven launch formulas so an agent can take an idea, transcript, or half-built repo and drive it to a real launch.
+
+To use it you need:
+
+- **An AI coding agent that supports skills** — [Claude Code](https://claude.com/claude-code) or Codex. The skill is a set of markdown playbooks plus TypeScript validators that the agent reads and runs; it is **not** a standalone app you launch by itself.
+- **Node.js 18+** to run the validators (`npm install`).
+- *(Optional, swappable)* accounts for the third-party providers the playbooks reference — RevenueCat, Doppler, PostHog, Stripe, Resend, Apple App Store Connect / Google Play, Firecrawl, and similar. Most have free tiers. **None are required to read the playbooks or run the validators**, and the skill always routes an explicit fallback when a paid tool is unavailable.
+
+Install it as a skill (see [Install](#install) below), then give your agent one broad launch request — examples are in [Autopilot Usage](#autopilot-usage).
+
+> Want to **maintain or contribute to** this skill rather than use it? Start with [`AGENTS.md`](AGENTS.md). That file and `CLAUDE.md` are maintainer guides, not usage docs.
+
 ## Core Idea
 
 The skill now has two layers:

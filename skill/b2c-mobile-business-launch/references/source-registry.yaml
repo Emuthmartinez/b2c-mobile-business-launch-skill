@@ -20,6 +20,15 @@ sources:
       - skill/b2c-mobile-business-launch/references/skill-versioning.md
       - skill/b2c-mobile-business-launch/scripts/check-skill-version.ts
     notes: Remote manifest used when comparing installed runtime freshness against the pushed main branch.
+  - id: claude-com-claude-code
+    name: Claude Code product page
+    source_type: official_docs
+    url: https://claude.com/claude-code
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - README.md
+    notes: Claude Code is one of the supported agent runtimes for installing and running this skill.
   - id: anthropic-com-engineering-how-we-contain-claude
     name: Anthropic Claude containment
     source_type: official_docs
