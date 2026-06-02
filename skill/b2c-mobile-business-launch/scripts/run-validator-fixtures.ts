@@ -750,6 +750,7 @@ try {
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
   runFixture("complete emotional design packet passes", clean, "check-emotional-design.ts", 0);
   runFixture("aso metadata packet passes", clean, "check-aso-metadata.ts", 0);
+  runFixture("localization market research packet passes", clean, "check-localization-research.ts", 0);
   runFixture("landing funnel skips without landing scope", clean, "check-landing-funnel.ts", 0);
   runFixture("current skill version passes", skillRoot, "check-skill-version.ts", 0, undefined, ["--source", skillRoot, "--installed", skillRoot]);
   runFixture("current version discipline passes", skillRoot, "check-version-discipline.ts", 0, undefined, ["--repo-root", path.resolve(skillRoot, "../.."), "--skill-root", skillRoot]);
@@ -777,6 +778,21 @@ try {
   const paidToolMissing = makeFixture("paid-tool-missing-decisions");
   rmSync(path.join(paidToolMissing, "TOOL_DECISIONS.md"), { force: true });
   runFixture("missing TOOL_DECISIONS.md fails when paid tools in scope", paidToolMissing, "check-paid-tool-decisions.ts", 1, "paid_tool_decisions.file_missing");
+
+  const localizationTranslateFirst = makeFixture("localization-translate-first");
+  rmSync(path.join(localizationTranslateFirst, "localization-market-research"), { recursive: true, force: true });
+  writeFileSync(
+    path.join(localizationTranslateFirst, "APP_STORE_LISTING.md"),
+    ["# App Store Listing", "Localization matrix: target locales ja, de, pt-BR.", "Localized keywords prepared for all locales."].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "localization without market research fails as translate-first",
+    localizationTranslateFirst,
+    "check-localization-research.ts",
+    1,
+    "localization_research.translate_first",
+  );
 
   const wranglerCreds = makeFixture("wrangler-toml-credentials");
   writeFileSync(
