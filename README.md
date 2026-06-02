@@ -263,3 +263,7 @@ npm run check:skill-version -- --source skill/b2c-mobile-business-launch --insta
 ```
 
 This skill is intentionally guardrail-heavy. Its job is to prevent launch drift across research, design, build, revenue, legal, store, email, growth, and verification surfaces.
+
+## Contributing
+
+Contributions from humans and agents are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for setup, the `npm run audit:ci` gate, versioning/source-freshness rules, and PR expectations. Maintainer details live in [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md). The repo is licensed under [MIT](LICENSE).

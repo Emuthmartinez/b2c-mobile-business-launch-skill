@@ -4,6 +4,8 @@ This repo maintains the `b2c-mobile-business-launch` skill: source skill files, 
 
 This file is for maintaining this skill repo itself. Do not copy these instructions into a launched business or generated app repo. Business repos created through the skill must get their own product-specific `AGENTS.md` and `CLAUDE.md` from the shipped templates, filled with the current app, stack, launch state, and source-of-truth docs.
 
+New contributor (human or agent)? Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for setup, the CI gate, and PR expectations; this file is the deeper maintainer reference behind it.
+
 ## Repo Map
 
 - `README.md`: public overview and maintainer commands.
