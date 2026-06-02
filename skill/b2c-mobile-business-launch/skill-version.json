@@ -1,9 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.5.6",
-  "updatedAt": "2026-06-01",
+  "version": "0.5.7",
+  "updatedAt": "2026-06-02",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
+    "Adds a monetization-and-growth anti-pattern digest so agents know the cozy defaults NOT to reach for, grounded in the RevenueCat State of Subscription Apps 2026 report (no new source URLs; reuses the registered state-of-subscription-apps entry). revenue-monetization.md gains a new §10 digest index plus detailed traps (assume you are the exception; soft paywall by reflex; push monthly/skip annual; price low to be 'humble'); onboarding-conversion.md gains Conversion Anti-Patterns (short-trial reflex; ignore Day 0 and bank on a day-30 win-back; one experiment a year); paid-user-acquisition.md gains Anti-Patterns (run ads before you can read the result; optimize creative before the paywall; chase vanity views); app-store-listing-prep.md frames localization as a high-leverage conversion lever (not optional translation) and cross-links the existing App Preview lever; viral-growth-loops.md cross-links the vanity-views trap. Each benchmark is framed as a default to TEST, not dogma, and pricing/plan/trial/paywall-model changes stay founder-gated.",
+    "Adds the monetization-cozy-default-stack-unexamined LaunchBench scenario (validated by check-onboarding-conversion) and a launchbench-evals.md catalog entry so the default-stack miss is regression-covered, not prose-only.",
     "Public-readiness pass: adds an MIT LICENSE and license metadata, removes hardcoded author machine paths/username from AGENTS.md, references/skill-versioning.md, and check-skill-version.ts (now uses the B2C_SKILL_SOURCE env override with a repo-relative fallback), and makes validate:skill skip gracefully when the maintainer-only skill-creator linter is not installed so a fresh clone can run npm run audit end to end.",
     "Adds a README \"Who this is for & what you need\" section that states the subscription-app scope, the Claude Code/Codex runtime requirement, and discloses that third-party provider accounts are optional and swappable; registers the Claude Code product URL in source-registry.yaml.",
     "Adds the Business Control workspace read-model schema plus a deterministic renderer/checker that adapts state/business.json and PROJECT_STATE.yaml into state/workspace.generated.json, validated by check:business-control-plane-workspace.",

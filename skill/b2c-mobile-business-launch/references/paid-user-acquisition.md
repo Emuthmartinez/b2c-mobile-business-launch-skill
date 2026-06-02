@@ -209,4 +209,14 @@ npm run check:paid-ua -- --root .
 - Using RevenueCat products and paywalls without checking whether CPA can fit LTV and trial conversion.
 - Scaling creative volume before the app has real product UI, clear claims, and repeatable angle evidence.
 - Copying a big-team MMP/reporting stack when the first solo test only needs a small complete system.
+
+## Anti-Patterns (Spend And Sequencing Traps)
+
+The paid-acquisition entries in the monetization-and-growth digest in [`revenue-monetization.md`](revenue-monetization.md) §10. These are the cozy moves that feel like progress but burn budget. The Meta dashboard being "right there and shiny" is not a reason to spend.
+
+**8. Run ads before you can read the result.** Below a meaningful daily conversion volume, every paywall, trial, and creative test is statistical noise — you spend the budget, get random numbers, declare them "insights," and build strategy on a coin flip. Do not start paid spend until the baseline window and minimum volume needed for a readable result are defined (see Tracking And Baseline and Stop And Scale Rules: "baseline cannot be established" is a stop condition). If volume is too low to reach significance, the correct move is more organic/ASO signal or a longer window, not more spend.
+
+**9. Optimize ad creative first.** The fun part — hooks, fonts, trending audio — is not the constraint. The order that works is **paywall → onboarding → ads**: paywall (and trial/price) LTV is the bottleneck, onboarding is the conversion ramp into it, and ads only multiply whatever those two already do. Pouring traffic into a leaky paywall is filling a bucket with no bottom and calling it marketing. The Fit Gate already requires `revenue-monetization.md` and `onboarding-conversion.md` to be in good shape before spend; do not invert the order by polishing creatives while the paywall is unproven.
+
+**11. Chase views / vanity reach.** A 500K-view screenshot for the group chat is a hug, not a business — views without buying intent do not convert (one founder turned broad emotional reach into $400). Optimize for installs → paywall reach → purchase → retention, not impressions. The Stop And Scale Rules already flag "the only positive metric is impressions, clicks, or installs"; the same trap on the organic side is covered in [`viral-growth-loops.md`](viral-growth-loops.md) Common Failure Modes (optimizing for views instead of installs/paywall/purchases).
 - Calling paid UA "done" while `PAID_UA.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `CONTENT_ASSETS.md`, `APP_STORE_LISTING.md`, or `LAUNCH_TRACE.md` disagree.
