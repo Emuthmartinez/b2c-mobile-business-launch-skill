@@ -155,7 +155,7 @@ npm run check:viral-growth -- --root .
 - Copying a case-study tactic without checking audience, platform, category, device mix, policy risk, or monetization readiness.
 - Hiding referrals in settings while expecting them to drive acquisition.
 - Forcing referrals without a fair fallback, fraud control, or policy review.
-- Optimizing for views while ignoring installs, paywall reach, purchases, retention, or referral quality.
+- Optimizing for views while ignoring installs, paywall reach, purchases, retention, or referral quality. (Anti-pattern 11 in the monetization-and-growth digest in [`revenue-monetization.md`](revenue-monetization.md) §10 — a 500K-view post that converts to $400 is a hug, not a business; vanity reach without buying intent does not pay.)
 - Scaling creators from one lucky post before a repeatable format exists.
 - Letting content promise a result the product cannot truthfully produce.
 - Moving a viral unlock into build work without backend entitlement/referral proof.
