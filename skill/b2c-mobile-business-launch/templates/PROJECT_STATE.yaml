@@ -233,6 +233,7 @@ lanes:
     status: "partial"
     evidence:
       - "growth/VIRAL_GROWTH.md"
+      - "growth/LAUNCH_NARRATIVE.md"
       - "growth/format-lab.csv"
       - "UGC_PLAYBOOK.md"
       - "FASTLANE_OPS.md"

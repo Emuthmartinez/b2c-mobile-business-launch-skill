@@ -1635,3 +1635,66 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
     notes: Motion (framer-motion's successor, import from motion/react) React animation docs. Web-surface library used by the Design Room render app and launch web surfaces (landing, funnel); never used in the shipped mobile binary. Refresh before changing motion API/setup guidance.
+  - id: shownmedia-com
+    name: Shown Media
+    source_type: website
+    url: https://shownmedia.com
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: NYC viral go-to-market launch agency whose stated method (internet moments, algorithm/reply-chain craft, 4-6 week launch process) informs the launch-narrative-cadence lane. Self-reported aggregate view/revenue numbers are unverified marketing claims and are not repeated as fact.
+  - id: shownmedia-com-tech
+    name: Shown Media tech launches
+    source_type: website
+    url: https://shownmedia.com/tech
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Shown Media tech/AI launch page; source for the 4-6 week process, the ~2-10M-view/~48-hour-peak outcome band, and the disclosed client list used in the launch-narrative-cadence evidence base.
+  - id: the-ai-corner-com-shown-media-script-factory
+    name: The AI Corner profile of Shown Media
+    source_type: website
+    url: https://www.the-ai-corner.com/p/20-agent-ai-script-factory-10m-revenue
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Profile describing Shown Media's founders and Claude Code multi-agent script-factory method ("the system doesn't invent taste, it encodes it"). Used for the launch-process description; credential claims beyond the verified facts are flagged unverified in the reference.
+  - id: x-com-suekhim-koji-launch
+    name: Koji by Brilliant launch post (Sue Khim)
+    source_type: website
+    url: https://x.com/suekhim/status/2060378988606878147
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Verified tentpole launch artifact (~4.71M impressions) used as a feeling-first copy exemplar in launch-narrative-cadence.md.
+  - id: blog-brilliant-org-world-class-tutor
+    name: Brilliant Koji launch post
+    source_type: website
+    url: https://blog.brilliant.org/a-world-class-tutor-in-every-home
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Brilliant's own post announcing Koji; supporting evidence for the Koji tentpole launch example.
+  - id: x-com-anvisha-moda-launch
+    name: Moda funding launch post (Anvisha Pai)
+    source_type: website
+    url: https://x.com/anvisha/status/2036474296353411290
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Verified tentpole launch artifact (~4.50M impressions) used to illustrate category-reframe copy and the optional RT+comment engagement mechanic.
+  - id: x-com-chatgptapp-paperwork-feature
+    name: ChatGPT feature launch post
+    source_type: website
+    url: https://x.com/ChatGPTapp/status/2057908052968521902
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/launch-narrative-cadence.md
+    notes: Verified weekly-heartbeat artifact (~2.66M impressions); model for framing a single small feature as an event with feeling-first copy.
