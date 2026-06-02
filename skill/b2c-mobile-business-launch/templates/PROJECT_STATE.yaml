@@ -99,6 +99,8 @@ lanes:
     status: "partial"
     evidence:
       - "RESEARCH.md"
+      - "localization-market-research/LOCALIZATION_MARKET_RESEARCH.md"
+      - "localization-market-research/localization-market-research.html"
     blockers: []
   traceability:
     status: "partial"

@@ -34,6 +34,7 @@ For any public launch funnel, create or update:
 - founder/company/entity facts that are consistent across site, store, social, and press pages
 - privacy, terms, account deletion/privacy choices, support, and contact pages that are crawlable but not over-indexed when sensitive
 - readable answer-style sections for core questions users or AI systems will ask
+- for localized landing surfaces, `hreflang` tags, localized `llms.txt`/schema, and translated answer sections **only for the markets ranked Tier 1 in `LOCALIZATION_MARKET_RESEARCH.md`** (see [`localization-market-research.md`](localization-market-research.md)) — localize web demand the same research-first way as the store, not by translating every page into every language
 
 Acceptance:
 - Public pages can be fetched without auth, client-only rendering failures, geofencing, or blocked bots.

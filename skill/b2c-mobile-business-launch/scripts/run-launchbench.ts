@@ -45,6 +45,7 @@ const knownValidators = new Set([
   "check-version-discipline",
   "check-compound-engineering-routing",
   "check-aso-metadata",
+  "check-localization-research",
   "check-paid-tool-decisions",
   "check-landing-funnel",
   "validate-state",
