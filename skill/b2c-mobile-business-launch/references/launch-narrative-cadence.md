@@ -40,6 +40,11 @@ ran. Keep the verifiable facts; do not repeat the marketing claims.
   "script factory" (research phase sets the ceiling; specialist hook/body agents; a manager layer
   and a final quality gate) — "the system doesn't invent taste, it encodes it." See the
   [AI Corner profile](https://www.the-ai-corner.com/p/20-agent-ai-script-factory-10m-revenue).
+  Shown has also published an operational **"X Launch Playbook & Checklist"** (six phases,
+  summarized in [The Six-Phase X Launch Checklist](#the-six-phase-x-launch-checklist) below). Its
+  headline figures (e.g. "100M+ views," "$1M+ in launch execution," a "2–3x" founder-reply uplift,
+  "$50K+" amplification budgets) are agency-stated and must not be repeated as the launching
+  company's own results.
 - **Verified launch artifacts** (X impressions read off the live posts):
   - **Koji by Brilliant** — Sue Khim, [@suekhim, May 29 2026](https://x.com/suekhim/status/2060378988606878147),
     ~**4.71M** impressions. Hook: "AI is making kids dumber. It should be making them geniuses.
@@ -149,6 +154,136 @@ Plan every beat weeks out — down to post order and who replies to what. A work
 Optional engagement mechanic (use sparingly — it reads growth-hacky if overused): "RT + comment 'X'
 and we'll do Y for free," which manufactures the reply/RT signals the algorithm rewards.
 
+## The Six-Phase X Launch Checklist
+
+This is the agency's published, operational checklist, adapted here. It runs in order, from idea to
+the week after launch. The sections above (two launch types, copy craft, run-of-show) are the
+deep-dives; this is the end-to-end sequence. Keep the claims-hygiene rule in force throughout:
+public copy states only what is true and attributable.
+
+### Phase 1 — Foundation (before you build anything)
+
+- **Write your bold claim.** One sentence: polarizing, defensible, novel. Not "AI-powered
+  dashboard"; yes "See which deals close this quarter before they do." Sound like everyone else and
+  the algorithm treats you like everyone else. Test: would someone screenshot it to argue with a
+  friend?
+- **Sell the outcome, not the feature.** Strip every feature to what the user walks away with.
+  Features tell; outcomes sell. Write the outcome first, map features to it later.
+- **Build your network before you need it.** Your launch is only as strong as the people you can
+  activate on day one. Months ahead, log friendly, influential accounts (founders, operators, theme
+  pages, niche creators). "Friendly" = they already like you, your product, or your space — warm
+  beats big. Track engagement rate, niche fit, and whether their followers are your actual customers.
+- **If you have no network, identify it now.** Map who you'd want, then start the relationship early:
+  engage with substance, share their work, be useful before you ask. By launch day they should know
+  your name.
+- **Pre-write posts for your friendly accounts.** Draft custom posts in advance so day-one outreach
+  is "here's a post ready to go," not "can you help?" A ready-made post is the easiest yes you'll get.
+- **Identify your activatable communities.** Every category has groups easy to excite and groups easy
+  to anger. List the communities around your product and how each reacts to bold messaging — you'll
+  use this for both excitement and (defensible) rage-bait.
+- **Map your product roadmap to your narrative.** The roadmap is content. Sequence features so each
+  release gives a fresh bold claim. Build the product calendar and launch calendar together; always
+  have the next story ready. (This is the [Marketing At The Table](#marketing-at-the-table) discipline.)
+
+### Phase 2 — Outlier Research (the step everyone skips)
+
+- **Spend 10–20 hours researching before writing a word.** You're not inventing content; you're
+  finding what works and adapting it. The best launches copy proven formats.
+- **Find 20+ outliers in your niche.** Search X for posts in your category with 500+ likes, 50+
+  comments, 50+ reposts — roughly 10x normal engagement for the account size. These show what your
+  audience actually responds to.
+- **Document each outlier's anatomy:** hook format, structure (list/story/comparison/thread),
+  emotional trigger (fear/curiosity/anger/aspiration), visual format (screenshot/video/text), and
+  engagement pattern (genuine replies vs giveaway-driven).
+- **Map the conversations already happening** — what your niche complains about, celebrates, argues
+  over. The best hooks enter an existing conversation with a better answer; they don't start one.
+- **Lock in 3–5 proven hook formats** that repeat across your outliers. Finish with saved examples,
+  proven formats, a conversation map, an activatable-community list, and data-backed confidence.
+
+### Phase 3 — Content Creation
+
+- **Write every influencer post yourself** — word for word, with custom visuals per influencer.
+  Influencers are good at being themselves and bad at selling your product; a brief reads as an ad.
+- **Study each page for hours before writing** — their top posts from the last 90 days, the formats
+  they lean on, their tone, and what their audience rewards in comments. Write something native to
+  their feed but engineered to convert.
+- **Match a proven format to each creator,** e.g. *Ways I Use It* ("5 ways I'm using [Product]"),
+  *Comparison* ("[Product] vs [Competitor]"), or *Founder Story* (underdog + credentials).
+- **Build the launch video to the rules:** bold claim in the first five seconds; show the product
+  working in present tense; language below a fifth-grade reading level; audio and visual matched one
+  to one; about the viewer's outcome, never your five-year journey. (See [`remotion-content-assets.md`](remotion-content-assets.md).)
+- **Engineer one line of (defensible) rage-bait.** Find the most common criticism of your category
+  and make your product the answer; bury one line a specific community can't ignore — subtle enough
+  that most scroll past, pointed enough that ~10% quote-tweet it. **Keep it true and defensible: you
+  want engagement, not a cancellation, and it must not cross the truthfulness/claims line.** This is a
+  HIGH-sensitivity tactic — review it against [`ethics-guardrail.md`](ethics-guardrail.md) and the
+  "public claims are liabilities" rule before it ships.
+
+### Phase 4 — Amplification Roster (influencer selection)
+
+- **Set roster and budget.** The agency's stated bands: roughly $500–$3,000 per influencer (~$1,000
+  average), 30–100 influencers by campaign size, $50K+ amplification for a major launch. These are
+  founder-gated spend decisions — route through [`paid-user-acquisition.md`](paid-user-acquisition.md).
+- **Vet on engagement, not follower count.** Want audiences that comment with personal familiarity,
+  niche business owners over generalists, followers who *are* your target customer, and creators who
+  genuinely use tools like yours.
+- **Cut the wrong fits:** accounts that post about everything, accounts where every post is an ad,
+  high followers with low comment quality, anyone unwilling to work their comments.
+- **Confirm each creator will reply to comments** on their sponsored post. Non-negotiable.
+
+### Phase 5 — Launch-Day Timing Engine
+
+One principle: make it feel organic. Layer amplification gradually, starting closest to your ICP and
+expanding out. (This is the [Launch-Day Run-of-Show](#launch-day-run-of-show) above, in three gates.)
+
+- **Gate 1 — Let it breathe (0–60 min).** Post goes live; do nothing externally. Let organic
+  followers and the algorithm test it. Reply to every comment immediately. Watch likes-per-minute,
+  reply quality, retweet pace. Strong velocity: proceed. Weak: fix before amplifying.
+- **Gate 2 — First wave (hours 1–2).** If velocity holds, deploy the first 10–20 influencers,
+  staggered across 30-minute windows (five, wait, five, wait). Start with the biggest ICP accounts.
+  Each post retweets the main post, runs its own giveaway, and the creator works their comments.
+- **Gate 3 — Full deployment + live adjustment (hours 2–3).** Everyone has posted by hour three. Add
+  gas where momentum builds (theme pages, Discord communities); hold back channels where engagement
+  slips; coordinate cross-engagement between influencers. Live adjustment separates good from great.
+- **Reply to everything for 48 hours.** The single highest-leverage activity: author-reply chains are
+  the strongest signal on the platform, and substantive replies (not "thanks") are what count.
+
+### Phase 6 — Follow-Up Window (the launch never ends)
+
+The algorithm gives you a momentum window after a viral post; content posted inside it gets boosted,
+and most companies waste it. A workable cadence: **Day 2** meme or short AI-generated video riffing on
+the launch; **Day 3** deep dive on one feature; **Day 4** founder story / behind-the-scenes; **Week 2**
+results, testimonials, early traction. (This is the [feature-launch heartbeat](#feature-launch-cadence-the-heartbeat)
+catching the tentpole's long tail.)
+
+## How the X Algorithm Is Treated (Sourcing And Ranking)
+
+This is the agency's working model of the platform — not official platform documentation — but it is
+a useful planning lens. Two separate signals decide reach:
+
+- **Sourcing — will your post be shown?** Retweets qualify a post for the For You feed. No retweets,
+  no reach beyond your followers. This is why every giveaway requires a retweet.
+- **Ranking — how high will it appear?** Reply chains where you respond back. The platform optimizes
+  for time on site; conversation keeps people scrolling, and every author reply creates a new chain
+  signaling the post is worth surfacing.
+
+## Launch-Killing Mistakes
+
+- **Creative:** a video about your journey instead of the viewer's outcome; jargon or above a
+  fifth-grade level; past tense instead of present; no bold claim in the first five seconds; letting
+  influencers write their own content; audio/visual mismatch.
+- **Distribution:** not replying to comments; deploying all amplification at once; using theme pages
+  too early before core engagement lands; no follow-up content; influencers in the wrong niche.
+- **Positioning:** feature-focused over outcome-focused; not novel enough; too nuanced (save nuance
+  for the replies); sitting on your ammunition (funding, revenue, or credential stats worth leading
+  with — subject to the claims-hygiene rule).
+
+## Final Principles
+
+Novelty above all. No nuance. Show, don't tell. Reply to everything. Research first, then copy proven
+formats. Intensity over vagueness. Outcomes over features. Speed beats perfect planning. Control
+everything. The launch never ends.
+
 ## Measurement & Claims Hygiene
 
 - Tie attention to product behavior via [`analytics-attribution.md`](analytics-attribution.md): post
@@ -158,6 +293,9 @@ and we'll do Y for free," which manufactures the reply/RT signals the algorithm 
   viewers), not just per-post views.
 - Use exact, attributable numbers when you cite anyone (Koji ~4.71M, Moda funding ~4.50M, ChatGPT
   Paperwork ~2.66M). Do not launder rounded or unverifiable view/revenue claims into your own copy.
+- The agency's **stated success bands** for a tentpole (targets to aim at, not promises): ~2–10M
+  views across video + influencer posts + organic spread; 500–2,000+ comments (each replied to);
+  1,000–5,000+ retweets. Treat these as planning targets, not guaranteed outcomes.
 
 ## Founder-Only Gates
 
@@ -183,9 +321,11 @@ calendar and paid amplification:
 Before calling the launch-narrative lane ready:
 
 - [ ] `growth/LAUNCH_NARRATIVE.md` exists with Fit Gate, Launch Thesis (Feeling-First), Emotional
-      Angle, Two Launch Types, Algorithm Compounding (standing audience), Marketing At The Table,
-      Launch Day Run-of-Show, Tentpole Announcement Post, Copy Guardrails, Feature Launch Post,
-      Measurement Plan, Stop And Scale Rules, Founder-Only Gates, and Traceability.
+      Angle, Bold Claim, Outcome Over Feature, Two Launch Types, Algorithm Compounding (standing
+      audience), Marketing At The Table, Outlier Research, Amplification Roster, Launch Day Run-of-Show,
+      Launch-Day Timing Engine, Tentpole Announcement Post, Copy Guardrails, Feature Launch Post,
+      Follow-Up Window, Sourcing And Ranking, Measurement Plan, Stop And Scale Rules, Founder-Only
+      Gates, and Traceability.
 - [ ] The dominant emotional angle (hope / something broken we fix / category reframe) is named.
 - [ ] All post copy lives in fenced code blocks and passes the copy guardrails (no hashtags, no
       emojis, no link in the main post).
