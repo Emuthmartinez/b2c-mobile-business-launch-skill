@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-06-03",
+  "business": {
+    "name": "Ballast",
+    "slug": "ballast",
+    "stage": "research",
+    "positioning": "Ballast tells homeowners exactly how much cash to keep on hand so a dead furnace is an annoyance, not a crisis.",
+    "targetAudience": "New and recent homeowners (first 5 years) who were surprised by major-system and appliance repair costs and want a defensible plan instead of dread."
+  },
+  "theme": {
+    "tokensPath": "state/theme.tokens.json",
+    "status": "draft"
+  },
+  "designBrief": {
+    "source": "ui-ux-pro-max",
+    "productType": "home-finance preparedness utility (calm, advisory, non-gamified)",
+    "recommendedStyle": "Steady, editorial, instrument-panel calm. Reads like a trusted financial dashboard, not a chore tracker or a game. Generous whitespace, one clear number per screen, quiet confidence.",
+    "paletteMood": "Deep navy as the steady anchor, warm paper background, a single confident amber used sparingly for the one thing that needs attention. No red-alert dread; risk is shown as managed, not alarming.",
+    "typographyMood": "Warm serif display (Fraunces) for the headline number and section anchors; clean neutral sans (Inter) for everything operational. Numbers are the hero typography.",
+    "keyEffects": [
+      "The Reserve Number counts up to its target once, calmly, on first reveal",
+      "A coverage meter that fills toward 'covered' rather than draining toward 'doom'",
+      "Soft state transitions; nothing flashes, buzzes, or celebrates with confetti"
+    ],
+    "antiPatterns": [
+      "No mascot, no cute characters, no anthropomorphized appliances",
+      "No streak guilt, fake urgency, or countdown timers on financial decisions",
+      "No alarmist red 'YOU ARE AT RISK' framing; no gamified points/badges",
+      "No dark-pattern paywall that hides the user's own inventory behind the wall"
+    ],
+    "motionNotes": "Web surfaces animate with framer-motion from the motion.* tokens; the mobile binary uses native animation; honor reduced motion. Motion communicates steadiness (ease-out settles), never excitement.",
+    "generatedAt": "",
+    "notes": "Run `npm run seed:design-brief`, then the ui-ux-pro-max skill, to refine recommendedStyle, paletteMood, typographyMood, keyEffects, and antiPatterns. Reference-only: adapt its guidance, do not paste its data. Brand intent is locked by the founder: calm, defensive, non-gamified, no mascot."
+  },
+  "designRoom": {
+    "status": "mutating",
+    "renderPath": "design-room.html",
+    "versionLog": [
+      {
+        "id": "ballast-seed-2026-06-03",
+        "createdAt": "2026-06-03",
+        "summary": "Seeded Ballast Design Room from the skill template: brand name, positioning, target audience, preparedness theme tokens (navy/amber/paper), and the V1 core screens/flows for the appliance inventory and Reserve Number.",
+        "statePaths": [
+          "state/business.json",
+          "state/theme.tokens.json"
+        ],
+        "renderedArtifacts": [
+          "design-room.html"
+        ]
+      }
+    ],
+    "baselines": []
+  },
+  "surfaces": {
+    "webFunnels": [],
+    "landingPages": [
+      {
+        "id": "ballast-waitlist",
+        "name": "Ballast waitlist landing",
+        "status": "not_started",
+        "purpose": "Pre-launch waitlist: state the surprise-cost problem, the Reserve Number promise, and capture email. AI-search visible.",
+        "decisions": [
+          "Lead with the homeowner surprise-cost pain, not features",
+          "One promise above the fold: know your number before something breaks"
+        ],
+        "tokenReferences": ["color.primary", "color.accent", "color.background", "font.display"]
+      }
+    ],
+    "marketingAssets": [],
+    "mobileApp": {
+      "platforms": ["ios"],
+      "screens": [
+        {
+          "id": "inventory-onboarding",
+          "name": "Appliance inventory onboarding",
+          "status": "draft",
+          "purpose": "Walk the homeowner through inventorying major systems and appliances (HVAC, water heater, roof, garage door, kitchen, laundry) with age and rough value, building toward the value reveal.",
+          "decisions": [
+            "Inventory is the value reveal, not a data-entry chore",
+            "Smart defaults for typical replacement costs so users can move fast and refine later",
+            "Native App Review prompt fires immediately after the first Reserve Number reveal"
+          ],
+          "tokenReferences": ["color.primary", "color.surface", "color.muted", "space.md", "radius.md"]
+        },
+        {
+          "id": "reserve-number",
+          "name": "Reserve Number (home dashboard)",
+          "status": "draft",
+          "purpose": "The hero screen: the single recommended home emergency-fund figure as a percentage of total replacement value, plus a coverage meter showing how covered the user is today.",
+          "decisions": [
+            "One big number is the hero; methodology is one tap away, never hidden",
+            "Coverage meter fills toward 'covered', never drains toward 'doom'",
+            "The Reserve Number itself is free; depth/probability/recommendations are paywalled"
+          ],
+          "tokenReferences": ["color.primary", "color.accent", "font.display", "motion.durationSlow", "space.lg"]
+        },
+        {
+          "id": "item-detail",
+          "name": "Item detail & spend log",
+          "status": "draft",
+          "purpose": "Per-item record: model, age, replacement estimate, spend-to-date, manuals, recommended spare parts to keep on hand, and the trusted pro assigned to it.",
+          "decisions": [
+            "Track money spent per item to show real cost of ownership over time",
+            "Manuals and recommended-parts links reduce time-to-resolution for techs"
+          ],
+          "tokenReferences": ["color.surface", "color.border", "color.text", "space.md", "radius.lg"]
+        },
+        {
+          "id": "trusted-pros",
+          "name": "Trusted people & pros",
+          "status": "draft",
+          "purpose": "The homeowner's roster of trusted people/pros (HVAC tech, plumber, electrician, handyman) attached to the items they cover.",
+          "decisions": [
+            "Pros are attached to items, so when something breaks the next call is obvious"
+          ],
+          "tokenReferences": ["color.surface", "color.muted", "space.md"]
+        },
+        {
+          "id": "paywall",
+          "name": "Reserve+ paywall",
+          "status": "draft",
+          "purpose": "Soft paywall presented after the free Reserve Number reveal: unlocks failure-probability ranking, what-breaks-first ordering, recommended parts-on-hand, and ongoing recommendations.",
+          "decisions": [
+            "Paywall appears after value is shown, not before",
+            "Never hide the user's own inventory data behind the wall"
+          ],
+          "tokenReferences": ["color.primary", "color.accent", "font.display", "space.lg", "radius.md"]
+        }
+      ],
+      "flows": [
+        {
+          "id": "first-session-to-number",
+          "name": "First session: inventory to Reserve Number",
+          "status": "draft",
+          "steps": [
+            "Frame the surprise-cost problem",
+            "Inventory major systems and appliances with age + smart-default values",
+            "Reveal total replacement value",
+            "Reveal the recommended Reserve Number (% of replacement value)",
+            "Native App Review prompt",
+            "Soft Reserve+ paywall for probability and recommendations"
+          ],
+          "tokenReferences": ["color.primary", "color.accent", "motion.durationBase"]
+        },
+        {
+          "id": "manage-item",
+          "name": "Manage an item over time",
+          "status": "draft",
+          "steps": [
+            "Open item detail",
+            "Log a repair/spend or update age",
+            "Attach manuals, spare parts, and a trusted pro",
+            "See the Reserve Number and coverage update"
+          ],
+          "tokenReferences": ["color.surface", "motion.durationFast"]
+        }
+      ]
+    },
+    "appStore": {
+      "defaultProductPage": {
+        "status": "not_started",
+        "positioning": "Know your home emergency fund before something breaks.",
+        "screenshotCount": 0,
+        "appPreviewCount": 0,
+        "promotionalText": "",
+        "keywords": []
+      },
+      "customProductPages": [],
+      "productPageOptimizationTests": [],
+      "inAppEvents": []
+    }
+  },
+  "controlPlane": {
+    "panels": [
+      {
+        "id": "design-room",
+        "name": "Design Room",
+        "status": "active",
+        "stateRefs": [
+          "state/business.json",
+          "state/theme.tokens.json"
+        ],
+        "renderedArtifacts": [
+          "design-room.html"
+        ]
+      },
+      {
+        "id": "analytics",
+        "name": "Analytics",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "ANALYTICS.md",
+          "analytics-plan.html"
+        ],
+        "renderedArtifacts": [
+          "analytics-plan.html"
+        ]
+      },
+      {
+        "id": "monetization",
+        "name": "Monetization",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "REVENUE_OPS.md"
+        ],
+        "renderedArtifacts": [
+          "revenue-plan.html"
+        ]
+      },
+      {
+        "id": "store-ops",
+        "name": "Store Ops",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "APP_STORE_LISTING.md",
+          "STORE_CONSOLE.md",
+          "SCREENSHOTS.md"
+        ],
+        "renderedArtifacts": [
+          "app-store-listing.html",
+          "store-console.html"
+        ]
+      },
+      {
+        "id": "growth",
+        "name": "Growth",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "growth/PAID_UA.md",
+          "growth/VIRAL_GROWTH.md"
+        ],
+        "renderedArtifacts": [
+          "growth-plan.html"
+        ]
+      }
+    ],
+    "futurePanels": []
+  }
+}

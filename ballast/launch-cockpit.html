@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ballast Launch Cockpit</title>
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --ink: #161512;
+      --muted: #686159;
+      --line: #d8d0c3;
+      --panel: #fffdfa;
+      --accent: #0c7c59;
+      --warn: #a05a00;
+      --bad: #b3261e;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 ui-sans-serif, system-ui, sans-serif; }
+    header { padding: 32px; border-bottom: 1px solid var(--line); background: linear-gradient(120deg, #fffdfa, #e5f1ea); }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 56px); line-height: 0.95; letter-spacing: 0; }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    h3 { margin: 0 0 8px; }
+    main { padding: 24px; display: grid; gap: 18px; }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; overflow: auto; }
+    .meta { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); padding: 10px; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    ul { margin: 0; padding-left: 18px; }
+    .muted { color: var(--muted); }
+    .status { display: inline-block; border-radius: 999px; padding: 3px 8px; background: #eee5d9; }
+    .done { background: #d8eee2; color: #06472f; }
+    .blocked { background: #f8d7d4; color: var(--bad); }
+    .partial { background: #f7ead5; color: var(--warn); }
+    .deferred, .not_needed { background: #e8e5df; color: #514b45; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .card, .proof { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: #fff; }
+    @media (max-width: 720px) { header, main { padding: 18px; } table { min-width: 640px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ballast</h1>
+    <div class="meta">
+      <span class="pill">Phase: phase_1_research</span>
+      <span class="pill">Mode: prepare</span>
+      <span class="pill">Updated: 2026-06-03</span>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>Lane Status</h2>
+      <table><thead><tr><th>Lane</th><th>Status</th><th>Evidence</th><th>Blockers</th></tr></thead><tbody><tr><td>paid_tool_routing</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 0b: create TOOL_DECISIONS.md and confirm paid-tool access before any fallback.</li></ul></td></tr><tr><td>secrets</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 0c: create SECRETS.md and select Doppler or approved provider before any service setup.</li></ul></td></tr><tr><td>security</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1g: threat model + SECURITY.md before architecture hardens.</li></ul></td></tr><tr><td>research</td><td><span class="status partial">partial</span></td><td><ul><li>RESEARCH.md</li></ul></td><td><ul><li>Still owed: AppKittie/category economics, competitor deep dives, keyword scan, and LOCALIZATION_MARKET_RESEARCH.md before the spec is treated as evidence-backed.</li></ul></td></tr><tr><td>traceability</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1f: create LAUNCH_TRACE.md once the 11-star V1 slice and spec are locked.</li></ul></td></tr><tr><td>experience</td><td><span class="status partial">partial</span></td><td><ul><li>11-star-experience/11_STAR_EXPERIENCE.md</li></ul></td><td><ul><li>Still owed: 11-star-experience.html visual ladder and confirmation of the V1 scalable slice with the founder.</li></ul></td></tr><tr><td>product</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1c/1f: create SPEC.md after the 11-star slice is confirmed.</li></ul></td></tr><tr><td>design</td><td><span class="status partial">partial</span></td><td><ul><li>state/business.json</li><li>state/theme.tokens.json</li><li>design-room.html</li></ul></td><td><ul><li>Still owed: BRAND.md, DESIGN.md, token promotion to design-system/, and ui-ux-pro-max design brief refinement.</li></ul></td></tr><tr><td>emotional_design</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1c+: EMOTIONAL_DESIGN.md once the core loop is specced. Target is 6-star+ and must respect the founder's no-dark-pattern, no-gamification constraint.</li></ul></td></tr><tr><td>content_assets</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 2/3: CONTENT_ASSETS.md and DEMO_VIDEO.md after design is locked.</li></ul></td></tr><tr><td>analytics_attribution</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1b: ANALYTICS.md and analytics-plan.html before surfaces lock.</li></ul></td></tr><tr><td>paid_user_acquisition</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1d: PAID_UA.md. No spend until founder approves budget and one-channel choice.</li></ul></td></tr><tr><td>onboarding</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 2: ONBOARDING.md. The inventory IS the onboarding/value-reveal; native App Review prompt fires right after the first Reserve Number reveal.</li></ul></td></tr><tr><td>revenue</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 3b: REVENUE_OPS.md + RevenueCat. Pricing/paywall model is founder-gated.</li></ul></td></tr><tr><td>store_console</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 3: APP_STORE_LISTING.md, STORE_CONSOLE.md, SCREENSHOTS.md, APPLE_APP_STORE_REQUIREMENTS.md.</li></ul></td></tr><tr><td>apple_signing</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 3: APPLE_SIGNING.md. Requires founder Apple Developer account access.</li></ul></td></tr><tr><td>privacy_legal</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 4: PRIVACY.md, TERMS.md. Note: app handles home inventory + valuations; data-sensitivity review required.</li></ul></td></tr><tr><td>email</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 4: EMAIL_OPS.md (Resend) for waitlist + lifecycle.</li></ul></td></tr><tr><td>orchestration</td><td><span class="status partial">partial</span></td><td><ul><li>AGENTS.md</li><li>CLAUDE.md</li></ul></td><td><ul><li>Still owed: ORCHESTRATION.md, APP_AGENTS.md, and agents/ role prompts before parallel/build work.</li></ul></td></tr><tr><td>engineering</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1f/5b: TECH_SPEC.md, ENGINEERING_PLAN.md, PRODUCTION_READINESS.md after the spec and 11-star slice lock.</li></ul></td></tr><tr><td>growth</td><td><span class="status deferred">deferred</span></td><td><span class="muted">None recorded</span></td><td><ul><li>Scheduled for Phase 1e/6: VIRAL_GROWTH.md and growth/LAUNCH_NARRATIVE.md.</li></ul></td></tr></tbody></table>
+    </section>
+    <section>
+      <h2>Orchestration</h2>
+      <div class="grid">
+    <article class="card"><h3>Strategy</h3><p>single_agent_kickoff</p><p class="muted">Phase 0/1 scaffold is a single coherent unit owned by the orchestrator; no parallel agents needed yet.</p></article>
+    <article class="card"><h3>Owner</h3><p>orchestrator</p><p class="muted">Manager pattern: true</p></article>
+    <article class="card"><h3>Safety</h3><p>File overlap checked: true</p><p>Actual collision check: true</p></article>
+    <article class="card"><h3>Integration</h3><p>Outputs reviewed: false</p><p>State reconciled: true</p></article>
+  </div>
+    </section>
+    <section>
+      <h2>Provider State</h2>
+      <table><thead><tr><th>Provider</th><th>Route</th><th>Docs Checked</th><th>Secret Names</th><th>Preflight</th><th>Validation</th></tr></thead><tbody><tr><td>doppler</td><td>intended_paid_or_account_tool</td><td></td><td><ul><li>DOPPLER_TOKEN</li></ul></td><td>Confirm project/config naming before creating service tokens.</td><td>doppler run -- printenv APP_ENV</td></tr><tr><td>posthog</td><td>intended_account_tool</td><td></td><td><ul><li>POSTHOG_PROJECT_API_KEY</li><li>POSTHOG_PERSONAL_API_KEY</li></ul></td><td>Confirm product analytics region, replay/survey posture, and privacy disclosures.</td><td>Verify event plus person property in PostHog.</td></tr><tr><td>revenuecat</td><td>intended_account_tool</td><td></td><td><ul><li>REVENUECAT_PUBLIC_IOS_KEY</li><li>REVENUECAT_SECRET_API_KEY</li><li>REVENUECAT_WEBHOOK_SECRET</li></ul></td><td>Confirm entitlement, offering, store products, and sandbox account.</td><td>Sandbox purchase grants entitlement in app and backend/profile.</td></tr><tr><td>resend</td><td>intended_account_tool</td><td></td><td><ul><li>RESEND_API_KEY</li><li>RESEND_WEBHOOK_SECRET</li></ul></td><td>Confirm sender domain, reply-to, unsubscribe, and support aliases.</td><td>Send test email and verify webhook or provider log.</td></tr><tr><td>app_store_connect</td><td>intended_account_tool</td><td></td><td><ul><li>ASC_KEY_ID</li><li>ASC_ISSUER_ID</li><li>ASC_PRIVATE_KEY_PATH</li></ul></td><td>Use app-store-connect-cli.md first. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, and founder approval before app-record mutation.</td><td>ASC CLI/skill route records app creation, IDs, metadata, screenshots, TestFlight, review status, and RevenueCat catalog reconciliation.</td></tr></tbody></table>
+    </section>
+    <section>
+      <h2>Founder Gates</h2>
+      <ul><li>final business name + domain purchase (name is provisional pending collision check)</li><li>paid tool signups or spend</li><li>credentials, secrets, and account access</li><li>pricing and subscription approval</li><li>App Store or Google Play submission</li><li>public posting or scheduling</li></ul>
+    </section>
+    <section>
+      <h2>Active Failure Cards</h2>
+      <div class="grid"><article class="card"><h3>ballast-name-unverified</h3><p><strong>medium</strong> | orchestrator | open</p><p>Run a name-collision check (App Store, trademark, .com/.app domains) and confirm or replace 'Ballast' with the founder before locking brand surfaces.</p></article><article class="card"><h3>doppler-docs-stale</h3><p><strong>medium</strong> | orchestrator | open</p><p>Refresh official docs and local CLI help before writing setup commands.</p></article></div>
+    </section>
+    <section>
+      <h2>Proof</h2>
+      <div class="grid"><article class="proof"><strong>tsx skill/.../validate-state.ts --root ballast</strong><p>Expected: 0 error(s)</p><p>Actual: 0 error(s), 0 warning(s)</p><p>Evidence: ballast/state/business.json validated against the Design Room schema</p></article></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,306 @@
+schema_version: "1"
+updated_at: "2026-06-03"
+project:
+  name: "Ballast"
+  slug: "ballast"
+  owner: "Founder (admin@clueless.clothing)"
+  phase: "phase_1_research"
+  platforms:
+    - ios
+  bundle_ids:
+    ios: "com.ballast.app"
+    android: ""
+  public_urls:
+    landing: ""
+    privacy: ""
+    terms: ""
+  source_truth:
+    transcript: "Founder idea brief (2026-06-03): home emergency-fund app for new homeowners; inventory major appliances/systems, compute recommended reserve as % of replacement value, manage spend/pros/manuals/parts, failure-probability ranking. Explicitly non-gamified, no cutesy mascot."
+    repo: "ballast/ (workspace inside the skill maintainer repo; will move to its own repo before build)"
+    current_docs:
+      - "RESEARCH.md"
+      - "11-star-experience/11_STAR_EXPERIENCE.md"
+      - "state/business.json"
+autonomy:
+  mode: "prepare"
+  last_founder_approval: ""
+  founder_only_gates:
+    - "final business name + domain purchase (name is provisional pending collision check)"
+    - "paid tool signups or spend"
+    - "credentials, secrets, and account access"
+    - "pricing and subscription approval"
+    - "App Store or Google Play submission"
+    - "public posting or scheduling"
+continuity:
+  last_state_review: "2026-06-03 (initial scaffold from founder brief)"
+  source_files:
+    - "AGENTS.md"
+    - "PROJECT_STATE.yaml"
+    - "launch-cockpit.html"
+    - "ORCHESTRATION.md"
+    - "PRODUCTION_READINESS.md"
+    - "FAILURE_CARDS.md"
+  git_status_reviewed: true
+  next_action: "Phase 1 research deepening (category economics + competitor scan), then Phase 1c: lock the 11-star V1 slice and create SPEC.md."
+  drift_risks:
+    - "Business name 'Ballast' is a working codename; a real name-collision/App Store/trademark/domain check has not been run."
+orchestration:
+  preflight_done: false
+  strategy: "single_agent_kickoff"
+  rationale: "Phase 0/1 scaffold is a single coherent unit owned by the orchestrator; no parallel agents needed yet."
+  integration_owner: "orchestrator"
+  manager_pattern: true
+  file_overlap_checked: true
+  actual_file_collision_check: true
+  agent_outputs_reviewed: false
+  state_reconciled: true
+  candidate_units: []
+  parallel_safe_units: []
+  serialized_units:
+    - "PROJECT_STATE.yaml updates"
+    - "launch-cockpit.html rendering"
+    - "git staging, commits, merges, pushes, and releases"
+    - "provider/account mutations"
+    - "MobAI or simulator/device control"
+  spawned_agents: []
+  focused_validators_run:
+    - "validate:design-state (ballast) -> 0 errors"
+    - "validate:launch-state (ballast) -> pending in this run"
+  full_suites_run: []
+compound_engineering:
+  availability: "unknown"
+  route: "not_evaluated"
+  latest_check:
+    status: "not_checked"
+    checked_at: ""
+    installed_version: ""
+    latest_version: ""
+    source: ""
+  skills_considered: []
+  brainstorm_status: "not_evaluated"
+  plan_status: "not_evaluated"
+  work_status: "not_evaluated"
+  worktree_status: "not_evaluated"
+  review_status: "not_evaluated"
+  test_status: "not_evaluated"
+  proof_status: "not_evaluated"
+  fallback_reason: "CE not yet evaluated; this turn is research/scaffold only. Evaluate ce-brainstorm at the Phase 1c product-shape checkpoint before any implementation."
+lanes:
+  paid_tool_routing:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 0b: create TOOL_DECISIONS.md and confirm paid-tool access before any fallback."
+  secrets:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 0c: create SECRETS.md and select Doppler or approved provider before any service setup."
+  security:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1g: threat model + SECURITY.md before architecture hardens."
+  research:
+    status: "partial"
+    evidence:
+      - "RESEARCH.md"
+    blockers:
+      - "Still owed: AppKittie/category economics, competitor deep dives, keyword scan, and LOCALIZATION_MARKET_RESEARCH.md before the spec is treated as evidence-backed."
+  traceability:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1f: create LAUNCH_TRACE.md once the 11-star V1 slice and spec are locked."
+  experience:
+    status: "partial"
+    evidence:
+      - "11-star-experience/11_STAR_EXPERIENCE.md"
+    blockers:
+      - "Still owed: 11-star-experience.html visual ladder and confirmation of the V1 scalable slice with the founder."
+  product:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1c/1f: create SPEC.md after the 11-star slice is confirmed."
+  design:
+    status: "partial"
+    evidence:
+      - "state/business.json"
+      - "state/theme.tokens.json"
+      - "design-room.html"
+    blockers:
+      - "Still owed: BRAND.md, DESIGN.md, token promotion to design-system/, and ui-ux-pro-max design brief refinement."
+  emotional_design:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1c+: EMOTIONAL_DESIGN.md once the core loop is specced. Target is 6-star+ and must respect the founder's no-dark-pattern, no-gamification constraint."
+    audit_requested: false
+    deferred_cards: []
+  content_assets:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 2/3: CONTENT_ASSETS.md and DEMO_VIDEO.md after design is locked."
+  analytics_attribution:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1b: ANALYTICS.md and analytics-plan.html before surfaces lock."
+    attribution_contract:
+      screen_early: false
+      stable_source_keys:
+        - "friend"
+        - "x_twitter"
+        - "tiktok"
+        - "instagram"
+        - "youtube"
+        - "app_store_search"
+        - "google_play_search"
+        - "creator"
+        - "ai_search"
+        - "other"
+      other_free_text: false
+      event_name: "attribution_source_selected"
+      person_properties:
+        - "self_reported_source"
+        - "self_reported_source_label"
+      backend_persistence: false
+      anonymous_reconciliation: false
+      verified: false
+  paid_user_acquisition:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1d: PAID_UA.md. No spend until founder approves budget and one-channel choice."
+  onboarding:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 2: ONBOARDING.md. The inventory IS the onboarding/value-reveal; native App Review prompt fires right after the first Reserve Number reveal."
+  revenue:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 3b: REVENUE_OPS.md + RevenueCat. Pricing/paywall model is founder-gated."
+  store_console:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 3: APP_STORE_LISTING.md, STORE_CONSOLE.md, SCREENSHOTS.md, APPLE_APP_STORE_REQUIREMENTS.md."
+  apple_signing:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 3: APPLE_SIGNING.md. Requires founder Apple Developer account access."
+  privacy_legal:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 4: PRIVACY.md, TERMS.md. Note: app handles home inventory + valuations; data-sensitivity review required."
+  email:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 4: EMAIL_OPS.md (Resend) for waitlist + lifecycle."
+  orchestration:
+    status: "partial"
+    evidence:
+      - "AGENTS.md"
+      - "CLAUDE.md"
+    blockers:
+      - "Still owed: ORCHESTRATION.md, APP_AGENTS.md, and agents/ role prompts before parallel/build work."
+  engineering:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1f/5b: TECH_SPEC.md, ENGINEERING_PLAN.md, PRODUCTION_READINESS.md after the spec and 11-star slice lock."
+  growth:
+    status: "deferred"
+    evidence: []
+    blockers:
+      - "Scheduled for Phase 1e/6: VIRAL_GROWTH.md and growth/LAUNCH_NARRATIVE.md."
+tools:
+  doppler:
+    route: "intended_paid_or_account_tool"
+    docs_checked_at: ""
+    cli_version: ""
+    required_secrets:
+      - "DOPPLER_TOKEN"
+    preflight: "Confirm project/config naming before creating service tokens."
+    validation: "doppler run -- printenv APP_ENV"
+    fallback: "Apple Keychain, platform secrets, or names-only .env after founder approval."
+  posthog:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "POSTHOG_PROJECT_API_KEY"
+      - "POSTHOG_PERSONAL_API_KEY"
+    preflight: "Confirm product analytics region, replay/survey posture, and privacy disclosures."
+    validation: "Verify event plus person property in PostHog."
+    fallback: "Local event log or open-source analytics only after founder approval."
+  revenuecat:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "REVENUECAT_PUBLIC_IOS_KEY"
+      - "REVENUECAT_SECRET_API_KEY"
+      - "REVENUECAT_WEBHOOK_SECRET"
+    preflight: "Confirm entitlement, offering, store products, and sandbox account."
+    validation: "Sandbox purchase grants entitlement in app and backend/profile."
+    fallback: "StoreKit/TestFlight sandbox notes only after founder approval."
+  resend:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "RESEND_API_KEY"
+      - "RESEND_WEBHOOK_SECRET"
+    preflight: "Confirm sender domain, reply-to, unsubscribe, and support aliases."
+    validation: "Send test email and verify webhook or provider log."
+    fallback: "Cloudflare routing plus manual Gmail responses after founder approval."
+  app_store_connect:
+    route: "intended_account_tool"
+    docs_checked_at: ""
+    required_secrets:
+      - "ASC_KEY_ID"
+      - "ASC_ISSUER_ID"
+      - "ASC_PRIVATE_KEY_PATH"
+    preflight: "Use app-store-connect-cli.md first. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, and founder approval before app-record mutation."
+    validation: "ASC CLI/skill route records app creation, IDs, metadata, screenshots, TestFlight, review status, and RevenueCat catalog reconciliation."
+    fallback: "Manual ASC click-path packet only after CLI/auth/account/skill-route blocker is recorded."
+proof:
+  launch_cockpit: "launch-cockpit.html"
+  launchbench:
+    last_run: ""
+    scenarios_passed: []
+    scenarios_failed: []
+  commands:
+    - command: "tsx skill/.../validate-state.ts --root ballast"
+      expected: "0 error(s)"
+      actual: "0 error(s), 0 warning(s)"
+      evidence: "ballast/state/business.json validated against the Design Room schema"
+open_questions:
+  - owner: "founder"
+    question: "Approve or replace the working name 'Ballast' before a domain/trademark/App Store collision check is run?"
+    blocks:
+      - "name lock"
+      - "domain purchase"
+      - "app store listing"
+  - owner: "founder"
+    question: "Confirm iOS-first (vs. iOS+Android) for V1?"
+    blocks:
+      - "engineering scope"
+failure_cards:
+  active:
+    - id: "ballast-name-unverified"
+      severity: "medium"
+      owner: "orchestrator"
+      status: "open"
+      next_action: "Run a name-collision check (App Store, trademark, .com/.app domains) and confirm or replace 'Ballast' with the founder before locking brand surfaces."
+    - id: "doppler-docs-stale"
+      severity: "medium"
+      owner: "orchestrator"
+      status: "open"
+      next_action: "Refresh official docs and local CLI help before writing setup commands."
+  resolved: []

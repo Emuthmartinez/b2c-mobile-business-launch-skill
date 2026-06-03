@@ -1,5 +1,6 @@
 node_modules/
 skill/b2c-mobile-business-launch/node_modules/
+ballast/
 .git/
 .DS_Store
 *.log

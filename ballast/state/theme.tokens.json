@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "updatedAt": "2026-06-03",
+  "tokens": {
+    "color": {
+      "background": "#f3f0ea",
+      "surface": "#ffffff",
+      "surfaceElevated": "#ffffff",
+      "primary": "#14263f",
+      "accent": "#c2762b",
+      "text": "#111620",
+      "muted": "#5b6675",
+      "border": "#d8d2c6",
+      "success": "#2f6f4f",
+      "warning": "#b06a14",
+      "danger": "#a3342a"
+    },
+    "font": {
+      "display": {
+        "family": "Fraunces, Georgia, serif",
+        "weight": "600"
+      },
+      "body": {
+        "family": "Inter, system-ui, -apple-system, sans-serif",
+        "weight": "400"
+      }
+    },
+    "radius": {
+      "sm": "4px",
+      "md": "8px",
+      "lg": "12px"
+    },
+    "space": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "40px"
+    },
+    "motion": {
+      "durationFast": "120ms",
+      "durationBase": "220ms",
+      "durationSlow": "360ms",
+      "reducedMotionDuration": "0ms",
+      "easing": "cubic-bezier(0.2, 0, 0, 1)"
+    }
+  }
+}

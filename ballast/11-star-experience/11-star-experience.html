@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ballast — 11-Star Experience</title>
+<style>
+  :root {
+    --bg: #f3f0ea; --surface: #ffffff; --primary: #14263f; --accent: #c2762b;
+    --text: #111620; --muted: #5b6675; --border: #d8d2c6; --success: #2f6f4f;
+    --display: "Fraunces", Georgia, serif; --body: "Inter", system-ui, -apple-system, sans-serif;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); line-height: 1.5; }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 40px 20px 80px; }
+  h1, h2, .num { font-family: var(--display); }
+  h1 { font-size: 2rem; margin: 0 0 4px; color: var(--primary); }
+  .lede { color: var(--muted); margin: 0 0 28px; max-width: 60ch; }
+  h2 { font-size: 1.15rem; color: var(--primary); margin: 36px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 10px 0; }
+  .hero { display: flex; align-items: baseline; gap: 14px; }
+  .num { font-size: 2.6rem; color: var(--primary); }
+  .meter { height: 12px; background: #e7e1d6; border-radius: 999px; overflow: hidden; margin: 10px 0 4px; }
+  .meter > span { display: block; height: 100%; width: 72%; background: var(--success); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.92rem; background: var(--surface); border-radius: var(--radius); overflow: hidden; }
+  th, td { text-align: left; padding: 9px 11px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--primary); color: #fff; font-weight: 600; }
+  .star { font-weight: 700; color: var(--accent); white-space: nowrap; }
+  .pill { display: inline-block; font-size: 0.72rem; color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; margin: 2px 4px 2px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } .num { font-size: 2rem; } }
+  .v1 { border-left: 4px solid var(--accent); }
+  footer { color: var(--muted); font-size: 0.8rem; margin-top: 40px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Ballast — the 11-Star Experience</h1>
+  <p class="lede">Replace vague dread about "what breaks next" with one defensible number. This is the visual proof of the experience ladder, the Line Of Feasibility, and the V1 Scalable Slice. Calm, defensive, non-gamified — no mascot.</p>
+
+  <div class="card">
+    <div class="hero"><span class="num">$9,200</span><span>Recommended reserve · keep on hand</span></div>
+    <div class="meter"><span></span></div>
+    <div style="color:var(--muted);font-size:0.85rem;">Coverage: you're ~72% there — about $2,600 to go, not a catastrophe.</div>
+  </div>
+
+  <h2>11-Star Ladder</h2>
+  <table>
+    <thead><tr><th>Stars</th><th>Scene</th><th>Emotional reaction</th></tr></thead>
+    <tbody>
+      <tr><td class="star">1★</td><td>Scary number, no explanation, data held hostage behind a paywall.</td><td>Manipulated.</td></tr>
+      <tr><td class="star">2★</td><td>You get <em>a</em> number, but it's a generic brochure stat.</td><td>Indifference.</td></tr>
+      <tr><td class="star">5★</td><td>Inventory your systems, get a clear reserve, track items and spend.</td><td>"Okay, useful."</td></tr>
+      <tr><td class="star">6★</td><td>Smart defaults fill the costs; the number comes with a plain-English why and a coverage meter.</td><td>Relief, trust.</td></tr>
+      <tr class="v1"><td class="star">7★ · V1</td><td>It orders your items by what's most likely to break first and names the 2 cheap parts to keep on a shelf.</td><td>"It's thinking ahead for me."</td></tr>
+      <tr><td class="star">10★</td><td>A home inspector + planner walk your house and hand you a binder, parts pre-bought, a tech on call per item.</td><td>Amazement.</td></tr>
+      <tr><td class="star">11★</td><td>Nothing in your home ever surprises you again — failures are predicted, funded, and fixed before they ruin a weekend.</td><td>They tell every homeowner they know.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Line Of Feasibility</h2>
+  <div class="grid">
+    <div class="card"><strong>V1 (ship)</strong><br/>Inventory + smart defaults · replacement value · Reserve Number (% band) · coverage meter · spend log · manuals · parts suggestions · trusted pros · age-based "what breaks first."</div>
+    <div class="card"><strong>Manual / concierge assist</strong><br/>Curated cost &amp; lifespan tables per category/region · hand-built "parts worth keeping" starter lists.</div>
+    <div class="card"><strong>Deferred inspiration</strong><br/>Live data hookups (utility/warranty/permit/MLS) · auto valuation refresh · vetted-pro marketplace · true actuarial failure odds.</div>
+    <div class="card"><strong>Not in scope (founder-locked)</strong><br/>Mascot/characters · points/badges/streaks · alarmist "at risk" framing · countdown urgency · hostage-data paywall.</div>
+  </div>
+
+  <h2>V1 Scalable Slice</h2>
+  <div class="card v1">
+    <strong>Inventory → Reserve Number reveal → "what breaks first" + parts-on-hand.</strong>
+    <p style="margin:8px 0 0;color:var(--muted);">The smallest thing that delivers the 7★ "it's thinking ahead for me" moment. The Reserve Number counts up once to its target on first reveal; the coverage meter fills toward "covered." Reduced-motion: number and meter appear instantly in final state, no count-up.</p>
+  </div>
+
+  <h2>Surface Translation</h2>
+  <div>
+    <span class="pill">Product: one number, not a wall of anxiety</span>
+    <span class="pill">Onboarding: inventory is the value reveal; App Review prompt right after</span>
+    <span class="pill">Paywall: free number, Reserve+ for probability &amp; parts</span>
+    <span class="pill">Ad: "type in your furnace, AC, water heater…"</span>
+    <span class="pill">App Store: number · coverage · what-breaks-first</span>
+    <span class="pill">Landing: "Know your number before something breaks"</span>
+    <span class="pill">Email: "your water heater just crossed 10 years"</span>
+    <span class="pill">Engineering: reference tables · reserve model · failure heuristic</span>
+  </div>
+
+  <footer>Visual proof for <code>11_STAR_EXPERIENCE.md</code> · Ballast · 2026-06-03 · working name pending collision check.</footer>
+</div>
+</body>
+</html>
