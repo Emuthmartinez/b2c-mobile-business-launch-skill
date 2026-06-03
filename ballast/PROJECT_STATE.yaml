@@ -15,10 +15,12 @@ project:
     privacy: ""
     terms: ""
   source_truth:
-    transcript: "Founder idea brief (2026-06-03): home emergency-fund app for new homeowners; inventory major appliances/systems, compute recommended reserve as % of replacement value, manage spend/pros/manuals/parts, failure-probability ranking. Explicitly non-gamified, no cutesy mascot."
+    transcript: "Founder idea brief (2026-06-03): home emergency-fund app for new homeowners; inventory major appliances/systems, compute recommended reserve as % of replacement value, manage spend/pros/manuals/parts, failure-probability ranking. Explicitly non-gamified, no cutesy mascot. Founder confirmed iOS-first; requested name options before locking."
     repo: "ballast/ (workspace inside the skill maintainer repo; will move to its own repo before build)"
     current_docs:
       - "RESEARCH.md"
+      - "NAMING.md"
+      - "TOOL_DECISIONS.md"
       - "11-star-experience/11_STAR_EXPERIENCE.md"
       - "state/business.json"
 autonomy:
@@ -41,9 +43,10 @@ continuity:
     - "PRODUCTION_READINESS.md"
     - "FAILURE_CARDS.md"
   git_status_reviewed: true
-  next_action: "Phase 1 research deepening (category economics + competitor scan), then Phase 1c: lock the 11-star V1 slice and create SPEC.md."
+  next_action: "Founder selects a name from NAMING.md (lead candidates Backstop / Holdfast). Then run USPTO/domain/App Store clearance, re-key the workspace, and proceed to Phase 1c: lock the 11-star V1 slice and create SPEC.md. Still owed in research: AppKittie real economics + appliance cost/lifespan tables."
   drift_risks:
-    - "Business name 'Ballast' is a working codename; a real name-collision/App Store/trademark/domain check has not been run."
+    - "Business name 'Ballast' is a working codename with an App Store finance namesake; founder name selection is pending (NAMING.md)."
+    - "Pricing anchor is from vendor pages, not AppKittie download/revenue data; treat bands as directional until AppKittie pass."
 orchestration:
   preflight_done: false
   strategy: "single_agent_kickoff"
@@ -87,10 +90,11 @@ compound_engineering:
   fallback_reason: "CE not yet evaluated; this turn is research/scaffold only. Evaluate ce-brainstorm at the Phase 1c product-shape checkpoint before any implementation."
 lanes:
   paid_tool_routing:
-    status: "deferred"
-    evidence: []
+    status: "partial"
+    evidence:
+      - "TOOL_DECISIONS.md"
     blockers:
-      - "Scheduled for Phase 0b: create TOOL_DECISIONS.md and confirm paid-tool access before any fallback."
+      - "AppKittie/XPOZ category-economics tools unavailable in this runtime; used directional web/social fallback. Founder to confirm whether to provision AppKittie access before pricing/ASO lock."
   secrets:
     status: "deferred"
     evidence: []
@@ -105,8 +109,9 @@ lanes:
     status: "partial"
     evidence:
       - "RESEARCH.md"
+      - "NAMING.md"
     blockers:
-      - "Still owed: AppKittie/category economics, competitor deep dives, keyword scan, and LOCALIZATION_MARKET_RESEARCH.md before the spec is treated as evidence-backed."
+      - "Done: competitor map + category pricing anchor (HomeZada tiers) + Centriq-shutdown opening. Still owed: AppKittie/XPOZ real download/revenue/keyword data, keyword-difficulty scan, LOCALIZATION_MARKET_RESEARCH.md, and citable replacement-cost/lifespan tables before the spec is treated as fully evidence-backed."
   traceability:
     status: "deferred"
     evidence: []
@@ -282,22 +287,27 @@ proof:
       evidence: "ballast/state/business.json validated against the Design Room schema"
 open_questions:
   - owner: "founder"
-    question: "Approve or replace the working name 'Ballast' before a domain/trademark/App Store collision check is run?"
+    question: "Select a name from NAMING.md. Lead candidates: Backstop (most legible) or Holdfast (most ownable); Ballast has an App Store finance namesake."
     blocks:
       - "name lock"
       - "domain purchase"
       - "app store listing"
   - owner: "founder"
-    question: "Confirm iOS-first (vs. iOS+Android) for V1?"
+    question: "Provision AppKittie/XPOZ access for real category economics, or accept the directional web/social fallback for now?"
     blocks:
-      - "engineering scope"
+      - "pricing lock"
+      - "aso"
+resolved_questions:
+  - owner: "founder"
+    question: "iOS-first vs iOS+Android for V1?"
+    answer: "iOS-first confirmed (2026-06-03)."
 failure_cards:
   active:
     - id: "ballast-name-unverified"
       severity: "medium"
       owner: "orchestrator"
       status: "open"
-      next_action: "Run a name-collision check (App Store, trademark, .com/.app domains) and confirm or replace 'Ballast' with the founder before locking brand surfaces."
+      next_action: "Options generated in NAMING.md (lead: Backstop/Holdfast). Founder to select; then run USPTO + .com/.app + App Store name-availability clearance and re-key the workspace before locking brand surfaces."
     - id: "doppler-docs-stale"
       severity: "medium"
       owner: "orchestrator"

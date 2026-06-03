@@ -48,10 +48,33 @@ Repeatedly, commenters cite a maintenance-reserve heuristic — and disagree on 
 3. The **age-based "what breaks first"** ordering is what a 12-year HVAC pro intuitively does — a credible, differentiating V1 feature (EXP-003) and the Reserve+ hook.
 4. Voice = calm, lived-in, non-alarmist. Banned: fear-selling, gamification, mascot (founder-locked; carry into `BRAND.md`).
 
+## Category economics & competitor landscape
+
+Source: public web search, retrieved 2026-06-03. Note: **AppKittie/XPOZ (the skill's paid category-economics tools) were not available in this runtime** — these figures come from vendor pricing pages and review roundups, not download/revenue estimators. See `TOOL_DECISIONS.md`. A proper AppKittie pass is still owed before pricing is locked.
+
+### Pricing anchor (willingness to pay)
+
+- **HomeZada** (home-management incumbent): Free *Essential*; **$99/yr** (or $15.95/mo) *Premium* (single property); **$189/yr** *Deluxe* (up to 3 properties). Source: HomeZada pricing page.
+- Implication: home-management consumers already sustain **~$100/yr** subscriptions. A Ballast Reserve+ tier in roughly the **$40–$100/yr** band is defensible; exact pricing stays founder-gated (`REVENUE_OPS.md`).
+
+### Competitor map & positioning gap
+
+| Player | What it is | Gap vs. Ballast |
+| --- | --- | --- |
+| **HomeZada** | Comprehensive home management: inventory, maintenance reminders, project finances. Mature, broad. | Tracks *records and tasks*. Does **not** compute a recommended emergency-fund reserve or rank failure likelihood. Broad/heavy; Ballast is a focused financial-preparedness wedge. |
+| **Centriq** | Photo-to-manual appliance identification, manuals, parts, recall alerts. | **Shut down January 2026** — tight export window, CSV without photos/docs, then data deleted. Left users burned on portability. **Opening:** a trustworthy successor for "know your appliances + what to do," with data-portability as an explicit promise. |
+| **DomiDocs** | Bank-level secure document vault + home-title monitoring. | Security/vault + title fraud angle; not a reserve calculator. |
+| **Dwellin / HomeBox / micasa / Shelf.nu** | Home inventory / maintenance / cost tracking, some sustainability tips. | Inventory/maintenance trackers; none frames the **"how much cash should I hold"** question. |
+| **Home warranties** (e.g. Select Home Warranty) | Pay a premium; they cover some repairs. | Reddit signal: widely seen as "a waste of money." Ballast is the **self-insurance planning** layer between "ignore it" and "buy a warranty." |
+| **Spreadsheets / sinking funds** | DIY per-category savings buckets. | Users already do a worse, manual version of Ballast (Signal 4). Direct evidence of the job-to-be-done. |
+
+**Positioning gap (the wedge, restated):** every incumbent is an *inventory/maintenance/records* tool or a *warranty*. **None turns the inventory into a single recommended cash reserve + a what-breaks-first plan.** Ballast owns the "financial preparedness number," using inventory as the means, not the end. Centriq's shutdown is a timely trust-and-acquisition opening.
+
 ## Open research tasks (next)
 
-- [ ] AppKittie / App Store category economics for home-management & personal-finance utilities; pricing bands.
-- [ ] Competitor deep dives (HomeZada, Centriq, Houszz/▲ home-inventory apps, insurance "home inventory" tools, spreadsheets) — positioning gaps.
+- [ ] **AppKittie / XPOZ category economics** — real download/revenue/keyword-difficulty estimates (currently blocked: paid tools unavailable in this runtime; see `TOOL_DECISIONS.md`). Confirm pricing bands before `REVENUE_OPS.md`.
+- [x] Competitor deep dives — done above (HomeZada, Centriq, DomiDocs, Dwellin/HomeBox, warranties, spreadsheets).
+- [x] Category pricing anchor — done above (HomeZada tiers).
 - [ ] Keyword popularity/difficulty scan; `LOCALIZATION_MARKET_RESEARCH.md` (likely US-first given the % -of-value norms vary by market).
-- [ ] **Name-collision check for "Ballast"** (App Store, trademark, .com/.app) — currently an open failure card (`ballast-name-unverified`).
+- [~] Name-collision scan — first pass done in `NAMING.md` (Ballast has an App Store finance namesake; Backstop/Holdfast cleaner). Founder selection + USPTO/domain clearance still owed; `ballast-name-unverified` stays open.
 - [ ] Quantify replacement-cost & lifespan reference tables per appliance category from a citable source (not memory).
