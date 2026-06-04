@@ -1,4 +1,4 @@
-# Ballast 11-Star Experience
+# Reservoir 11-Star Experience
 
 This artifact defines the product's extreme experience, the feasible V1 slice, and how the same magic translates across product, onboarding, ads, store, engineering, lifecycle, and support. Status: **partial** — the V1 slice is proposed and pending founder confirmation at the Phase 1c checkpoint.
 
@@ -7,19 +7,19 @@ This artifact defines the product's extreme experience, the feasible V1 slice, a
 - Target user: New / recent homeowners (first ~5 years) who have already felt — or dread — the sucker-punch of an unexpected major repair (furnace, AC, water heater, roof, garage door).
 - Ordinary world: They "can afford the mortgage" but have no idea how much cash they should keep on hand for the things that *will* break. The fear is vague and unbounded, so they either ignore it (and get blindsided) or worry about it constantly.
 - Desired transformation: Replace vague dread with **one defensible number** and a calm sense that they are covered — and a plan for what to do when something fails.
-- One magical moment V1 must prove: After a 3-minute inventory, Ballast shows the user a single recommended **Reserve Number** ("Keep about $X on hand") grounded in *their* actual systems and ages — and the feeling shifts from "I have no idea" to "okay, I know the number, and I'm most of the way there."
+- One magical moment V1 must prove: After a 3-minute inventory, Reservoir shows the user a single recommended **Reserve Number** ("Keep about $X on hand") grounded in *their* actual systems and ages — and the feeling shifts from "I have no idea" to "okay, I know the number, and I'm most of the way there."
 - Why a user would retell it: "I spent three minutes listing my stuff and it told me I should have $9k set aside — turns out I'm only $3k short, not bankrupt. I finally stopped low-key panicking about the furnace."
 
 ## Star Ladder
 
 | Stars | Label | User scene | Product behavior implied | Emotional reaction | What we learn |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Refund me | Ballast spits out a scary number with no explanation, feels like a fear-sales funnel, or hides the user's own data behind a paywall. | Identify the trust-breakers: alarmism, opacity, hostage data. | Manipulated, resentful. | What must never ship. |
+| 1 | Refund me | Reservoir spits out a scary number with no explanation, feels like a fear-sales funnel, or hides the user's own data behind a paywall. | Identify the trust-breakers: alarmism, opacity, hostage data. | Manipulated, resentful. | What must never ship. |
 | 2 | It technically works | The user can list appliances and gets *a* number, but it's generic (national averages only), slow, and forgettable. | Remove friction; make the number feel like theirs, not a brochure stat. | Indifference. | Minimum usability bar. |
 | 5 | Expected experience | The user inventories their systems and gets a clear recommended reserve as a % of replacement value, and can track items and spend. | Deliver the core loop reliably: inventory -> value -> Reserve Number -> manage. | "Okay, that's useful." | The baseline competitors/spreadsheets already imply. |
 | 6 | Better than expected | Smart defaults pre-fill typical replacement costs and lifespans, so the user moves fast; the Reserve Number comes with a plain-English "why," and a coverage meter shows how close they already are. | Reflect user input, reduce uncertainty, show progress toward "covered." | Relief, trust. | The first feasible delight. |
-| 7 | Way beyond | Ballast orders the user's items by *what is most likely to break first* given age/type and tells them the two cheap spare parts worth keeping on hand for their specific units — so a future failure is shorter and cheaper. | Use item age/type data, failure-probability modeling, and parts knowledge to prepare the next best step. | "This was made for me — it's actually thinking ahead." | **The V1 magic candidate.** |
-| 10 | Impossible concierge | A seasoned home inspector and a financial planner personally walk your house, hand you a binder: every system's remaining life, the exact reserve to hold, the parts pre-bought and labeled on a shelf, and a vetted tech on call for each item. | Reveal the hidden service blueprint Ballast is compressing into software. | Amazement; total calm. | Which unscalable pieces (vetted pros, parts pre-buy) can become product later. |
+| 7 | Way beyond | Reservoir orders the user's items by *what is most likely to break first* given age/type and tells them the two cheap spare parts worth keeping on hand for their specific units — so a future failure is shorter and cheaper. | Use item age/type data, failure-probability modeling, and parts knowledge to prepare the next best step. | "This was made for me — it's actually thinking ahead." | **The V1 magic candidate.** |
+| 10 | Impossible concierge | A seasoned home inspector and a financial planner personally walk your house, hand you a binder: every system's remaining life, the exact reserve to hold, the parts pre-bought and labeled on a shelf, and a vetted tech on call for each item. | Reveal the hidden service blueprint Reservoir is compressing into software. | Amazement; total calm. | Which unscalable pieces (vetted pros, parts pre-buy) can become product later. |
 | 11 | Absurd extreme | Nothing in the home ever surprises you again: failures are predicted, funded, and fixed before they ruin a weekend — the "emergency" stops existing. | Reveal the emotional north star: the unexpected becomes expected and handled. | They tell every new homeowner they know. | The true ambition, not the V1 scope. |
 
 ## Line Of Feasibility

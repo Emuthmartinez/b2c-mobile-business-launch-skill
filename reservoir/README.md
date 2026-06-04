@@ -1,12 +1,12 @@
-# Ballast (incubation workspace)
+# Reservoir (incubation workspace)
 
-**Ballast** — know exactly how much cash to keep on hand so a dead furnace is an annoyance, not a crisis.
+**Reservoir** — know exactly how much cash to keep on hand so a dead furnace is an annoyance, not a crisis.
 
 A calm, defensive home emergency-fund app for new homeowners: inventory your major systems and appliances, get one recommended cash reserve (a % band of total replacement value), see how covered you already are, learn what's most likely to break first, and track spend, manuals, spare parts, and trusted pros per item. Explicitly non-gamified — no mascot, no streaks, no alarmism.
 
 ## Status
 
-Phase 1 (research/scaffold). This folder was generated with the `b2c-mobile-business-launch` skill and **will be moved into its own repository before app build**. The working name "Ballast" is provisional pending a name-collision / trademark / domain check.
+Phase 1 (research/scaffold). This folder was generated with the `b2c-mobile-business-launch` skill and **will be moved into its own repository before app build**. The working name "Reservoir" is provisional pending a name-collision / trademark / domain check.
 
 Start with `AGENTS.md`, then `PROJECT_STATE.yaml` and `launch-cockpit.html`.
 
@@ -30,8 +30,8 @@ Deepen research (category economics, competitors, keywords), run the name-collis
 From the skill maintainer repo root, validators can target this folder:
 
 ```bash
-npx tsx skill/b2c-mobile-business-launch/scripts/validate-project-state.ts --root ballast --state PROJECT_STATE.yaml
-npx tsx skill/b2c-mobile-business-launch/scripts/validate-state.ts --root ballast
-npx tsx skill/b2c-mobile-business-launch/scripts/check-eleven-star-experience.ts --root ballast --state PROJECT_STATE.yaml
-npx tsx skill/b2c-mobile-business-launch/scripts/render-launch-cockpit.ts --root ballast --state PROJECT_STATE.yaml --out ballast/launch-cockpit.html
+npx tsx skill/b2c-mobile-business-launch/scripts/validate-project-state.ts --root reservoir --state PROJECT_STATE.yaml
+npx tsx skill/b2c-mobile-business-launch/scripts/validate-state.ts --root reservoir
+npx tsx skill/b2c-mobile-business-launch/scripts/check-eleven-star-experience.ts --root reservoir --state PROJECT_STATE.yaml
+npx tsx skill/b2c-mobile-business-launch/scripts/render-launch-cockpit.ts --root reservoir --state PROJECT_STATE.yaml --out reservoir/launch-cockpit.html
 ```

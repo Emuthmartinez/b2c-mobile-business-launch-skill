@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-Read `AGENTS.md` first; it is the canonical operating guide for Ballast.
+Read `AGENTS.md` first; it is the canonical operating guide for Reservoir.
 
-> Workspace note: Ballast lives in `ballast/` inside the `b2c-mobile-business-launch` skill maintainer repo for now and will move to its own repo before build. Do not copy the skill repo's maintainer `CLAUDE.md` (at the skill root) into this business; this file is the business entrypoint.
+> Workspace note: Reservoir lives in `reservoir/` inside the `b2c-mobile-business-launch` skill maintainer repo for now and will move to its own repo before build. Do not copy the skill repo's maintainer `CLAUDE.md` (at the skill root) into this business; this file is the business entrypoint.
 
 Claude-specific notes:
 
@@ -15,4 +15,4 @@ Claude-specific notes:
 - Use ASC CLI/skills for App Store Connect work by default; manual console-only instructions are a fallback after CLI/auth/capability blockers or founder approval.
 - Do not stage, commit, push, release, submit builds, connect accounts, spend money, change pricing, mutate credentials, or mark readiness from subagent findings alone.
 - Refresh official docs and local CLI help before changing third-party command guidance for Doppler, PostHog, RevenueCat, Stripe, Resend, Apple/App Store Connect, Google Play, XcodeBuildMCP, MobAI, Refero, Higgsfield, Fastlane, Remotion, or similar fast-moving tools.
-- Brand guardrail: Ballast is calm, defensive, and non-gamified — no mascot, no points/streaks, no alarmism. Hold this line in any copy, design, or onboarding work.
+- Brand guardrail: Reservoir is calm, defensive, and non-gamified — no mascot, no points/streaks, no alarmism. Hold this line in any copy, design, or onboarding work.

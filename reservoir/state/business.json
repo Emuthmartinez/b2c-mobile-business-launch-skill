@@ -2,10 +2,10 @@
   "schemaVersion": "1.0.0",
   "updatedAt": "2026-06-03",
   "business": {
-    "name": "Ballast",
-    "slug": "ballast",
+    "name": "Reservoir",
+    "slug": "reservoir",
     "stage": "research",
-    "positioning": "Ballast tells homeowners exactly how much cash to keep on hand so a dead furnace is an annoyance, not a crisis.",
+    "positioning": "Reservoir tells homeowners exactly how much cash to keep on hand so a dead furnace is an annoyance, not a crisis.",
     "targetAudience": "New and recent homeowners (first 5 years) who were surprised by major-system and appliance repair costs and want a defensible plan instead of dread."
   },
   "theme": {
@@ -38,15 +38,28 @@
     "renderPath": "design-room.html",
     "versionLog": [
       {
-        "id": "ballast-seed-2026-06-03",
+        "id": "reservoir-seed-2026-06-03",
         "createdAt": "2026-06-03",
-        "summary": "Seeded Ballast Design Room from the skill template: brand name, positioning, target audience, preparedness theme tokens (navy/amber/paper), and the V1 core screens/flows for the appliance inventory and Reserve Number.",
+        "summary": "Seeded Reservoir Design Room from the skill template: brand name, positioning, target audience, preparedness theme tokens (navy/amber/paper), and the V1 core screens/flows for the appliance inventory and Reserve Number.",
         "statePaths": [
           "state/business.json",
           "state/theme.tokens.json"
         ],
         "renderedArtifacts": [
           "design-room.html"
+        ]
+      },
+      {
+        "id": "rebrand-reservoir-2026-06-03",
+        "createdAt": "2026-06-03",
+        "summary": "Renamed the working codename Ballast to Reservoir (founder selection). Chosen for visualizable readiness: the reserve's fill level mirrors the app's coverage meter, so brand and core UI share one gesture. Legal/availability clearance still pending; see NAMING.md.",
+        "statePaths": [
+          "state/business.json",
+          "state/theme.tokens.json"
+        ],
+        "renderedArtifacts": [
+          "design-room.html",
+          "brand/name-concepts.html"
         ]
       }
     ],
@@ -56,8 +69,8 @@
     "webFunnels": [],
     "landingPages": [
       {
-        "id": "ballast-waitlist",
-        "name": "Ballast waitlist landing",
+        "id": "reservoir-waitlist",
+        "name": "Reservoir waitlist landing",
         "status": "not_started",
         "purpose": "Pre-launch waitlist: state the surprise-cost problem, the Reserve Number promise, and capture email. AI-search visible.",
         "decisions": [

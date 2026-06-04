@@ -42,10 +42,19 @@ Founder steer: the name should be **something we can visualize to show readiness
 
 **Round-2 recommendation: Reservoir.** It is the only candidate whose icon directly renders the product's readiness state, and it has the cleanest consumer-app namespace. Visual concepts rendered in `brand/name-concepts.html`.
 
-For the chosen name, check: `.com`, `.app`, `getX.com`, App Store name availability, and `@X` on the channels in `growth/`. Record results here and clear the `ballast-name-unverified` failure card once a name is locked.
+For the chosen name, check: `.com`, `.app`, `getX.com`, App Store name availability, and `@X` on the channels in `growth/`. Record results here and close the `reservoir-name-clearance-pending` failure card once cleared.
 
 ## Decision
 
-- [ ] Founder selects a name.
-- [ ] Run USPTO + domain + App Store name-availability checks for the selection.
-- [ ] Re-key the workspace (slug, `state/business.json`, docs, bundle ID) to the chosen name and retire this codename.
+- [x] **Founder selected: Reservoir** (2026-06-03), chosen for visualizable readiness — the reserve's fill level mirrors the app's coverage meter, and it has the cleanest consumer-app namespace of the candidates.
+- [x] Re-key the workspace (folder, slug, `state/business.json`, docs, bundle ID) to Reservoir and retire the Ballast codename. *(Done; this file keeps the Ballast history intentionally.)*
+- [ ] Run USPTO TESS + `.com`/`.app` domain + App Store name-availability checks for Reservoir. **(Owed — `reservoir-name-clearance-pending`.)**
+- [ ] Record clearance results below and buy the domain (founder-gated) only after clearance.
+
+### Clearance log (to fill)
+
+| Check | Result | Date |
+| --- | --- | --- |
+| USPTO TESS (live marks, classes 9/36/42) | pending | |
+| reservoir.com / reservoir.app / getreservoir.com | pending | |
+| App Store name "Reservoir" availability | pending | |

@@ -1,19 +1,19 @@
-# Ballast Agent Guide
+# Reservoir Agent Guide
 
-This repo is the operating home for Ballast, a B2C mobile app business.
+This repo is the operating home for Reservoir, a B2C mobile app business.
 
-> Workspace note: Ballast currently lives in the `ballast/` folder inside the `b2c-mobile-business-launch` **skill maintainer repo** as a temporary incubation workspace. Before app build, it will be moved into its own repository. Do **not** copy the skill's maintainer `AGENTS.md`/`CLAUDE.md` (at the skill repo root) into this business — this file is the business entrypoint.
+> Workspace note: Reservoir currently lives in the `reservoir/` folder inside the `b2c-mobile-business-launch` **skill maintainer repo** as a temporary incubation workspace. Before app build, it will be moved into its own repository. Do **not** copy the skill's maintainer `AGENTS.md`/`CLAUDE.md` (at the skill repo root) into this business — this file is the business entrypoint.
 
 Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue, analytics, security, growth, and production-readiness work. Once the skill is active, do not ask the founder to re-invoke it; load the next needed skill reference, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run the relevant validators until a founder-only gate is reached.
 
 ## 60-Second Brief
 
-- Product: A calm, defensive home emergency-fund app. Homeowners inventory their major systems/appliances; Ballast computes a recommended cash reserve (a % band of total replacement value), shows how covered they already are, ranks what is most likely to break first, and tracks spend, manuals, spare parts, and trusted pros per item.
+- Product: A calm, defensive home emergency-fund app. Homeowners inventory their major systems/appliances; Reservoir computes a recommended cash reserve (a % band of total replacement value), shows how covered they already are, ranks what is most likely to break first, and tracks spend, manuals, spare parts, and trusted pros per item.
 - Target user: New / recent homeowners (first ~5 years) blindsided by — or dreading — major repair costs, who want one defensible number instead of vague anxiety.
 - Business model: Freemium subscription. Free: inventory + Reserve Number + coverage. Reserve+ (paid): failure-probability ranking, "what breaks first," parts-on-hand, ongoing recommendations. Pricing is founder-gated and not yet set.
 - Platforms: iOS first (V1). Android deferred pending founder confirmation.
 - Current phase: read `PROJECT_STATE.yaml` and `launch-cockpit.html` (currently `phase_1_research`).
-- Primary repos or apps: `ballast/` workspace (this folder); a dedicated app repo will be created before build.
+- Primary repos or apps: `reservoir/` workspace (this folder); a dedicated app repo will be created before build.
 
 ## Read First
 
@@ -69,7 +69,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - `DESIGN.md` owns tokens, voice, components, visual rules, and the tokenized `motion.*` scale. Motion communicates steadiness, never excitement; honor reduced motion on every surface. Web surfaces use framer-motion/`motion` from the promoted `--motion-*` variables; the mobile binary uses native animation from `DesignTokens.Motion` and must never import framer-motion.
 - HTML proofs must be opened and checked on mobile and desktop before visual work is called ready.
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
-- When the 11-star target is 6-star or higher, `EMOTIONAL_DESIGN.md` owns the Experience Card map, ethics guardrails, PostHog events, reduced-motion fallbacks, and counter-metrics. Run `npm run check:emotional-design -- --root .` before build or store handoff. Note: Ballast's brand explicitly bans dark patterns and gamification — engineered emotion here means *calm and trust*, not extraction.
+- When the 11-star target is 6-star or higher, `EMOTIONAL_DESIGN.md` owns the Experience Card map, ethics guardrails, PostHog events, reduced-motion fallbacks, and counter-metrics. Run `npm run check:emotional-design -- --root .` before build or store handoff. Note: Reservoir's brand explicitly bans dark patterns and gamification — engineered emotion here means *calm and trust*, not extraction.
 - `BRAND.md` owns voice, owned words, banned language, and claim boundaries.
 - Store screenshots need `SCREENSHOTS.md`; demo/app-preview video needs `DEMO_VIDEO.md`; iOS upload readiness needs `APPLE_APP_STORE_REQUIREMENTS.md`.
 
@@ -86,12 +86,12 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 
 ## Security And Compliance
 
-- `SECURITY.md` and `security-review.html` are release-lane artifacts, not optional polish. Note: Ballast stores a user's home inventory and rough valuations — treat that as sensitive personal/financial data in the threat model and privacy answers.
+- `SECURITY.md` and `security-review.html` are release-lane artifacts, not optional polish. Note: Reservoir stores a user's home inventory and rough valuations — treat that as sensitive personal/financial data in the threat model and privacy answers.
 - Public privacy, terms, pricing, subscription, financial, and security claims require source truth and founder approval.
 
 ## Founder-Only Gates
 
-Ask before: locking the business name / buying a domain (name "Ballast" is provisional pending collision check), credentials, account access, paid signups or spend, pricing changes, billing/subscription moves, DNS/MX changes, legal approval, public posting or scheduling, app-store submission, destructive actions, force pushes, production data mutations, or final release decisions.
+Ask before: locking the business name / buying a domain (name "Reservoir" is provisional pending collision check), credentials, account access, paid signups or spend, pricing changes, billing/subscription moves, DNS/MX changes, legal approval, public posting or scheduling, app-store submission, destructive actions, force pushes, production data mutations, or final release decisions.
 
 ## Common Mistakes
 
@@ -106,10 +106,10 @@ Ask before: locking the business name / buying a domain (name "Ballast" is provi
 Run installed-skill validators against this folder. From the installed skill (or this maintainer repo's `skill/b2c-mobile-business-launch`):
 
 ```bash
-npm run validate:launch-state -- --root /path/to/ballast --state PROJECT_STATE.yaml
-npm run validate:design-state -- --root /path/to/ballast
-npm run check:11-star -- --root /path/to/ballast --state PROJECT_STATE.yaml
-npm run render:launch-cockpit -- --root /path/to/ballast --state PROJECT_STATE.yaml --out /path/to/ballast/launch-cockpit.html
+npm run validate:launch-state -- --root /path/to/reservoir --state PROJECT_STATE.yaml
+npm run validate:design-state -- --root /path/to/reservoir
+npm run check:11-star -- --root /path/to/reservoir --state PROJECT_STATE.yaml
+npm run render:launch-cockpit -- --root /path/to/reservoir --state PROJECT_STATE.yaml --out /path/to/reservoir/launch-cockpit.html
 ```
 
 Add lane-specific checks for secrets, security, onboarding, attribution, store, and emotional design whenever those lanes are in scope.

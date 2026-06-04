@@ -1,14 +1,14 @@
 schema_version: "1"
 updated_at: "2026-06-03"
 project:
-  name: "Ballast"
-  slug: "ballast"
+  name: "Reservoir"
+  slug: "reservoir"
   owner: "Founder (admin@clueless.clothing)"
   phase: "phase_1_research"
   platforms:
     - ios
   bundle_ids:
-    ios: "com.ballast.app"
+    ios: "com.reservoir.app"
     android: ""
   public_urls:
     landing: ""
@@ -16,7 +16,7 @@ project:
     terms: ""
   source_truth:
     transcript: "Founder idea brief (2026-06-03): home emergency-fund app for new homeowners; inventory major appliances/systems, compute recommended reserve as % of replacement value, manage spend/pros/manuals/parts, failure-probability ranking. Explicitly non-gamified, no cutesy mascot. Founder confirmed iOS-first; requested name options before locking."
-    repo: "ballast/ (workspace inside the skill maintainer repo; will move to its own repo before build)"
+    repo: "reservoir/ (workspace inside the skill maintainer repo; will move to its own repo before build)"
     current_docs:
       - "RESEARCH.md"
       - "NAMING.md"
@@ -43,9 +43,9 @@ continuity:
     - "PRODUCTION_READINESS.md"
     - "FAILURE_CARDS.md"
   git_status_reviewed: true
-  next_action: "Founder selects a name from NAMING.md (lead candidates Backstop / Holdfast). Then run USPTO/domain/App Store clearance, re-key the workspace, and proceed to Phase 1c: lock the 11-star V1 slice and create SPEC.md. Still owed in research: AppKittie real economics + appliance cost/lifespan tables."
+  next_action: "Name selected: Reservoir (workspace re-keyed). Run USPTO + .com/.app + App Store name-availability clearance, then proceed to Phase 1c: lock the 11-star V1 slice and create SPEC.md. Still owed in research: AppKittie real economics + appliance cost/lifespan tables."
   drift_risks:
-    - "Business name 'Ballast' is a working codename with an App Store finance namesake; founder name selection is pending (NAMING.md)."
+    - "Name 'Reservoir' is selected and the workspace is re-keyed, but legal/availability clearance (USPTO, domain, App Store name) is not yet done; do not buy a domain or lock store surfaces until cleared."
     - "Pricing anchor is from vendor pages, not AppKittie download/revenue data; treat bands as directional until AppKittie pass."
 orchestration:
   preflight_done: false
@@ -67,8 +67,8 @@ orchestration:
     - "MobAI or simulator/device control"
   spawned_agents: []
   focused_validators_run:
-    - "validate:design-state (ballast) -> 0 errors"
-    - "validate:launch-state (ballast) -> pending in this run"
+    - "validate:design-state (reservoir) -> 0 errors"
+    - "validate:launch-state (reservoir) -> pending in this run"
   full_suites_run: []
 compound_engineering:
   availability: "unknown"
@@ -283,17 +283,11 @@ proof:
     scenarios_passed: []
     scenarios_failed: []
   commands:
-    - command: "tsx skill/.../validate-state.ts --root ballast"
+    - command: "tsx skill/.../validate-state.ts --root reservoir"
       expected: "0 error(s)"
       actual: "0 error(s), 0 warning(s)"
-      evidence: "ballast/state/business.json validated against the Design Room schema"
+      evidence: "reservoir/state/business.json validated against the Design Room schema"
 open_questions:
-  - owner: "founder"
-    question: "Select a name from NAMING.md. Lead candidates: Backstop (most legible) or Holdfast (most ownable); Ballast has an App Store finance namesake."
-    blocks:
-      - "name lock"
-      - "domain purchase"
-      - "app store listing"
   - owner: "founder"
     question: "Provision AppKittie/XPOZ access for real category economics, or accept the directional web/social fallback for now?"
     blocks:
@@ -303,13 +297,16 @@ resolved_questions:
   - owner: "founder"
     question: "iOS-first vs iOS+Android for V1?"
     answer: "iOS-first confirmed (2026-06-03)."
+  - owner: "founder"
+    question: "Business name?"
+    answer: "Reservoir selected (2026-06-03), chosen for visualizable readiness — its fill level mirrors the coverage meter. Workspace re-keyed; legal/availability clearance still pending."
 failure_cards:
   active:
-    - id: "ballast-name-unverified"
+    - id: "reservoir-name-clearance-pending"
       severity: "medium"
       owner: "orchestrator"
       status: "open"
-      next_action: "Options generated in NAMING.md (lead: Backstop/Holdfast). Founder to select; then run USPTO + .com/.app + App Store name-availability clearance and re-key the workspace before locking brand surfaces."
+      next_action: "Reservoir is selected and re-keyed. Run USPTO TESS + .com/.app domain + App Store name-availability checks; record results in NAMING.md and close this card once cleared. Do not buy a domain or lock store surfaces until then."
     - id: "doppler-docs-stale"
       severity: "medium"
       owner: "orchestrator"

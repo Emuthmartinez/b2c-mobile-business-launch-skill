@@ -1,4 +1,4 @@
-# Ballast — Paid / Account-Gated Tool Decisions
+# Reservoir — Paid / Account-Gated Tool Decisions
 
 Status: **partial** (Phase 0b). Records which paid or account-gated tools the launch intends to use, what is currently unavailable, and which fallbacks were used so nothing is silently downgraded.
 
