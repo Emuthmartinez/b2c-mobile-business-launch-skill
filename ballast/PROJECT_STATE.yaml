@@ -134,8 +134,10 @@ lanes:
       - "state/business.json"
       - "state/theme.tokens.json"
       - "design-room.html"
+      - "NAMING.md"
+      - "brand/name-concepts.html"
     blockers:
-      - "Still owed: BRAND.md, DESIGN.md, token promotion to design-system/, and ui-ux-pro-max design brief refinement."
+      - "Still owed: BRAND.md, DESIGN.md, token promotion to design-system/, and ui-ux-pro-max design brief refinement. Name selection pending (NAMING.md round 2: Reservoir recommended)."
   emotional_design:
     status: "deferred"
     evidence: []

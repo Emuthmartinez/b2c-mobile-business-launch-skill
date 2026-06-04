@@ -28,7 +28,19 @@ Lead candidates are **Backstop** and **Holdfast** — both nail the defensive/st
 
 If the founder wants maximum legibility: **Backstop**. If they want a more defensible, ownable brand: **Holdfast**.
 
-## Domains / handles (to verify at selection time — not yet checked)
+## Round 2 — visualizable "readiness" names (founder steer 2026-06-03)
+
+Founder steer: the name should be **something we can visualize to show readiness** — an icon can depict the prepared/covered state, not just an abstract finance word.
+
+| Name | Icon / "readiness" visual | Collision scan | Rating |
+| --- | --- | --- | --- |
+| **Reservoir** | A reserve **level filling toward full** — which *is* the product's coverage meter. The brand gesture and the core UI are identical: watch your reserve fill until "covered." | Only "Reservoir Financial" (an advisory firm); **no consumer app** found under the name. App Store namespace appears open. | ✅ **Recommended** |
+| **Harbor** | A breakwater sheltering a home dot; "safe harbor before the storm." | Several uses (Harbor compliance, crypto, misc apps). Medium. | ◐ |
+| **Aegis** | A shield with a filled gauge inside; "shielded and ready." | Security/insurance namesakes (Aegis). Medium. | ◐ |
+| **Keel** | A weighted keel/ballast bulb under a hull; steadiness (sister to Ballast). | Crowded in consumer finance: Keel Wealth, keel.money, Keel Point Benefits. | ⚠️ |
+| **Bedrock** | Solid strata under the house; foundation. | Very crowded: many "Bedrock Financial" firms + Amazon Bedrock. | ⚠️ |
+
+**Round-2 recommendation: Reservoir.** It is the only candidate whose icon directly renders the product's readiness state, and it has the cleanest consumer-app namespace. Visual concepts rendered in `brand/name-concepts.html`.
 
 For the chosen name, check: `.com`, `.app`, `getX.com`, App Store name availability, and `@X` on the channels in `growth/`. Record results here and clear the `ballast-name-unverified` failure card once a name is locked.
 

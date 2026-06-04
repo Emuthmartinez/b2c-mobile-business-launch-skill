@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ballast → name concepts: visualizing readiness</title>
+<style>
+  :root{
+    --bg:#f3f0ea; --surface:#fff; --navy:#14263f; --amber:#c2762b; --teal:#2f6f4f;
+    --text:#111620; --muted:#5b6675; --border:#d8d2c6;
+    --display:"Fraunces",Georgia,serif; --body:"Inter",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.5}
+  .wrap{max-width:960px;margin:0 auto;padding:36px 20px 72px}
+  h1{font-family:var(--display);color:var(--navy);font-size:1.7rem;margin:0 0 4px}
+  .lede{color:var(--muted);max-width:64ch;margin:0 0 26px}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;gap:18px;align-items:center}
+  .card.lead{border:2px solid var(--amber)}
+  .icon{flex:0 0 auto}
+  .meta h2{font-family:var(--display);color:var(--navy);margin:0 0 2px;font-size:1.3rem}
+  .tag{display:inline-block;font-size:.7rem;color:#fff;background:var(--teal);border-radius:999px;padding:2px 9px;margin-bottom:6px}
+  .tag.warn{background:var(--amber)}
+  .tag.muted{background:var(--muted)}
+  .meta p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+  .wordmark{font-family:var(--display);font-weight:600;letter-spacing:-.01em}
+  footer{color:var(--muted);font-size:.8rem;margin-top:30px}
+  .legend{font-size:.82rem;color:var(--muted);margin:6px 0 22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Naming concepts — visualizing "readiness"</h1>
+  <p class="lede">The brief: the name should let an icon <em>show</em> the prepared / covered state. The standout is <strong>Reservoir</strong> — because a reserve level filling toward full <em>is</em> the app's coverage meter. The brand and the core screen become the same gesture.</p>
+  <p class="legend">✅ clean consumer-app namespace &nbsp;·&nbsp; ◐ medium collision &nbsp;·&nbsp; ⚠️ crowded. Quick public scans, not legal clearance.</p>
+
+  <div class="grid">
+
+    <!-- RESERVOIR (lead) -->
+    <div class="card lead">
+      <div class="icon">
+        <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-label="Reservoir icon: a tank filled three-quarters with a covered checkmark">
+          <rect x="2" y="2" width="100" height="100" rx="24" fill="#14263f"/>
+          <rect x="26" y="22" width="52" height="64" rx="10" fill="none" stroke="#f3f0ea" stroke-width="3"/>
+          <clipPath id="tank"><rect x="29" y="25" width="46" height="58" rx="8"/></clipPath>
+          <g clip-path="url(#tank)">
+            <rect x="29" y="42" width="46" height="41" fill="#2f6f4f"/>
+            <path d="M29 44 q11 -6 23 0 t23 0 v40 h-46 z" fill="#388056"/>
+          </g>
+          <path d="M44 40 l6 7 l12 -14" fill="none" stroke="#c2762b" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="tag">✅ recommended</span>
+        <h2 class="wordmark">Reservoir</h2>
+        <p>Your reserve, filling toward <strong>covered</strong>. The icon’s fill level is the product’s coverage meter — readiness you can literally watch rise.</p>
+      </div>
+    </div>
+
+    <!-- HARBOR -->
+    <div class="card">
+      <div class="icon">
+        <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-label="Harbor icon: a breakwater sheltering a home from waves">
+          <rect x="2" y="2" width="100" height="100" rx="24" fill="#14263f"/>
+          <path d="M22 70 q30 -34 60 0" fill="none" stroke="#f3f0ea" stroke-width="3" stroke-linecap="round"/>
+          <path d="M44 66 l8 -12 l8 12 z" fill="#c2762b"/>
+          <rect x="48" y="64" width="8" height="10" fill="#c2762b"/>
+          <path d="M18 82 q8 -7 16 0 t16 0 t16 0 t16 0" fill="none" stroke="#2f6f4f" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="tag muted">◐ medium</span>
+        <h2 class="wordmark">Harbor</h2>
+        <p>A safe harbor before the storm — the home sheltered behind the breakwater while the weather rolls in.</p>
+      </div>
+    </div>
+
+    <!-- AEGIS -->
+    <div class="card">
+      <div class="icon">
+        <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-label="Aegis icon: a shield with a filled readiness gauge">
+          <rect x="2" y="2" width="100" height="100" rx="24" fill="#14263f"/>
+          <path d="M52 20 l26 8 v22 c0 18 -13 28 -26 34 c-13 -6 -26 -16 -26 -34 v-22 z" fill="none" stroke="#f3f0ea" stroke-width="3"/>
+          <path d="M34 52 a18 18 0 0 1 36 0" fill="none" stroke="#2f6f4f" stroke-width="6" stroke-linecap="round"/>
+          <line x1="52" y1="52" x2="64" y2="44" stroke="#c2762b" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="tag muted">◐ medium</span>
+        <h2 class="wordmark">Aegis</h2>
+        <p>A shield with a readiness gauge inside — protected and prepared. (Some security/insurance namesakes.)</p>
+      </div>
+    </div>
+
+    <!-- KEEL -->
+    <div class="card">
+      <div class="icon">
+        <svg width="104" height="104" viewBox="0 0 104 104" role="img" aria-label="Keel icon: a hull with a weighted keel that keeps it upright">
+          <rect x="2" y="2" width="100" height="100" rx="24" fill="#14263f"/>
+          <path d="M30 44 q22 16 44 0 l-6 16 q-16 8 -32 0 z" fill="none" stroke="#f3f0ea" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="52" y1="60" x2="52" y2="80" stroke="#f3f0ea" stroke-width="3"/>
+          <circle cx="52" cy="84" r="6" fill="#c2762b"/>
+          <path d="M26 40 q8 -5 16 0" fill="none" stroke="#2f6f4f" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="meta">
+        <span class="tag warn">⚠️ crowded</span>
+        <h2 class="wordmark">Keel</h2>
+        <p>The weighted keel that won’t let you capsize — sister metaphor to Ballast. But the consumer-finance namespace is busy (Keel Wealth, keel.money).</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Concept sketches for founder selection · Ballast working codename · 2026-06-03 · colors from <code>state/theme.tokens.json</code>. Final marks would be produced through the design system once a name is locked.</footer>
+</div>
+</body>
+</html>
