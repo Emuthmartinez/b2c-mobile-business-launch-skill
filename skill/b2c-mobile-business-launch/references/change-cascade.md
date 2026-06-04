@@ -64,7 +64,7 @@ Higgsfield-generated assets embed design tokens, feature names, copy, and pricin
 ## Process
 
 1. **Classify the change** against the map above (a change can be more than one type).
-2. **Enumerate impacted surfaces.** List each surface from the matching rows. For surfaces with localizations, the cascade applies to **every locale**.
+2. **Enumerate impacted surfaces.** List each surface from the matching rows. For surfaces with localizations, the cascade applies to **every localized locale** — and "which locales" is defined by the `LOCALIZATION_MARKET_RESEARCH.md` priority tiers (see [`localization-market-research.md`](localization-market-research.md)), not every language the stores support. Cascade Tier 1 markets across all surfaces (incl. paywall/offers), Tier 2 markets across metadata only.
 3. **Update or justify each.** Edit the surface, or record one line of why it is unaffected. A surface left stale by omission is the `change-cascade-incomplete` failure card.
 4. **Re-render derived assets.** Copy or UI changes that appear in App Store screenshots, App Preview, or ad creative require a **re-render**, not just a doc edit — old screenshots showing old copy will drift and can draw a Guideline 2.3 metadata rejection.
 5. **Reconcile the lexicon.** Confirm the canonical terms (from `DESIGN.md`/`BRAND.md`) read identically across in-app, store, landing, schema, RevenueCat, and email.

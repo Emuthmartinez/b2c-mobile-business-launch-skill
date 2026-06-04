@@ -1,13 +1,13 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.6.0",
-  "updatedAt": "2026-05-31",
+  "version": "0.6.2",
+  "updatedAt": "2026-06-04",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "Adds a conversion-craft lane adapted from Corey Haines' marketingskills (MIT, © Corey Haines 2025) where the skill was genuinely thin, without duplicating lanes it already covers deeply.",
-    "Adds references/conversion-copy.md: conversion copywriting and copy-editing craft (voice-of-customer mining, message hierarchy, claims ledger, per-surface recipes) producing COPY_BRIEF.md so one promise carries across landing, App Store, paywall, email, and screenshots.",
-    "Adds references/cro-landing.md: public-funnel CRO structure (one conversion goal, above-the-fold promise/CTA/proof, trust placement, mobile-viewport + Core Web Vitals, friction audit) producing CRO_AUDIT.md — distinct from the in-app onboarding-conversion lane.",
-    "Folds an experiment-design discipline into analytics-attribution.md (falsifiable hypothesis, minimum detectable effect, sample sizing, the low-traffic indie-launch reality, anti-peeking and guardrail rules) so copy/CRO A/B tests are not reported as winners when underpowered.",
-    "Wires the new lane into SKILL.md routing (rule 18a + Phase 2/Phase 4 flow), the launch-coverage matrix (Conversion copy, Landing CRO rows), artifact-contracts (COPY_BRIEF.md, CRO_AUDIT.md), and source-registry.yaml with MIT attribution; intentionally skips marketing skills already covered (paid UA, viral loops, onboarding, ASO, email, GEO/SEO, pricing) and out-of-scope B2B skills (cold-email, prospecting, revops, sales-enablement)."
+    "Adds a conversion-craft lane adapted from Corey Haines' marketingskills (MIT, © Corey Haines 2025) where this skill was genuinely thin, without duplicating lanes it already covers deeply.",
+    "Adds references/conversion-copy.md so voice-of-customer mining, message hierarchy, claims discipline, and per-surface copy recipes produce COPY_BRIEF.md for landing pages, store listings, paywalls, email, and screenshots.",
+    "Adds references/cro-landing.md so public-funnel CRO audits produce CRO_AUDIT.md and cover above-the-fold promise, proof, CTA clarity, mobile friction, and Core Web Vitals outside the in-app onboarding lane.",
+    "Folds experiment-design discipline into analytics-attribution.md so copy and landing-page tests require falsifiable hypotheses, minimum detectable effects, sample sizing, anti-peeking rules, and low-traffic honesty before a win is claimed.",
+    "Wires the new conversion-copy and landing-CRO surfaces into SKILL.md routing, launch-coverage.md, artifact contracts, and source-registry.yaml with explicit MIT attribution while keeping already-covered marketing lanes and out-of-scope B2B playbooks excluded."
   ]
 }

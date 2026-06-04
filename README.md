@@ -4,6 +4,22 @@ A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript,
 
 This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
 
+> **Status:** Public, actively maintained. Licensed under [MIT](LICENSE).
+
+## Who this is for & what you need
+
+This skill is **highly opinionated** and built for **subscription / freemium consumer apps** — not one-time purchases, and it does not (yet) cover ad-based monetization. It encodes proven launch formulas so an agent can take an idea, transcript, or half-built repo and drive it to a real launch.
+
+To use it you need:
+
+- **An AI coding agent that supports skills** — [Claude Code](https://claude.com/claude-code) or Codex. The skill is a set of markdown playbooks plus TypeScript validators that the agent reads and runs; it is **not** a standalone app you launch by itself.
+- **Node.js 18+** to run the validators (`npm install`).
+- *(Optional, swappable)* accounts for the third-party providers the playbooks reference — RevenueCat, Doppler, PostHog, Stripe, Resend, Apple App Store Connect / Google Play, Firecrawl, and similar. Most have free tiers. **None are required to read the playbooks or run the validators**, and the skill always routes an explicit fallback when a paid tool is unavailable.
+
+Install it as a skill (see [Install](#install) below), then give your agent one broad launch request — examples are in [Autopilot Usage](#autopilot-usage).
+
+> Want to **maintain or contribute to** this skill rather than use it? Start with [`AGENTS.md`](AGENTS.md). That file and `CLAUDE.md` are maintainer guides, not usage docs.
+
 ## Core Idea
 
 The skill now has two layers:
@@ -123,6 +139,7 @@ The scripts are intentionally simple:
 - `check-security-release.ts` checks `SECURITY.md`, security-review routing, OWASP/platform basis, mobile hardening, entitlement/webhook abuse controls, privacy/analytics/email controls, supply-chain checks, incident response, and accepted risks.
 - `check-content-assets.ts` checks `CONTENT_ASSETS.md`, Remotion/Higgsfield route decisions, fallback approval, license status, source inputs, render proof, claim review, and manifest shape.
 - `check-viral-growth-loop.ts` checks `VIRAL_GROWTH.md`, product/referral/content loops, monetization timing, analytics proof, abuse controls, stop/scale rules, and format-lab evidence.
+- `check-launch-narrative.ts` checks `growth/LAUNCH_NARRATIVE.md`, the feeling-first launch thesis and emotional angle, the tentpole-plus-weekly-cadence model and standing-audience compounding, the launch-day run-of-show, traceability refs, and the deterministic 2026 copy guardrails (no hashtags, no emojis, no link in the main announcement post) scanned against the fenced post copy.
 - `check-paid-user-acquisition.ts` checks `PAID_UA.md`, one-channel paid acquisition focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, weekly schedule, stop/scale rules, and founder-only spend gates.
 - `check-store-screenshots.ts` checks `SCREENSHOTS.md`, raw-vs-composed screenshot separation, ParthJadhav/app-store-screenshots or equivalent export routing, iPhone/iPad/Play wells, App Icon/App Preview routing, copy overlays, validation, and visual QA proof.
 - `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
@@ -247,3 +264,7 @@ npm run check:skill-version -- --source skill/b2c-mobile-business-launch --insta
 ```
 
 This skill is intentionally guardrail-heavy. Its job is to prevent launch drift across research, design, build, revenue, legal, store, email, growth, and verification surfaces.
+
+## Contributing
+
+Contributions from humans and agents are welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for setup, the `npm run audit:ci` gate, versioning/source-freshness rules, and PR expectations. Maintainer details live in [`AGENTS.md`](AGENTS.md) and [`CLAUDE.md`](CLAUDE.md). The repo is licensed under [MIT](LICENSE).

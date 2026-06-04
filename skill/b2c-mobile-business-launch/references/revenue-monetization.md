@@ -23,6 +23,7 @@ Load `paid-user-acquisition.md` before using paid ads, Apple Search Ads, web-to-
 - 7. Pricing And Disclosure Rules
 - 8. Backend And Analytics Contract
 - 9. Founder-Only Gates
+- 10. Anti-Patterns (Monetization And Growth Decision Traps)
 
 ## 1. Official Sources To Refresh
 
@@ -236,3 +237,36 @@ Always ask before:
 - switching from Test Store/sandbox to production
 
 Agents may self-resolve doc organization, sandbox validation sequencing, and which non-live checklist to run first.
+
+## 10. Anti-Patterns (Monetization And Growth Decision Traps)
+
+This skill mostly tells agents what to do. This section names what *not* to do: the comfortable defaults that feel safe and quietly lose. They share one pattern — founders fall in love with building, then reach for the cozy choice on money and distribution. The losing moves are documented in public benchmarks; the winning moves are slightly uncomfortable.
+
+Every figure below is from the **RevenueCat State of Subscription Apps 2026** report (already tracked in `references/source-registry.yaml`). Treat each direction as a strong default to test against your product, not dogma — the existing nuance in §4c and `onboarding-conversion.md` still holds (freemium can be right when free users drive network effects; trial length is an experiment). The anti-pattern is reaching for the cozy default *by reflex* and never surfacing the trade-off.
+
+This is the digest index. Traps 1–2, 5–6 are detailed here; the rest live in their home references.
+
+| # | Anti-pattern (the cozy default) | Lives in |
+| --- | --- | --- |
+| 1 | Assume you are the exception | here |
+| 2 | Soft paywall by default because a hard paywall "feels pushy" | here + `onboarding-conversion.md` |
+| 3 | Default to a 3-day/short trial because "urgency converts" | `onboarding-conversion.md` |
+| 4 | Ignore the first session and bank on a day-30 win-back email | `onboarding-conversion.md` |
+| 5 | Push monthly, skip annual | here |
+| 6 | Price low to be "humble" | here |
+| 7 | Ship English-only; treat localization as optional translation | `app-store-listing-prep.md` |
+| 8 | Run ads before you can read the result | `paid-user-acquisition.md` |
+| 9 | Optimize ad creative first | `paid-user-acquisition.md` |
+| 10 | Run one paywall experiment a year and call it focus | `onboarding-conversion.md` |
+| 11 | Chase views / vanity reach | `paid-user-acquisition.md` + `viral-growth-loops.md` |
+| 12 | Skip the App Preview video because it "feels like a real project" | `app-store-listing-prep.md` |
+
+**1. Assume you are the exception.** Only ~4.6% of newly launched apps reach $10K/month within two years, with roughly a 75% drop-off from the $1K to the $10K milestone. A vision board does not move you into the 4.6%. Do not pick a monetization model that only works if you are an outlier. Choose the path that survives if you are the median app, and instrument the funnel so you learn fast enough to climb.
+
+**2. Soft paywall by default because a hard paywall "feels pushy."** Hard paywalls show a median ~10.7% Day-35 download-to-paid conversion vs ~2.1% for freemium (about 5x), and roughly 8–9x higher D14 revenue per install ($2.32 vs $0.27). Letting everyone in free and gently whispering "maybe upgrade someday" is the cozy choice that leaves most of the money behind. Default to *testing* a hard paywall after a clear value moment; choose freemium **deliberately** when free users drive network effects, UGC inventory, marketplace value, or word of mouth (see §4c and `onboarding-conversion.md` Paywall Timing), not because forcing a decision feels rude.
+
+**5. Push monthly, skip annual.** Apps whose most popular plan is yearly generate the highest realized revenue per install (D14 $0.36, D60 $0.46 — above weekly- and monthly-dominant apps); an annual commitment locks in retention instead of handing the renewal decision back to the store every month. Do not lead with monthly because it "feels honest and low-commitment." Offer annual as the highlighted plan with monthly and any entry plan visible alongside it (see `onboarding-conversion.md` Plan And Trial Mix), and test the mix.
+
+**6. Price low to be "humble."** High-priced apps show ~5.4x the monthly realized LTV of low-priced apps ($35.89 vs $6.67) and ~6x the yearly LTV ($62.19 vs $10.69) — and download-to-paid is *higher* at higher prices (2.8% vs 1.4%), because price reads as a quality signal. Pricing at $2.99 "to avoid gouging anyone" trains users to value the app at nothing; it is not generous. Set price from delivered value and willingness to pay, then test it. (This is distinct from the App Store **container price**, which must stay Free for subscription/IAP apps — see §4. The anti-pattern here is the *subscription/IAP price* being anchored low out of timidity.)
+
+Founder-only gate reminder: pricing, plan mix, trial length, and paywall-model changes are all founder-approved (see §9). Surface the benchmark trade-off; do not silently apply or silently skip it.
