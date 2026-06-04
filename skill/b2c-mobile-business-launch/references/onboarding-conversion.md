@@ -212,6 +212,16 @@ Default candidate package set for subscription apps:
 
 RevenueCat 2026 benchmarks show longer trials can convert better, but shorter trials can improve experiment velocity and cash-flow feedback. Pick an initial hypothesis, then test with RevenueCat experiments or an equivalent feature flag.
 
+### Conversion Anti-Patterns
+
+Name the cozy defaults that feel safe and quietly lose. These are the onboarding/trial entries in the monetization-and-growth digest in [`revenue-monetization.md`](revenue-monetization.md) §10; figures are from the **RevenueCat State of Subscription Apps 2026** report. Treat each as a strong default to test, not dogma — the anti-pattern is reaching for the comfortable choice by reflex.
+
+**3. Default to a 3-day / short trial because "urgency converts."** Trials of ≤4 days convert to paid at ~25.5%, vs ~37.4% at 5–9 days and ~42.5% at 17–32 days — yet ~46.5% of apps still ship trials of 4 days or less. Short trials manufacture pressure but cut conversion; longer trials let the user reach real value before deciding. Do not pick the short trial by default (see Plan And Trial Mix above: "do not default to very short trials without a reason"). Set a trial-length hypothesis and test it; shorter trials are a deliberate choice for faster learning or cash-flow feedback, not a reflex.
+
+**4. Ignore the first session and bank on a day-30 win-back email.** ~78–90% of trials start on Day 0 (Business ~89.9%, Health & Fitness ~82.1%, Productivity ~78%), and ~55% of 3-day-trial cancellations happen on Day 0 — before any day-30 win-back email could ever send. The beautifully written re-engagement email reaches a user who already churned. Win or lose the user in the first session: the onboarding flow must prove value, explain billing clearly, and route to the first activation task on Day 0 (see `revenue-monetization.md` §4c). Win-back email is a supplement, never the plan.
+
+**10. Run one paywall experiment a year and call it focus.** Testing a button color in March is not an experimentation program. RevenueCat 2026 guidance: lift comes from running smaller, parallel experiments across *when* the paywall appears and *what* it offers — keeping a true control and judging outcomes on cohort LTV, refunds, and early churn — not a once-a-year tweak. Stand up a continuous experiment cadence with RevenueCat Experiments or an equivalent feature-flag/holdout setup; "staying lean" by never testing is the trap, and it quietly loses to teams that test their headline and timing repeatedly.
+
 ## Analytics Events
 
 Add these to `ANALYTICS.md` before implementation:

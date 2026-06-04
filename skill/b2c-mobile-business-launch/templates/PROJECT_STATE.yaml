@@ -99,6 +99,8 @@ lanes:
     status: "partial"
     evidence:
       - "RESEARCH.md"
+      - "localization-market-research/LOCALIZATION_MARKET_RESEARCH.md"
+      - "localization-market-research/localization-market-research.html"
     blockers: []
   traceability:
     status: "partial"
@@ -233,6 +235,7 @@ lanes:
     status: "partial"
     evidence:
       - "growth/VIRAL_GROWTH.md"
+      - "growth/LAUNCH_NARRATIVE.md"
       - "growth/format-lab.csv"
       - "UGC_PLAYBOOK.md"
       - "FASTLANE_OPS.md"

@@ -8,6 +8,8 @@ For App Store listing preparation, load `app-store-listing-prep.md` too. ASO dec
 
 Load `paid-user-acquisition.md` before Apple Search Ads, paid campaign custom product page routing, paid creative tests, MMP/ad-network SDK decisions, or spend-readiness claims.
 
+Load `localization-market-research.md` before any localization work. Localization is a market-selection decision made from search-demand evidence, not a translation task: research keyword popularity, difficulty, and demand per storefront, rank markets into priority tiers, and produce `LOCALIZATION_MARKET_RESEARCH.md` before localizing metadata, keywords, screenshots, paywalls, landing, or email. Localize based on search demand, not language.
+
 Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
 
 ## Contents
@@ -240,7 +242,7 @@ Run a weekly loop for the first 6-8 weeks after launch:
 - crash-free sessions and support volume
 - subscription funnel: trial starts, conversion, cancels, refunds, yearly/monthly mix
 - competitor metadata, screenshot, ranking, ad, pricing, and review changes
-- localization opportunities by country revenue/downloads
+- localization opportunities by country revenue/downloads: refresh `LOCALIZATION_MARKET_RESEARCH.md` from first-party App Analytics/Play statistics — promote Tier 2/3 markets that are downloading or converting, prune localized markets that under-deliver (see `localization-market-research.md` §7)
 
 When keyword or CVR analysis flags a priority angle, produce a 3-5 slide social carousel via `product-photoshoot --mode social_carousel` (DESIGN.md brief required; gate behind spend confirmation per `references/paid-tool-routing.md`; record in `CONTENT_ASSETS.md`; founder approval required before distribution); add the produced carousel to the prioritized-experiments output below.
 

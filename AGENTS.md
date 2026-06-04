@@ -4,6 +4,8 @@ This repo maintains the `b2c-mobile-business-launch` skill: source skill files, 
 
 This file is for maintaining this skill repo itself. Do not copy these instructions into a launched business or generated app repo. Business repos created through the skill must get their own product-specific `AGENTS.md` and `CLAUDE.md` from the shipped templates, filled with the current app, stack, launch state, and source-of-truth docs.
 
+New contributor (human or agent)? Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) for setup, the CI gate, and PR expectations; this file is the deeper maintainer reference behind it.
+
 ## Repo Map
 
 - `README.md`: public overview and maintainer commands.
@@ -68,10 +70,10 @@ repo_root="$PWD"
 
 rsync -a --delete --exclude node_modules \
   "$repo_root/skill/b2c-mobile-business-launch/" \
-  /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch/
+  ~/.codex/skills/b2c-mobile-business-launch/
 
 (
-  cd /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch
+  cd ~/.codex/skills/b2c-mobile-business-launch
   npm install
   npm run audit
   npm pack --dry-run --json
@@ -79,7 +81,7 @@ rsync -a --delete --exclude node_modules \
 
 diff -qr --exclude node_modules \
   "$repo_root/skill/b2c-mobile-business-launch" \
-  /Users/eduardomuthmartinez/.codex/skills/b2c-mobile-business-launch
+  ~/.codex/skills/b2c-mobile-business-launch
 
 ls -ld ~/.codex/skills/b2c-mobile-business-launch \
   ~/.claude/skills/b2c-mobile-business-launch \

@@ -122,9 +122,9 @@ function parseArgs(argv: string[]): VersionArgs {
 
 function findDefaultSource(): string {
   const candidates = [
-    "/Users/eduardomuthmartinez/code/b2c-mobile-business-launch-skill/skill/b2c-mobile-business-launch",
+    process.env.B2C_SKILL_SOURCE,
     skillRoot,
-  ];
+  ].filter((candidate): candidate is string => Boolean(candidate));
   return candidates.find((candidate) => existsSync(path.join(candidate, "skill-version.json"))) ?? skillRoot;
 }
 

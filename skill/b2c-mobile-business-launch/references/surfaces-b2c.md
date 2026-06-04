@@ -24,7 +24,7 @@ State requirements for each custom product page:
 - traffic source or organic keyword reason
 - screenshot count and app preview count
 - promotional text under 170 characters
-- keyword set and localization plan
+- keyword set and localization plan drawn from `LOCALIZATION_MARKET_RESEARCH.md` priority tiers (see `localization-market-research.md`), not a blanket translate-everything pass
 - deep link when the page should open a specific in-app path
 - share URL or blocked reason
 - measurement plan and approval state
