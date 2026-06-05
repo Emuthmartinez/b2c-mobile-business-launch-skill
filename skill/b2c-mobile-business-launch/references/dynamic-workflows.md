@@ -4,16 +4,35 @@ Use this when the current runtime is **Claude Code** and the work is a non-trivi
 
 This reference is the home for the **Claude-vs-Codex split** and for **Dynamic Workflows** guidance, for both agents driving the skill and humans running it. It does not replace `parallel-agent-orchestration.md` (subagents and worktrees) or `compound-engineering-routing.md` / `engineering-orchestration.md` (the build); it sits in front of them for the speced-but-not-yet-built phases.
 
-## The Claude-vs-Codex Split
+## The Claude-vs-Codex Split (A Recommendation, Not A Requirement)
 
-This skill's default division of labor:
+This is a **default bias and a recommendation, not a hard rule**. Either runtime can do any stage, and the founder decides. The skill's job is to make the recommendation visible — and especially to surface it to people who are running Codex on pre-build work — not to block, gate, or refuse work in whichever runtime is in front of you.
 
-- **Claude owns everything up to and including the spec/handoff.** Evidence gathering, category economics, social-language mining, 11-star and emotional design, analytics/attribution blueprints, paid UA and viral-growth plans, the launch narrative, localization market research, design exploration, and the build contracts (`SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, `ENGINEERING_PLAN.md`). These are research-heavy, taste-heavy, and adversarial-verification-shaped — exactly where Dynamic Workflows earn their cost.
-- **Codex owns the core engineering build** once the spec is ready. The handoff bundle (`AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, `agents/`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`) is what Codex (or Compound Engineering on Codex) consumes to write the app.
+The recommended division of labor:
 
-The boundary is a deliberate gate, not a hard rule: a founder can run the build under Claude too, and Claude can do small code edits. But when the founder's stated preference is "Claude for everything that is not the core app build, Codex for the build," structure the run so Claude takes each pre-build stage to a locked, evidence-backed artifact, then hands a complete spec to Codex. Record which runtime owns which lane in `ORCHESTRATION.md` and `PROJECT_STATE.yaml` so a later session does not re-litigate it.
+- **Claude is the better fit for everything up to and including the spec/handoff.** Evidence gathering, category economics, social-language mining, 11-star and emotional design, analytics/attribution blueprints, paid UA and viral-growth plans, the launch narrative, localization market research, design exploration, and the build contracts (`SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, `ENGINEERING_PLAN.md`). These are research-heavy, taste-heavy, and adversarial-verification-shaped — exactly where Dynamic Workflows earn their cost.
+- **Codex is the better fit for the core engineering build** once the spec is ready. The handoff bundle (`AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, `agents/`, `TECH_SPEC.md`, `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`) is what Codex (or Compound Engineering on Codex) consumes to write the app.
 
-Do **not** spend a Claude Dynamic Workflow on the core engineering build (500-file migrations, codebase-wide refactors, the app implementation itself) when Codex owns that lane — that is the build, and it belongs to the Codex/CE route. Workflows on the Claude side stop at the spec.
+When the founder leans this way, structure the run so Claude takes each pre-build stage to a locked, evidence-backed artifact, then hands a complete spec to Codex. Record which runtime is handling which lane in `ORCHESTRATION.md` and `PROJECT_STATE.yaml` so a later session does not re-litigate it. But none of this is a gate: Claude can do small code edits, a founder can run the whole build under Claude, and a founder can run the whole pre-build under Codex if they choose — the skill recommends, then proceeds.
+
+As a cost note rather than a rule: a Claude Dynamic Workflow is usually wasted on the core engineering build (500-file migrations, codebase-wide refactors, the app implementation itself) — that work belongs to the Codex/CE route, so workflows on the Claude side typically stop at the spec.
+
+## Detect Codex And Recommend Claude For Pre-Build
+
+The highest-value moment for this recommendation is when someone is **running Codex (or any non-Claude-Code runtime) on a pre-build stage** — research, social mining, 11-star/emotional design, analytics, paid UA, viral growth, launch narrative, localization research, design/taste, naming, or spec hardening. Those are exactly the stages where Claude + Dynamic Workflows tends to help most, and the Codex user has no `ultracode` to reach for.
+
+**How to detect the runtime.** The agent generally knows which runtime it is; corroborate with concrete signals when unsure:
+
+- Dynamic Workflows are unavailable — `ultracode` does nothing, `/effort` has no `ultracode` option, `/workflows` and `/deep-research` are absent.
+- The session was invoked through the Codex app or `codex` CLI, or `AGENTS.md` is the active entrypoint while Claude Code-specific features are absent.
+- Runtime/environment markers indicate Codex rather than Claude Code.
+
+**What to do when detected (recommend once, never block):**
+
+1. Surface the recommendation **once**, plainly — not via AskUserQuestion, not as a founder-only gate. Say what and why: this pre-build stage tends to go better on Claude Code with Dynamic Workflows (per-agent isolation, adversarial verification, fan-out research), and Codex remains the stronger pick for the core build that follows.
+2. Give the concrete option: run this stage in Claude Code with `ultracode` (or `/deep-research`), or continue here in Codex — their call.
+3. **Continue the work in the current runtime regardless of the answer.** Do not pause, do not require approval, do not refuse. If they stay in Codex, run the same quality shapes (fan-out, adversarial verification, quarantine) as serial/parallel subagents or inline.
+4. Record that the recommendation was made in `PROJECT_STATE.yaml` so it is not repeated every turn. Make it once per pre-build phase or session, not on every message — no nagging.
 
 ## What A Dynamic Workflow Is
 
@@ -117,9 +136,13 @@ When a stage runs as a workflow, record it in `ORCHESTRATION.md` and the top-lev
 ```yaml
 orchestration:
   runtime_split:
-    prebuild_owner: "claude"      # who owns research → spec
-    build_owner: "codex"          # who owns the core app build
-    rationale: "Founder prefers Claude for non-build stages, Codex for the build."
+    current_runtime: "codex"      # the runtime actually in use this session
+    recommended_prebuild: "claude"   # recommendation, not a requirement
+    recommended_build: "codex"
+    prebuild_handled_by: "codex"  # who is actually doing pre-build this run
+    build_handled_by: "codex"
+    recommendation_made: true     # surfaced the Claude-for-pre-build tip this session/phase
+    rationale: "Recommendation surfaced; founder chose to continue in Codex for this stage."
   workflows:
     - stage: "research-backed-spec"
       used: true                  # true | false
@@ -145,7 +168,8 @@ Refresh these before changing any trigger, API name, flag, or limit above — th
 
 A pre-build stage run through Dynamic Workflows is done only when:
 
-- the runtime split (who owns pre-build vs build) is recorded in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`;
+- the runtime in use, the recommended split, and who actually handled pre-build vs build are recorded in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`;
+- if the runtime is Codex (or another non-Claude-Code runtime) on a pre-build stage, the Claude-for-pre-build recommendation was surfaced once (plainly, not as a gate), recorded, and the work continued without blocking;
 - the workflow used a token budget, and any loop pattern was paired with `/goal`;
 - any agent that read untrusted public content was quarantined (read-only, no high-privilege actions);
 - producing agents and verifying agents were separate (no self-judging) where a quality gate was claimed;
