@@ -1418,7 +1418,7 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/onboarding-conversion.md
       - skill/b2c-mobile-business-launch/references/revenue-monetization.md
-    notes: State of Subscription Apps benchmark. Cited figures verified against the SOSA 2026 PDF on 2026-06-05; added involuntary-churn (Google Play ~31% vs App Store ~14%), AI-retention (~41% higher RPP / ~30% faster churn), and paid-intro-offer findings.
+    notes: State of Subscription Apps benchmark. Cited figures verified against the SOSA 2026 PDF on 2026-06-05; added involuntary-churn (Google Play ~31% vs App Store ~14%), AI-retention (~41% higher RPP / ~30% faster churn), paid-intro-offer, first-renewal-inflection / Y1-retention-softening, reactivation-by-plan-duration (monthly ~20% / weekly ~9% / annual ~5%), and web-revenue-adoption (~41% top-tier vs ~1.3% hobby) findings.
   - id: styles-refero-design
     name: styles.refero.design
     source_type: website
