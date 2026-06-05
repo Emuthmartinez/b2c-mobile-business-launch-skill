@@ -152,6 +152,7 @@ Evidence rules:
 - RevenueCat's 2026 report shows longer trials can convert better, while shorter trials can speed learning and cash-flow feedback. Treat trial length as an experiment, not dogma.
 - RevenueCat's 2026 report identifies the moment after paywall dismissal as a high-leverage conversion point. Test transparent downsells, reverse trials, or shorter commitments without fake scarcity or unclear renewal terms.
 - Day 0 is the cancellation-risk window. The first session must prove value, explain billing clearly, and route users to the first activation task.
+- RevenueCat's 2026 report shows AI-centric apps earn ~41% more revenue per payer but churn ~30% faster, and LLM-backed features carry real per-subscriber serving cost. Treat AI value as a conversion driver, not a retention guarantee: instrument retention from the first cohort, and follow the report's own unit-economics pattern for AI apps (lead with annual plans, run less-generous freemium, and add a higher-priced AI tier) rather than assuming novelty will keep users. See §8a for the involuntary-churn side of retention.
 
 ## 5. Stripe Required Setup
 
@@ -225,6 +226,20 @@ Create or update `ANALYTICS.md` and backend docs with:
 Acceptance:
 - a support agent can find a user by app UID, RevenueCat App User ID, Stripe customer ID, store transaction ID, email, or anonymous redemption path.
 
+## 8a. Billing Health And Involuntary Churn (Recovery As A Growth Lever)
+
+Not all churn is a user decision. RevenueCat's **State of Subscription Apps 2026** finds that on **Google Play ~31% of all subscription cancellations are involuntary billing failures** (a ~32.2% billing-error rate) — **more than double the App Store's ~14%** (~15.2%). The report's framing: for Android-heavy apps, *fixing billing is one of the highest-leverage growth levers available*, because recovered payments are retained revenue you already earned with no new acquisition spend. Refund medians cluster around 3–5%; involuntary churn is the larger, more recoverable leak.
+
+This is distinct from the win-the-first-session work in `onboarding-conversion.md` (that is voluntary churn / failure to activate). Billing health is the recovery system for users who already decided to pay and then hit a card decline, expired card, insufficient funds, or grace-period lapse.
+
+Treat billing recovery as a first-class system, not an afterthought:
+- **Grace period + account hold (Android):** enable Google Play grace period and account hold so a failed renewal retries instead of revoking access instantly. Handle the Play RTDN states (`SUBSCRIPTION_IN_GRACE_PERIOD`, `SUBSCRIPTION_ON_HOLD`, `SUBSCRIPTION_RECOVERED`) through RevenueCat or the backend so entitlement state tracks the recovery, not just the first failure. Confirm exact state names against current Play billing docs before implementing (§1).
+- **Billing retry (iOS):** Apple retries failed renewals automatically; surface the App Store-managed *Billing Issue* / update-payment path rather than treating the first decline as a hard cancel.
+- **RevenueCat billing-issue webhook → dunning:** wire the RevenueCat `BILLING_ISSUE` / billing-issue webhook to a recovery sequence — an in-app banner and a push *before* the grace period ends, plus the `payment.failed` lifecycle email in `resend-email-ops.md`. Give the user one tap to update the payment method (native subscription management deep link), and show the remaining grace period in plain language.
+- **Experience-card alignment:** the payment-failure recovery card in `experience-cards.md` (restorative gesture, grace-period-aware copy, no spend prompt on a failure screen) is the UX contract for this; keep the copy non-punitive.
+
+Analytics: emit `billing_issue_detected`, `billing_recovery_prompt_shown`, `payment_method_update_started`, and `billing_recovered` / `billing_issue_churned` with `platform`, `store`, `grace_state`, and `failure_reason` dimensions so involuntary churn and recovery rate are measurable separately from voluntary churn. Do not report retention health without splitting voluntary vs. involuntary churn by platform.
+
 ## 9. Founder-Only Gates
 
 Always ask before:
@@ -260,6 +275,8 @@ This is the digest index. Traps 1–2, 5–6 are detailed here; the rest live in
 | 10 | Run one paywall experiment a year and call it focus | `onboarding-conversion.md` |
 | 11 | Chase views / vanity reach | `paid-user-acquisition.md` + `viral-growth-loops.md` |
 | 12 | Skip the App Preview video because it "feels like a real project" | `app-store-listing-prep.md` |
+| 13 | Treat involuntary (billing-failure) churn as inevitable | here + §8a |
+| 14 | Bank on AI novelty for retention | here + §4c |
 
 **1. Assume you are the exception.** Only ~4.6% of newly launched apps reach $10K/month within two years, with roughly a 75% drop-off from the $1K to the $10K milestone. A vision board does not move you into the 4.6%. Do not pick a monetization model that only works if you are an outlier. Choose the path that survives if you are the median app, and instrument the funnel so you learn fast enough to climb.
 
@@ -268,5 +285,9 @@ This is the digest index. Traps 1–2, 5–6 are detailed here; the rest live in
 **5. Push monthly, skip annual.** Apps whose most popular plan is yearly generate the highest realized revenue per install (D14 $0.36, D60 $0.46 — above weekly- and monthly-dominant apps); an annual commitment locks in retention instead of handing the renewal decision back to the store every month. Do not lead with monthly because it "feels honest and low-commitment." Offer annual as the highlighted plan with monthly and any entry plan visible alongside it (see `onboarding-conversion.md` Plan And Trial Mix), and test the mix.
 
 **6. Price low to be "humble."** High-priced apps show ~5.4x the monthly realized LTV of low-priced apps ($35.89 vs $6.67) and ~6x the yearly LTV ($62.19 vs $10.69) — and download-to-paid is *higher* at higher prices (2.8% vs 1.4%), because price reads as a quality signal. Pricing at $2.99 "to avoid gouging anyone" trains users to value the app at nothing; it is not generous. Set price from delivered value and willingness to pay, then test it. (This is distinct from the App Store **container price**, which must stay Free for subscription/IAP apps — see §4. The anti-pattern here is the *subscription/IAP price* being anchored low out of timidity.)
+
+**13. Treat involuntary (billing-failure) churn as inevitable.** On Google Play ~31% of cancellations are involuntary billing failures (~32.2% billing-error rate) vs. ~14% (~15.2%) on the App Store — and the report calls fixing billing one of the highest-leverage growth levers for Android apps, because recovered payments are revenue you already earned. Shipping the paywall and then shrugging at declines is the cozy default that quietly leaks retained revenue. Stand up the recovery system in §8a (grace period / account hold, billing-issue webhook → dunning push + in-app banner + `payment.failed` email, one-tap update-payment), and split voluntary vs. involuntary churn by platform in analytics. Do not call retention "healthy" without measuring the involuntary slice.
+
+**14. Bank on AI novelty for retention.** AI-centric apps earn ~41% more revenue per payer but churn ~30% faster (per the 2026 report), and LLM features carry real per-subscriber cost. Assuming the AI wow-factor will keep users — and skipping the retention/unit-economics work — is the trap. Instrument retention from the first cohort, protect margin per the report's AI pattern (annual-led plans, less-generous freemium, a higher-priced AI tier; see §4c), and judge an AI app on second/third-cycle renewal and reactivation, not just install-day conversion.
 
 Founder-only gate reminder: pricing, plan mix, trial length, and paywall-model changes are all founder-approved (see §9). Surface the benchmark trade-off; do not silently apply or silently skip it.

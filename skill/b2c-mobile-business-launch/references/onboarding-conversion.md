@@ -212,6 +212,8 @@ Default candidate package set for subscription apps:
 
 RevenueCat 2026 benchmarks show longer trials can convert better, but shorter trials can improve experiment velocity and cash-flow feedback. Pick an initial hypothesis, then test with RevenueCat experiments or an equivalent feature flag.
 
+**Paid intro offers as a free-trial alternative.** The 2026 report flags a structural shift: paid intro offers (e.g. `$0.99` for the first month/week, then auto-renewing to full price) are increasingly replacing free trials because they create commitment, reduce trial abuse, improve early cash flow, and often convert at higher quality. Context to calibrate against, not copy blindly: only ~9.3% of apps currently use promotional offers, yet ~30% of new subscribers (median) enter through an intro discount — and reliance is inverted by scale (hobby-tier apps often run 65–99% of new subs through intro offers, while top performers rely on them for ~0–10%). Treat a low-priced paid intro as one candidate alongside a free trial in the plan-mix hypothesis, disclose the renewal price/terms clearly (see `revenue-monetization.md` §7), and avoid building a business that *depends* on permanent heavy discounting. This is a founder-approved pricing decision (`revenue-monetization.md` §9).
+
 ### Conversion Anti-Patterns
 
 Name the cozy defaults that feel safe and quietly lose. These are the onboarding/trial entries in the monetization-and-growth digest in [`revenue-monetization.md`](revenue-monetization.md) §10; figures are from the **RevenueCat State of Subscription Apps 2026** report. Treat each as a strong default to test, not dogma — the anti-pattern is reaching for the comfortable choice by reflex.
