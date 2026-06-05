@@ -50,6 +50,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 - Rerender `launch-cockpit.html` whenever state, blockers, provider status, proof, or launch-readiness changes.
 - Use `references/engineering-orchestration.md`, `references/parallel-agent-orchestration.md`, and `references/app-agent-roster.md` from the skill before editing `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, or `PRODUCTION_READINESS.md`.
 - For broad launch/build work, either use `APP_AGENTS.md` and the role prompts under `agents/` for read-only specialist audits or record why subagents are unavailable or unsafe in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`. The orchestrator owns integration, state, git, releases, and final readiness.
+- Runtime split: when running Claude Code, Claude owns the pre-build stages through the spec and Codex owns the core app build. For long-running, parallel, or adversarial pre-build stages (research, social mining, 11-star/emotional design, growth, analytics, spec readiness) prefer a Dynamic Workflow (`ultracode` / `/effort ultracode` / `/deep-research`): budget tokens, pair loops with `/goal`, quarantine untrusted reviews/social/scraped input, keep producer and verifier agents separate, and record the split and workflow use in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`. Do not run a Claude workflow on the build Codex owns; fall back to subagents and record the reason when workflows are unavailable.
 
 ## Scope
 
