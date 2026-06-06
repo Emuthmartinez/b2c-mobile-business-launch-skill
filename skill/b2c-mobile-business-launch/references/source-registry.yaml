@@ -1783,3 +1783,57 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/premium-mobile-craft.md
     notes: iOS 26 Liquid Glass API surface (glassEffect, .buttonStyle(.glass), GlassEffectContainer) referenced for press feedback and chrome material in premium-mobile-craft.md and PremiumCraft.swift.
+  - id: posthog-com-docs-api-events
+    name: PostHog — Events REST API
+    source_type: official_docs
+    url: https://posthog.com/docs/api/events
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/probe-posthog.ts
+    notes: PostHog GET /api/projects/:project_id/events endpoint used by probe-posthog.ts as the fallback event-count method when HogQL query is unavailable.
+  - id: posthog-com-docs-api-query
+    name: PostHog — Query REST API (HogQL)
+    source_type: official_docs
+    url: https://posthog.com/docs/api/query
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/probe-posthog.ts
+    notes: PostHog POST /api/projects/:project_id/query endpoint used by probe-posthog.ts to run HogQL aggregate queries for attribution event counts.
+  - id: app-posthog-com
+    name: PostHog Cloud — app host
+    source_type: api
+    url: https://app.posthog.com
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/probe-posthog.ts
+    notes: Default POSTHOG_HOST value used by probe-posthog.ts when no custom self-hosted URL is provided. Cloud host for PostHog REST API calls.
+  - id: posthog-your-domain-com
+    name: PostHog self-hosted placeholder
+    source_type: docs
+    url: https://posthog.your-domain.com
+    refresh_cadence_days: 365
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/templates/ANALYTICS.md
+    notes: Template placeholder URL illustrating the POSTHOG_HOST variable for self-hosted PostHog deployments. Not a real endpoint — founder replaces with their actual self-hosted host.
+  - id: api-revenuecat-com
+    name: RevenueCat REST API v2 — API host
+    source_type: api
+    url: https://api.revenuecat.com
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/probe-revenuecat.ts
+    notes: Base host for RevenueCat REST API v2 calls in probe-revenuecat.ts (GET /v2/projects/{project_id}/offerings and /entitlements).
+  - id: www-revenuecat-com-docs-api-v1
+    name: RevenueCat REST API v1 reference
+    source_type: official_docs
+    url: https://www.revenuecat.com/docs/api-v1
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/scripts/probe-revenuecat.ts
+    notes: RevenueCat v1 REST API reference cited in probe-revenuecat.ts header documentation explaining the v1 vs v2 endpoint difference.

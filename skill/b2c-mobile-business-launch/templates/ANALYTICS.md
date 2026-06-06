@@ -2,6 +2,112 @@
 
 Status: partial until live provider proof is recorded in `PROVIDER_PROOF.md`.
 
+## Definition of Good
+
+This section defines what "done" means for the `analytics_attribution` lane across three enforcement layers. The validator `check:attribution` enforces PRESENT and PROVEN as hard errors; OPTIMIZED items fire as warnings (taste stays human).
+
+### PRESENT — artifact exists
+
+The following must exist before the attribution lane can advance past "partial":
+
+- `ANALYTICS.md` created and non-empty.
+- `analytics-plan.html` created and non-empty.
+- `PROJECT_STATE.yaml` contains `lanes.analytics_attribution.attribution_contract` with all five boolean fields (`screen_early`, `other_free_text`, `backend_persistence`, `anonymous_reconciliation`, `verified`) set to `true`.
+- `attribution_source_selected` (or a documented alias) appears in implementation code or docs outside `PROJECT_STATE.yaml`.
+- `self_reported_source` appears in implementation code or docs.
+- Stable source keys include at minimum: `friend`, `app_store_search`, `creator`, `ai_search`, `other`.
+- `self_reported_source` is in `person_properties`.
+
+### PROVEN — objective on-disk or live evidence the work happened
+
+The following are hard errors when `analytics_attribution.status` is `"done"`:
+
+- At least one evidence path beyond `ANALYTICS.md` and `analytics-plan.html` is listed under `lanes.analytics_attribution.evidence` in `PROJECT_STATE.yaml`. Planning docs alone are not proof.
+- Evidence paths must be relative file paths (containing `/` or `.`), not bare words. A bare word such as `posthog` with no slash or extension fires a warning — it is treated as a probable copy-paste from a template comment.
+- Every non-placeholder local evidence path listed there must exist on disk. A path like `analytics/posthog-proof.json` means the file is present in the repo.
+- `PROVIDER_PROOF.md` exists and contains a PostHog row with a non-placeholder evidence path. The `check:attribution` validator cross-checks the PostHog row's evidence path cell for placeholder text (`TODO`, `PLACEHOLDER`, `<…>`, `tbd`, etc.) and, when the path is local (not `https://…`), verifies it exists on disk.
+- The PostHog row in `PROVIDER_PROOF.md` must not simultaneously claim a verified/live status while still carrying a placeholder evidence path.
+- **Remote URL bypass is NOT accepted.** If the PostHog evidence cell in `PROVIDER_PROOF.md` is an `https://` URL, the static validator cannot fetch it and will fire a warning: `attribution.provider_proof_evidence_url_unverifiable`. The founder must either attest in-line (`founder-attested: YYYY-MM-DD`) or run the probe tool below to generate a local artifact instead.
+- `analytics/posthog-proof.json` must exist, parse as valid JSON, carry the `"probe":"posthog@1"` fingerprint, record `event_count > 0`, and be no older than 72 hours. This file is produced by the founder-gated probe tool (see below). It must **not** be byte-identical to `analytics/posthog-proof.example.json` or below the 80-byte floor.
+
+These checks also fire as warnings when the lane is `"partial"` and `attribution_contract.verified` is `true`, so placeholder drift is caught early.
+
+Cross-lane gap: `check:attribution` is the single place that bridges the attribution boolean contract in `PROJECT_STATE.yaml` and the evidence ledger in `PROVIDER_PROOF.md`. Both must agree before the lane can be marked done.
+
+### FOUNDER-GATED PROBE — required before marking done
+
+The static validator cannot verify live PostHog data — a human must run the probe with real credentials. This must happen **after** real user traffic has arrived (not during development with synthetic test events).
+
+**Step 1 — Ensure credentials are in Doppler**
+
+```
+doppler secrets set POSTHOG_PERSONAL_API_KEY=phc_...   # personal API key from PostHog Project Settings
+doppler secrets set POSTHOG_PROJECT_ID=12345  # numeric project ID from the PostHog URL
+# Optional — only for self-hosted deployments:
+doppler secrets set POSTHOG_HOST=https://posthog.your-domain.com
+```
+
+**Step 2 — Run the probe (founder or designated team member only)**
+
+```
+doppler run -- npm run probe:posthog -- --root /path/to/business-repo
+```
+
+The probe queries PostHog for the `attribution_source_selected` event (or the custom event recorded in `PROJECT_STATE.yaml`) and writes `analytics/posthog-proof.json` with non-secret facts only: event name, count, query window, HTTP status, API host, and ISO timestamp. No API key is written to disk.
+
+**Step 3 — Commit `analytics/posthog-proof.json`**
+
+Commit the generated artifact. The `check:attribution` validator will verify its shape, fingerprint, count (`> 0`), and freshness (no older than 72 hours at audit time).
+
+**Step 4 — Update `PROVIDER_PROOF.md`**
+
+Change the PostHog row's evidence path cell from `analytics/posthog-proof.md` to `analytics/posthog-proof.json` and mark current status as `verified`.
+
+**Security note:** The probe fingerprint `"probe":"posthog@1"` raises the bar versus hand-typed JSON but is not cryptographically unforgeable. Founder approval remains the ultimate backstop — only the founder who ran the probe can attest the count is real.
+
+### OPTIMIZED — quality bar (warning only, taste stays human)
+
+Record the following when optimizing attribution quality. These do not block launch but improve signal over time:
+
+- Attribution dashboard in PostHog shows self-reported source breakdown with at least one full week of post-launch data.
+- `other` free-text responses are reviewed and new source keys are added to the stable enum when a pattern emerges (e.g. a creator or community drives >5% of installs).
+- Anonymous-to-identified stitching is verified in PostHog person timelines for at least five representative users.
+- Backend/profile records for `self_reported_source` are exported and spot-checked after the first 100 signups.
+- Attribution funnel (landing UTM → onboarding question → `attribution_source_selected` event → backend profile write) is documented in `ANALYTICS.md` with a verified percentage of users who complete each step.
+
+### Validator issue codes
+
+| Code | Layer | Severity (done / partial) |
+| --- | --- | --- |
+| `attribution.verified_without_evidence_path` | PROVEN | error / warning |
+| `attribution.evidence_path_bare_word` | TIER-1 | warning / warning |
+| `attribution.provider_proof_placeholder` | PROVEN | error / warning |
+| `attribution.provider_proof_evidence_path_missing` | PROVEN | error / — |
+| `attribution.provider_proof_evidence_url_unverifiable` | TIER-3 | warning / — |
+| `attribution.provider_proof.file_missing` | PROVEN | error / warning |
+| `attribution.provider_proof.posthog_row_missing` | PROVEN | error / warning |
+| `attribution.posthog_proof.missing` | TIER-3 | error / — |
+| `attribution.posthog_proof.example_copy` | TIER-1 | error / — |
+| `attribution.posthog_proof.too_small` | TIER-1 | error / — |
+| `attribution.posthog_proof.invalid_json` | TIER-3 | error / — |
+| `attribution.posthog_proof.missing_fingerprint` | TIER-3 | error / — |
+| `attribution.posthog_proof.count_unknown` | TIER-3 | error / — |
+| `attribution.posthog_proof.count_zero` | TIER-3 | error / — |
+| `attribution.posthog_proof.count_approximate` | TIER-3 | warning / — |
+| `attribution.posthog_proof.count_invalid` | TIER-3 | error / — |
+| `attribution.posthog_proof.missing_timestamp` | TIER-3 | error / — |
+| `attribution.posthog_proof.invalid_timestamp` | TIER-3 | error / — |
+| `attribution.posthog_proof.stale` | TIER-3 | error / — |
+| `attribution.screen_early.incomplete` | PRESENT | error |
+| `attribution.verified.incomplete` | PRESENT | error |
+| `attribution.backend_persistence.incomplete` | PRESENT | error |
+| `attribution.anonymous_reconciliation.incomplete` | PRESENT | error |
+| `attribution.event_name.invalid` | PRESENT | error |
+| `attribution.event_name.alias` | PRESENT | warning |
+| `attribution.stable_key.*.missing` | PRESENT | error |
+| `attribution.person_property.missing` | PRESENT | error |
+| `attribution.text.*.not_found` | PRESENT | error (done) / warning (partial) |
+
 ## Event Contract
 
 | Event | When | Properties | Provider proof |

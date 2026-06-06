@@ -136,3 +136,18 @@ npm run render:launch-cockpit -- --root /path/to/{{APP_SLUG}} --state PROJECT_ST
 ```
 
 Add lane-specific checks for attribution, UX patterns, content assets, 11-star experience, LaunchBench, and app tests whenever those lanes are in scope.
+
+## Validator Hooks And Probes
+
+**PostToolUse hooks** (`.claude/settings.json`) auto-fire depth checks after Write/Edit/Bash. Two prerequisites or they silently no-op: `jq` on `PATH`; `SKILL_ROOT` set to the installed skill's absolute path (else hooks fall back to `.`, local-dev only).
+
+**Founder-gated reality probes** — real API keys, run via Doppler so secrets are never committed:
+
+```bash
+doppler run -- npx tsx <SKILL_ROOT>/scripts/probe-revenuecat.ts --root .   # REVENUECAT_SECRET_API_KEY
+doppler run -- npx tsx <SKILL_ROOT>/scripts/probe-posthog.ts --root .       # POSTHOG_PERSONAL_API_KEY
+```
+
+Each writes a machine-verifiable JSON artifact (`revenue/revenuecat-proof.json`, `analytics/posthog-proof.json`) that `check:revenue` / `check:provider-proof` validate. Both keys are founder-only — never ask the agent for them.
+
+**Screenshot grading is a separate pass** (producer ≠ verifier): after final PNGs are written, the hook routes to a fresh grader session that runs `grade-screenshots.ts`, scores each slot per `SCREENSHOT_RUBRIC.md`, and writes `screenshot-rubric-scores.json` with distinct `builder`/`grader` identities. `store_console` cannot be `done` until that exists. This raises the self-attestation bar but does not eliminate it — one agent can fabricate both identities, so founder review of the grading session is the ultimate backstop.

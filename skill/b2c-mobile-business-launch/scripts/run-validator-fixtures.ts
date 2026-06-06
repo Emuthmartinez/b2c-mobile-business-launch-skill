@@ -201,6 +201,7 @@ function writeCompleteStoreScreenshots(root: string): void {
       "App Preview Video (Autoplay Hook): app previews autoplay muted and always precede screenshots; the first preview's first 3-5 seconds are the muted hook showing the magical moment first, produced via aso-skills:app-preview-video, with a poster frame, real in-app footage, and founder approval before upload.",
       "Asset Knowledge Brief: every asset draws on RESEARCH.md (target user/problem), 11_STAR_EXPERIENCE.md (magical moment), and EMOTIONAL_DESIGN.md (Emotional North Star and Experience Card) so screenshots and the app preview are knowledge-leveraged, not generic.",
       "Composition And Export Route: ParthJadhav/app-store-screenshots writes app-store-screenshots.json and a reusable screenshots/index.html board from real UI, app icon, design tokens, localized copy, and optional Higgsfield support assets.",
+      "Definition of Good (Present / Proven / Optimized): PRESENT — matrices filled; PROVEN — real raw captures and final PNGs exist, app-store-screenshots.json references them, the ParthJadhav theme is derived from theme.tokens.json, and captions reinforce APP_STORE_LISTING.md keywords; OPTIMIZED — screenshot-rubric-scores.json records a passing grade per SCREENSHOT_RUBRIC.md or a logged founder override.",
       "Raw Capture Matrix",
       "| Slot | Platform | Device | Locale | Source screen | Capture tool | Raw path | Version localization ID | Status |",
       "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
@@ -900,11 +901,17 @@ try {
   writeState(unreasonedDeferredEmotional, unreasonedDeferredState);
   runFixture("deferred emotional design lane without reason fails", unreasonedDeferredEmotional, "validate-project-state.ts", 1, "deferred_without_reason");
 
+  // not_started lanes are exempt from the attribution contract (nothing to attribute yet);
+  // a "partial" lane with an incomplete contract is a WARNING (WIP), and only "done" hard-errors.
   const partialAttribution = makeFixture("partial-attribution");
-  runFixture("partial attribution contract fails", partialAttribution, "check-attribution-contract.ts", 1, "attribution.screen_early.incomplete");
+  const partialAttributionState = readState(partialAttribution);
+  getLane(partialAttributionState, "analytics_attribution")["status"] = "partial";
+  writeState(partialAttribution, partialAttributionState);
+  runFixture("partial attribution contract warns", partialAttribution, "check-attribution-contract.ts", 0, "attribution.screen_early.incomplete");
 
   const attributionAlias = makeFixture("attribution-alias");
   const attributionAliasState = readState(attributionAlias);
+  getLane(attributionAliasState, "analytics_attribution")["status"] = "partial";
   const aliasContract = expectRecord(getLane(attributionAliasState, "analytics_attribution").attribution_contract, "attribution_contract");
   aliasContract["screen_early"] = true;
   aliasContract["other_free_text"] = true;

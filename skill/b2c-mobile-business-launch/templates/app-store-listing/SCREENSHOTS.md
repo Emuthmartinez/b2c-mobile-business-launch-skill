@@ -146,6 +146,78 @@ Both screenshots and the app preview run through the screenshot ASO skill; they 
 
 Produce required resolution variants by `reframe`-ing one master rather than re-rendering per size; the source must be real app footage. See the Master → All Platforms recipe in `references/tool-recipes.md`.
 
+## Definition of Good: Present / Proven / Optimized
+
+This section is the machine-readable contract for `check:store-screenshots`. Each layer has a defined enforcement mode.
+
+### PRESENT — packet filled (hard-error when lane is "partial" or "done")
+
+The SCREENSHOTS.md packet is filled: no cell in any required matrix still reads "Pending", "Blocked", or is empty. Specifically:
+
+- Every required row in the Raw Capture Matrix has a non-empty source screen, capture tool, raw path, and status.
+- Every required row in the Production Composition Matrix has a non-empty headline, route, final upload path, and dimensions.
+- Every required Device Wells row has a confirmed required/scaled/not-needed decision.
+- The Narrative table has headings and copy for every required slot.
+- The Per-Slot Knowledge Map is filled for every slot.
+
+### PROVEN — objective on-disk evidence (hard-error when lane is "done")
+
+Evidence that the work actually happened, not just that it was declared:
+
+1. **Raw captures exist on disk** at the exact paths listed in the Raw Capture Matrix (e.g. `screenshots/raw/iphone-69-slot-1.png`). A filled path that points to a non-existent file is a hard error.
+2. **`app-store-screenshots.json` exists** and is a valid schema-v2 file. Its `rawPaths` (or equivalent field) reference files that exist on disk.
+3. **Final PNGs exist** under `screenshots/final/<locale>/<device-well>/` for every required device well at the correct ASC dimensions. Alpha-removed, sRGB. The validator checks existence; the dimensions/color-space proof is in the upload log.
+4. **One deck per Tier-1 locale**: for every locale listed in `LOCALIZATION_MARKET_RESEARCH.md` that is marked Tier-1, a final screenshot deck exists under `screenshots/final/<locale>/`.
+5. **Theme is token-derived**: `app-store-screenshots.json` must reference `state/theme.tokens.json` or contain a `tokensSource` field pointing to it. The ParthJadhav theme was generated FROM design tokens, not hand-coded colors.
+6. **Captions contain keyword tokens from `APP_STORE_LISTING.md`**: at least one headline in `app-store-screenshots.json` contains a keyword that also appears in the `keywords` field of `APP_STORE_LISTING.md`. ASO fold-in is data-wired, not declared.
+7. **Upload proof in `STORE_CONSOLE.md`**: the `asc-shots-pipeline` dry-run or upload output is recorded there before the lane is marked "done".
+
+### OPTIMIZED — quality bar (warning + logged override; taste stays human)
+
+Rubric scores are recorded in `screenshot-rubric-scores.json`. For every required slot/locale:
+
+- Either `pass: true` (weighted-high dimensions all >= 2, overall weighted score >= threshold in `SCREENSHOT_RUBRIC.md`), OR
+- A non-empty `override.reason` is logged by the founder.
+
+A slot with no score entry at all is an error when the lane is "done" and a warning when "partial".
+
+**Producer != Verifier (Tier 2 enforcement):** The ledger root must carry distinct non-empty `builder` and `grader` identity fields. The agent or session that built the deck may not grade it. The validator errors (when "done") or warns (when "partial") if `grader` is missing, if `grader === builder`, or if any required slot lacks non-empty `grader_notes`. See `SCREENSHOT_RUBRIC.md` for the full grader protocol.
+
+**Suspicious perfect score:** When every high dimension is scored 3 and `grader_notes` is very short, the validator fires `store_screenshots.suspicious_perfect` warning. A perfect score needs proportionally detailed justification.
+
+**Tier-1 anti-gaming:** `screenshot-rubric-scores.json` that is byte-identical to `screenshot-rubric-scores.example.json` or smaller than 200 bytes is rejected as an unmodified scaffold copy.
+
+**Tier-3 PNG reality checks:** For every `final_png` in the ledger, the validator reads the real PNG IHDR bytes (width, height, bit depth, color type) and verifies that declared device-well dimensions match the file and that no alpha channel is present when `alpha removed` is claimed in the Production Composition Matrix.
+
+### Pipeline Spine
+
+This is the canonical end-to-end pipeline. Every step must be evidenced before the lane can be "done".
+
+```
+Capture (MobAI / ios-screenshots / XcodeBuildMCP / serve-sim)
+  → real app frames at screenshots/raw/<device>/<locale>/
+
+Compose (ParthJadhav/app-store-screenshots)
+  → themed from state/theme.tokens.json          [token fold-in: data-wired]
+  → copy/headlines from APP_STORE_LISTING.md keywords  [ASO fold-in: data-wired]
+  → one deck per Tier-1 locale from LOCALIZATION_MARKET_RESEARCH.md
+  → outputs: app-store-screenshots.json (schema v2) + screenshots/index.html
+
+Grade (SCREENSHOT_RUBRIC.md + SEPARATE grader agent/session — never the builder)
+  → builder identity recorded at ledger root "builder" field
+  → grader identity recorded at ledger root "grader" field (must differ from builder)
+  → per-slot grader_notes written (non-empty, explains each dimension)
+  → scores written to screenshot-rubric-scores.json
+  → pass or founder override logged
+
+Resize / validate (asc-screenshot-resize)
+  → final PNGs at screenshots/final/<locale>/<device-well>/
+  → alpha removed, sRGB, correct ASC dimensions
+
+Upload (asc-shots-pipeline)
+  → dry-run output and upload proof in STORE_CONSOLE.md
+```
+
 ## Visual QA
 
 - [ ] An iOS app preview video exists (or a founder-approved deferral is recorded); the first preview is the autoplay hook and precedes the screenshots.
@@ -166,3 +238,4 @@ Produce required resolution variants by `reframe`-ing one master rather than re-
 - [ ] iPhone and iPad safe areas, text fit, overlap, and contrast are checked.
 - [ ] Localized screenshot copy is reviewed for each shipped locale.
 - [ ] Founder approval is recorded before screenshot upload, App Icon replacement, App Preview upload, CPP/event media submission, or paid asset generation.
+- [ ] `screenshot-rubric-scores.json` exists and every required slot has either `pass: true` or a non-empty `override.reason`.
