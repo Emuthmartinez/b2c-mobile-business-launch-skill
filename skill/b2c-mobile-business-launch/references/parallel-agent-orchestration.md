@@ -14,6 +14,7 @@ Refresh current provider guidance before changing runtime-specific orchestration
 - OpenAI Agents SDK update: `https://openai.com/index/the-next-evolution-of-the-agents-sdk/`
 - Anthropic multi-agent research system: `https://www.anthropic.com/engineering/multi-agent-research-system`
 - Anthropic Claude Code subagents: `https://code.claude.com/docs/en/sub-agents`
+- Anthropic Claude Code dynamic workflows: `https://code.claude.com/docs/en/workflows`
 - Anthropic containment model: `https://www.anthropic.com/engineering/how-we-contain-claude`
 - Anthropic Claude Code advanced patterns: `https://www.anthropic.com/webinars/claude-code-advanced-patterns`
 
@@ -25,6 +26,10 @@ Current synthesis for this skill:
 - Treat subagents as tools with narrow objectives, explicit inputs, output contracts, forbidden actions, and blast-radius limits.
 - Parallelism is not free. It can burn tokens, duplicate work, create merge conflicts, and make hidden assumptions harder to catch unless the orchestrator records the plan and reconciles outputs.
 - Keep `AGENTS.md` as the short map over the harness: source docs, active plans, validations, and failure cards. Repeated orchestration misses should become mechanical checks or LaunchBench scenarios.
+
+## Subagents Vs Dynamic Workflows
+
+This reference covers Claude's turn-by-turn subagents and worktrees, where the orchestrator holds the plan in its context. When the runtime is Claude Code and a stage needs dozens-to-hundreds of agents, a codified repeatable quality pattern (adversarial verification, tournament, loop-until-done), or a run you want to read and rerun, use a **Dynamic Workflow** instead — the plan moves into a script the runtime executes in the background, and only the final answer returns to context. Workflows are the preferred shape for the heavy *pre-build* stages on the Claude side of the Claude-vs-Codex split; subagents here are the fallback when workflows are unavailable, disabled, or below Claude Code v2.1.154. See [`dynamic-workflows.md`](dynamic-workflows.md). Either way, the adversarial-verification and quarantine shapes still apply — only the runtime changes.
 
 ## Required Preflight
 
