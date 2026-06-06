@@ -278,14 +278,46 @@ interface RubricSlot {
   weighted_score?: number;
   /** Grader's textual notes explaining the score for this slot. Required. */
   grader_notes?: string | null;
+  /**
+   * v1.2+: one-line note referencing something the grader actually observed in
+   * the PNG (headline text, dominant color, a specific UI element). A grader who
+   * never opened the PNG cannot easily fill this field without fabricating it.
+   * Required when store_console is "done" or "partial".
+   */
+  observed_evidence?: string | null;
+}
+
+interface RubricIdentity {
+  agent?: string | null;
+  session_id?: string | null;
+}
+
+interface RubricGradingPass {
+  separate_pass?: boolean | null;
+  started_at?: string | null;
+  method?: string | null;
 }
 
 interface RubricLedger {
   slots?: RubricSlot[];
-  /** Identity of the agent/session that built the screenshot deck. */
-  builder?: string | null;
-  /** Identity of the agent/session that graded the deck. Must differ from builder. */
-  grader?: string | null;
+  /**
+   * Identity of the agent/session that built the screenshot deck.
+   * Schema v1.2+: structured object with { agent, session_id }.
+   * Schema v1.1 (legacy): plain string "<agent>/<session>".
+   * Both forms are accepted; structured form is required for separate_pass enforcement.
+   */
+  builder?: RubricIdentity | string | null;
+  /**
+   * Identity of the agent/session that graded the deck. Must differ from builder.
+   * Schema v1.2+: structured { agent, session_id }.
+   * Schema v1.1 (legacy): plain string.
+   */
+  grader?: RubricIdentity | string | null;
+  /**
+   * v1.2+: attestation that grading was a distinct invocation from building.
+   * Required when store_console is "done".
+   */
+  grading_pass?: RubricGradingPass | null;
 }
 
 function isRubricLedger(value: unknown): value is RubricLedger {
@@ -606,26 +638,81 @@ function checkRubricScores(storeStatus: string | undefined): void {
     return;
   }
 
-  // TIER 2: Producer != Verifier — builder and grader identity fields
-  const builder = typeof ledger.builder === "string" ? ledger.builder.trim() : "";
-  const grader = typeof ledger.grader === "string" ? ledger.grader.trim() : "";
+  // ---------------------------------------------------------------------------
+  // TIER 2: Producer != Verifier — builder/grader identity + grading_pass provenance
+  //
+  // v1.2 schema uses structured { agent, session_id } objects.
+  // v1.1 legacy schema used plain strings "<agent>/<session>".
+  // Both are accepted; session_id comparison requires structured form.
+  //
+  // HONEST LIMIT: the validator can confirm that distinct session_id values are
+  // recorded and that grading_pass.separate_pass is asserted, but it cannot prove
+  // that two truly independent processes ran. A single agent that knows the schema
+  // can fabricate both fields. This raises the bar vs. the v1.1 string comparison
+  // (faking now requires deliberate fabrication of two session identities + an
+  // explicit separation attestation), but founder approval remains the ultimate
+  // backstop. See SCREENSHOT_RUBRIC.md §Separate-Pass Protocol.
+  // ---------------------------------------------------------------------------
+
   const builderGraderSeverity = storeStatus === "done" ? "error" : "warning";
 
-  if (!grader) {
+  // Normalise builder identity to a session_id string for comparison
+  let builderSessionId = "";
+  let graderSessionId = "";
+
+  if (typeof ledger.builder === "string") {
+    // v1.1 legacy: "agent/session" — use whole string as the identity token
+    builderSessionId = ledger.builder.trim();
+  } else if (ledger.builder && typeof ledger.builder === "object") {
+    builderSessionId = (ledger.builder.session_id ?? "").toString().trim();
+  }
+
+  if (typeof ledger.grader === "string") {
+    graderSessionId = ledger.grader.trim();
+  } else if (ledger.grader && typeof ledger.grader === "object") {
+    graderSessionId = (ledger.grader.session_id ?? "").toString().trim();
+  }
+
+  const graderPresent = graderSessionId.length > 0;
+  const builderPresent = builderSessionId.length > 0;
+
+  if (!graderPresent) {
     issues.push(
       issue(
         builderGraderSeverity,
-        "store_screenshots.grader_missing",
-        `${ledgerRelPath} is missing a non-empty "grader" field. The agent or session that grades the deck must be distinct from the builder. Record the grader identity in the ledger root.`,
+        "store_screenshots.grader_provenance_missing",
+        `${ledgerRelPath} is missing a non-empty grader identity (grader.session_id or legacy grader string). The agent or session that grades the deck must be distinct from the builder and must record its identity in the ledger root.`,
         ledgerRelPath,
       ),
     );
-  } else if (builder && grader === builder) {
+  } else if (builderPresent && graderSessionId === builderSessionId) {
     issues.push(
       issue(
         builderGraderSeverity,
-        "store_screenshots.grader_equals_builder",
-        `${ledgerRelPath}: "grader" ("${grader}") is identical to "builder". The agent that builds the deck must not grade it. Use a separate grading pass with a distinct agent or session identity.`,
+        "store_screenshots.builder_equals_grader",
+        `${ledgerRelPath}: builder.session_id ("${builderSessionId}") equals grader.session_id. The agent/session that builds the deck must not grade it. Run the grader as a separate pass (npx tsx scripts/grade-screenshots.ts) with a distinct session identity.`,
+        ledgerRelPath,
+      ),
+    );
+  }
+
+  // v1.2 grading_pass block: required when store_console is "done"; warn when partial
+  const gradingPass = ledger.grading_pass;
+  if (!gradingPass || typeof gradingPass !== "object") {
+    issues.push(
+      issue(
+        builderGraderSeverity,
+        "store_screenshots.grading_not_separate_pass",
+        `${ledgerRelPath} is missing the "grading_pass" block introduced in rubric v1.2. Add { separate_pass: true, started_at, method: "vision" } to attest that grading was a distinct invocation from building. Run: npx tsx scripts/grade-screenshots.ts --root . to generate the grading task template.`,
+        ledgerRelPath,
+      ),
+    );
+  } else if (gradingPass.separate_pass !== true) {
+    issues.push(
+      issue(
+        builderGraderSeverity,
+        "store_screenshots.grading_not_separate_pass",
+        `${ledgerRelPath}: grading_pass.separate_pass is ${JSON.stringify(gradingPass.separate_pass)}, expected true. The grading pass must be a separate invocation from the build pass. Run: npx tsx scripts/grade-screenshots.ts --root . to generate the grading task and write a validated ledger.`,
         ledgerRelPath,
       ),
     );
@@ -663,6 +750,25 @@ function checkRubricScores(storeStatus: string | undefined): void {
           builderGraderSeverity,
           "store_screenshots.rubric_slot_missing_grader_notes",
           `${id} in ${ledgerRelPath} has missing or very short grader_notes (${graderNotes.length} chars, minimum ${GRADER_NOTES_MIN_CHARS}). The grader must explain the score for each dimension.`,
+          ledgerRelPath,
+        ),
+      );
+    }
+
+    // TIER 2: observed_evidence required per slot (v1.2+)
+    // This field must reference something the grader actually saw in the PNG
+    // (headline text, dominant color, a specific UI element). A grader who never
+    // opened the PNG cannot fill this field without fabricating it — which raises
+    // the bar for dishonest grading vs. the v1.1 grader_notes-only check.
+    const OBSERVED_EVIDENCE_MIN_CHARS = 10;
+    const observedEvidence = (slot as Record<string, unknown>)["observed_evidence"];
+    const observedEvidenceStr = typeof observedEvidence === "string" ? observedEvidence.trim() : "";
+    if (observedEvidenceStr.length < OBSERVED_EVIDENCE_MIN_CHARS) {
+      issues.push(
+        issue(
+          builderGraderSeverity,
+          "store_screenshots.grader_provenance_missing",
+          `${id} in ${ledgerRelPath} has missing or too-short observed_evidence (${observedEvidenceStr.length} chars, minimum ${OBSERVED_EVIDENCE_MIN_CHARS}). Write one line referencing something you actually observed in the PNG — headline text, dominant color, a specific UI element. This is the per-slot provenance check that distinguishes a grader who opened the PNG from one who fabricated scores.`,
           ledgerRelPath,
         ),
       );

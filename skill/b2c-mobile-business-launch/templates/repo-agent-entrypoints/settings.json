@@ -1,19 +1,39 @@
 {
   "_comment_setup": [
     "Copy this file to .claude/settings.json in the generated business repo root.",
-    "PREREQUISITES: jq must be on PATH (brew install jq / apt install jq). Without jq the",
-    "  file_path extraction in Bash hooks silently exits 0 — no validator fires.",
-    "SKILL_ROOT: Set the SKILL_ROOT env var to the absolute path of the installed",
-    "  b2c-mobile-business-launch skill directory (e.g. ~/.codex/skills/b2c-mobile-business-launch",
-    "  or the symlinked path on this machine). If SKILL_ROOT is unset the hooks fall back to '.'",
-    "  which works only when the business repo IS the skill root (local dev). In all other cases",
-    "  the validator scripts will not be found and hooks will fail silently.",
-    "BLOCKING vs ADVISORY: hooks that affect lane-coverage and store-screenshots at 'done' are",
-    "  BLOCKING (no || true) — a real failure surfaces as a hook error. All other validators are",
-    "  ADVISORY (|| true) — they print warnings but do not interrupt the agent turn.",
-    "PRODUCER != VERIFIER: After final PNGs are written a separate PostToolUse step prints a",
-    "  mandatory instruction to run the SEPARATE grader pass before marking store_console done.",
-    "  The grader MUST be a different agent/pass than the one that produced the PNGs."
+    "",
+    "PREREQUISITES",
+    "  jq: must be on PATH (brew install jq / apt install jq). Without jq the",
+    "    file_path extraction in PostToolUse Bash hooks silently exits 0 and no",
+    "    validator fires. Verify with: which jq",
+    "  SKILL_ROOT: must be set to the absolute path of the installed",
+    "    b2c-mobile-business-launch skill directory (e.g.",
+    "    ~/.codex/skills/b2c-mobile-business-launch or the symlinked path on this",
+    "    machine). Without SKILL_ROOT the hooks fall back to '.' which only works",
+    "    when the business repo IS the skill root (local dev). In all other cases",
+    "    the 'npm --prefix' calls will not resolve and hooks will fail silently.",
+    "    Set via: export SKILL_ROOT=/path/to/skill  or add to .env.local.",
+    "",
+    "BLOCKING vs ADVISORY",
+    "  Hooks that affect lane-coverage and store-screenshots at 'done' are",
+    "  BLOCKING (no '|| true') — a real failure surfaces as a hook error and the",
+    "  agent turn is interrupted. All other validators are ADVISORY ('|| true') —",
+    "  they print warnings but do not stop the agent.",
+    "",
+    "PRODUCER != VERIFIER — SEPARATE GRADING PASS (screenshot rubric)",
+    "  After final PNGs are written, the 'Final PNG hook' below emits a BLOCKING",
+    "  signal that routes the grade step to a separate agent/session. The signal",
+    "  exits non-zero so the agent sees the instruction as a hard requirement, not",
+    "  just advisory text. The grader MUST be a different agent/session than the",
+    "  builder. The grade-screenshots.ts scaffold emits the grading task template",
+    "  and validates the assembled ledger before writing screenshot-rubric-scores.json.",
+    "  store_console CANNOT be marked done until a validated separate-pass ledger exists.",
+    "",
+    "  Command: npx tsx scripts/grade-screenshots.ts --root . --state PROJECT_STATE.yaml",
+    "",
+    "  HONEST LIMIT: The validator enforces distinct session_id values and",
+    "  grading_pass.separate_pass=true, but cannot prove two truly independent",
+    "  processes ran. Founder approval is the ultimate backstop."
   ],
   "hooks": {
     "PostToolUse": [
@@ -42,14 +62,14 @@
         ]
       },
       {
-        "_comment": "Final PNG hook: after any final screenshot PNG is written, mandate the SEPARATE grader pass (producer != verifier). This fires as an advisory instruction — it does NOT block the write, but the grader pass is required before store_console can be marked done.",
+        "_comment": "Final PNG hook (BLOCKING): after any final screenshot PNG is written, routes to the SEPARATE grading pass and exits non-zero so the agent sees it as a hard requirement. store_console CANNOT be marked done until a separate-pass ledger exists. PREREQUISITES: jq on PATH; SKILL_ROOT set to skill root so npx resolves. The hook prints the exact grade-screenshots.ts command to run.",
         "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "f=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.file_path // empty' 2>/dev/null); if [ -z \"$f\" ]; then exit 0; fi; case \"$f\" in *screenshots/final/*.png) echo ''; echo '=========================================================='; echo 'PRODUCER != VERIFIER — MANDATORY GRADER PASS REQUIRED'; echo '=========================================================='; echo 'Final PNG written. Before marking store_console done you MUST run'; echo 'the screenshot rubric grader as a SEPARATE agent or session pass,'; echo 'NOT the same agent that built/wrote these PNGs.'; echo ''; echo 'Grader pass instructions:'; echo '  1. Open a NEW Claude session (or spawn a fresh subagent).'; echo '  2. Provide: final PNGs, APP_STORE_LISTING.md, EMOTIONAL_DESIGN.md,'; echo '     state/theme.tokens.json, REVENUE_OPS.md, SCREENSHOT_RUBRIC.md.'; echo '  3. Score each slot per SCREENSHOT_RUBRIC.md dimensions 1-8.'; echo '  4. Write scores + builder/grader identity to screenshot-rubric-scores.json.'; echo '  5. The grader field MUST differ from the builder field.'; echo '  6. Each slot MUST include non-empty grader_notes.'; echo '=========================================================='; echo '' ;; esac",
+            "command": "f=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.file_path // empty' 2>/dev/null); if [ -z \"$f\" ]; then exit 0; fi; case \"$f\" in *screenshots/final/*.png) echo ''; echo '=========================================================='; echo 'BLOCKING: PRODUCER != VERIFIER — SEPARATE GRADING PASS REQUIRED'; echo '=========================================================='; echo 'A final screenshot PNG was just written. You MUST run the grading'; echo 'pass as a SEPARATE agent or session before marking store_console done.'; echo ''; echo 'The grader MUST NOT be the same agent/session that built the PNGs.'; echo 'The validator (check:store-screenshots) will ERROR if:'; echo '  - grading_pass.separate_pass is not true in screenshot-rubric-scores.json'; echo '  - builder.session_id equals grader.session_id'; echo '  - any slot is missing grader_notes or observed_evidence'; echo ''; echo 'STEP 1 — Generate the grading task template (run in THIS repo):'; echo '  npx tsx scripts/grade-screenshots.ts \\'; echo '    --root . --state PROJECT_STATE.yaml'; echo ''; echo 'STEP 2 — Open a NEW grader session (different agent/session_id).'; echo '  Provide the task template + final PNGs to the grader agent.'; echo '  The grader reads each PNG and fills in dimensions + observed_evidence.'; echo ''; echo 'STEP 3 — Validate and write the ledger:'; echo '  npx tsx scripts/grade-screenshots.ts \\'; echo '    --root . --state PROJECT_STATE.yaml \\'; echo '    --grading-input /tmp/grading-output.json \\'; echo '    --write screenshot-rubric-scores.json'; echo ''; echo 'STEP 4 — Verify the full rubric check passes:'; echo '  npm run --prefix \"${SKILL_ROOT:-.}\" check:store-screenshots -- --root . --state PROJECT_STATE.yaml'; echo ''; echo 'store_console CANNOT be marked done until all four steps complete.'; echo '=========================================================='; echo ''; exit 1 ;; esac",
             "timeout": 10,
-            "statusMessage": "Checking for final PNG grader requirement..."
+            "statusMessage": "Routing to separate grader pass (BLOCKING)..."
           }
         ]
       }

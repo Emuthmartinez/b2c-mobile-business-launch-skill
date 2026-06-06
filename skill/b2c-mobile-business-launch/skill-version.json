@@ -1,6 +1,6 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "updatedAt": "2026-06-05",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
@@ -41,6 +41,7 @@
     "Adds the Emotional Experience System lane: an emotionally-intelligent consumer-product design layer grounded in behavioral science (Skinner, Schultz, Eyal, Fogg, Cialdini, Buell-Norton, Kahneman) with a 12-card Experience Card deck led by the four named cards — Commitment, Variable Reward, Perceived Effort Delay, and Intent Mirroring.",
     "Ships a Producer path (charge a feature with engineered emotion → EMOTIONAL_DESIGN.md + emotional-design.html) and an Auditor path (walk every user journey on-device, score it through a six-lens review, and return a pathway to a better state → EMOTIONAL_AUDIT.md).",
     "Adds the check:emotional-design validator enforcing the artifact contract plus a deterministic dark-pattern guardrail: high-risk cards (variable reward, streak, scarcity, urgency, social proof) require an ethics attestation, a user-control escape hatch, a counter-metric, and a mechanism-specific truthfulness proof; live copy is scanned for fake scarcity, fabricated social proof, confirmshaming, and commitment guilt.",
-    "Wires the lane into SKILL.md routing, launch-coverage, PROJECT_STATE.yaml (lanes.emotional_design), failure cards, and LaunchBench, and threads the cards through the 11-star 6/7-star levels, onboarding-conversion timing, and analytics-attribution events."
+    "Wires the lane into SKILL.md routing, launch-coverage, PROJECT_STATE.yaml (lanes.emotional_design), failure cards, and LaunchBench, and threads the cards through the 11-star 6/7-star levels, onboarding-conversion timing, and analytics-attribution events.",
+    "Producer/verifier follow-up + business-repo plumbing. Screenshot rubric ledger v1.2: builder/grader are now structured {agent,session_id} objects, a grading_pass {separate_pass,started_at,method} attestation and per-slot observed_evidence are required, and check-store-screenshots.ts ERRORs (done)/WARNs (partial) when grading is not a separate pass, when builder.session_id===grader.session_id, or when observed_evidence/grader_notes are missing. New scripts/grade-screenshots.ts is the only supported write path for the separate vision grading pass (emits a per-slot grading task with real PNG IHDR dimensions; validates provenance before writing the ledger). settings.json final-PNG hook is now BLOCKING (exits 1) and routes to grade-screenshots.ts; its jq/SKILL_ROOT prerequisites are documented. Honest limit recorded throughout: a single deliberate agent can still fabricate two session ids — founder review of the PNGs alongside the ledger remains the ultimate backstop. Plumbing: PROVIDER_PROOF.md PostHog/RevenueCat evidence rows now point at the .json probe artifacts; repo-agent-entrypoints/AGENTS.md documents the hook prerequisites, the Doppler-run probes (POSTHOG_PERSONAL_API_KEY/REVENUECAT_SECRET_API_KEY), and the separate grading pass."
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -62,7 +62,8 @@
     "check:revenue": "tsx skill/b2c-mobile-business-launch/scripts/check-revenue.ts",
     "check:email": "tsx skill/b2c-mobile-business-launch/scripts/check-email.ts",
     "probe:revenuecat": "tsx skill/b2c-mobile-business-launch/scripts/probe-revenuecat.ts",
-    "probe:posthog": "tsx skill/b2c-mobile-business-launch/scripts/probe-posthog.ts"
+    "probe:posthog": "tsx skill/b2c-mobile-business-launch/scripts/probe-posthog.ts",
+    "grade:screenshots": "tsx skill/b2c-mobile-business-launch/scripts/grade-screenshots.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
