@@ -236,7 +236,7 @@ If ASC CLI is missing, use `paid-tool-routing.md` before falling back to manual 
 
 For screenshot upload:
 - plan screenshots with `SCREENSHOTS.md`
-- use real app captures from MobAI or confirmed XcodeBuildMCP fallback
+- use real app captures from MobAI, Codex Desktop native iOS/XcodeBuildMCP, serve-sim, or approved fallback; SnapshotPreviews is preview-only support proof
 - use design-system frames, headline/copy overlay, App Icon/App Preview routing, and iPhone/iPad device-well exports for final compositions
 - use `asc-screenshot-resize` before upload to get the current size matrix, strip alpha, resize only after target selection, and validate final files
 - use `asc-shots-pipeline` only after the screenshot matrix is approved and version-localization IDs are resolved

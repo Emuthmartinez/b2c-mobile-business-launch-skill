@@ -56,7 +56,7 @@ orchestration:
     - "launch-cockpit.html rendering"
     - "git staging, commits, merges, pushes, and releases"
     - "provider/account mutations"
-    - "MobAI or simulator/device control"
+    - "MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or simulator/device control"
   spawned_agents: []
   focused_validators_run: []
   full_suites_run: []
@@ -380,6 +380,27 @@ tools:
     preflight: "Confirm device/app access, bundle/package ID, locale, seeded demo state, and screenshot-critical flows before capture."
     validation: "SCREENSHOTS.md records raw capture paths, device/locale, source screen, version localization ID, and final composition linkage."
     fallback: "XcodeBuildMCP for Apple-only capture or founder-provided captures only after paid-tool fallback approval and limitations are recorded."
+  codex_native_ios:
+    route: "codex_desktop_native_tooling_when_exposed"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "When Codex Desktop exposes native Apple/XcodeBuildMCP tools, load xcodebuildmcp-testing.md, call session_show_defaults before the first build/run/test, and confirm project/workspace, scheme, simulator/device, OS/runtime, and configuration."
+    validation: "PRODUCTION_READINESS.md records exposed MCP tool names such as build_run_sim/test_sim/screenshot/log capture, output paths, simulator/device details, provider-proof pairing, and the distribution-readiness limitation."
+    fallback: "Use XcodeBuildMCP CLI, serve-sim, SnapshotPreviews preview proof, MobAI, or mark proof blocked according to the lane and paid-tool approval state."
+  snapshot_previews:
+    route: "optional_open_source_cli_preview_proof"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Refresh getsentry/SnapshotPreviews, confirm SwiftUI/UIKit/AppKit previews exist, link SnapshottingTests, and decide SnapshotTest vs PreviewLayoutTest."
+    validation: "PRODUCTION_READINESS.md records package URL/version/commit, TEST_RUNNER_SNAPSHOTS_EXPORT_DIR, exported PNG/JSON paths, deterministic fixtures, and preview-only limitation."
+    fallback: "Use XcodeBuildMCP/Codex Desktop screenshots, serve-sim, MobAI, or manual preview review; do not call preview proof runtime E2E."
+  serve_sim:
+    route: "optional_open_source_cli_simulator_stream"
+    docs_checked_at: ""
+    required_secrets: []
+    preflight: "Refresh EvanBacon/serve-sim, confirm macOS + Xcode command line tools + Node 18+, boot the intended iOS Simulator, and choose URL/port."
+    validation: "PRODUCTION_READINESS.md or SCREENSHOTS.md records npx serve-sim resolution, booted simulator/device, localhost preview URL/port, actions, logs, stream proof, and provider/signing limitations."
+    fallback: "Use Codex Desktop native iOS/XcodeBuildMCP tools, MobAI, founder-provided captures, or mark simulator proof blocked."
   google_play:
     route: "intended_account_tool"
     docs_checked_at: ""

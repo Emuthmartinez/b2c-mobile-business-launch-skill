@@ -16,6 +16,9 @@ Raw device captures prove the product exists. Final store screenshots are compos
 | `APP_STORE_LISTING.md` | metadata, privacy, pricing, CPP/event alignment | Pending | Copy and offers must match listing truth |
 | `CONTENT_ASSETS.md` | Higgsfield/Remotion route, license, outputs, approvals | Pending | Required when generated/rendered assets are used |
 | MobAI raw captures | real app proof layer | Pending | Use approved fallback only after founder approval |
+| Codex Desktop native iOS / XcodeBuildMCP | Apple simulator/device proof layer | Pending | Record `session_show_defaults`, project/scheme/simulator, tool names, and output paths in `PRODUCTION_READINESS.md` |
+| SnapshotPreviews | preview snapshot proof layer | Pending | Preview-only PNG/JSON evidence via `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`; not runtime E2E proof |
+| serve-sim | browser-visible simulator proof layer | Pending | Record booted simulator/device, `http://localhost:3200` or chosen port, actions, logs, and limitations |
 | ParthJadhav/app-store-screenshots | production screenshot editor and bulk export board | Pending | Use for copy-led iPhone/iPad/Play decks when installed or approved |
 | `asc-screenshot-resize` | device wells, size, alpha, color space | Pending | Refresh current ASC sizing first |
 
@@ -55,8 +58,8 @@ Store assets are not generic marketing — they are engineered from everything t
 
 | Slot | Platform | Device | Locale | Source screen | Capture tool | Raw path | Version localization ID | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | iOS | iPhone 6.9 | en-US | Pending | MobAI or approved fallback | `screenshots/raw/iphone-69-slot-1.png` | Pending | blocked |
-| 1 | iOS | iPad 13 | en-US | Pending | MobAI or approved fallback | `screenshots/raw/ipad-13-slot-1.png` | Pending | blocked |
+| 1 | iOS | iPhone 6.9 | en-US | Pending | MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or approved fallback; SnapshotPreviews only for preview/component proof | `screenshots/raw/iphone-69-slot-1.png` | Pending | blocked |
+| 1 | iOS | iPad 13 | en-US | Pending | MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or approved fallback; SnapshotPreviews only for preview/component proof | `screenshots/raw/ipad-13-slot-1.png` | Pending | blocked |
 | 1 | Google Play | phone | en-US | Pending | MobAI or approved fallback | `screenshots/raw/play-phone-slot-1.png` | n/a | optional |
 
 ## Production Composition Matrix
@@ -114,7 +117,7 @@ The app preview video is the most underused growth lever on the App Store. Treat
 - You can upload **up to 3 app previews** per device size and language, and **app previews always precede screenshots** at the top of the product page.
 - On the product page, **app previews autoplay with muted audio** — Apple's own guidance: "make sure the first few seconds of your video are visually compelling." The first preview is a hook the user watches whether they intended to or not.
 - Length is **up to 30 seconds** (Apple's accepted range is 15–30s; confirm the current min/max in the app preview specifications before render). The **poster frame** displays whenever the video does not autoplay, so it must sell on its own.
-- Source MUST be real in-app footage (captured via MobAI / on-device), never generated UI.
+- Source MUST be real in-app footage (captured via MobAI, Codex Desktop native iOS/XcodeBuildMCP, serve-sim, or on-device), never generated UI. SnapshotPreviews can support preview/component regression evidence but does not replace runtime App Preview footage.
 
 ### The 5-Second Muted Hook (required spec)
 
@@ -132,7 +135,7 @@ Because the first preview plays silent and unrequested, its first ~3–5 seconds
 Both screenshots and the app preview run through the screenshot ASO skill; they are never hand-composed one-offs:
 
 - **Screenshots:** `ParthJadhav/app-store-screenshots` (the screenshot ASO skill), `ios-screenshots`, and `aso-skills:screenshot-optimization`, from real UI, App Icon, and design tokens.
-- **App preview:** script/storyboard via `aso-skills:app-preview-video`; capture real footage via MobAI; edit and caption via Remotion; produce all Apple/Play resolution variants (9:16 / 1:1 / 16:9) from a single master via the Higgsfield `reframe` MCP tool (Master → All Platforms recipe in `references/tool-recipes.md`) — reframe reformats aspect ratio only, never substitutes UI.
+- **App preview:** script/storyboard via `aso-skills:app-preview-video`; capture real footage via MobAI, Codex Desktop native iOS/XcodeBuildMCP, or serve-sim; edit and caption via Remotion; produce all Apple/Play resolution variants (9:16 / 1:1 / 16:9) from a single master via the Higgsfield `reframe` MCP tool (Master → All Platforms recipe in `references/tool-recipes.md`) — reframe reformats aspect ratio only, never substitutes UI.
 - A/B test variants with `aso-skills:ab-test-store-listing` (Product Page Optimization) where available.
 
 | Preview | Knowledge-leveraged hook (first 3–5s) | Emotion / Card | Poster frame | Captions (muted) | Skill route | Output | Status |

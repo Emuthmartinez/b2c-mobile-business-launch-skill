@@ -523,11 +523,11 @@ Fallback:
 - If the Eronred ASO skill set is relevant, refresh `https://github.com/Eronred/aso-skills` and prefer installed or vendored skill docs over memory.
 - If no ASO skill pack is installed, use `paid-tool-routing.md` before replacing paid ASO tooling with AppKittie, public App Store/Play Console research, manual keyword sheets, and the same outputs: context, keyword map, metadata variants, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`, `app-store-listing.html`, `store-console.html`, `SCREENSHOTS.md`, launch calendar, and post-launch monitoring loop.
 
-## MobAI Toolbelt, Recorders, And XcodeBuildMCP Capture
+## MobAI Toolbelt, Recorders, Native iOS, And CLI Simulator Capture
 
 Purpose: capture truthful app UI for App Store and Google Play screenshots, record polished demo videos, create app-preview/social proof, and compose final assets with the design system.
 
-Always load `mobai-toolbelt.md` before MobAI device automation, recorder skills, app previews, bug-repro recordings, mobile harness work, or MobAI-adjacent build/test tooling. Refresh the MobAI org and relevant repo docs before installing or naming commands.
+Always load `mobai-toolbelt.md` before MobAI device automation, recorder skills, app previews, bug-repro recordings, mobile harness work, or MobAI-adjacent build/test tooling. Load `xcodebuildmcp-testing.md` before Codex Desktop native iOS/XcodeBuildMCP proof, SnapshotPreviews preview exports, serve-sim simulator streaming, or Apple simulator/device command examples. Refresh the MobAI org and relevant repo docs before installing or naming commands.
 
 Use when:
 - a local iOS or Android build exists
@@ -565,6 +565,15 @@ Confirmed free fallback:
 - After confirmation, load `xcodebuildmcp-testing.md` for iOS/iPadOS/macOS/tvOS/watchOS/visionOS build, run, UI automation, screenshot, video, and log workflows.
 - Refresh official XcodeBuildMCP docs and local `xcodebuildmcp --help`/`xcodebuildmcp tools` output before setup commands, CLI syntax, MCP tool names, screenshot captures, or readiness proof.
 - Use XcodeBuildMCP for Apple simulator/device captures and record the missing MobAI coverage. Use Android emulator/ADB or mark Android proof blocked for Android-only flows.
+
+Codex Desktop native iOS route:
+- When Codex Desktop exposes native Apple/XcodeBuildMCP tools, use those tools instead of shelling out first.
+- Call `session_show_defaults` before the first build/run/test, use `build_run_sim` when defaults are set, and capture screenshots/logs/UI snapshots through the exposed tools.
+- Record project/workspace, scheme, simulator/device, OS/runtime, tool names, output paths, and the simulator/signing limitation in `PRODUCTION_READINESS.md`.
+
+CLI proof tools:
+- SnapshotPreviews (`https://github.com/getsentry/SnapshotPreviews`) exports preview PNG/JSON proof from XCTest. Link `SnapshottingTests`, use `SnapshotTest` or `PreviewLayoutTest`, set `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`, and record that this is preview-only coverage.
+- serve-sim (`https://github.com/EvanBacon/serve-sim`) streams and controls a booted iOS Simulator in a browser. Run `npx serve-sim` for the default `http://localhost:3200` preview, record the booted simulator/device, URL/port, actions, logs, and the limitation that simulator streaming does not replace provider proof or App Store signing readiness.
 
 Record in `SCREENSHOTS.md`:
 - platform, device model/class, OS, app build, locale, theme, account fixture, and data fixture
@@ -650,7 +659,7 @@ Use `ugc-creator-engine.md` before:
 Inputs:
 - `SPEC.md`, `BRAND.md`, `DESIGN.md`, `ONBOARDING.md`, `LAUNCH.md`, `ANALYTICS.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`
 - AppKittie/XPOZ/review evidence for audience language and competitor creator patterns
-- real app screenshots/recordings from MobAI or confirmed XcodeBuildMCP fallback
+- real app screenshots/recordings from MobAI, Codex Desktop native iOS/XcodeBuildMCP, serve-sim, or approved fallback
 - Higgsfield visuals only as supporting assets constrained by `DESIGN.md`
 
 Outputs:
@@ -686,7 +695,7 @@ Delegate:
 Inputs:
 - `SPEC.md`, `BRAND.md`, `DESIGN.md`, `LAUNCH.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, `PRIVACY.md`, `TERMS.md`, and `RESEARCH.md`
 - MobAI screenshots/recordings for real app proof
-- confirmed XcodeBuildMCP screenshots/recordings when MobAI fallback was approved for Apple-platform media
+- Codex Desktop native iOS/XcodeBuildMCP or serve-sim screenshots/recordings when Apple-platform media proof is available or approved as a fallback
 - Higgsfield assets for design-system constrained hooks, mascots, backgrounds, and motion
 - `UGC_PLAYBOOK.md`, `ugc/script-bank.md`, and creator/post results when a creator-led engine exists
 

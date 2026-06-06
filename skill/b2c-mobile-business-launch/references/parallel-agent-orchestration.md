@@ -22,7 +22,7 @@ Current synthesis for this skill:
 
 - Start with a strong single orchestrator. Split only when tool overload, context separation, independent breadth, or specialist consistency justifies the coordination cost.
 - Prefer a manager pattern for B2C launches: one orchestrator owns the user thread, state, integration, git, provider mutations, and release calls.
-- Use parallel subagents for breadth-first work and bounded independent units, not for shared-file editing, device control, account mutations, or final launch decisions.
+- Use parallel subagents for breadth-first work and bounded independent units, not for shared-file editing, device/simulator control, account mutations, or final launch decisions.
 - Treat subagents as tools with narrow objectives, explicit inputs, output contracts, forbidden actions, and blast-radius limits.
 - Parallelism is not free. It can burn tokens, duplicate work, create merge conflicts, and make hidden assumptions harder to catch unless the orchestrator records the plan and reconciles outputs.
 - Keep `AGENTS.md` as the short map over the harness: source docs, active plans, validations, and failure cards. Repeated orchestration misses should become mechanical checks or LaunchBench scenarios.
@@ -81,7 +81,7 @@ Do not parallelize these unless they are isolated in separate worktrees and the 
 
 - edits to `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENTS.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, or release notes
 - migrations plus code depending on the migration state
-- MobAI or simulator/device automation on the same target device
+- MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or simulator/device automation on the same target device
 - App Store Connect, Google Play, RevenueCat, Stripe, Resend, PostHog, DNS, domain, Fastlane, or social-account mutations
 - git staging, committing, merging, rebasing, tagging, pushing, release submission, or public posting
 - final production-readiness, pricing, legal, security acceptance, or launch decisions
@@ -179,7 +179,7 @@ orchestration:
     - "PROJECT_STATE.yaml updates"
     - "git staging, commits, merges, pushes, and releases"
     - "provider/account mutations"
-    - "MobAI or simulator/device control"
+    - "MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or simulator/device control"
   spawned_agents: []
   focused_validators_run: []
   full_suites_run: []

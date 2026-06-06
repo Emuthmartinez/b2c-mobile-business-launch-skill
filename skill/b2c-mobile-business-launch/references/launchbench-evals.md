@@ -8,6 +8,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 
 - attribution screen emits an event but does not persist a stable key, PostHog person property, backend/profile value, or `other` free text
 - simulator build passes but Apple distribution signing, Team ID, bundle ID, app record, certificate/profile, archive/export/upload, or TestFlight state is unknown
+- iOS readiness ignores Codex Desktop native iOS/XcodeBuildMCP tools when exposed, or CLI proof names SnapshotPreviews/serve-sim without exported PNG/JSON paths, simulator URL/port, provider-proof pairing, and simulator/preview/distribution limitations
 - App Store Connect app name is taken and the CLI proposes a fallback name without founder approval
 - MobAI is unavailable and the agent silently switches to XcodeBuildMCP
 - RevenueCat products exist but entitlement grant, restore, webhook, or backend projection is unproven

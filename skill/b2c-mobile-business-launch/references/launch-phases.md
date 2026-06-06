@@ -371,7 +371,7 @@ Do:
 - Write App Store metadata: name, subtitle, promotional text, keyword field, description, what's-new copy, categories, localization posture.
 - Prepare App Store listing packet: App Privacy answers, pricing/RevenueCat/Stripe/web-funnel matrix, custom product pages, In-App Events, localization, screenshot/app-preview upload wells, and Higgsfield/design-system marketing asset route.
 - Prepare Apple pre-ASC requirements: `APPLE_APP_STORE_REQUIREMENTS.md` with `PrivacyInfo.xcprivacy`, required reason API declarations, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, archive/upload warnings, and founder approval before upload/submission.
-- Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/device capture, production-text overlay notes, final upload dimensions, and upload well.
+- Define screenshots by frame: hero copy, device screen content, supporting line, source asset, raw MobAI/native iOS/device capture, production-text overlay notes, final upload dimensions, and upload well.
 - Build an ad-copy library by angle clusters; tie angles to research, not vibes.
 - Create Apple Search Ads or paid-channel campaign groups only inside `PAID_UA.md` or a linked campaign packet: exact/phrase/broad, defensive keywords, category keywords, competitor keywords, daily budget, success metrics, and founder approval.
 - Verify store-console readiness with a copy-paste packet: categories, age rating, pricing/IAP/subscriptions, review notes, demo credentials, export compliance, privacy labels, privacy manifests/required-reason APIs, account deletion, screenshot slot requirements, App Icon/App Preview routes, and build/review status.
@@ -408,7 +408,7 @@ Acceptance:
 - Apple upload readiness is not inferred from simulator success; `APPLE_SIGNING.md` proves distribution prerequisites or names the exact blocker.
 - Apple upload readiness is not inferred from App Privacy copy; `APPLE_APP_STORE_REQUIREMENTS.md` proves privacy manifest, required-reason API, SDK, purpose-string, ATT, review-note, account-deletion, and upload-warning prerequisites or names the exact blocker.
 - The founder can follow exact App Store Connect/Google Play click paths and copy values from `store-console.html`.
-- Screenshot files are mapped from raw MobAI/device capture to final upload asset by platform, device well, locale, slot, and dimensions.
+- Screenshot files are mapped from raw MobAI/native iOS/device capture to final upload asset by platform, device well, locale, slot, and dimensions.
 - Store-console blockers are known before submission, not discovered during review.
 - The launch plan states what to do when metrics miss thresholds.
 - Any claims about partners, pricing, or scarcity are explicitly approved or removed.
@@ -522,7 +522,7 @@ Do:
 - Load `project-state.md`, `autonomy-modes.md`, `launchbench-evals.md`, and `failure-cards.md` before the handoff is considered complete.
 - Load `app-agent-roster.md` before writing repo-root `AGENTS.md`/`CLAUDE.md`, `APP_AGENTS.md`, app-local `agents/`, or specialist audit prompts.
 - Use `launch-coverage.md` before moving from docs to implementation or submission.
-- Create a business-specific `AGENTS.md` from `templates/repo-agent-entrypoints/AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, continued `b2c-mobile-business-launch` routing, Compound Engineering routing, `ORCHESTRATION.md`, parallel-agent/worktree rules, MobAI/device testing, and production-readiness gates.
+- Create a business-specific `AGENTS.md` from `templates/repo-agent-entrypoints/AGENTS.md` as canonical source of truth: brief, stack, business model, brand rules, doc map, V1/V2/V3 scope, implementation conventions, analytics rules, continued `b2c-mobile-business-launch` routing, Compound Engineering routing, `ORCHESTRATION.md`, parallel-agent/worktree rules, MobAI/native iOS/device testing, and production-readiness gates.
 - Include `PROJECT_STATE.yaml`, `launch-cockpit.html`, active failure cards, and LaunchBench/validator instructions in the first-read docs.
 - Create `APP_AGENTS.md` and the seven-file `agents/` roster so future app work has an orchestrator plus marketing, engineering, security, product, design, and customer-success specialist entrypoints.
 - Include paid-tool routing, approved fallbacks, and `TOOL_DECISIONS.md` so future agents do not silently downgrade AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, ASO, RevenueCat, Stripe, PostHog, Resend, or ASC/Play work.
@@ -575,7 +575,7 @@ Acceptance:
 - Prompts are ordered and self-contained.
 - V2 features and banned components cannot accidentally creep into V1.
 - Analytics events are required at the moment each screen/flow is built.
-- Builder prompts route heavy work through Compound Engineering and require real frontend/backend/MobAI proof, not only code generation.
+- Builder prompts route heavy work through Compound Engineering and require real frontend/backend/mobile proof, not only code generation.
 - Launch state, cockpit, and failure cards are current at handoff time.
 
 ## Phase 5b: Engineering Orchestration And Production Readiness
@@ -595,12 +595,12 @@ Do:
 - Use `ce-worktree` when parallel feature lanes need isolation or the current checkout must remain clean.
 - Create or update `ORCHESTRATION.md` and use parallel agents only for independent units that pass file-overlap, shared-resource, and dependency checks.
 - Keep the orchestrator responsible for git state, staging, commits, full-suite tests, migrations, releases, and final readiness calls.
-- Serialize MobAI/device automation; other agents may prepare fixtures, inspect code, or analyze logs while the device owner runs the flow.
+- Serialize MobAI/native iOS/device automation; other agents may prepare fixtures, inspect code, or analyze logs while the device owner runs the flow.
 - Run backend and frontend E2E checks for in-scope user journeys: onboarding, attribution, paywall, entitlement, restore, referral, web checkout, lifecycle email, privacy/delete, analytics, and support.
 - Run secret-bearing commands through `doppler run --` or the approved provider wrapper, and update `SECRETS.md` whenever implementation introduces new variables.
 - Verify real test data lands where expected: database/Firestore/Supabase/Postgres, RevenueCat, Stripe, Resend, PostHog, Sentry, store console, or provider logs.
 - Use `ce-code-review`, `ce-test-browser`, `ce-test-xcode`, `ce-proof`, or `ce-demo-reel` when available and appropriate.
-- Use `xcodebuildmcp-testing.md` only after the founder confirms it as the Apple-platform fallback from MobAI, or when XcodeBuildMCP is the explicitly chosen Apple build/test route.
+- Use `xcodebuildmcp-testing.md` before Codex Desktop native iOS/XcodeBuildMCP proof, SnapshotPreviews preview exports, serve-sim simulator streaming, or any Apple simulator/device command examples. Use XcodeBuildMCP as a MobAI replacement only after the founder confirms the fallback or when it is the explicitly chosen Apple build/test route.
 - Record all verification and blockers in `PRODUCTION_READINESS.md`.
 - Run deterministic validators or LaunchBench checks where available, update failure cards, update `PROJECT_STATE.yaml`, and rerender `launch-cockpit.html`.
 
@@ -614,7 +614,7 @@ Acceptance:
 - Unit tests, integration tests, browser/mobile E2E, and provider/backend proof cover the launch-critical paths.
 - Release/staging build has mocks disabled and production-like configuration verified.
 - Frontend actions are proven against backend/provider state when a backend/provider is in scope.
-- MobAI device proof exists for critical mobile flows, or confirmed XcodeBuildMCP Apple-platform proof exists with limitations, or the blocker is explicit.
+- MobAI device proof exists for critical mobile flows, or native iOS/XcodeBuildMCP/serve-sim/SnapshotPreviews proof exists with limitations, or the blocker is explicit.
 - Remaining gaps are founder-only gates, external access waits, or platform review waits.
 - `PROJECT_STATE.yaml` and `launch-cockpit.html` match the proof and blockers in `PRODUCTION_READINESS.md`.
 
@@ -666,7 +666,7 @@ Do:
 - Build campaign brief, prompts, angles, Blitz preferences, UTM convention, and 30-day cadence from the launch docs.
 - Use MobAI full-quality screenshots and screen recordings plus Higgsfield design-system visuals as approved media inputs.
 - For polished app-flow demo videos, load `mobai-toolbelt.md` and route to MobAI `mobile-recorder-skill` for iOS/Android or `desktop-recorder-skill` for macOS/web. Save `.mob` or `screenplay.json`, raw capture, final export, captions, and upload copy in `DEMO_VIDEO.md`.
-- Use confirmed XcodeBuildMCP Apple-platform screenshots/recordings only when MobAI fallback was approved and limitations are recorded.
+- Use Codex Desktop native iOS/XcodeBuildMCP/serve-sim Apple-platform screenshots/recordings when available or approved as fallback, and record limitations.
 - Generate content, QA it against brand/legal/store claims, and prepare a schedule.
 - Schedule or post only after explicit approval.
 - Run weekly analytics loops that connect Fastlane performance to installs, trials, purchases, attribution answers, and product analytics.

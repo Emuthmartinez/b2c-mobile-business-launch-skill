@@ -80,7 +80,7 @@ FASTLANE_OPS.md           # Fastlane workspace, connections, content engine, sch
 OUTREACH.md               # endorsement/partner drafts when relevant
 brand.html                # optional rendered brand book
 landing/                  # optional pre-launch funnel
-screenshots/              # raw MobAI/device captures, compositions, and final store upload assets
+screenshots/              # raw MobAI/native iOS/device captures, compositions, and final store upload assets
 content-assets/           # Remotion/local media workspace, manifest, copy inputs, render inputs, and rendered outputs
 fastlane/                 # campaign brief, prompts, angles, preferences, sanitized API logs, runs, schedules, metrics
 ugc/                      # creator list, briefs, scripts, tracker, weekly review, rights/disclosure notes
@@ -188,8 +188,8 @@ Must include:
 - security rules: `SECURITY.md`, `security-review.html`, threat model, security tool routing, OWASP MASVS/ASVS basis, mobile platform hardening, app-integrity decision, entitlement/webhook abuse controls, supply-chain checks, monitoring/incident response, accepted risks, and `check:security`
 - Compound Engineering routing, `ORCHESTRATION.md`, safe parallel-agent/worktree rules, and when to use `ce-brainstorm`, `ce-plan`, `ce-work`, review, and proof skills
 - app-local agent roster pointer to `APP_AGENTS.md` and `agents/`, including orchestrator ownership and specialist audit roles
-- MobAI/device testing rules and serialized device ownership
-- paid-tool routing and approved MobAI/XcodeBuildMCP fallback rules
+- MobAI/native iOS/device testing rules and serialized device ownership
+- paid-tool routing and approved MobAI/XcodeBuildMCP fallback rules plus SnapshotPreviews/serve-sim limitations
 - UGC/Fastlane growth rules when social distribution is in scope
 - backend/frontend E2E and production-readiness gates
 - common agent mistakes
@@ -461,7 +461,7 @@ Must include:
 - frontend, backend, database, analytics, revenue, email, privacy, and store-console impacts
 - secret impacts: new/changed env vars, Doppler/provider routing, `.env.example` updates, CI/deploy injection, and bundle-safety checks
 - test scenarios for each unit
-- MobAI/device E2E scenarios
+- MobAI/native iOS/device E2E scenarios
 - backend/provider verification scenarios
 - production-readiness gates and blockers
 
@@ -477,7 +477,9 @@ Use before declaring an app build ready for beta, store submission, or productio
 Must include:
 - build/typecheck/lint/test commands and outcomes for every touched repo
 - frontend/browser E2E evidence when web surfaces exist
-- MobAI mobile E2E evidence when app flows exist, or founder-confirmed XcodeBuildMCP Apple-platform evidence with limitations when MobAI is unavailable
+- MobAI mobile E2E evidence when app flows exist, Codex Desktop native iOS/XcodeBuildMCP evidence when Apple simulator/device tools are exposed, or founder-confirmed fallback evidence with limitations when MobAI is unavailable
+- SnapshotPreviews preview proof when used: package/version/commit, `SnapshotTest` or `PreviewLayoutTest`, `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`, exported PNG/JSON paths, and preview-only limitation
+- serve-sim simulator proof when used: booted simulator/device, preview URL/port, actions/logs, stream evidence paths, and provider/signing limitations
 - backend/database proof for frontend actions, including real test records or provider logs
 - RevenueCat/Stripe entitlement proof when monetized
 - PostHog analytics proof when events are in scope
@@ -486,6 +488,7 @@ Must include:
 - Sentry/crash/release-health status or a documented no-Sentry reason
 - security release proof: `SECURITY.md`, `security-review.html`, `check:security` output, scanner/security-review evidence or founder-approved blocked route, app-integrity decision, accepted risks, and incident-response route
 - release-build or staging-build proof that mocks are disabled and secrets are not bundled
+- `check:native-ios-proof` result when iOS engineering, screenshots, app-preview, or production-readiness lanes are in scope
 - secret-management proof: `SECRETS.md` coverage, Doppler/provider setup, `doppler run --` or approved command wrapper, CI/deploy injection, secret scan, and public-bundle check
 - remaining blockers and founder-only gates
 
@@ -829,7 +832,7 @@ Use when App Store or Play Store screenshots, previews, icons, feature graphics,
 Must include:
 - current official screenshot/asset sources checked with URLs and dates
 - device matrix by platform, device class, display well, locale, required/optional status, and dimensions
-- raw MobAI/device capture path, or founder-confirmed XcodeBuildMCP Apple-platform capture path, production composition path, design-system frame path, final upload path, visual proof path, and upload status
+- raw MobAI/native iOS/device capture path, Codex Desktop native iOS/XcodeBuildMCP capture path, serve-sim stream capture path, SnapshotPreviews preview-only path when applicable, production composition path, design-system frame path, final upload path, visual proof path, and upload status
 - screenshot slot strategy: first three conversion frames, source screen, headline, copy overlay, claim risk, localization, and production readiness
 - App Icon and App Preview route, source inputs, output paths, thumbnail/poster-frame QA, and founder approval gate when in scope
 - generated asset use: Higgsfield or other AI assets labeled `direction`, `draft`, or `production`, with proof that real app UI remains truthful and visible

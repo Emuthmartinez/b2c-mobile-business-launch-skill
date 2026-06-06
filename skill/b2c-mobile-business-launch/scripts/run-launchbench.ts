@@ -25,6 +25,7 @@ const knownValidators = new Set([
   "check-apple-app-store-requirements",
   "check-store-console-packet",
   "check-store-screenshots",
+  "check-native-ios-proof",
   "check-secret-routing",
   "check-security-release",
   "check-content-assets",

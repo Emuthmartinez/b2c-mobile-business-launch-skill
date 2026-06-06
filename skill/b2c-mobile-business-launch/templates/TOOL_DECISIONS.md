@@ -9,3 +9,6 @@ Record paid, account-gated, and fallback tooling decisions before using or downg
 | Refero | design | not checked | required before paid/account access | Refero MCP | bundled patterns only after approval |
 | Higgsfield | content assets | not checked | required before paid generation | Higgsfield MCP | Remotion fallback requires approval |
 | MobAI | mobile proof | not checked | required before device mutation | MobAI MCP | XcodeBuildMCP only when appropriate |
+| Codex Desktop native iOS / XcodeBuildMCP | iOS proof | use when exposed or configured | not required for exposed local tools; required when replacing MobAI | session_show_defaults, build_run_sim/test/screenshot/log tools or CLI | Apple-only proof; not Android, provider, or distribution readiness |
+| SnapshotPreviews | iOS preview proof | not checked | not required unless introducing new dependency | SnapshotTest or PreviewLayoutTest with TEST_RUNNER_SNAPSHOTS_EXPORT_DIR | preview-only PNG/JSON proof; not runtime E2E |
+| serve-sim | iOS simulator stream | not checked | not required unless introducing new dependency or public tunnel | npx serve-sim / localhost preview | simulator stream; not provider or App Store signing proof |
