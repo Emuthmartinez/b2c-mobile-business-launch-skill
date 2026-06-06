@@ -1038,6 +1038,45 @@ try {
     "native_ios_proof.codex_desktop_session_defaults_missing",
   );
 
+  const snapshotOnlyScreenshots = makeFixture("snapshot-only-screenshots");
+  writeFileSync(
+    path.join(snapshotOnlyScreenshots, "SCREENSHOTS.md"),
+    [
+      "# Store Screenshots",
+      "Status: ready.",
+      "Raw Capture Matrix: SnapshotPreviews exported XCTest PNG/JSON proof through TEST_RUNNER_SNAPSHOTS_EXPORT_DIR into snapshot-images.",
+      "Production Composition Matrix: final upload path screenshots/final/iphone.png.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "ready iOS screenshots fail when SnapshotPreviews is the only capture route",
+    snapshotOnlyScreenshots,
+    "check-native-ios-proof.ts",
+    1,
+    "native_ios_proof.screenshot_capture_route_missing",
+  );
+
+  const snapshotLimitScreenshots = makeFixture("snapshot-limit-screenshots");
+  writeFileSync(
+    path.join(snapshotLimitScreenshots, "SCREENSHOTS.md"),
+    [
+      "# Store Screenshots",
+      "Status: ready.",
+      "Raw Capture Matrix: MobAI captured screenshots/raw/home.png from the real UI.",
+      "Component regression layer: SnapshotPreviews exported SnapshotTest PNG/JSON proof through TEST_RUNNER_SNAPSHOTS_EXPORT_DIR into snapshot-images.",
+      "Production Composition Matrix: final upload path screenshots/final/iphone.png.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "ready iOS screenshots fail when SnapshotPreviews limitation is missing",
+    snapshotLimitScreenshots,
+    "check-native-ios-proof.ts",
+    1,
+    "native_ios_proof.screenshot_snapshot_previews_limit_missing",
+  );
+
   const androidOnly = makeFixture("apple-android-only");
   const androidOnlyState = readState(androidOnly);
   expectRecord(androidOnlyState.project, "project")["platforms"] = ["android"];

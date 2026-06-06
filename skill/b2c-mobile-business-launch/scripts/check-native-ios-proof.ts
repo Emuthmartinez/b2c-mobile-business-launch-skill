@@ -170,11 +170,20 @@ function validateReadiness(text: string, file: string): void {
 function validateScreenshotCaptureRoute(text: string, file: string): void {
   requireAny(
     text,
-    ["MobAI", "Codex Desktop", "XcodeBuildMCP", "serve-sim", "SnapshotPreviews"],
+    ["MobAI", "Codex Desktop", "XcodeBuildMCP", "serve-sim", "on-device", "device capture", "real app capture"],
     "native_ios_proof.screenshot_capture_route_missing",
-    "Ready iOS screenshot work must name the capture/proof route used for raw real-app UI.",
+    "Ready iOS screenshot work must name the real app, simulator, or device capture route used for raw UI.",
     file,
   );
+  if (includesAny(text, ["SnapshotPreviews", "SnapshotTest", "PreviewLayoutTest"])) {
+    requireAny(
+      text,
+      ["preview-only", "preview/component proof", "does not replace runtime", "not runtime", "not raw real-app UI"],
+      "native_ios_proof.screenshot_snapshot_previews_limit_missing",
+      "Ready iOS screenshot work that mentions SnapshotPreviews must state that it is preview-only support proof, not raw real-app UI.",
+      file,
+    );
+  }
 }
 
 function shouldValidateReadiness(text: string, laneStatus?: string): boolean {
