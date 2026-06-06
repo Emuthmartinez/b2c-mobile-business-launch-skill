@@ -79,42 +79,44 @@ compound_engineering:
   proof_status: "not_evaluated"
   fallback_reason: ""
 lanes:
+  # Lane status: not_started (honest default) -> partial -> blocked/not_needed/deferred -> done.
+  # "done" requires evidence paths; do not leave lanes at not_started past phase_0c (see check-lane-coverage).
   paid_tool_routing:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "TOOL_DECISIONS.md"
     blockers: []
   secrets:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "secrets/SECRETS.md"
     blockers: []
   security:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "SECURITY.md"
       - "security-review.html"
     blockers: []
   research:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "RESEARCH.md"
       - "localization-market-research/LOCALIZATION_MARKET_RESEARCH.md"
       - "localization-market-research/localization-market-research.html"
     blockers: []
   traceability:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "LAUNCH_TRACE.md"
     blockers: []
   experience:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "11-star-experience/11_STAR_EXPERIENCE.md"
       - "11-star-experience/11-star-experience.html"
     blockers: []
   emotional_design:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "emotional-design/EMOTIONAL_DESIGN.md"
       - "emotional-design/emotional-design.html"
@@ -122,12 +124,12 @@ lanes:
     audit_requested: false
     deferred_cards: []
   product:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "SPEC.md"
     blockers: []
   design:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "BRAND.md"
       - "DESIGN.md"
@@ -137,7 +139,7 @@ lanes:
       - "ux-patterns/ux-patterns.html"
     blockers: []
   content_assets:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "content-assets/CONTENT_ASSETS.md"
       - "content-assets/content-assets.html"
@@ -145,7 +147,7 @@ lanes:
       - "DEMO_VIDEO.md"
     blockers: []
   analytics_attribution:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "ANALYTICS.md"
       - "analytics-plan.html"
@@ -172,25 +174,25 @@ lanes:
       anonymous_reconciliation: false
       verified: false
   paid_user_acquisition:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "growth/PAID_UA.md"
       - "growth/paid-ua-report.csv"
     blockers:
       - "Founder approval is required before ad account connection, paid spend, budget changes, or live campaign launch."
   onboarding:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "ONBOARDING.md"
       - "onboarding.html"
     blockers: []
   revenue:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "REVENUE_OPS.md"
     blockers: []
   store_console:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "STORE_CONSOLE.md"
       - "store-console.html"
@@ -201,38 +203,38 @@ lanes:
       - "app-store-listing/SCREENSHOTS.md"
     blockers: []
   apple_signing:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "APPLE_SIGNING.md"
       - "APPLE_APP_STORE_REQUIREMENTS.md"
     blockers: []
   privacy_legal:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "PRIVACY.md"
       - "TERMS.md"
       - "APPLE_APP_STORE_REQUIREMENTS.md"
     blockers: []
   email:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "EMAIL_OPS.md"
     blockers: []
   orchestration:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "ORCHESTRATION.md"
       - "orchestration.html"
     blockers: []
   engineering:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "TECH_SPEC.md"
       - "ENGINEERING_PLAN.md"
       - "PRODUCTION_READINESS.md"
     blockers: []
   growth:
-    status: "partial"
+    status: "not_started"
     evidence:
       - "growth/VIRAL_GROWTH.md"
       - "growth/LAUNCH_NARRATIVE.md"

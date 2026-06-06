@@ -7,6 +7,7 @@ import {
   autonomyModes,
   getPath,
   isRecord,
+  isPastOrientPhase,
   issue,
   loadProjectState,
   parseCliArgs,
@@ -14,6 +15,7 @@ import {
   requiredLanes,
   requireStatus,
   requireString,
+  validateReason,
 } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
@@ -36,6 +38,10 @@ if (state) {
   if (!mode || !autonomyModes.has(mode)) {
     issues.push(issue("error", "autonomy.mode.invalid", `autonomy.mode must be one of ${Array.from(autonomyModes).join(", ")}.`, "PROJECT_STATE.yaml"));
   }
+
+  // Phase-gated coverage: used inside the lane loop below.
+  const currentPhase = asString(getPath(state, "project.phase")) ?? "";
+  const pastOrient = isPastOrientPhase(currentPhase);
 
   for (const lane of requiredLanes) {
     const lanePath = `lanes.${lane}`;
@@ -75,19 +81,92 @@ if (state) {
         ),
       );
     }
+
+    // Phase-gated coverage rules (added alongside existing checks; do not replace them).
+    // Once the project moves past the orient/scaffold window (phase_1+), lanes
+    // still at not_started are a hard error because they represent work the
+    // project claimed to be doing but never started.
+    if (status === "not_started" && pastOrient) {
+      issues.push(
+        issue(
+          "error",
+          `${lanePath}.not_started_past_orient`,
+          `${lanePath} is not_started but the project is past the orient phase (${currentPhase}). Start the lane, block it with a reason, or explicitly mark it not_needed or deferred.`,
+          "PROJECT_STATE.yaml",
+        ),
+      );
+    }
+
+    // A lane that is partial with no evidence, no blockers, and no reason
+    // string is a silent stall — flag it as a warning so it surfaces in the
+    // audit output without breaking the run.
+    if (status === "partial" && nonEmptyEvidence.length === 0 && nonEmptyBlockers.length === 0) {
+      const reason = asString(getPath(state, `${lanePath}.reason`));
+      if (!reason?.trim()) {
+        issues.push(
+          issue(
+            "warning",
+            `${lanePath}.partial_no_evidence_no_blocker`,
+            `${lanePath} is partial but has no evidence paths, no blockers, and no reason. Add an evidence path, a blocker, or a reason field to show intentional progress.`,
+            "PROJECT_STATE.yaml",
+          ),
+        );
+      } else {
+        // Tier-1: reason exists but validate it is dated and non-trivial.
+        validateReason(reason, lanePath, "partial stall", issues);
+      }
+    }
+
+    // Tier-1: deferred/not_needed reasons must also be dated and non-trivial.
+    if (
+      (status === "deferred" || status === "not_needed") &&
+      (nonEmptyEvidence.length > 0 || nonEmptyBlockers.length > 0 || asString(getPath(state, `${lanePath}.reason`))?.trim())
+    ) {
+      const reason = asString(getPath(state, `${lanePath}.reason`));
+      // Only validate the reason field itself when it exists; blockers/evidence
+      // satisfy the base "has a rationale" check already handled above, but we
+      // also validate the free-text reason when it is present because that is
+      // where staleness info lives.
+      if (reason?.trim()) {
+        validateReason(reason, lanePath, status, issues);
+      }
+    }
     if (status === "done") {
       for (const evidenceItem of evidence) {
         const evidencePath = asString(evidenceItem);
         if (!evidencePath || /^[a-z]+:/i.test(evidencePath) || evidencePath.startsWith("#")) {
+          // URLs (http://, https://, revcat://, etc.) and anchor-style notes are
+          // intentionally skipped for the existsSync check — they are remote or
+          // human-readable references, not local paths.
           continue;
         }
-        const localEvidencePath = path.join(args.root, evidencePath);
-        if ((evidencePath.includes("/") || evidencePath.includes(".")) && !existsSync(localEvidencePath)) {
+        const looksLikeLocalPath = evidencePath.includes("/") || evidencePath.includes(".");
+        if (looksLikeLocalPath) {
+          // Local-path-style evidence: must exist on disk.
+          const localEvidencePath = path.join(args.root, evidencePath);
+          if (!existsSync(localEvidencePath)) {
+            issues.push(
+              issue(
+                "error",
+                `${lanePath}.done_evidence_missing`,
+                `${lanePath} is done but local evidence path does not exist: ${evidencePath}.`,
+                "PROJECT_STATE.yaml",
+              ),
+            );
+          }
+        } else {
+          // Tier-1: bare word with no slash and no dot — not resolvable as a
+          // local path and not a URL/anchor.  Surface as a warning so a note
+          // like "submitted" or "approved" is visible rather than a silent free
+          // pass.  Do NOT error — note-style evidence is sometimes legitimate
+          // (e.g. "App Store review approved").
           issues.push(
             issue(
-              "error",
-              `${lanePath}.done_evidence_missing`,
-              `${lanePath} is done but local evidence path does not exist: ${evidencePath}.`,
+              "warning",
+              `${lanePath}.evidence.not_a_resolvable_path`,
+              `${lanePath} evidence entry "${evidencePath}" is not a resolvable local path and not a URL/anchor reference. ` +
+                `If this is a human note, prefix it with "#" so its intent is explicit. ` +
+                `If it is a file path, ensure it contains a "/" or "." so existence can be verified.`,
               "PROJECT_STATE.yaml",
             ),
           );

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
 
@@ -7,6 +7,10 @@ const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
 const issues = [...loaded.issues];
 const state = loaded.state;
+
+// ---------------------------------------------------------------------------
+// Helpers shared with existing phrase checks
+// ---------------------------------------------------------------------------
 
 function firstExistingText(candidates: string[]): { relativePath: string; text: string } | undefined {
   for (const candidate of candidates) {
@@ -139,6 +143,574 @@ function checkAppPreviewRequired(text: string, file: string): void {
   }
 }
 
+// ---------------------------------------------------------------------------
+// PROVEN layer helpers — hard-errors for on-disk evidence
+// ---------------------------------------------------------------------------
+
+/**
+ * Extract file paths from a markdown table column that looks like a relative
+ * file path (starts with screenshots/ or similar).
+ */
+function extractPathsFromTable(text: string, columnPattern: RegExp): string[] {
+  const paths: string[] = [];
+  for (const line of text.split(/\r?\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|")) {
+      continue;
+    }
+    const cells = trimmed.split("|").map((cell) => cell.trim());
+    for (const cell of cells) {
+      if (columnPattern.test(cell) && /\.(png|jpg|jpeg|webp)$/i.test(cell)) {
+        // Strip backticks if present
+        const cleaned = cell.replaceAll("`", "").trim();
+        if (cleaned && !cleaned.startsWith("Pending") && !cleaned.startsWith("blocked") && cleaned !== "n/a") {
+          paths.push(cleaned);
+        }
+      }
+    }
+  }
+  return paths;
+}
+
+/**
+ * When store_console is "done", every raw capture path listed in the Raw
+ * Capture Matrix must exist on disk.
+ */
+function checkRawCapturesExist(text: string, file: string): void {
+  const rawPaths = extractPathsFromTable(text, /^screenshots\/raw\//i);
+  for (const rawPath of rawPaths) {
+    const absPath = path.join(args.root, rawPath);
+    if (!existsSync(absPath)) {
+      issues.push(
+        issue(
+          "error",
+          "store_screenshots.raw_capture_missing_on_disk",
+          `Raw capture path listed in ${file} does not exist on disk: ${rawPath}`,
+          rawPath,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * When store_console is "done", every final PNG path listed in the Production
+ * Composition Matrix must exist on disk.
+ */
+function checkFinalPngsExist(text: string, file: string): void {
+  const finalPaths = extractPathsFromTable(text, /^screenshots\/final\//i);
+  for (const finalPath of finalPaths) {
+    const absPath = path.join(args.root, finalPath);
+    if (!existsSync(absPath)) {
+      issues.push(
+        issue(
+          "error",
+          "store_screenshots.final_png_missing",
+          `Final PNG path listed in ${file} does not exist on disk: ${finalPath}`,
+          finalPath,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * When store_console is "done" and app-store-screenshots.json is present,
+ * check that it references state/theme.tokens.json (token fold-in wired).
+ */
+function checkThemeTokenDerived(appStoreScreenshotsPath: string): void {
+  const absPath = path.join(args.root, appStoreScreenshotsPath);
+  if (!existsSync(absPath)) {
+    return;
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(readFileSync(absPath, "utf8"));
+  } catch {
+    issues.push(
+      issue("error", "store_screenshots.app_store_screenshots_json_invalid", `${appStoreScreenshotsPath} is not valid JSON.`, appStoreScreenshotsPath),
+    );
+    return;
+  }
+  // Look for a tokensSource field or any reference to theme.tokens.json
+  const raw = JSON.stringify(parsed);
+  if (!raw.includes("theme.tokens.json") && !raw.includes("tokensSource")) {
+    issues.push(
+      issue(
+        "warning",
+        "store_screenshots.theme_not_token_derived",
+        `${appStoreScreenshotsPath} does not reference state/theme.tokens.json or include a tokensSource field. The ParthJadhav theme must be generated FROM design tokens to satisfy the PROVEN layer.`,
+        appStoreScreenshotsPath,
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// OPTIMIZED layer — rubric score ledger checks
+// ---------------------------------------------------------------------------
+
+interface RubricDimensions {
+  thumbnail_legibility?: number | null;
+  hook_first?: number | null;
+  truthfulness?: number | null;
+  one_idea_per_slot?: number | null;
+  brand_token_fidelity?: number | null;
+  aso_keyword_reinforcement?: number | null;
+  emotional_north_star?: number | null;
+  localization_quality?: number | null;
+}
+
+interface RubricOverride {
+  by?: string;
+  reason?: string;
+  at?: string;
+}
+
+interface RubricSlot {
+  slot?: number;
+  locale?: string;
+  device_well?: string;
+  final_png?: string;
+  pass?: boolean;
+  override?: RubricOverride | null;
+  dimensions?: RubricDimensions;
+  weighted_score?: number;
+  /** Grader's textual notes explaining the score for this slot. Required. */
+  grader_notes?: string | null;
+}
+
+interface RubricLedger {
+  slots?: RubricSlot[];
+  /** Identity of the agent/session that built the screenshot deck. */
+  builder?: string | null;
+  /** Identity of the agent/session that graded the deck. Must differ from builder. */
+  grader?: string | null;
+}
+
+function isRubricLedger(value: unknown): value is RubricLedger {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/**
+ * Find the rubric scores ledger. Accepts the canonical name or a project-level
+ * override declared in SCREENSHOTS.md as `screenshot-rubric-scores.<name>.json`.
+ */
+function findRubricLedgerPath(): string | undefined {
+  const candidates = [
+    "screenshot-rubric-scores.json",
+    "screenshots/screenshot-rubric-scores.json",
+    "app-store-listing/screenshot-rubric-scores.json",
+  ];
+  return candidates.find((candidate) => existsSync(path.join(args.root, candidate)));
+}
+
+// ---------------------------------------------------------------------------
+// Tier 1: known ASC device well pixel dimensions (portrait, w x h)
+// Sourced from Apple App Store Connect screenshot spec. Refresh via:
+//   asc screenshots sizes --all
+// The validator checks these against the real PNG IHDR; only wells whose
+// final PNGs are on disk are checked (Tier 3 gating handles missing files).
+// ---------------------------------------------------------------------------
+const ASC_WELL_DIMENSIONS: Record<string, { width: number; height: number }[]> = {
+  // iPhone 6.9-inch (current flagship)
+  "iphone-69": [{ width: 1320, height: 2868 }],
+  // iPhone 6.5-inch (includes older Super Retina XDR)
+  "iphone-65": [
+    { width: 1284, height: 2778 },
+    { width: 1242, height: 2688 },
+  ],
+  // iPhone 6.3-inch
+  "iphone-63": [{ width: 1179, height: 2556 }],
+  // iPhone 6.1-inch
+  "iphone-61": [
+    { width: 1170, height: 2532 },
+    { width: 1080, height: 2340 },
+  ],
+  // iPhone 5.5-inch
+  "iphone-55": [{ width: 1242, height: 2208 }],
+  // iPad 13-inch
+  "ipad-13": [
+    { width: 2064, height: 2752 },
+    { width: 2048, height: 2732 },
+  ],
+  // iPad 12.9-inch (4th gen and earlier)
+  "ipad-129": [{ width: 2048, height: 2732 }],
+  // iPad 11-inch / 10.5-inch
+  "ipad-11": [{ width: 1668, height: 2388 }],
+  // iPad 10.2-inch / 9.7-inch
+  "ipad-97": [{ width: 768, height: 1024 }],
+};
+
+// ---------------------------------------------------------------------------
+// Tier 3: PNG IHDR binary parsing
+//
+// PNG structure:
+//   8-byte signature: 0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A
+//   First chunk: 4-byte length (big-endian), 4-byte type "IHDR", 13-byte data
+//   IHDR data: width(4), height(4), bit_depth(1), color_type(1), compression(1),
+//              filter(1), interlace(1)
+//
+// color_type values:
+//   0 = greyscale (no alpha)
+//   2 = truecolor RGB (no alpha)
+//   3 = indexed-color (no alpha)
+//   4 = greyscale + alpha
+//   6 = truecolor + alpha (RGBA)
+//
+// Alpha is present when color_type is 4 or 6.
+// Note: this is a raised bar vs hand-typed JSON but not unforgeable — a
+// carefully crafted fake PNG header could pass. Founder approval is the
+// ultimate backstop; this check catches accidental/lazy bypasses.
+// ---------------------------------------------------------------------------
+
+interface PngIhdr {
+  width: number;
+  height: number;
+  bitDepth: number;
+  colorType: number;
+  hasAlpha: boolean;
+}
+
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+// Minimum bytes: 8 (sig) + 4 (len) + 4 (type) + 13 (IHDR data) = 29
+const PNG_MIN_HEADER_BYTES = 29;
+
+function parsePngIhdr(absPath: string): PngIhdr | { error: string } {
+  let buf: Buffer;
+  try {
+    // Read only the first 29 bytes — we only need the IHDR
+    const fd = (() => {
+      const { openSync } = require("node:fs") as typeof import("node:fs");
+      return openSync(absPath, "r");
+    })();
+    buf = Buffer.alloc(PNG_MIN_HEADER_BYTES);
+    const { readSync, closeSync } = require("node:fs") as typeof import("node:fs");
+    const bytesRead = readSync(fd, buf, 0, PNG_MIN_HEADER_BYTES, 0);
+    closeSync(fd);
+    if (bytesRead < PNG_MIN_HEADER_BYTES) {
+      return { error: `file too small to contain a PNG IHDR (${bytesRead} bytes read, need ${PNG_MIN_HEADER_BYTES})` };
+    }
+  } catch (err) {
+    return { error: `could not read file: ${err instanceof Error ? err.message : String(err)}` };
+  }
+
+  // Verify PNG signature
+  for (let index = 0; index < 8; index++) {
+    // Both Buffer indexers can return undefined in strict TS; cast to number for comparison
+    if ((buf[index] as number | undefined) !== (PNG_SIGNATURE[index] as number | undefined)) {
+      return { error: "file does not start with a valid PNG signature — is this really a PNG?" };
+    }
+  }
+
+  // Chunk at offset 8: length (4) + type (4) + data (13)
+  const chunkType = buf.subarray(12, 16).toString("ascii");
+  if (chunkType !== "IHDR") {
+    return { error: `expected first chunk to be IHDR but got "${chunkType}"` };
+  }
+
+  const width = buf.readUInt32BE(16);
+  const height = buf.readUInt32BE(20);
+  // Buffer index access returns number|undefined in strict TS; default to 0 if out of range
+  // (we already validated bytesRead >= 29, so these offsets are safe, but TS doesn't know that)
+  const bitDepth: number = buf[24] ?? 0;
+  const colorType: number = buf[25] ?? 0;
+  // color_type 4 = greyscale+alpha, 6 = RGBA
+  const hasAlpha = colorType === 4 || colorType === 6;
+
+  return { width, height, bitDepth, colorType, hasAlpha };
+}
+
+/**
+ * TIER 3: For a given slot's final_png, read the real PNG IHDR and check:
+ * 1. Width/height match one of the accepted ASC dimensions for the declared device_well.
+ * 2. No alpha channel is present (alpha must be removed before App Store upload).
+ *
+ * Only fires errors/warnings when the file actually exists on disk — missing
+ * files are handled separately by checkFinalPngsExist / checkRubricScores.
+ */
+function checkPngDimensions(slot: RubricSlot, storeStatus: string | undefined): void {
+  const finalPng = slot.final_png;
+  if (!finalPng) {
+    return;
+  }
+  const absPath = path.join(args.root, finalPng);
+  if (!existsSync(absPath)) {
+    // Missing file is already caught by checkFinalPngsExist or rubric check; skip here.
+    return;
+  }
+
+  const id = `slot ${slot.slot ?? "?"} locale ${slot.locale ?? "?"} well ${slot.device_well ?? "?"}`;
+  const ihdr = parsePngIhdr(absPath);
+
+  if ("error" in ihdr) {
+    issues.push(
+      issue(
+        storeStatus === "done" ? "error" : "warning",
+        "store_screenshots.png_ihdr_unreadable",
+        `${id} (${finalPng}): could not parse PNG header — ${ihdr.error}`,
+        finalPng,
+      ),
+    );
+    return;
+  }
+
+  // Check alpha channel: App Store requires no alpha transparency
+  if (ihdr.hasAlpha) {
+    issues.push(
+      issue(
+        storeStatus === "done" ? "error" : "warning",
+        "store_screenshots.png_has_alpha",
+        `${id} (${finalPng}): PNG has an alpha channel (color_type=${ihdr.colorType}). App Store requires alpha-removed files. Run through asc-screenshot-resize or flatten before upload.`,
+        finalPng,
+      ),
+    );
+  }
+
+  // Check device well dimensions if we know the expected sizes for this well
+  const declaredWell = (slot.device_well ?? "").toLowerCase().replace(/_/g, "-");
+  const acceptedSizes = ASC_WELL_DIMENSIONS[declaredWell];
+  if (acceptedSizes && acceptedSizes.length > 0) {
+    // PNG can be portrait or landscape — check both orientations for each accepted size
+    const matches = acceptedSizes.some(
+      (size) =>
+        (ihdr.width === size.width && ihdr.height === size.height) ||
+        (ihdr.width === size.height && ihdr.height === size.width),
+    );
+    if (!matches) {
+      const acceptedStr = acceptedSizes.map((size) => `${size.width}x${size.height}`).join(" or ");
+      issues.push(
+        issue(
+          storeStatus === "done" ? "error" : "warning",
+          "store_screenshots.png_wrong_dimensions",
+          `${id} (${finalPng}): real PNG dimensions are ${ihdr.width}x${ihdr.height} but expected ${acceptedStr} for well "${declaredWell}". Resize with asc-screenshot-resize before upload.`,
+          finalPng,
+        ),
+      );
+    }
+  }
+}
+
+/**
+ * TIER 1: Reject a rubric ledger file that is byte-identical to the shipped
+ * example file, or that is below a minimum byte threshold indicating it has
+ * not been populated with real data.
+ *
+ * This catches the "copy the example and claim done" bypass where a founder
+ * or agent pastes screenshot-rubric-scores.example.json as their proof.
+ * Returns true if the file should be rejected (issues already pushed).
+ */
+const RUBRIC_EXAMPLE_REL_PATH = "templates/app-store-listing/screenshot-rubric-scores.example.json";
+const RUBRIC_MIN_BYTES = 200;
+
+function checkRubricLedgerNotExampleCopy(ledgerRelPath: string, ledgerRaw: string): boolean {
+  // Sub-threshold check: below 200 bytes is clearly a stub
+  if (Buffer.byteLength(ledgerRaw, "utf8") < RUBRIC_MIN_BYTES) {
+    issues.push(
+      issue(
+        "error",
+        "store_screenshots.rubric_ledger_stub",
+        `${ledgerRelPath} is smaller than ${RUBRIC_MIN_BYTES} bytes and appears to be an empty stub. Populate it with real graded slot data.`,
+        ledgerRelPath,
+      ),
+    );
+    return true;
+  }
+
+  // Byte-identical to example: attempt to read the example from the skill root
+  // The example lives alongside the template; the repo root is the skill root.
+  // We try a few candidate paths because the validator may run from a business
+  // repo that installed the skill as a dependency.
+  const exampleCandidates = [
+    path.join(args.root, RUBRIC_EXAMPLE_REL_PATH),
+    path.join(args.root, "screenshot-rubric-scores.example.json"),
+    path.join(args.root, "app-store-listing/screenshot-rubric-scores.example.json"),
+  ];
+  for (const examplePath of exampleCandidates) {
+    if (!existsSync(examplePath)) {
+      continue;
+    }
+    try {
+      const exampleRaw = readFileSync(examplePath, "utf8");
+      if (ledgerRaw === exampleRaw) {
+        issues.push(
+          issue(
+            "error",
+            "store_screenshots.rubric_ledger_is_example_copy",
+            `${ledgerRelPath} is byte-identical to the shipped example file. Replace it with real graded scores — do not use the example as proof.`,
+            ledgerRelPath,
+          ),
+        );
+        return true;
+      }
+    } catch {
+      // If we can't read the example, skip this check silently.
+    }
+  }
+
+  return false;
+}
+
+function checkRubricScores(storeStatus: string | undefined): void {
+  const ledgerRelPath = findRubricLedgerPath();
+
+  if (!ledgerRelPath) {
+    // Missing ledger: error when done, warning when partial
+    const severity = storeStatus === "done" ? "error" : "warning";
+    issues.push(
+      issue(
+        severity,
+        "store_screenshots.rubric_unscored",
+        `screenshot-rubric-scores.json is missing. Every required slot must be graded per SCREENSHOT_RUBRIC.md before the lane is "done". Run the grader agent and write scores to screenshot-rubric-scores.json.`,
+        "screenshot-rubric-scores.json",
+      ),
+    );
+    return;
+  }
+
+  let ledgerRaw: string;
+  let ledger: RubricLedger;
+  try {
+    ledgerRaw = readFileSync(path.join(args.root, ledgerRelPath), "utf8");
+    const parsed = JSON.parse(ledgerRaw) as unknown;
+    if (!isRubricLedger(parsed)) {
+      throw new TypeError("ledger is not an object");
+    }
+    ledger = parsed;
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    issues.push(issue("error", "store_screenshots.rubric_ledger_invalid_json", `${ledgerRelPath} is not valid JSON: ${message}`, ledgerRelPath));
+    return;
+  }
+
+  // TIER 1: reject example copy / stub
+  // Gate on store_console lane being beyond not_started so the template itself
+  // stays clean (no false error on a fresh business repo).
+  const laneIsActive = storeStatus !== undefined && storeStatus !== "not_started" && storeStatus !== "not_needed" && storeStatus !== "deferred";
+  if (laneIsActive && checkRubricLedgerNotExampleCopy(ledgerRelPath, ledgerRaw)) {
+    // Already pushed an error; stop further ledger checks to avoid cascade noise.
+    return;
+  }
+
+  const slots = ledger.slots ?? [];
+  if (slots.length === 0) {
+    const severity = storeStatus === "done" ? "error" : "warning";
+    issues.push(
+      issue(
+        severity,
+        "store_screenshots.rubric_no_slots",
+        `${ledgerRelPath} exists but contains no slot entries. Add at least one graded slot record.`,
+        ledgerRelPath,
+      ),
+    );
+    return;
+  }
+
+  // TIER 2: Producer != Verifier — builder and grader identity fields
+  const builder = typeof ledger.builder === "string" ? ledger.builder.trim() : "";
+  const grader = typeof ledger.grader === "string" ? ledger.grader.trim() : "";
+  const builderGraderSeverity = storeStatus === "done" ? "error" : "warning";
+
+  if (!grader) {
+    issues.push(
+      issue(
+        builderGraderSeverity,
+        "store_screenshots.grader_missing",
+        `${ledgerRelPath} is missing a non-empty "grader" field. The agent or session that grades the deck must be distinct from the builder. Record the grader identity in the ledger root.`,
+        ledgerRelPath,
+      ),
+    );
+  } else if (builder && grader === builder) {
+    issues.push(
+      issue(
+        builderGraderSeverity,
+        "store_screenshots.grader_equals_builder",
+        `${ledgerRelPath}: "grader" ("${grader}") is identical to "builder". The agent that builds the deck must not grade it. Use a separate grading pass with a distinct agent or session identity.`,
+        ledgerRelPath,
+      ),
+    );
+  }
+
+  // Minimum threshold for grader_notes to be considered substantive (characters)
+  const GRADER_NOTES_MIN_CHARS = 20;
+  // Minimum threshold for suspicious-perfect warning (all high dims = 3 but very short notes)
+  const SUSPICIOUS_PERFECT_NOTES_THRESHOLD = 50;
+
+  for (const slot of slots) {
+    const id = `slot ${slot.slot ?? "?"} locale ${slot.locale ?? "?"} well ${slot.device_well ?? "?"}`;
+
+    // Each slot must pass OR have a non-empty override.reason
+    const hasPassed = slot.pass === true;
+    const hasOverride = typeof slot.override?.reason === "string" && slot.override.reason.trim().length > 0;
+
+    if (!hasPassed && !hasOverride) {
+      const severity = storeStatus === "done" ? "error" : "warning";
+      issues.push(
+        issue(
+          severity,
+          "store_screenshots.rubric_slot_unresolved",
+          `${id} in ${ledgerRelPath} has pass=false and no override.reason. Either improve the screenshot to pass the rubric or record a founder override with a non-empty reason.`,
+          ledgerRelPath,
+        ),
+      );
+    }
+
+    // TIER 2: grader_notes required per slot
+    const graderNotes = typeof slot.grader_notes === "string" ? slot.grader_notes.trim() : "";
+    if (graderNotes.length < GRADER_NOTES_MIN_CHARS) {
+      issues.push(
+        issue(
+          builderGraderSeverity,
+          "store_screenshots.rubric_slot_missing_grader_notes",
+          `${id} in ${ledgerRelPath} has missing or very short grader_notes (${graderNotes.length} chars, minimum ${GRADER_NOTES_MIN_CHARS}). The grader must explain the score for each dimension.`,
+          ledgerRelPath,
+        ),
+      );
+    }
+
+    // TIER 2: suspicious perfect — all three high dimensions are 3 but notes are thin
+    const dims = slot.dimensions;
+    if (dims) {
+      const allHighDimsMaxed =
+        dims.thumbnail_legibility === 3 &&
+        dims.hook_first === 3 &&
+        dims.truthfulness === 3;
+      if (allHighDimsMaxed && graderNotes.length < SUSPICIOUS_PERFECT_NOTES_THRESHOLD) {
+        issues.push(
+          issue(
+            "warning",
+            "store_screenshots.suspicious_perfect",
+            `${id} in ${ledgerRelPath}: all three high dimensions are scored 3/3 but grader_notes is only ${graderNotes.length} chars. A perfect score requires proportionally detailed justification. Add at least one sentence per dimension explaining what visual evidence supports each score.`,
+            ledgerRelPath,
+          ),
+        );
+      }
+    }
+
+    // Check that final_png referenced in ledger exists when store is done
+    if (storeStatus === "done" && slot.final_png) {
+      const absPath = path.join(args.root, slot.final_png);
+      if (!existsSync(absPath)) {
+        issues.push(
+          issue(
+            "error",
+            "store_screenshots.rubric_final_png_missing",
+            `${id} references final_png "${slot.final_png}" in ${ledgerRelPath} but the file does not exist on disk.`,
+            slot.final_png,
+          ),
+        );
+      }
+    }
+
+    // TIER 3: PNG header reality check for every slot with a final_png on disk
+    checkPngDimensions(slot, storeStatus);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Main gate: read project state and decide what to check
+// ---------------------------------------------------------------------------
+
 const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
@@ -152,7 +724,7 @@ const screenshotPacket = firstExistingText(["SCREENSHOTS.md", "screenshots/SCREE
 const appListing = firstExistingText(["APP_STORE_LISTING.md", "app-store-listing/APP_STORE_LISTING.md"]);
 const contentAssets = firstExistingText(["CONTENT_ASSETS.md", "content-assets/CONTENT_ASSETS.md"]);
 const screenshotHtml = existsAny(["screenshots/index.html", "screenshots/screenshots.html", "app-store-listing/screenshots.html"]);
-const appStoreScreenshotsState = existsAny(["app-store-screenshots.json", "screenshots/app-store-screenshots.json", "app-store-listing/app-store-screenshots.json"]);
+const appStoreScreenshotsStateRelPath = existsAny(["app-store-screenshots.json", "screenshots/app-store-screenshots.json", "app-store-listing/app-store-screenshots.json"]);
 
 if (shouldCheck && !screenshotPacket) {
   issues.push(
@@ -166,6 +738,9 @@ if (shouldCheck && !screenshotPacket) {
 }
 
 if (screenshotPacket) {
+  // -------------------------------------------------------------------------
+  // PRESENT layer — phrase presence (keyword / structural checks)
+  // -------------------------------------------------------------------------
   const required = [
     "Raw Capture Matrix",
     "Production Composition Matrix",
@@ -201,6 +776,10 @@ if (screenshotPacket) {
     "thumbnail",
     "visual QA",
     "founder approval",
+    // Pipeline spine phrases (PRESENT: declared)
+    "Definition of Good",
+    "theme.tokens.json",
+    "screenshot-rubric-scores.json",
   ];
 
   if (hasIos) {
@@ -217,7 +796,7 @@ if (screenshotPacket) {
   checkAppPreviewRequired(screenshotPacket.text, screenshotPacket.relativePath);
 
   const usesAppStoreScreenshots = /ParthJadhav\/app-store-screenshots|app-store-screenshots/i.test(screenshotPacket.text);
-  if (storeStatus === "done" && usesAppStoreScreenshots && !appStoreScreenshotsState && !screenshotHtml) {
+  if (storeStatus === "done" && usesAppStoreScreenshots && !appStoreScreenshotsStateRelPath && !screenshotHtml) {
     issues.push(
       issue(
         "error",
@@ -250,8 +829,40 @@ if (screenshotPacket) {
       ),
     );
   }
+
+  // -------------------------------------------------------------------------
+  // PROVEN layer — on-disk file existence (hard-errors when status = "done")
+  // -------------------------------------------------------------------------
+  if (storeStatus === "done") {
+    checkRawCapturesExist(screenshotPacket.text, screenshotPacket.relativePath);
+    checkFinalPngsExist(screenshotPacket.text, screenshotPacket.relativePath);
+
+    // app-store-screenshots.json must exist and must be token-derived
+    if (!appStoreScreenshotsStateRelPath) {
+      issues.push(
+        issue(
+          "error",
+          "store_screenshots.app_store_screenshots_json_missing",
+          "app-store-screenshots.json is required when store_console lane is done. The ParthJadhav/app-store-screenshots board state must be saved.",
+          "app-store-screenshots.json",
+        ),
+      );
+    } else {
+      checkThemeTokenDerived(appStoreScreenshotsStateRelPath);
+    }
+  }
 }
 
+// -------------------------------------------------------------------------
+// OPTIMIZED layer — rubric score ledger (warning when partial, error when done)
+// -------------------------------------------------------------------------
+if (shouldCheck) {
+  checkRubricScores(storeStatus);
+}
+
+// -------------------------------------------------------------------------
+// APP_STORE_LISTING.md cross-checks (unchanged from original)
+// -------------------------------------------------------------------------
 if (shouldCheck && appListing) {
   requirePhrases(
     appListing.text,

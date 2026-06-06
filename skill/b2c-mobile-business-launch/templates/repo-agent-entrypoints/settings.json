@@ -1,0 +1,58 @@
+{
+  "_comment_setup": [
+    "Copy this file to .claude/settings.json in the generated business repo root.",
+    "PREREQUISITES: jq must be on PATH (brew install jq / apt install jq). Without jq the",
+    "  file_path extraction in Bash hooks silently exits 0 — no validator fires.",
+    "SKILL_ROOT: Set the SKILL_ROOT env var to the absolute path of the installed",
+    "  b2c-mobile-business-launch skill directory (e.g. ~/.codex/skills/b2c-mobile-business-launch",
+    "  or the symlinked path on this machine). If SKILL_ROOT is unset the hooks fall back to '.'",
+    "  which works only when the business repo IS the skill root (local dev). In all other cases",
+    "  the validator scripts will not be found and hooks will fail silently.",
+    "BLOCKING vs ADVISORY: hooks that affect lane-coverage and store-screenshots at 'done' are",
+    "  BLOCKING (no || true) — a real failure surfaces as a hook error. All other validators are",
+    "  ADVISORY (|| true) — they print warnings but do not interrupt the agent turn.",
+    "PRODUCER != VERIFIER: After final PNGs are written a separate PostToolUse step prints a",
+    "  mandatory instruction to run the SEPARATE grader pass before marking store_console done.",
+    "  The grader MUST be a different agent/pass than the one that produced the PNGs."
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "_comment": "Write/Edit hook: fires depth-check validators automatically after every relevant artifact write.",
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.file_path // empty' 2>/dev/null); if [ -z \"$f\" ]; then exit 0; fi; case \"$f\" in *SCREENSHOTS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:store-screenshots -- --root . --state PROJECT_STATE.yaml 2>&1 ;; *PROJECT_STATE.yaml*) npm run --prefix \"${SKILL_ROOT:-.}\" check:lane-coverage -- --root . --state PROJECT_STATE.yaml 2>&1 ;; *ANALYTICS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:attribution -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *REVENUE_OPS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:revenue -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *EMAIL_OPS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:email -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *SPEC.md*|*APP_STORE_LISTING.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:aso-metadata -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *SECRETS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:secrets -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *TOOL_DECISIONS.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:paid-tool-decisions -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *LOCALIZATION_MARKET_RESEARCH.md*) npm run --prefix \"${SKILL_ROOT:-.}\" check:localization-research -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *screenshot-rubric-scores.json*) npm run --prefix \"${SKILL_ROOT:-.}\" check:store-screenshots -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *revenuecat-proof.json*|*posthog-proof.json*) npm run --prefix \"${SKILL_ROOT:-.}\" check:provider-proof -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; esac",
+            "timeout": 60,
+            "statusMessage": "Running depth checks (Write/Edit)..."
+          }
+        ]
+      },
+      {
+        "_comment": "Bash hook: catches proof artifacts written via touch/echo/tee/bash redirection — complements the Write|Edit hook above.",
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cmd=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.command // empty' 2>/dev/null); if [ -z \"$cmd\" ]; then exit 0; fi; case \"$cmd\" in *revenuecat-proof.json*|*posthog-proof.json*) npm run --prefix \"${SKILL_ROOT:-.}\" check:provider-proof -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *screenshot-rubric-scores.json*) npm run --prefix \"${SKILL_ROOT:-.}\" check:store-screenshots -- --root . --state PROJECT_STATE.yaml 2>&1 || true ;; *PROJECT_STATE.yaml*) npm run --prefix \"${SKILL_ROOT:-.}\" check:lane-coverage -- --root . --state PROJECT_STATE.yaml 2>&1 ;; esac",
+            "timeout": 60,
+            "statusMessage": "Running depth checks (Bash)..."
+          }
+        ]
+      },
+      {
+        "_comment": "Final PNG hook: after any final screenshot PNG is written, mandate the SEPARATE grader pass (producer != verifier). This fires as an advisory instruction — it does NOT block the write, but the grader pass is required before store_console can be marked done.",
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(echo \"$CLAUDE_TOOL_INPUT\" | jq -r '.file_path // empty' 2>/dev/null); if [ -z \"$f\" ]; then exit 0; fi; case \"$f\" in *screenshots/final/*.png) echo ''; echo '=========================================================='; echo 'PRODUCER != VERIFIER — MANDATORY GRADER PASS REQUIRED'; echo '=========================================================='; echo 'Final PNG written. Before marking store_console done you MUST run'; echo 'the screenshot rubric grader as a SEPARATE agent or session pass,'; echo 'NOT the same agent that built/wrote these PNGs.'; echo ''; echo 'Grader pass instructions:'; echo '  1. Open a NEW Claude session (or spawn a fresh subagent).'; echo '  2. Provide: final PNGs, APP_STORE_LISTING.md, EMOTIONAL_DESIGN.md,'; echo '     state/theme.tokens.json, REVENUE_OPS.md, SCREENSHOT_RUBRIC.md.'; echo '  3. Score each slot per SCREENSHOT_RUBRIC.md dimensions 1-8.'; echo '  4. Write scores + builder/grader identity to screenshot-rubric-scores.json.'; echo '  5. The grader field MUST differ from the builder field.'; echo '  6. Each slot MUST include non-empty grader_notes.'; echo '=========================================================='; echo '' ;; esac",
+            "timeout": 10,
+            "statusMessage": "Checking for final PNG grader requirement..."
+          }
+        ]
+      }
+    ]
+  }
+}
