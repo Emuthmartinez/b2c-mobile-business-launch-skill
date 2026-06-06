@@ -718,10 +718,40 @@ function checkRubricScores(storeStatus: string | undefined): void {
     );
   }
 
-  // Minimum threshold for grader_notes to be considered substantive (characters)
-  const GRADER_NOTES_MIN_CHARS = 20;
+  // Minimum threshold for grader_notes to be considered substantive (characters).
+  // Raised from 20 to 30 in rubric v1.2.1: a 20-char note ("looks ok", filler) is
+  // not a real grading note. 30 chars still doesn't require a paragraph but rules out
+  // trivially short filler.
+  const GRADER_NOTES_MIN_CHARS = 30;
   // Minimum threshold for suspicious-perfect warning (all high dims = 3 but very short notes)
   const SUSPICIOUS_PERFECT_NOTES_THRESHOLD = 50;
+  // Minimum threshold for observed_evidence to be considered substantive (characters).
+  // Raised from 10 to 15: "looks good" (10 chars) passes the old floor; 15 chars
+  // forces at least a brief concrete reference ("blue background" is 16 chars).
+  const OBSERVED_EVIDENCE_MIN_CHARS = 15;
+
+  // Stock generic phrases that are too vague to constitute real per-slot evidence.
+  // HONEST LIMIT: this list can only catch known clichés; a grader could still write
+  // a novel generic sentence. The distinctness check below catches copy-paste across
+  // slots, which is the more common fabrication pattern.
+  // Multi-word stock clichés only, matched EXACTLY (after normalization) so that
+  // legitimate concrete observations that merely begin with a common adjective
+  // (e.g. "good contrast ratio at thumbnail size") are NOT false-flagged.
+  const OBSERVED_EVIDENCE_DENYLIST: string[] = [
+    "looks good",
+    "reads clearly",
+    "headline visible",
+    "looks clean",
+    "looks ok",
+    "looks great",
+    "looks fine",
+    "looks nice",
+    "all good",
+  ];
+
+  // Collect observed_evidence strings (normalized) per slot to check distinctness
+  // across the full slot array after the per-slot loop.
+  const evidenceBySlot: Array<{ id: string; normalized: string }> = [];
 
   for (const slot of slots) {
     const id = `slot ${slot.slot ?? "?"} locale ${slot.locale ?? "?"} well ${slot.device_well ?? "?"}`;
@@ -742,7 +772,7 @@ function checkRubricScores(storeStatus: string | undefined): void {
       );
     }
 
-    // TIER 2: grader_notes required per slot
+    // TIER 2: grader_notes required per slot (minimum 30 chars)
     const graderNotes = typeof slot.grader_notes === "string" ? slot.grader_notes.trim() : "";
     if (graderNotes.length < GRADER_NOTES_MIN_CHARS) {
       issues.push(
@@ -755,12 +785,13 @@ function checkRubricScores(storeStatus: string | undefined): void {
       );
     }
 
-    // TIER 2: observed_evidence required per slot (v1.2+)
+    // TIER 2: observed_evidence required per slot (v1.2+), minimum 15 chars.
     // This field must reference something the grader actually saw in the PNG
     // (headline text, dominant color, a specific UI element). A grader who never
     // opened the PNG cannot fill this field without fabricating it — which raises
     // the bar for dishonest grading vs. the v1.1 grader_notes-only check.
-    const OBSERVED_EVIDENCE_MIN_CHARS = 10;
+    // HONEST LIMIT: a sufficiently creative fabricator can still write slot-specific
+    // fiction. The distinctness check below and founder review are additional backstops.
     const observedEvidence = (slot as Record<string, unknown>)["observed_evidence"];
     const observedEvidenceStr = typeof observedEvidence === "string" ? observedEvidence.trim() : "";
     if (observedEvidenceStr.length < OBSERVED_EVIDENCE_MIN_CHARS) {
@@ -772,6 +803,33 @@ function checkRubricScores(storeStatus: string | undefined): void {
           ledgerRelPath,
         ),
       );
+    } else {
+      // Normalize for distinctness + denylist checks: collapse whitespace, lowercase,
+      // strip a leading "slot N:" label so the prefix trick ("slot 1: X" / "slot 2: X")
+      // cannot defeat the distinctness check, and trim trailing punctuation.
+      const normalizedEvidence = observedEvidenceStr
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase()
+        .replace(/^slot\s*\d+\s*[:.\-)]*\s*/i, "")
+        .replace(/[.!]+$/, "")
+        .trim();
+
+      // Generic-phrase guard: warn when observed_evidence IS a known stock cliché.
+      // HONEST LIMIT: exact-match on known clichés only; does not catch novel generic sentences.
+      if (OBSERVED_EVIDENCE_DENYLIST.includes(normalizedEvidence)) {
+        issues.push(
+          issue(
+            "warning",
+            "store_screenshots.observed_evidence_generic",
+            `${id} in ${ledgerRelPath}: observed_evidence ("${observedEvidenceStr}") matches a stock generic phrase that does not demonstrate the grader opened the PNG. Replace with a slot-specific concrete observation (headline text, dominant color, a specific UI element visible in that slot).`,
+            ledgerRelPath,
+          ),
+        );
+      }
+
+      // Collect for post-loop distinctness check
+      evidenceBySlot.push({ id, normalized: normalizedEvidence });
     }
 
     // TIER 2: suspicious perfect — all three high dimensions are 3 but notes are thin
@@ -810,6 +868,43 @@ function checkRubricScores(storeStatus: string | undefined): void {
 
     // TIER 3: PNG header reality check for every slot with a final_png on disk
     checkPngDimensions(slot, storeStatus);
+  }
+
+  // ---------------------------------------------------------------------------
+  // TIER 2 (post-loop): DISTINCTNESS check for observed_evidence.
+  //
+  // If two or more scored slots share the exact same (normalized, case/space-
+  // insensitive) observed_evidence string, the grader almost certainly copy-pasted
+  // rather than opening each PNG. Identical evidence across slots is stronger proof
+  // of fabrication than any per-slot length or phrase check.
+  //
+  // Fires ERROR at store_console=done, WARN at partial.
+  //
+  // HONEST LIMIT: this checks for exact normalized duplicates. A grader who writes
+  // slightly varied but equally fabricated strings per slot evades the check.
+  // Founder review of the final PNGs alongside the ledger is the ultimate backstop.
+  // ---------------------------------------------------------------------------
+  if (evidenceBySlot.length >= 2) {
+    // Group slot IDs by their normalized evidence string
+    const evidenceGroups = new Map<string, string[]>();
+    for (const { id, normalized } of evidenceBySlot) {
+      const existing = evidenceGroups.get(normalized) ?? [];
+      existing.push(id);
+      evidenceGroups.set(normalized, existing);
+    }
+    for (const [normalized, slotIds] of evidenceGroups) {
+      if (slotIds.length >= 2) {
+        const severity = storeStatus === "done" ? "error" : "warning";
+        issues.push(
+          issue(
+            severity,
+            "store_screenshots.observed_evidence_not_distinct",
+            `${ledgerRelPath}: ${slotIds.join(", ")} all share the same observed_evidence ("${normalized}"). Each slot must have a DISTINCT observation referencing that slot's actual PNG content — identical evidence across slots indicates the grader did not open each PNG separately.`,
+            ledgerRelPath,
+          ),
+        );
+      }
+    }
   }
 }
 
