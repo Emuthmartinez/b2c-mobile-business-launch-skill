@@ -195,7 +195,7 @@ function writeCompleteStoreScreenshots(root: string): void {
     [
       "# Store Screenshots",
       "Status: partial until founder approval for upload.",
-      "Source Ledger: DESIGN.md, design.md, 11_STAR_EXPERIENCE.md, APP_STORE_LISTING.md, CONTENT_ASSETS.md, MobAI raw captures, Higgsfield supporting visuals, Remotion rendered frames, ParthJadhav/app-store-screenshots export board, app-store-screenshots.json state, and asc-screenshot-resize validation.",
+      "Source Ledger: DESIGN.md, design.md, 11_STAR_EXPERIENCE.md, APP_STORE_LISTING.md, CONTENT_ASSETS.md, MobAI raw captures, Codex Desktop native iOS/XcodeBuildMCP captures, serve-sim streams, SnapshotPreviews preview-only proof, Higgsfield supporting visuals, Remotion rendered frames, ParthJadhav/app-store-screenshots export board, app-store-screenshots.json state, and asc-screenshot-resize validation.",
       "Narrative: Slot 1 sells the core outcome; slots 2-3 prove the V1 scalable slice; later slots show one benefit per frame.",
       "App Icon: 1024x1024 PNG, no alpha, no rounded corners, tested at App Store search thumbnail size, with Higgsfield route recorded when generated.",
       "App Preview Video (Autoplay Hook): app previews autoplay muted and always precede screenshots; the first preview's first 3-5 seconds are the muted hook showing the magical moment first, produced via aso-skills:app-preview-video, with a poster frame, real in-app footage, and founder approval before upload.",
@@ -644,6 +644,9 @@ function writeCompletePaidToolDecisions(root: string): void {
       "| Higgsfield | content_assets | access confirmed | founder approved; Remotion fallback approved if Higgsfield is unavailable | Higgsfield MCP | Remotion fallback is founder-approved |",
       "| Refero | design | access confirmed | founder approved | Refero MCP | bundled ux-patterns fallback approved |",
       "| MobAI | engineering | access confirmed | founder approved | MobAI MCP | XcodeBuildMCP fallback approved when MobAI is unavailable |",
+      "| Codex Desktop native iOS / XcodeBuildMCP | engineering | available | founder approval not required for exposed local tools | session_show_defaults and build_run_sim | Apple-only proof; not provider or distribution readiness |",
+      "| SnapshotPreviews | engineering | available | founder approved dependency | TEST_RUNNER_SNAPSHOTS_EXPORT_DIR | preview-only proof; not runtime E2E |",
+      "| serve-sim | engineering | available | founder approved dependency | npx serve-sim | simulator stream; not provider or App Store signing proof |",
     ].join("\n"),
     "utf8",
   );
@@ -745,6 +748,7 @@ try {
   runFixture("complete Apple App Store requirements packet passes", clean, "check-apple-app-store-requirements.ts", 0);
   runFixture("complete store console packet passes", clean, "check-store-console-packet.ts", 0);
   runFixture("complete store screenshots packet passes", clean, "check-store-screenshots.ts", 0);
+  runFixture("complete native iOS proof packet passes", clean, "check-native-ios-proof.ts", 0);
   runFixture("complete UX pattern packet passes", clean, "check-ux-patterns.ts", 0);
   runFixture("complete onboarding conversion packet passes", clean, "check-onboarding-conversion.ts", 0);
   runFixture("complete 11-star experience packet passes", clean, "check-eleven-star-experience.ts", 0);
@@ -1012,6 +1016,27 @@ try {
     "utf8",
   );
   runFixture("simulator-only Apple signing claim fails", simulatorOnly, "check-apple-signing-packet.ts", 1, "simulator_only_risk");
+
+  const nativeIosProofThin = makeFixture("native-ios-proof-thin");
+  writeFileSync(
+    path.join(nativeIosProofThin, "PRODUCTION_READINESS.md"),
+    [
+      "# Production Readiness",
+      "Status: ready.",
+      "Native iOS Proof: Codex Desktop build passed. SnapshotPreviews passed. serve-sim worked.",
+      "Implementation proof: ce-work completed.",
+      "Review proof: ce-code-review passed.",
+      "Proof artifact: ce-proof exists.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "thin native iOS proof fails without Codex Desktop session defaults",
+    nativeIosProofThin,
+    "check-native-ios-proof.ts",
+    1,
+    "native_ios_proof.codex_desktop_session_defaults_missing",
+  );
 
   const androidOnly = makeFixture("apple-android-only");
   const androidOnlyState = readState(androidOnly);

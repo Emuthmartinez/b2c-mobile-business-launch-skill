@@ -1,8 +1,8 @@
-# XcodeBuildMCP Testing Fallback
+# Native iOS Proof: Codex Desktop, XcodeBuildMCP, SnapshotPreviews, And serve-sim
 
-Use this when iOS, iPadOS, macOS, tvOS, watchOS, or visionOS build/test/run/UI automation is needed, especially when MobAI is unavailable and the founder confirms a free/open-source Apple workflow fallback.
+Use this when iOS, iPadOS, macOS, tvOS, watchOS, or visionOS build/test/run/UI automation is needed, when Codex Desktop exposes native Apple tooling, or when CLI users need open-source simulator and preview proof routes.
 
-XcodeBuildMCP is not a full MobAI replacement. It is excellent for Apple simulator/device workflows, Xcode builds, tests, screenshots, UI automation, logs, debugging, and video capture. It does not cover Android device automation.
+XcodeBuildMCP and Codex Desktop native iOS tooling are not full MobAI replacements. They are excellent for Apple simulator/device workflows, Xcode builds, tests, screenshots, UI automation, logs, debugging, and video capture. SnapshotPreviews adds preview-to-PNG/JSON coverage from XCTest. serve-sim exposes a booted simulator through a local browser stream/control surface. None of these cover Android device automation, and none of them replace App Store signing/distribution proof.
 
 For Apple distribution, TestFlight, physical-device signing, archives, exports, or uploads, load `apple-signing-release.md` too. XcodeBuildMCP simulator proof does not by itself prove App Store signing readiness.
 
@@ -11,9 +11,12 @@ For Apple distribution, TestFlight, physical-device signing, archives, exports, 
 - Current Sources To Refresh
 - Live Documentation Gate
 - When To Use
+- Codex Desktop Native iOS Route
 - Setup Flow
 - MCP Client Routing
 - CLI Routing
+- SnapshotPreviews CLI Proof
+- serve-sim CLI Proof
 - Testing And Screenshot Workflow
 - Privacy And Telemetry
 - Troubleshooting
@@ -34,6 +37,8 @@ Refresh these before implementation because XcodeBuildMCP versions, tool names, 
 - Privacy: `https://xcodebuildmcp.com/docs/privacy`
 - Skills: `https://xcodebuildmcp.com/docs/skills`
 - Local skill when installed: `xcodebuildmcp-cli`
+- SnapshotPreviews: `https://github.com/getsentry/SnapshotPreviews`
+- serve-sim: `https://github.com/EvanBacon/serve-sim`
 
 ## Live Documentation Gate
 
@@ -45,6 +50,8 @@ Record in `PRODUCTION_READINESS.md` or `SCREENSHOTS.md`:
 - official docs version/tag when shown
 - installed version or install route: Homebrew, npm/npx, or existing binary
 - `xcodebuildmcp --help`, `xcodebuildmcp tools`, or MCP tool-list snapshot
+- SnapshotPreviews package URL/version/commit when used
+- serve-sim package version or `npx serve-sim` resolution when used
 - Xcode version, macOS version, simulator/device runtime, project/workspace, scheme, and configuration
 - command or tool-name differences between live docs, CLI help, MCP tools, and local skills
 
@@ -66,12 +73,34 @@ Use XcodeBuildMCP after the founder confirms the fallback when:
 - LLDB/debugging or crash/log triage is needed
 - the repo needs deterministic Xcode project discovery and session defaults
 
+Use Codex Desktop native iOS tooling when:
+- the current runtime is Codex Desktop
+- XcodeBuildMCP/native Apple MCP tools are exposed in the active tool list
+- the task needs Apple simulator/device build, run, test, screenshot, UI snapshot, log, or debug proof
+- a local native iOS/macOS app exists and simulator/device proof is relevant
+
 Do not silently switch from MobAI to XcodeBuildMCP. Use `paid-tool-routing.md` first.
+
+Do not treat SnapshotPreviews or serve-sim as distribution proof. SnapshotPreviews proves deterministic preview rendering and exports; serve-sim proves a booted simulator can be observed/controlled through a browser stream. Production-readiness still needs runtime app flow proof, backend/provider proof, signing proof when distribution is in scope, and founder-only gates.
 
 For Android:
 - use MobAI if available and approved
 - otherwise use Android emulator/ADB/UIAutomator/Appium-style project tooling if the repo already uses it
 - mark Android device proof blocked if no equivalent exists
+
+## Codex Desktop Native iOS Route
+
+When Codex Desktop exposes native Apple/XcodeBuildMCP tools, prefer those tools over shell commands. This is the fastest path for Codex Desktop users because tool schemas define the current command surface and keep simulator/build/log state visible in the agent runtime.
+
+Required sequence:
+
+1. Call `session_show_defaults` before the first build, run, or test.
+2. If project/workspace, scheme, and simulator defaults are set, call `build_run_sim`, `test_sim`, screenshot, UI snapshot, or log tools directly.
+3. Use discovery tools only when defaults are missing, wrong, or stale.
+4. Do not manually boot/open Simulator as a prerequisite for `build_run_sim`; the tool handles that where supported.
+5. Record the exposed tool names, project/workspace, scheme, simulator/device, OS/runtime, build configuration, screenshots/log paths, and any fallback in `PRODUCTION_READINESS.md`.
+
+Codex Desktop native iOS proof can satisfy Apple simulator/device implementation proof when paired with the relevant backend/provider proof. It does not replace MobAI for Android coverage, App Store signing readiness, archive/export/upload proof, TestFlight proof, or founder approval gates.
 
 ## Setup Flow
 
@@ -158,6 +187,69 @@ Use `--json` for complex arguments and `--output jsonl` for long-running operati
 
 If the CLI shows commands such as `simulator build-and-run` while an MCP tool or local skill uses names such as `build_run_sim`, do not mix the forms. Use CLI names only in shell commands and MCP tool names only in MCP calls.
 
+## SnapshotPreviews CLI Proof
+
+Use SnapshotPreviews when a SwiftUI/UIKit/AppKit app has Xcode previews and CLI/CI needs deterministic visual proof without writing one-off screenshot tests. SnapshotPreviews is preview coverage: it exercises previews through XCTest, exports PNG and JSON sidecars, and can feed Sentry Snapshots or another visual diffing service. It is not runtime E2E proof and does not prove navigation, network, entitlement, analytics, or provider behavior.
+
+Refreshed source summary:
+- Repository URL in docs: `https://github.com/EmergeTools/SnapshotPreviews`; the requested GitHub location is `https://github.com/getsentry/SnapshotPreviews`.
+- Link the XCTest target to `SnapshottingTests`.
+- Create a test class inheriting from `SnapshotTest` for PNG/JSON snapshot export, or `PreviewLayoutTest` for preview rendering checks without PNGs.
+- Set `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR` on `xcodebuild test` to write the images and sidecars to disk.
+
+Example shape, after refreshing the repository README and local Xcode/project details:
+
+```bash
+TEST_RUNNER_SNAPSHOTS_EXPORT_DIR="$PWD/snapshot-images" \
+xcodebuild test \
+  -scheme MyApp \
+  -sdk iphonesimulator \
+  -destination 'platform=iOS Simulator,name=iPhone 15 Pro'
+```
+
+Record in `PRODUCTION_READINESS.md`:
+- package URL/version/commit
+- target and test class: `SnapshotTest` or `PreviewLayoutTest`
+- preview module filter, excluded previews, fixtures, and deterministic-data controls
+- export directory such as `snapshot-images`
+- PNG/JSON output paths and diff/upload result if Sentry Snapshots is used
+- limitation: preview-only coverage; does not replace runtime E2E, provider proof, or App Store signing readiness
+
+SnapshotPreviews is especially useful before screenshot composition because it catches broken SwiftUI preview states and can generate reusable UI evidence for component states. It is not a substitute for raw real-app captures for App Store screenshots unless the asset is explicitly a preview/component proof and the limitation is recorded.
+
+## serve-sim CLI Proof
+
+Use serve-sim when CLI users need a booted iOS Simulator visible and controllable through a browser surface, especially for Codex CLI, Claude Code, Cursor, or remote Mac flows where the agent needs a URL instead of a local Simulator window.
+
+Refreshed source summary:
+- Run with `npx serve-sim`; the default preview is `http://localhost:3200`.
+- Requires macOS with Xcode command line tools (`xcrun simctl`) and Node.js 18+.
+- Works with any booted iOS Simulator and does not require app instrumentation.
+- Streams simulator framebuffer through MJPEG plus a WebSocket control channel and forwards simulator logs to the browser UI.
+- CLI supports gestures, button presses, typing, rotation, CoreAnimation debug flags, memory warnings, and camera injection.
+
+Common commands from the current README:
+
+```bash
+npx serve-sim
+npx serve-sim "iPhone 16 Pro"
+npx serve-sim --detach
+npx serve-sim --list
+npx serve-sim --kill
+npx serve-sim type "Hello, world!"
+npx serve-sim button home
+```
+
+Record in `PRODUCTION_READINESS.md` or `SCREENSHOTS.md`:
+- package/version or `npx serve-sim` resolution
+- simulator/device name or UDID and proof it was booted
+- preview URL/port such as `http://localhost:3200`
+- browser screenshot/video/log capture path
+- actions run through `serve-sim gesture`, `serve-sim button`, `serve-sim type`, or camera injection when used
+- limitation: browser-visible simulator proof does not replace backend/provider proof, MobAI Android proof, App Store signing, archive/export/upload, or TestFlight proof
+
+If serve-sim is used for app-preview or store screenshot source footage, keep raw simulator captures separate from final composed assets and still run the store screenshot validator. Generated art can support the frame, but real app UI must remain visible and truthful.
+
 ## Testing And Screenshot Workflow
 
 For production-readiness proof:
@@ -167,8 +259,10 @@ For production-readiness proof:
 4. Run unit and UI tests where available.
 5. Use UI automation snapshots before gestures.
 6. Capture screenshots/video only after the target state is reached.
-7. Pair device proof with backend/provider proof: database, RevenueCat, Stripe, PostHog, Resend, Sentry, or store-console evidence when in scope.
-8. Record command/tool output paths, simulator/device, OS, scheme, build config, account fixture, and result in `PRODUCTION_READINESS.md` and `SCREENSHOTS.md`.
+7. Use SnapshotPreviews for preview coverage when previews exist, and record that it is preview-only coverage.
+8. Use serve-sim when a browser-visible simulator/control surface is useful for CLI agents or remote Mac workflows.
+9. Pair device proof with backend/provider proof: database, RevenueCat, Stripe, PostHog, Resend, Sentry, or store-console evidence when in scope.
+10. Record command/tool output paths, simulator/device, OS, scheme, build config, account fixture, and result in `PRODUCTION_READINESS.md` and `SCREENSHOTS.md`.
 
 ### Test Triage Protocol
 
@@ -226,6 +320,7 @@ Do not flatten these into "Xcode is broken". Record the exact doctor finding and
 ## Evidence Requirements
 
 `PRODUCTION_READINESS.md` should include:
+- Codex Desktop native iOS route when used: `session_show_defaults`, exposed MCP tool names, project/workspace, scheme, simulator/device, and screenshot/log/test paths
 - XcodeBuildMCP version or install route
 - docs refreshed date, official docs URLs, and docs version/tag when shown
 - CLI/help or `xcodebuildmcp tools` snapshot used to choose commands
@@ -236,6 +331,8 @@ Do not flatten these into "Xcode is broken". Record the exact doctor finding and
 - project/workspace, scheme, simulator/device, OS, configuration
 - command/tool names and outcomes
 - logs, screenshots, videos, UI snapshots, and test result paths
+- SnapshotPreviews package URL/version/commit, `SnapshotTest` or `PreviewLayoutTest` target, `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`, exported PNG/JSON paths, and preview-only limitation when used
+- serve-sim package/version, booted simulator/device, preview URL/port, gesture/type/button commands, stream/log evidence paths, and limitation when used
 - backend/provider proof paired to app actions
 - Apple signing proof when distribution is in scope: Team ID, `DEVELOPMENT_TEAM`, bundle ID/App ID, app record, signing style, local signing identity class, provisioning strategy, archive/export/upload/TestFlight status, and any `APPLE_SIGNING.md` blocker
 - telemetry decision

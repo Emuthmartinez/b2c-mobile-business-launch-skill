@@ -3,7 +3,7 @@
 Status: partial
 Owner: design-guru + marketing-guru + orchestrator
 
-`DEMO_VIDEO.md` records app-preview, launch-demo, support-demo, and social-demo proof. Use it when MobAI recorder, desktop recorder, Remotion, Higgsfield reframe, or store App Preview work is in scope. Source footage must show the real app or explicitly approved prototype footage.
+`DEMO_VIDEO.md` records app-preview, launch-demo, support-demo, and social-demo proof. Use it when MobAI recorder, native iOS capture, desktop recorder, Remotion, Higgsfield reframe, or store App Preview work is in scope. Source footage must show the real app or explicitly approved prototype footage.
 
 ## Source Inputs
 
@@ -14,7 +14,7 @@ Owner: design-guru + marketing-guru + orchestrator
 | `BRAND.md` | voice, owned words, banned claims | blocked |
 | `DESIGN.md` | tokens, type, motion, caption style | blocked |
 | `SCREENSHOTS.md` | App Preview and screenshot story | blocked |
-| MobAI / device capture | real in-app footage | blocked |
+| MobAI / native iOS / device capture | real in-app footage | blocked |
 | `CONTENT_ASSETS.md` + manifest | route, license, output registry | blocked |
 
 ## Storyboard
@@ -28,7 +28,7 @@ Owner: design-guru + marketing-guru + orchestrator
 
 | Step | Tool/route | Input | Output | Proof | Status |
 | --- | --- | --- | --- | --- | --- |
-| Raw capture | MobAI recorder or approved fallback | device/session | `demo/raw/` | command or recording log | blocked |
+| Raw capture | MobAI recorder, Codex Desktop native iOS/XcodeBuildMCP, serve-sim, or approved fallback | device/session | `demo/raw/` | command or recording log | blocked |
 | Edit/render | Remotion or approved editor | raw capture + captions | `demo/final/` | render command/log | blocked |
 | Reframe | Higgsfield reframe or local render variants | master clip | store/social aspect variants | output manifest | blocked |
 | QA | visual + claims review | final clips | approval notes | founder gate | blocked |

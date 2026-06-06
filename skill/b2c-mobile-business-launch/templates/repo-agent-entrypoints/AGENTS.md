@@ -45,7 +45,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 
 ## Skill Workflow
 
-- Use `b2c-mobile-business-launch` as the default workflow for broad launch/business work, business-side setup, App Store or Google Play readiness, RevenueCat/Stripe/PostHog/Resend setup, MobAI/XcodeBuildMCP proof, security release work, GEO/SEO, UGC/Fastlane, and production-readiness claims.
+- Use `b2c-mobile-business-launch` as the default workflow for broad launch/business work, business-side setup, App Store or Google Play readiness, RevenueCat/Stripe/PostHog/Resend setup, MobAI/native iOS proof, security release work, GEO/SEO, UGC/Fastlane, and production-readiness claims.
 - Keep `PROJECT_STATE.yaml` current before crossing phases, claiming a lane is done, spawning agents, changing provider state, or pausing at a blocker.
 - Rerender `launch-cockpit.html` whenever state, blockers, provider status, proof, or launch-readiness changes.
 - Use `references/engineering-orchestration.md`, `references/parallel-agent-orchestration.md`, and `references/app-agent-roster.md` from the skill before editing `AGENTS.md`, `CLAUDE.md`, `APP_AGENTS.md`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, or `PRODUCTION_READINESS.md`.
@@ -65,6 +65,8 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - Use Compound Engineering routes when available: `ce-update` or latest-release fallback, `ce-brainstorm` for unresolved product shape, `ce-plan` for implementation planning, `ce-work` for bounded execution, `ce-worktree` for isolated lanes, `ce-code-review`, applicable CE test skills, and `ce-proof`/`ce-demo-reel` before readiness claims. Record the route in `PROJECT_STATE.yaml` `compound_engineering`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md`. If unavailable, record the fallback reason in `ORCHESTRATION.md` and keep the lane partial until equivalent plan/work/review/test/proof exists.
 - Use `ORCHESTRATION.md` before parallel work. Parallel agents are for independent audits or isolated file ownership only; serialize shared files, migrations, provider/account mutations, device control, git, releases, pricing/legal/public posting, submissions, and final readiness.
 - Backend/frontend proof must show real data, provider state, analytics events, entitlement state, email delivery, or store/signing state where those lanes are in scope.
+- For iOS work in Codex Desktop, use exposed native iOS/XcodeBuildMCP tools before shelling out: call `session_show_defaults` before the first build/run/test, prefer `build_run_sim` or matching MCP tools when defaults are set, and record project/workspace, scheme, simulator/device, output paths, provider-proof pairing, and limitations in `PRODUCTION_READINESS.md`.
+- For CLI users, SnapshotPreviews and serve-sim are supported proof routes: SnapshotPreviews exports preview-only PNG/JSON proof via `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`; serve-sim streams a booted iOS Simulator at a URL such as `http://localhost:3200`. Neither replaces runtime provider proof or `APPLE_SIGNING.md` distribution readiness.
 
 ## Design And UX
 
@@ -76,7 +78,7 @@ Do not let builders or agents add product behavior that is not traced from `LAUN
 - Onboarding, paywall, review prompt, empty/loading/error/offline states, screenshots, and content assets must trace to the 11-star V1 scalable slice.
 - When the 11-star target is 6-star or higher, `EMOTIONAL_DESIGN.md` owns the Experience Card map, ethics guardrails, PostHog events, reduced-motion fallbacks, and counter-metrics. Run `npm run check:emotional-design -- --root .` before build or store handoff, and use `EMOTIONAL_AUDIT.md` for existing-app emotional UX audits.
 - `BRAND.md` owns voice, owned words, banned language, and claim boundaries; do not let copy rewrites, screenshots, app previews, lifecycle email, or support responses drift from it.
-- Store screenshots need `SCREENSHOTS.md`: raw MobAI/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, ParthJadhav/app-store-screenshots or equivalent export-board routing, App Icon/App Preview routing, current device wells, validation, and visual QA.
+- Store screenshots need `SCREENSHOTS.md`: raw MobAI/native iOS/device captures are proof inputs, while final iPhone/iPad/Play assets need copy overlays, composed frames, ParthJadhav/app-store-screenshots or equivalent export-board routing, App Icon/App Preview routing, current device wells, validation, and visual QA.
 - Demo/app-preview video work needs `DEMO_VIDEO.md`: choreography, raw capture, edited export, captions, upload copy, rerender path, and truth/accessibility QA must be recorded before public use.
 - iOS App Store upload readiness needs `APPLE_APP_STORE_REQUIREMENTS.md`: `PrivacyInfo.xcprivacy`, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report, App Privacy labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload warnings are checked before a build is pushed into App Store Connect.
 
@@ -125,6 +127,7 @@ npm run check:store-screenshots -- --root /path/to/{{APP_SLUG}} --state PROJECT_
 npm run check:apple-signing -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:apple-requirements -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:store-console -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:native-ios-proof -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:11-star -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:emotional-design -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:content-assets -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml

@@ -16,7 +16,7 @@ The goal is to turn the launch package into shippable software without losing st
 - 5. Parallel Agent Orchestration
 - 6. `ENGINEERING_PLAN.md` Requirements
 - 7. End-To-End Production Readiness
-- 8. MobAI, XcodeBuildMCP, And Device Testing
+- 8. MobAI, Native iOS Proof, And Device Testing
 - 9. LaunchBench And Failure Cards
 - 10. Done Rules
 
@@ -96,8 +96,8 @@ Every real app build or builder handoff should create or update a business-speci
 - secret-management rules: `SECRETS.md`, Doppler or approved provider, `doppler run --` wrappers, service token/provider-integration plan, CI/deploy injection, and no raw secrets in docs/logs/proofs
 - privacy/legal/store disclosure constraints
 - Compound Engineering routing: when to use `ce-brainstorm`, `ce-plan`, `ce-work`, worktrees, subagents, and review
-- MobAI/device-testing rules and serialized device ownership
-- paid-tool routing and confirmed XcodeBuildMCP fallback rules
+- MobAI/native iOS/device-testing rules and serialized device ownership
+- paid-tool routing and confirmed MobAI/XcodeBuildMCP fallback rules plus SnapshotPreviews/serve-sim limits
 - backend/frontend E2E proof requirements
 - common mistakes and launch blockers
 - exact verification commands or scripts when known
@@ -185,7 +185,7 @@ The plan must include:
 - migration and data-backfill plan when needed
 - auth/session, permission, app integrity, API/RPC/webhook, and state-machine impacts when relevant
 - test scenarios for happy path, edge cases, error paths, and integration paths
-- MobAI/device-test scenarios for mobile user journeys, plus XcodeBuildMCP scenarios when it is the approved Apple-platform fallback
+- MobAI/native iOS/device-test scenarios for mobile user journeys, plus XcodeBuildMCP/SnapshotPreviews/serve-sim scenarios when they are the Apple-platform proof route
 - backend verification scenarios showing real test data persisted or projected correctly
 - production-readiness gates and known blockers
 - validator and LaunchBench checks that must pass before done
@@ -228,11 +228,13 @@ Attribution-specific production-readiness proof is mandatory when onboarding, si
 - backend/profile storage contains the source once identity exists
 - anonymous attribution is stitched to the identified user after signup/login
 
-## 8. MobAI, XcodeBuildMCP, And Device Testing
+## 8. MobAI, Native iOS Proof, And Device Testing
 
 Use MobAI MCP when available for advanced multi-step device automation. Use the local `using-mobai-cli` skill when only CLI access is available or the environment is unfamiliar.
 
 MobAI is a paid third-party tool. If it is unavailable, do not silently switch to a free route. Load `paid-tool-routing.md`, ask the founder, and continue only after they confirm MobAI access, provide exports/screenshots, or approve a fallback.
+
+When running in Codex Desktop and native Apple/XcodeBuildMCP tools are exposed, use `xcodebuildmcp-testing.md` before Apple simulator/device proof. The Codex Desktop native iOS route should call `session_show_defaults` before the first build/run/test, use exposed MCP tools such as `build_run_sim` when defaults are set, and record project/workspace, scheme, simulator/device, tool names, screenshots/logs, and limitations in `PRODUCTION_READINESS.md`.
 
 Use XcodeBuildMCP after confirmation for Apple-platform build/run/test/UI automation/screenshots/logs/video:
 - load `xcodebuildmcp-testing.md`
@@ -242,6 +244,10 @@ Use XcodeBuildMCP after confirmation for Apple-platform build/run/test/UI automa
 - use one-shot build/run tools when defaults are configured
 - record Apple-only scope and any missing Android/MobAI coverage
 - record docs checked date, docs URLs, CLI/tool snapshot, install route/version, and any docs-vs-skill mismatch in `PRODUCTION_READINESS.md`
+
+For CLI users, use the same reference before SnapshotPreviews or serve-sim:
+- SnapshotPreviews exports SwiftUI/UIKit/AppKit preview PNG/JSON proof through XCTest using `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`; record it as preview-only coverage, not runtime E2E proof.
+- serve-sim exposes a booted iOS Simulator at a browser URL such as `http://localhost:3200`; record simulator/device, URL/port, actions, logs, and the fact that it does not replace provider proof or App Store signing readiness.
 
 Device loop:
 - observe UI tree before acting
@@ -258,7 +264,7 @@ For store screenshots, keep raw captures separate from composed assets. For E2E 
 - support/privacy/delete action reaches the intended backend/email route
 - lifecycle email/webhook appears in provider logs when expected
 
-If device access is blocked, mark production readiness as blocked for that flow. Do not replace live-device proof with screenshots or unit tests. If XcodeBuildMCP is the approved fallback, write the exact simulator/device, OS, workflow, and limitation into `PRODUCTION_READINESS.md`.
+If device access is blocked, mark production readiness as blocked for that flow. Do not replace live-device proof with screenshots, preview snapshots, or unit tests. If XcodeBuildMCP, SnapshotPreviews, or serve-sim is used, write the exact simulator/device, OS, workflow, output paths, and limitation into `PRODUCTION_READINESS.md`.
 
 ## 9. LaunchBench And Failure Cards
 
@@ -295,7 +301,7 @@ Engineering-heavy work is done only when:
 - Parallel agents were considered by default, used where safe, and serialized where required.
 - Specialist audit agents or equivalent independent review checked the build against attribution, onboarding, analytics, revenue, store, privacy, design, and production-readiness requirements where in scope.
 - frontend, backend, analytics, revenue, email, and mobile-device paths were tested end to end where in scope.
-- MobAI proof, or founder-confirmed XcodeBuildMCP Apple-platform proof, is paired with backend/provider verification where app flows mutate state.
+- MobAI proof, Codex Desktop native iOS/XcodeBuildMCP proof, serve-sim simulator proof, or SnapshotPreviews preview proof is paired with backend/provider verification where app flows mutate state, and preview/simulator limits are explicit.
 - production-readiness evidence is written down.
 - deterministic validators or LaunchBench scenarios were run where applicable, and active failure cards are explicit.
 - remaining blockers are explicit founder-only gates, access gaps, platform review waits, or external service issues.

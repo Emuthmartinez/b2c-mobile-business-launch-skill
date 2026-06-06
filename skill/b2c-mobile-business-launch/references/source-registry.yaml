@@ -1637,6 +1637,35 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-getsentry-snapshotpreviews
+    name: SnapshotPreviews
+    source_type: github
+    url: https://github.com/getsentry/SnapshotPreviews
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Sentry/EmergeTools SnapshotPreviews repository used for SwiftUI/UIKit/AppKit preview snapshot export guidance. Treat output as preview-only proof, not runtime E2E or distribution readiness.
+  - id: github-com-emerge-tools-snapshotpreviews
+    name: SnapshotPreviews package URL
+    source_type: github
+    url: https://github.com/EmergeTools/SnapshotPreviews
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Repository URL shown in the SnapshotPreviews README for Swift Package Manager installation.
+  - id: github-com-evanbacon-serve-sim
+    name: serve-sim
+    source_type: github
+    url: https://github.com/EvanBacon/serve-sim
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Open-source CLI for browser-visible iOS Simulator streaming/control used by CLI agents. Treat output as simulator proof, not provider or App Store signing proof.
   - id: github-com-nextlevelbuilder-ui-ux-pro-max-skill
     name: github.com
     source_type: github

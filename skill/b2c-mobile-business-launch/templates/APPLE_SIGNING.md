@@ -4,6 +4,8 @@ Status: scaffold
 
 This packet records distribution readiness for iOS. Keep it aligned with the Xcode project, App Store Connect app record, CI signing setup, `APPLE_APP_STORE_REQUIREMENTS.md`, and founder approval before TestFlight or App Store submission.
 
+Native iOS proof from Codex Desktop, XcodeBuildMCP, SnapshotPreviews, serve-sim, MobAI, or simulator/device screenshots supports implementation, screenshot, and app-preview evidence in `PRODUCTION_READINESS.md` and `SCREENSHOTS.md`. It does not satisfy this distribution packet unless archive/export/upload/TestFlight gates below are also proven.
+
 ## Account And Identifiers
 
 | Gate | Value | Proof |

@@ -194,7 +194,9 @@ Use real app media before generic generated visuals:
 - MobAI screen recordings for actual flows and app demos
 - MobAI `mobile-recorder-skill` for polished iOS/Android app-flow videos with `.mob` choreography, tap ripples, finger overlay, phone bezel/background, zoom, variable speed, captions, final mp4, and upload copy
 - MobAI `desktop-recorder-skill` for polished macOS/web app-flow videos with `screenplay.json`, click ripples, cursor sprite, captions, zoom, variable speed, final mp4, and upload copy
-- XcodeBuildMCP screenshots, videos, and logs when the founder confirmed the Apple-platform fallback from MobAI
+- Codex Desktop native iOS/XcodeBuildMCP screenshots, videos, and logs when Apple simulator/device proof is available or the founder confirmed the Apple-platform fallback from MobAI
+- serve-sim browser-visible simulator streams for CLI proof, with URL/port, actions, logs, and limitations recorded
+- SnapshotPreviews PNG/JSON preview exports for component/preview evidence only; do not treat them as runtime app-demo footage
 - app preview clips and store screenshots from `SCREENSHOTS.md`
 - Higgsfield assets for supporting characters, backgrounds, hooks, and motion when constrained by `DESIGN.md`
 - founder/UGC clips only when the founder approves identity use
@@ -210,20 +212,20 @@ MobAI capture rules:
 - record device, OS, build, locale, theme, fixture, capture path, and proof constraints
 - record `DEMO_VIDEO.md` with choreography/screenplay, raw capture, final export, captions, upload copy, and rerender path when using recorder skills
 
-XcodeBuildMCP fallback:
-- use only after `paid-tool-routing.md` confirmation
-- load `xcodebuildmcp-testing.md`
-- record Apple-only coverage limits in `FASTLANE_OPS.md` and `SCREENSHOTS.md`
+Native iOS fallback/proof:
+- load `xcodebuildmcp-testing.md` before Codex Desktop native iOS/XcodeBuildMCP, SnapshotPreviews, or serve-sim proof
+- use XcodeBuildMCP as a MobAI replacement only after `paid-tool-routing.md` confirmation
+- record Apple-only coverage limits, preview-only limits, provider-proof pairing, and signing/distribution limits in `FASTLANE_OPS.md`, `SCREENSHOTS.md`, and `PRODUCTION_READINESS.md`
 
 ### Multi-Format Delivery
 
-Once a master video exists (real app footage from MobAI/XcodeBuildMCP recorder, or a Higgsfield-generated supporting creative), convert it to all required aspect ratios at near-zero incremental cost versus three separate generations. See the **Master → All Platforms** recipe in `tool-recipes.md` for the full workflow.
+Once a master video exists (real app footage from MobAI, Codex Desktop native iOS/XcodeBuildMCP, serve-sim, or a Higgsfield-generated supporting creative), convert it to all required aspect ratios at near-zero incremental cost versus three separate generations. See the **Master → All Platforms** recipe in `tool-recipes.md` for the full workflow.
 
 Key points for this surface:
 - `mcp__claude_ai_Higgsfield__reframe` is MCP-only — there is no `higgsfield reframe ...` CLI command. Confirm exact invocation via the `higgsfield-generate` skill or MCP tool help before running.
 - `mcp__claude_ai_Higgsfield__personal_clipper_create` / `_jobs` / `_status` extracts shorts from long recordings before reframing. Same MCP-only constraint applies.
 - Targets: 9:16 (TikTok / Reels), 1:1 (feed), 16:9 (YouTube / LinkedIn).
-- **App Preview guardrail:** any reframe intended as an App Preview must be sourced from REAL app footage (MobAI/XcodeBuildMCP capture). Generated video is never a valid App Preview source.
+- **App Preview guardrail:** any reframe intended as an App Preview must be sourced from REAL app footage (MobAI, Codex Desktop native iOS/XcodeBuildMCP, or serve-sim capture). Generated video and preview-only snapshots are never valid App Preview sources.
 - **Spend-confirmation gate:** reframe and personal_clipper consume paid credits. Confirm spend with the founder per `paid-tool-routing.md` and surface the current balance (`mcp__claude_ai_Higgsfield__balance`) before running.
 - **CONTENT_ASSETS.md traceability:** record all output URLs, source job IDs (`source_job_id`), and aspect-ratio variants in `CONTENT_ASSETS.md` / `content-assets/manifest.json`. Run `brain_activity` virality scoring on each variant and log the score before scheduling any paid distribution.
 - Do not schedule reframed variants until the founder approves each output.
