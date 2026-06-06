@@ -96,6 +96,11 @@ Keep this sequence unless a named experiment is approved:
 - Motion uses ad-hoc durations instead of the tokenized `motion.*` scale.
 - framer-motion / `motion` imports leak into the mobile binary (SwiftUI/Flutter) instead of staying on web surfaces.
 - Animations ignore `prefers-reduced-motion`.
+- Tappable controls are flat with no press state, so they feel broken.
+- Everything animates (theme-park motion) instead of motion that clarifies what just happened.
+- Haptics fire on navigation/scroll/every tap until they become noise.
+- Keyboard covers the input or hides the submit button; dismissal is jarring or impossible.
+- Loading shows a bare spinner and layout jumps instead of a size-preserving skeleton.
 
 ## Motion Consistency And Reduced Motion
 
@@ -107,6 +112,20 @@ Motion is a tokenized contract, not per-screen improvisation. Every transition r
 - **Reduced Motion:** honor `prefers-reduced-motion` (web `useReducedMotion()` plus reduced-motion CSS; native reduce-motion settings). Replace transforms with instant or opacity-only changes and never block first paint on an animation.
 
 When the `ui-ux-pro-max` skill is available, adapt its senior-grade pattern, motion, and anti-pattern guidance (visible focus states, smooth 150-300ms transitions, reduced-motion support). Reference it; do not copy its data verbatim into this repo.
+
+## Premium Craft Details
+
+Premium is not flashy; it is the compounding effect of many invisible decisions. These five details ship as boilerplate (`design-system/PremiumCraft.swift` for SwiftUI/latest Swift, with React Native and Flutter parity notes) and must be honored on every in-app surface. Full doctrine: `references/premium-mobile-craft.md`.
+
+| Detail | Premium bar | Boilerplate | Reduced-motion / accessibility |
+| --- | --- | --- | --- |
+| Press states & spring physics | Every tappable control gives ~100ms physical feedback (scale/dim spring or iOS 26 Liquid Glass), never a flat rectangle | `.buttonStyle(.premiumPress)` / `.buttonStyle(.glass)`; `PremiumMotion.press` | Keep opacity/haptic cue; drop the scale transform |
+| Subtle animations | Motion only when it answers a question the user just asked; 150-300ms; tokenized, never improvised | `PremiumMotion.standard`; `.premiumAnimation(_:value:)` | Collapse to instant/opacity change; never block first paint |
+| Haptics | Confirm state changes and decisions only — not navigation, scrolling, or idle taps | `.sensoryFeedback(for:trigger:)`; `Haptics.Event.play()` | Respect system Haptics setting |
+| Keyboard behavior | Input/submit never covered; dismissal is intentional; focus/blur deliberate | `.premiumInteractiveKeyboardDismiss()`, `KeyboardDoneToolbar`, `.swipeFocusGesture` | Maintain visible focus order at large text sizes |
+| Loading & empty states | Size-preserving skeleton/shimmer (or status text), not a bare spinner; empty states explain what/why + one action | `.skeleton(isLoading)`, `EmptyStateView` | Static skeleton, no shimmer sweep, under Reduce Motion |
+
+These details are additive to the State Matrix above, not a replacement: the State Matrix defines *which* states each surface must handle; Premium Craft defines how they *feel*.
 
 ## Source Ledger
 
@@ -120,5 +139,6 @@ When the `ui-ux-pro-max` skill is available, adapt its senior-grade pattern, mot
 - [ ] Pattern inventory covers all launch-critical surfaces.
 - [ ] Flow maps preserve the onboarding playbook.
 - [ ] State matrix covers loading/error/offline/permission/premium/destructive states.
+- [ ] Premium Craft details (press states, subtle motion, haptics discipline, keyboard behavior, skeleton/empty states) are honored on in-app surfaces with reduced-motion handling.
 - [ ] `ux-patterns.html` or `design.html` renders the flow architecture.
 - [ ] Decisions map to `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, `REVENUE_OPS.md`, and `PRODUCTION_READINESS.md`.
