@@ -65,14 +65,22 @@ In v1.2, grading is an **explicitly routed, separately invoked pass** — not ju
 6. The validator (`npm run check:store-screenshots`) will ERROR if `grading_pass.separate_pass` is not `true`, if `builder.session_id` equals `grader.session_id`, or if any slot lacks `grader_notes` or `observed_evidence`.
 7. **store_console cannot be marked "done" until all steps above complete and the validator passes.**
 
+#### Bash-Written PNGs Are Also Covered
+
+The `settings.json` Write|Edit hook fires when the tool writes a file. If an agent instead writes final PNGs via a Bash command (`cp`, `mv`, `tee`, `install`, `ditto`, `sips`, `magick`/`convert -o`, or shell redirection `>`/`>>` into `screenshots/final/*.png`), the Bash PostToolUse hook intercepts the command and emits the identical BLOCKING grading-pass signal, then exits 1. This closes the Bash-write bypass.
+
+**Honest limit of the Bash hook:** the hook matches a regex against the Bash command string. A carefully constructed command string that uses the destination path in an unusual position could evade the pattern. It catches straightforward writes (copy, move, redirect) and is not a cryptographic guarantee.
+
 #### Honest Limit of This Control
 
 The validator enforces that:
 - `grading_pass.separate_pass: true` is explicitly asserted
 - `builder.session_id` and `grader.session_id` are distinct non-empty strings
-- every slot has substantive `grader_notes` (≥ 20 chars) and `observed_evidence` (≥ 10 chars)
+- every slot has substantive `grader_notes` (≥ 30 chars) and `observed_evidence` (≥ 15 chars)
+- `observed_evidence` is DISTINCT per slot — two or more slots sharing the exact same normalized evidence string fires `store_screenshots.observed_evidence_not_distinct` (ERROR at done, WARN at partial)
+- `observed_evidence` does not match a stock generic-phrase denylist (e.g. "looks good", "reads clearly", "headline visible") — matches fire `store_screenshots.observed_evidence_generic` (WARN)
 
-**What it cannot prove:** that two truly independent processes ran. A single agent that knows the schema can fabricate both session IDs and an `observed_evidence` field. This raises the bar significantly versus the v1.1 string-comparison control (faking now requires deliberate fabrication of two session identities, an explicit separation attestation, and per-slot visual evidence notes), but it does not eliminate the gap.
+**What it cannot prove:** that two truly independent processes ran. A single agent that knows the schema can fabricate both session IDs, an `observed_evidence` field, and write distinct-but-fictional evidence per slot. These controls raise the bar significantly versus the v1.1 string-comparison control (faking now requires deliberate fabrication of two session identities, an explicit separation attestation, per-slot visual evidence notes, AND distinct non-generic observations per slot), but they do not eliminate the gap.
 
 **Founder approval is the ultimate backstop.** The founder's review of the final PNGs alongside the grading ledger is the only control that cannot be mechanically gamed. The validator is a raised-bar deterrent, not a proof.
 
@@ -90,8 +98,11 @@ The validator enforces that:
 1. Run `npx tsx scripts/grade-screenshots.ts --root . --state PROJECT_STATE.yaml` to generate the grading task template. This reads SCREENSHOTS.md, verifies each final PNG exists, and reads its real IHDR width/height.
 2. For each slot in the task template, open the final PNG and score each dimension 0–3 using the criteria in the Dimensions table above.
 3. Compute the weighted score and the pass boolean.
-4. Fill in `grader_notes` for every slot — at minimum one paragraph explaining the score for each dimension that could plausibly change. Empty or missing `grader_notes` is treated by the validator as a grading skip.
-5. Fill in `observed_evidence` for every slot — one line referencing something you actually saw in the PNG (headline text, dominant color, a specific UI element). This is the per-slot anti-fabrication control.
+4. Fill in `grader_notes` for every slot — at minimum one paragraph explaining the score for each dimension that could plausibly change. Empty or missing `grader_notes`, or notes shorter than 30 characters, are treated by the validator as a grading skip.
+5. Fill in `observed_evidence` for every slot — one line referencing something you actually saw in the PNG (headline text, dominant color, a specific UI element). This is the per-slot anti-fabrication control. Rules:
+   - Minimum 15 characters.
+   - Must be DISTINCT across slots: two slots cannot share the same normalized observed_evidence — that signals the grader did not open each PNG separately.
+   - Must not be a stock generic phrase: "looks good", "reads clearly", "headline visible", "looks clean", "nice", "good", "clear", "ok" etc. are flagged as warnings.
 6. If pass is false AND the founder has not yet filed an override: emit a WARNING with the slot identifier, the failing dimension(s), and the score. Do NOT block launch from this alone.
 7. Assemble the complete ledger (identity block + all slot blocks) and run the validate+write command. The script enforces `builder.session_id != grader.session_id`, `grading_pass.separate_pass: true`, and notes presence before writing.
 8. If a founder override is provided: log `override.by`, `override.reason`, and `override.at` in the same record.
@@ -186,7 +197,7 @@ Linking rubric scores to downstream conversion metrics (PPO results, App Analyti
 - Do not collapse PROVEN checks into OPTIMIZED. A missing file on disk is always a hard error regardless of scores.
 - The ledger schema is at `rubric_version: 1.2`. Version 1.2 added `builder`/`grader` as structured objects (`{ agent, session_id }`), the `grading_pass` block (`{ separate_pass, started_at, method }`), and per-slot `observed_evidence`. Ledgers graded under v1.1 (plain string builder/grader) will fire `store_screenshots.grading_not_separate_pass` and `store_screenshots.grader_provenance_missing` warnings; re-grade them before marking the lane "done".
 - Tier-1 anti-gaming: the validator rejects `screenshot-rubric-scores.json` that is byte-identical to `screenshot-rubric-scores.example.json` or below 200 bytes. The example file is the scaffold; it must be replaced with real scores, not copied.
-- Tier-2 separate-pass enforcement: new in v1.2. The validator errors on `store_console=done` if `grading_pass.separate_pass !== true`, if `builder.session_id === grader.session_id`, or if any slot lacks substantive `grader_notes` or `observed_evidence`. Issue codes: `store_screenshots.grading_not_separate_pass`, `store_screenshots.builder_equals_grader`, `store_screenshots.grader_provenance_missing`.
+- Tier-2 separate-pass enforcement: new in v1.2; tightened in v1.2.1. The validator errors on `store_console=done` if `grading_pass.separate_pass !== true`, if `builder.session_id === grader.session_id`, if any slot lacks `grader_notes` (≥ 30 chars) or `observed_evidence` (≥ 15 chars), if two or more slots share the same normalized `observed_evidence` (issue code: `store_screenshots.observed_evidence_not_distinct`), or if `observed_evidence` matches a stock generic-phrase denylist (issue code: `store_screenshots.observed_evidence_generic`, warning only). Issue codes: `store_screenshots.grading_not_separate_pass`, `store_screenshots.builder_equals_grader`, `store_screenshots.grader_provenance_missing`, `store_screenshots.observed_evidence_not_distinct`, `store_screenshots.observed_evidence_generic`.
 - Tier-3 PNG reality checks: for every `final_png` path in the ledger the validator reads the PNG IHDR header bytes and checks that the declared device-well dimensions and alpha-removal claim are true. A final PNG that carries an alpha channel after `alpha removed` is claimed is a hard error when the lane is "done".
 - The `grade-screenshots.ts` scaffold is the ONLY supported way to assemble and write the grading ledger. It validates the complete provenance chain before writing. Do not write `screenshot-rubric-scores.json` directly from a build agent.
 - The settings.json `Final PNG hook` exits non-zero after final PNG writes (BLOCKING). This is intentional — it forces the agent to route to the grading pass. Do not add `|| true` to this hook.
