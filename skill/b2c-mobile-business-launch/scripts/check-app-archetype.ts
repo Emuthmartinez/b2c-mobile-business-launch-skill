@@ -26,17 +26,28 @@ import { issue, reportAndExit, type Issue } from "./lib/launch-state.js";
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
 
-// The shipped pack and its non-negotiable wiring. Extend this when a new
+// The shipped packs and their non-negotiable wiring. Add an entry here when a new
 // archetype is promoted from optional to shipped.
-const REQUIRED_PACK = "social-network";
-const REQUIRED_PROMPTS = [
-  "01-database-schema.md",
-  "02-auth-system.md",
-  "03-feed-and-posts.md",
-  "04-profiles-and-follow.md",
+interface ShippedPack {
+  name: string;
+  requiredPrompts: string[];
+  reference: string;
+  eval: string;
+}
+const SHIPPED_PACKS: ShippedPack[] = [
+  {
+    name: "social-network",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-feed-and-posts.md", "04-profiles-and-follow.md"],
+    reference: "references/social-network-lane.md",
+    eval: "evals/agent-behavior/social-network-archetype-prompt-pack.yaml",
+  },
+  {
+    name: "ai-chat-companion",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-chat-core-loop.md", "04-model-integration.md"],
+    reference: "references/ai-chat-companion-lane.md",
+    eval: "evals/agent-behavior/ai-chat-companion-archetype-prompt-pack.yaml",
+  },
 ];
-const REQUIRED_REFERENCE = "references/social-network-lane.md";
-const REQUIRED_EVAL = "evals/agent-behavior/social-network-archetype-prompt-pack.yaml";
 
 const args = parseArgs(process.argv.slice(2));
 const issues: Issue[] = [];
@@ -107,9 +118,10 @@ if (!existsSync(archetypesDir)) {
       }
     }
 
-    // Required-pack contract: the shipped pack must carry its core prompts.
-    if (name === REQUIRED_PACK) {
-      for (const required of REQUIRED_PROMPTS) {
+    // Required-pack contract: a shipped pack must carry its core prompts.
+    const shipped = SHIPPED_PACKS.find((pack) => pack.name === name);
+    if (shipped) {
+      for (const required of shipped.requiredPrompts) {
         if (!promptBasenames.has(required)) {
           issues.push(
             issue(
@@ -125,35 +137,41 @@ if (!existsSync(archetypesDir)) {
   }
 }
 
-// Wiring for the shipped pack: reference, SKILL.md routing, and the eval.
-const referencePath = path.join(args.skillRoot, REQUIRED_REFERENCE);
-if (!existsSync(referencePath)) {
-  issues.push(issue("error", "app_archetype.reference_missing", `${REQUIRED_REFERENCE} must exist for the shipped social-network lane.`, REQUIRED_REFERENCE));
-}
-
+// Wiring for each shipped pack: the pack dir, its reference, SKILL.md routing, and the eval.
 const skillPath = path.join(args.skillRoot, "SKILL.md");
-if (!existsSync(skillPath)) {
+const skillText = existsSync(skillPath) ? readFileSync(skillPath, "utf8") : undefined;
+if (skillText === undefined) {
   issues.push(issue("error", "app_archetype.skill_missing", "SKILL.md is missing.", "SKILL.md"));
-} else if (!readFileSync(skillPath, "utf8").includes(REQUIRED_REFERENCE)) {
-  issues.push(
-    issue(
-      "error",
-      "app_archetype.skill_routing_missing",
-      `SKILL.md must route to ${REQUIRED_REFERENCE} so the archetype lane is discoverable.`,
-      "SKILL.md",
-    ),
-  );
 }
 
-if (!existsSync(path.join(args.skillRoot, REQUIRED_EVAL))) {
-  issues.push(
-    issue(
-      "error",
-      "app_archetype.eval_missing",
-      `${REQUIRED_EVAL} must exist so the detect -> AskUserQuestion -> load-pack behavior is enforced, not prose-only.`,
-      REQUIRED_EVAL,
-    ),
-  );
+for (const pack of SHIPPED_PACKS) {
+  const packRel = `templates/app-archetypes/${pack.name}`;
+  if (!existsSync(path.join(archetypesDir, pack.name))) {
+    issues.push(issue("error", `app_archetype.${pack.name}.pack_missing`, `Shipped pack ${packRel} is missing.`, packRel));
+  }
+  if (!existsSync(path.join(args.skillRoot, pack.reference))) {
+    issues.push(issue("error", `app_archetype.${pack.name}.reference_missing`, `${pack.reference} must exist for the shipped ${pack.name} lane.`, pack.reference));
+  }
+  if (skillText !== undefined && !skillText.includes(pack.reference)) {
+    issues.push(
+      issue(
+        "error",
+        `app_archetype.${pack.name}.skill_routing_missing`,
+        `SKILL.md must route to ${pack.reference} so the ${pack.name} lane is discoverable.`,
+        "SKILL.md",
+      ),
+    );
+  }
+  if (!existsSync(path.join(args.skillRoot, pack.eval))) {
+    issues.push(
+      issue(
+        "error",
+        `app_archetype.${pack.name}.eval_missing`,
+        `${pack.eval} must exist so the detect -> AskUserQuestion -> load-pack behavior is enforced, not prose-only.`,
+        pack.eval,
+      ),
+    );
+  }
 }
 
 reportAndExit("App archetype prompt-pack check", issues);
