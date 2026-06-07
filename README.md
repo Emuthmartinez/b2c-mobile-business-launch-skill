@@ -48,6 +48,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Experience | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, and surface translation |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
+| App Archetypes | Reusable boilerplate prompt packs for known B2C product shapes, seeded with the Social / Community Platform lane (`references/social-network-lane.md`, `templates/app-archetypes/social-network/`): upfront AskUserQuestion archetype/variant detection (text/image/video-first, web vs native), the five core systems, and a dependency-ordered prompt sequence (schema, auth, feed, profiles, search, DMs, monetization, invites) that threads into the research, design, security, revenue, and growth lanes |
 | Security | `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool routing, OWASP MASVS/ASVS basis, platform hardening, app integrity, abuse controls, scanner/review proof, and accepted risks |
 | Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, Remotion content assets, screenshot systems, and audit gates |
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
