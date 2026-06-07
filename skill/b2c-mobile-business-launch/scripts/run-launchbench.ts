@@ -55,6 +55,7 @@ const knownValidators = new Set([
   "check-control-plane-contract",
   "check-live-provider-proof",
   "check-artifact-templates",
+  "check-app-archetype",
   "run-agent-evals",
   "check-token-promotion",
   "render-launch-cockpit",
