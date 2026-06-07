@@ -15,6 +15,7 @@ New contributor (human or agent)? Start with [`CONTRIBUTING.md`](CONTRIBUTING.md
 - `skill/b2c-mobile-business-launch/state/`: Design Room seed state, theme tokens, and JSON schema.
 - `skill/b2c-mobile-business-launch/render/`: React/Vite Design Room renderer; `scripts/render-design-room.ts` also writes the static fallback.
 - `skill/b2c-mobile-business-launch/templates/`: reusable launch artifacts copied into app repos.
+- `skill/b2c-mobile-business-launch/templates/app-archetypes/`: per-product-shape boilerplate prompt packs (e.g. `social-network`, `ai-chat-companion`), routed by their lane references and enforced by `check-app-archetype`.
 - `skill/b2c-mobile-business-launch/templates/repo-agent-entrypoints/`: business-repo `AGENTS.md` and `CLAUDE.md` templates that keep future agents on the launch skill workflow.
 - `skill/b2c-mobile-business-launch/scripts/`: deterministic validators, renderers, LaunchBench harness, and source freshness tooling.
 - `skill/b2c-mobile-business-launch/evals/launchbench/`: known failure-mode scenarios.

@@ -771,6 +771,15 @@ try {
     "continuity.file_missing",
   );
   runFixture("agent behavior eval definitions pass", path.join(skillRoot, "evals/agent-behavior"), "run-agent-evals.ts", 0);
+  runFixture("app archetype packs pass", skillRoot, "check-app-archetype.ts", 0, undefined, ["--skill-root", skillRoot]);
+  const archetypeMissing = makeEmptyFixture("app-archetype-missing");
+  runScriptArgs(
+    "app archetype layer missing fails",
+    "check-app-archetype.ts",
+    ["--skill-root", archetypeMissing],
+    1,
+    "app_archetype.dir_missing",
+  );
   runFixture("compound engineering not in scope passes", clean, "check-compound-engineering-routing.ts", 0);
   writeCompletePaidToolDecisions(clean);
   runFixture("complete paid-tool decisions packet passes", clean, "check-paid-tool-decisions.ts", 0);
