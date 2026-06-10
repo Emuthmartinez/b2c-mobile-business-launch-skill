@@ -1837,3 +1837,30 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/scripts/probe-revenuecat.ts
     notes: RevenueCat v1 REST API reference cited in probe-revenuecat.ts header documentation explaining the v1 vs v2 endpoint difference.
+  - id: play-google-com-console-about
+    name: Google Play Console overview
+    source_type: official_docs
+    url: https://play.google.com/console/about/
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/google-play-release.md
+    notes: Play Console product page; entry point for developer account, app records, testing tracks, and release management in the Google Play release lane.
+  - id: support-google-com-googleplay-android-developer-home
+    name: Google Play Console developer help center
+    source_type: official_docs
+    url: https://support.google.com/googleplay/android-developer
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/google-play-release.md
+    notes: Play developer help center root; Play policy, Data Safety, content rating, testing-track, and account-verification guidance must be refreshed here before commands or claims.
+  - id: developer-android-com-target-sdk-requirements
+    name: Google Play target API level requirements
+    source_type: official_docs
+    url: https://developer.android.com/google/play/requirements/target-sdk
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/google-play-release.md
+    notes: The yearly-ratcheting target API level requirement for new apps and updates; check at release time, never from memory.

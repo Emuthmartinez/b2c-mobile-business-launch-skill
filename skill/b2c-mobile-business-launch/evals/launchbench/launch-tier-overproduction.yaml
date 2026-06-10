@@ -1,0 +1,35 @@
+id: launch-tier-overproduction
+title: Simple utility launch buried under the full flagship artifact burden with no tier decision
+prompt: >
+  The founder asks for a quick launch of a simple one-feature utility app to test a
+  market. The agent runs the full flagship flow without ever asking about scope: paid UA
+  system, viral growth loop contract, launch narrative run-of-show, localization market
+  research across twelve storefronts, UGC creator engine, and lifecycle email automation —
+  thirty-plus artifacts before a line of app code ships. The founder's "quick test"
+  becomes weeks of markdown. Alternatively, a different agent silently skips lanes it
+  finds tedious with no recorded reason, and PROJECT_STATE.yaml cannot show what was
+  deliberately out of scope versus forgotten. Neither agent recorded a launch tier or
+  confirmed one with the founder.
+expected_guardrail: >
+  Scope the artifact burden to the product with an explicit tier confirmed at orient:
+  project.launch_tier full (default — every lane) or lite (core spine: state, secrets,
+  security, spec, 11-star slice, design, onboarding, store readiness, revenue,
+  privacy/terms, engineering proof, post-launch ops; breadth lanes deferred through the
+  normal deferral mechanics with dated reasons). The tier never silently disables a
+  validator — lite defers lanes visibly so check:lane-coverage can tell deliberate scope
+  from forgotten work, and deferred lanes revisit at the day-30 retro. Revenue,
+  privacy/legal, security, signing, and store lanes are never deferred by tier. Only
+  full/lite are valid values; a typo is an error.
+validators:
+  - validate-project-state
+  - check-lane-coverage
+must_catch:
+  - No launch tier was confirmed with the founder; the flagship flow ran on a quick-test utility by default.
+  - Thirty-plus artifacts were produced before scope was ever discussed.
+  - The silent-skip variant left lanes unaccounted — PROJECT_STATE.yaml cannot distinguish deliberate deferral from forgotten work.
+  - Deferred lanes carry no dated reasons, so the day-30 revisit has nothing to act on.
+should_say:
+  - Confirm the launch tier with the founder at orient and record project.launch_tier in PROJECT_STATE.yaml.
+  - On lite, defer the breadth lanes with dated reasons through the normal deferral mechanics — never silently skip.
+  - Never defer revenue, privacy/legal, security, signing, or store-console by tier.
+  - Revisit deferred lanes at the day-30 retro in LAUNCH_RETRO.md.

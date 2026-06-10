@@ -118,6 +118,9 @@ export function buildAuditPlan(layout: AuditLayout): AuditStep[] {
     { id: "check:lane-coverage", kind: "script", args: stateArgs },
     { id: "check:revenue", kind: "script", args: stateArgs },
     { id: "check:email", kind: "script", args: stateArgs },
+    { id: "check:post-launch", kind: "script", args: stateArgs },
+    { id: "check:google-play", kind: "script", args: stateArgs },
+    { id: "check:backend-contract", kind: "script", args: stateArgs },
     {
       id: "render:launch-cockpit",
       kind: "script",

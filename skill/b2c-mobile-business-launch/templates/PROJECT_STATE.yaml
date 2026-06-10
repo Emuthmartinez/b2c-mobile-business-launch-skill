@@ -5,6 +5,10 @@ project:
   slug: "app-name"
   owner: "Founder or team"
   phase: "phase_0_orient"
+  # Launch tier scopes the artifact burden to the product: "full" runs every lane;
+  # "lite" defers the named optional lanes with dated reasons (see launch-phases.md
+  # "Launch Tiers"). Confirm the tier with the founder at orient; record changes here.
+  launch_tier: "full"
   platforms:
     - ios
   bundle_ids:
@@ -241,6 +245,12 @@ lanes:
       - "growth/format-lab.csv"
       - "UGC_PLAYBOOK.md"
       - "FASTLANE_OPS.md"
+    blockers: []
+  post_launch_ops:
+    status: "not_started"
+    evidence:
+      - "POST_LAUNCH_OPS.md"
+      - "LAUNCH_RETRO.md"
     blockers: []
 tools:
   doppler:

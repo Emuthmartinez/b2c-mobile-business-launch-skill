@@ -44,7 +44,7 @@ compound_engineering:
 For production-readiness claims, the route must show either:
 
 - CE is available and planning, work, review, testing, and proof are used or intentionally not needed with a reason.
-- CE is unavailable and an equivalent fallback is recorded in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`.
+- CE is unavailable and the Standalone Engineering Loop (`engineering-orchestration.md` §1b) is recorded in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md` — plan, bounded slices, adversarial review, test, and proof with the same evidence bar. `check:compound-engineering` errors when CE is unavailable and `ENGINEERING_PLAN.md` does not record the loop.
 
 ## Artifact Requirements
 

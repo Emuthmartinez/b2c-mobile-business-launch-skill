@@ -43,6 +43,7 @@ If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write
 ## State Rules
 
 - `autonomy.mode` controls what the agent may do without founder approval. See `autonomy-modes.md`.
+- `project.launch_tier` scopes the artifact burden: `full` (default) runs every lane; `lite` defers the named breadth lanes with dated reasons through normal deferral mechanics (see `launch-phases.md` "Launch Tiers"). Only `full`/`lite` are valid; the tier never silently disables a validator.
 - top-level `orchestration` records preflight, strategy, candidate units, parallel-safe units, serialized units, spawned agents, collision checks, output review, state reconciliation, and validators.
 - top-level `compound_engineering` records whether Compound Engineering skills were available, used, blocked, or replaced with an equivalent fallback.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
@@ -52,6 +53,7 @@ If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write
 - `lanes.analytics_attribution.attribution_contract` is a hard data contract, not a UI note.
 - `lanes.paid_user_acquisition` tracks `PAID_UA.md`, one-channel paid acquisition fit, creative cadence, tracking baseline, blended report, RevenueCat economics, stop/scale rules, and founder-only spend gates.
 - `lanes.growth` tracks `VIRAL_GROWTH.md`, product-led referral/share mechanics, content format evidence, UGC/Fastlane state, and growth proof.
+- `lanes.post_launch_ops` tracks `POST_LAUNCH_OPS.md` (the live-app operating runbook: weekly rhythm, crash triage, review responses, release cadence, retention review, support) and `LAUNCH_RETRO.md`; it stays not_started or deferred-with-reason until the app is live, then gates on `check:post-launch`.
 - `proof.commands` should include command, expected result, actual result, and evidence path.
 - `failure_cards.active` should point to concrete risks, not generic reminders.
 

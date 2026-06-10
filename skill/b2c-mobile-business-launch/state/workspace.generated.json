@@ -22,12 +22,12 @@
         },
         {
           "label": "Lanes",
-          "value": "0/21",
+          "value": "0/22",
           "note": "0 blocked"
         },
         {
           "label": "Artifacts",
-          "value": "53",
+          "value": "55",
           "note": "evidence refs"
         },
         {
@@ -78,7 +78,7 @@
         },
         {
           "name": "Launch lane auditor",
-          "summary": "Checks 21 launch lanes and surfaces 0 blocked lane(s)."
+          "summary": "Checks 22 launch lanes and surfaces 0 blocked lane(s)."
         }
       ],
       "lanes": [
@@ -114,7 +114,7 @@
         },
         {
           "title": "Launch Cockpit",
-          "summary": "0 launch lane(s) done, 0 blocked, 21 tracked.",
+          "summary": "0 launch lane(s) done, 0 blocked, 22 tracked.",
           "path": "launch-cockpit.html",
           "status": "Watch"
         },

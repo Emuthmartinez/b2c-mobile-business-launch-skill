@@ -132,10 +132,13 @@ npm run check:11-star -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:emotional-design -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:content-assets -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:paid-ua -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:backend-contract -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:google-play -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:post-launch -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run render:launch-cockpit -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml --out /path/to/{{APP_SLUG}}/launch-cockpit.html
 ```
 
-Add lane-specific checks for attribution, UX patterns, content assets, 11-star experience, LaunchBench, and app tests whenever those lanes are in scope.
+Add lane-specific checks for attribution, UX patterns, content assets, 11-star experience, LaunchBench, and app tests whenever those lanes are in scope. Once the app is live, `check:post-launch` gates the post_launch_ops lane (weekly rhythm, crash route, review SLA, retention cohorts, launch retro); `check:google-play` applies whenever Android is in scope; `check:backend-contract` gates the TECH_SPEC.md Data Contract before engineering is done.
 
 ## Validator Hooks And Probes
 

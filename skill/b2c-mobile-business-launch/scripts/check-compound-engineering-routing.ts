@@ -97,6 +97,24 @@ if (engineeringPlan) {
   }
 }
 
+// CE-unavailable routing is a real fallback path, not just a recorded excuse:
+// the plan must name the Standalone Engineering Loop (engineering-orchestration.md)
+// so the build keeps the same plan/slice/review/test/proof bar without CE skills.
+const ceAvailability = state ? asString(getPath(state, "compound_engineering.availability"))?.trim() : undefined;
+const ceRoute = state ? asString(getPath(state, "compound_engineering.route"))?.trim() : undefined;
+if ((ceAvailability === "unavailable" || ceRoute === "ce_fallback") && engineeringPlan && !engineeringPlan.text.includes("Standalone Engineering Loop")) {
+  issues.push(
+    issue(
+      "error",
+      "compound_engineering.standalone_loop_missing",
+      "Compound Engineering is unavailable (or routed to ce_fallback) but ENGINEERING_PLAN.md does not record the Standalone Engineering Loop. " +
+        "A fallback reason alone is documentation, not a path — record the plan/bounded-slices/adversarial-review/test/proof loop from " +
+        "references/engineering-orchestration.md so the readiness bar does not silently drop with CE missing.",
+      engineeringPlan.relativePath,
+    ),
+  );
+}
+
 if (productionReadiness) {
   requireTerms(productionReadiness.text, ["ce-code-review"], productionReadiness.relativePath);
   if (!includesAny(productionReadiness.text, ["ce-test-browser", "ce-test-xcode", "MobAI", "E2E proof"])) {

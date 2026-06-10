@@ -67,7 +67,7 @@ if (state) {
         issue(
           "error",
           `lane_coverage.${lane}.missing`,
-          `${lanePath} is missing entirely. All 21 required lanes must be present in PROJECT_STATE.yaml.`,
+          `${lanePath} is missing entirely. All ${requiredLanes.length} required lanes must be present in PROJECT_STATE.yaml.`,
           "PROJECT_STATE.yaml",
         ),
       );
