@@ -62,6 +62,7 @@
     "check:lane-coverage": "tsx scripts/check-lane-coverage.ts",
     "check:revenue": "tsx scripts/check-revenue.ts",
     "check:email": "tsx scripts/check-email.ts",
+    "check:analytics-catalog": "tsx scripts/check-analytics-catalog.ts",
     "check:post-launch": "tsx scripts/check-post-launch-ops.ts",
     "check:google-play": "tsx scripts/check-google-play-readiness.ts",
     "check:backend-contract": "tsx scripts/check-backend-data-contract.ts",

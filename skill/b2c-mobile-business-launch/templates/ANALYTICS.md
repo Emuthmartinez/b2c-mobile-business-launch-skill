@@ -115,6 +115,23 @@ Record the following when optimizing attribution quality. These do not block lau
 | attribution_source_selected | early onboarding source screen | self_reported_source, self_reported_source_label | PostHog event and person property evidence |
 | review_prompt_eligible | after first value is visible | first_value_id, surface | onboarding proof |
 | review_prompt_requested | native review API called | platform, surface | onboarding proof |
+| onboarding_started | first onboarding screen mounts | flow_id, step_id | onboarding proof |
+| onboarding_step_viewed | each onboarding step renders | flow_id, step_id | onboarding proof |
+| onboarding_answer_selected | personalization question answered | question_id, answer_id | onboarding proof |
+| personalized_plan_viewed | first value / value-reveal screen | plan_id, surface | onboarding proof |
+| activation_task_completed | first core action completed | task_id, surface | onboarding proof |
+| paywall_viewed | paywall or offer screen renders | surface, offer_id, placement | revenue proof |
+| purchase_completed | purchase confirmed by store/provider | product_id, plan_duration, surface | RevenueCat/Stripe webhook evidence |
+| entitlement_active | entitlement granted/projected to backend | entitlement_id, source | RevenueCat webhook/projection evidence |
+| referral_invite_started | user opens the invite flow | surface, channel | growth proof |
+| referral_invite_completed | invitee accepts/redeems | inviter_id_hash, channel | growth proof |
+| referral_unlock_earned | referral reward granted | reward_id, threshold | growth proof |
+| share_started | share sheet/composer opened | surface, format | growth proof |
+| share_completed | share confirmed by OS/platform callback | surface, format | growth proof |
+| creator_code_applied | creator/referral code redeemed | code_source, campaign | growth proof |
+| viral_format_signal_detected | a content format shows outlier traction | format_id, platform | growth proof |
+
+Cross-doc rule: every event named in `ONBOARDING.md`, `EMOTIONAL_DESIGN.md`, or `VIRAL_GROWTH.md` must have a row here first — `check:analytics-catalog` reconciles them (warning while the analytics lane is partial, error at done).
 
 ## Emotion Card Events
 
@@ -127,6 +144,9 @@ Required when the Emotional Experience System is in scope (`EMOTIONAL_DESIGN.md`
 | emotion_card_abandoned | user exits during/just after a card fires | + abandon_reason, rage_tap_detected | dark-pattern watch |
 | emotion_card_opt_out | user disables an emotional feature | card_id, opt_out_surface, opt_out_reason_shown | compulsion signal |
 | commitment_made | commitment captured | commitment_type, commitment_value, flow_id, step_id | primary |
+| commitment_echoed | the product reflects the commitment back | commitment_type, surface | reinforcement signal |
+| peak_moment_reached | the designed session peak fires | surface, peak_type, session_id | peak-end proof |
+| variable_reward_anticipation_started | anticipation moment begins before a reveal | surface, reward_type | pairing proof for variable_reward_revealed |
 | variable_reward_revealed | reward shown after anticipation | surface, reward_type, reward_variant, anticipation_duration_ms, is_reduced_motion_fallback | primary + counter |
 | perceived_effort_started / perceived_effort_completed | processing UI begins / ends | surface, effort_type, step_count, computation_type, real_step_ratio | labor-illusion proof |
 | intent_mirror_shown / intent_mirror_continued | mirror pause displayed / user continues | surface, mirror_type, source_field, trigger_context | primary + conversion |

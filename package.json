@@ -65,6 +65,7 @@
     "check:lane-coverage": "tsx skill/b2c-mobile-business-launch/scripts/check-lane-coverage.ts",
     "check:revenue": "tsx skill/b2c-mobile-business-launch/scripts/check-revenue.ts",
     "check:email": "tsx skill/b2c-mobile-business-launch/scripts/check-email.ts",
+    "check:analytics-catalog": "tsx skill/b2c-mobile-business-launch/scripts/check-analytics-catalog.ts",
     "check:post-launch": "tsx skill/b2c-mobile-business-launch/scripts/check-post-launch-ops.ts",
     "check:google-play": "tsx skill/b2c-mobile-business-launch/scripts/check-google-play-readiness.ts",
     "check:backend-contract": "tsx skill/b2c-mobile-business-launch/scripts/check-backend-data-contract.ts",

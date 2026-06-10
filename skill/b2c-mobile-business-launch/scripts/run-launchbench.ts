@@ -60,6 +60,8 @@ const knownValidators = new Set([
   "check-app-archetype",
   "check-archetype-starter",
   "check-reference-size",
+  "check-email",
+  "check-analytics-catalog",
   "run-behavioral-evals",
   "run-agent-evals",
   "check-token-promotion",
