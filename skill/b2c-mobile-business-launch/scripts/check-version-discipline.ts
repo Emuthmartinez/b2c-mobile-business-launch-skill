@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { issue, isRecord, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { flagString, issue, isRecord, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 interface Args {
   repoRoot: string;
@@ -24,8 +24,19 @@ if (manifest) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(manifest.updatedAt)) {
     issues.push(issue("error", "version_discipline.updated_at_invalid", "skill-version.json updatedAt must be YYYY-MM-DD.", manifestPath));
   }
-  if (!Array.isArray(manifest.releaseNotes) || manifest.releaseNotes.length < 2 || manifest.releaseNotes.some((note) => typeof note !== "string" || note.trim().length < 12)) {
-    issues.push(issue("error", "version_discipline.release_notes_thin", "skill-version.json needs at least two concrete release notes for this skill version.", manifestPath));
+  if (
+    !Array.isArray(manifest.releaseNotes) ||
+    manifest.releaseNotes.length < 2 ||
+    manifest.releaseNotes.some((note) => typeof note !== "string" || note.trim().length < 12)
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "version_discipline.release_notes_thin",
+        "skill-version.json needs at least two concrete release notes for this skill version.",
+        manifestPath,
+      ),
+    );
   }
 }
 
@@ -33,10 +44,12 @@ const gitRoot = findGitRoot(args.repoRoot);
 if (gitRoot) {
   const relativeSkillRoot = path.relative(gitRoot, args.skillRoot);
   const relativeManifest = path.relative(gitRoot, manifestPath);
-  const changed = new Set([
-    ...git(["diff", "--name-only", "--", relativeSkillRoot], gitRoot).stdout.trim().split(/\r?\n/),
-    ...git(["diff", "--cached", "--name-only", "--", relativeSkillRoot], gitRoot).stdout.trim().split(/\r?\n/),
-  ].filter(Boolean));
+  const changed = new Set(
+    [
+      ...git(["diff", "--name-only", "--", relativeSkillRoot], gitRoot).stdout.trim().split(/\r?\n/),
+      ...git(["diff", "--cached", "--name-only", "--", relativeSkillRoot], gitRoot).stdout.trim().split(/\r?\n/),
+    ].filter(Boolean),
+  );
   const pendingManifestChanged = changed.has(relativeManifest);
   const latestSkillCommit = git(["log", "-1", "--format=%H", "--", relativeSkillRoot], gitRoot).stdout.trim();
   const latestManifestCommit = git(["log", "-1", "--format=%H", "--", relativeManifest], gitRoot).stdout.trim();
@@ -68,32 +81,15 @@ if (gitRoot) {
 reportAndExit("Skill version discipline check", issues);
 
 function parseArgs(argv: string[]): Args {
-  let repoRoot = process.cwd();
-  let skillRoot = defaultSkillRoot;
+  const flags = parseFlags(argv, [
+    { flags: ["--repo-root"], key: "repoRoot" },
+    { flags: ["--skill-root"], key: "skillRoot" },
+  ]);
 
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--repo-root" && value) {
-      repoRoot = path.resolve(expandHome(value));
-      index += 1;
-    } else if (token === "--skill-root" && value) {
-      skillRoot = path.resolve(expandHome(value));
-      index += 1;
-    }
-  }
-
-  return { repoRoot, skillRoot };
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
+  return {
+    repoRoot: flagString(flags, "repoRoot") ?? process.cwd(),
+    skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot,
+  };
 }
 
 function loadManifest(filePath: string): { version: string; updatedAt: string; releaseNotes: unknown } | undefined {

@@ -11,7 +11,11 @@ const relative = "APPLE_SIGNING.md";
 const filePath = path.join(args.root, relative);
 const text = readText(args.root, relative);
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter((item): item is string => Boolean(item))
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
 const appleSigningStatus = state ? asString(getPath(state, "lanes.apple_signing.status")) : undefined;
@@ -55,7 +59,14 @@ if (skipAppleSigning) {
   }
 
   if (/simulator build (succeeded|passes|passed)/i.test(text) && !/simulator build alone is not|not release proof|distribution readiness/i.test(text)) {
-    issues.push(issue("error", "apple_signing.simulator_only_risk", "If simulator build success is mentioned, the doc must explicitly state it is not distribution readiness.", relative));
+    issues.push(
+      issue(
+        "error",
+        "apple_signing.simulator_only_risk",
+        "If simulator build success is mentioned, the doc must explicitly state it is not distribution readiness.",
+        relative,
+      ),
+    );
   }
 
   const blockerTerms = [
@@ -78,7 +89,10 @@ if (skipAppleSigning) {
       continue;
     }
     const mentionsGate = blockerTerms.some((term) => trimmed.toLowerCase().includes(term.toLowerCase()));
-    const unresolved = /\b(missing|unknown|blank|not configured|not set|unavailable|no distribution|no apple developer|no team|no certificate|no provisioning|no app record)\b/i.test(trimmed);
+    const unresolved =
+      /\b(missing|unknown|blank|not configured|not set|unavailable|no distribution|no apple developer|no team|no certificate|no provisioning|no app record)\b/i.test(
+        trimmed,
+      );
     if (mentionsGate && unresolved) {
       issues.push(issue("error", "apple_signing.unresolved_distribution_gate", `Unresolved Apple distribution gate found: "${trimmed}"`, relative));
     }
@@ -87,7 +101,10 @@ if (skipAppleSigning) {
   // Pre-archive/export/upload preflight sign-off check (apple-signing-pre-upload-checklist theme)
   // If the doc claims archive/upload readiness but has no preflight sign-off block, flag it.
   const claimsArchiveReady = /\b(archive|export|upload|testflight)\b.{0,60}\b(pass|ready|done|complete|verified|uploaded)\b/i.test(text);
-  const hasPreflightSignoff = /pre-archive.*preflight|preflight.*sign.?off|sdk key.*(pass|blocked)|plutil.*lint.*(pass|ok|blocked)|authenticationkeypath.*(ready|blocked|set)|screenshot dimension.*(pass|blocked)/i.test(text);
+  const hasPreflightSignoff =
+    /pre-archive.*preflight|preflight.*sign.?off|sdk key.*(pass|blocked)|plutil.*lint.*(pass|ok|blocked)|authenticationkeypath.*(ready|blocked|set)|screenshot dimension.*(pass|blocked)/i.test(
+      text,
+    );
   if (claimsArchiveReady && !hasPreflightSignoff) {
     issues.push(
       issue(

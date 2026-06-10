@@ -1,6 +1,18 @@
 #!/usr/bin/env node
 import path from "node:path";
-import { asArray, asString, collectAllFiles, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
+import {
+  asArray,
+  asString,
+  collectAllFiles,
+  getPath,
+  issue,
+  loadProjectState,
+  missingPhraseCode,
+  normalizedIncludes,
+  parseCliArgs,
+  readText,
+  reportAndExit,
+} from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -9,20 +21,14 @@ const state = loaded.state;
 const relative = "APPLE_APP_STORE_REQUIREMENTS.md";
 const text = readText(args.root, relative);
 
-function normalizedIncludes(haystack: string, needle: string): boolean {
-  return haystack.toLowerCase().includes(needle.toLowerCase());
-}
-
-function missingPhraseCode(phrase: string): string {
-  return `apple_requirements.${phrase.replaceAll(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "").toLowerCase()}.missing`;
-}
-
 function statusForLane(name: string): string | undefined {
   return state ? asString(getPath(state, `lanes.${name}.status`))?.toLowerCase() : undefined;
 }
 
 function statusLineClaimsReady(markdown: string): boolean {
-  return markdown.split(/\r?\n/).some((line) => /^\s*(status|asc status|submission status)\s*:/i.test(line) && /\b(done|complete|completed|ready|verified|approved)\b/i.test(line));
+  return markdown
+    .split(/\r?\n/)
+    .some((line) => /^\s*(status|asc status|submission status)\s*:/i.test(line) && /\b(done|complete|completed|ready|verified|approved)\b/i.test(line));
 }
 
 function findPrivacyManifests(): string[] {
@@ -66,8 +72,8 @@ function checkPrivacyManifestContent(relativePath: string): void {
 
   // Detect empty NSPrivacyAccessedAPITypes array when UserDefaults is likely in use
   // (The array being present but empty is a common mistake that Apple catches on upload)
-  const emptyAccessedApiTypes = /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\s*\/>/i.test(manifest) ||
-    /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array>\s*<\/array>/i.test(manifest);
+  const emptyAccessedApiTypes =
+    /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array\s*\/>/i.test(manifest) || /<key>NSPrivacyAccessedAPITypes<\/key>\s*<array>\s*<\/array>/i.test(manifest);
   if (emptyAccessedApiTypes) {
     issues.push(
       issue(
@@ -113,12 +119,18 @@ function checkUnresolvedLines(markdown: string): void {
     const mentionsGate = gateTerms.some((term) => normalizedIncludes(trimmed, term));
     const unresolved = /\b(TODO|TBD|unknown|missing|not configured|not set|placeholder|fill in|to fill|pending|blocked|N\/A)\b/i.test(trimmed);
     if (mentionsGate && unresolved) {
-      issues.push(issue("error", "apple_requirements.placeholder_or_unknown", `Apple App Store requirements packet contains unresolved state: "${trimmed}"`, relative));
+      issues.push(
+        issue("error", "apple_requirements.placeholder_or_unknown", `Apple App Store requirements packet contains unresolved state: "${trimmed}"`, relative),
+      );
     }
   }
 }
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter((item): item is string => Boolean(item))
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
 const storeStatus = statusForLane("store_console");
@@ -130,12 +142,7 @@ if (appleRequirementsSkipped) {
   // Android-only or explicitly out-of-scope Apple distribution paths do not require this packet.
 } else if (!text) {
   issues.push(
-    issue(
-      "error",
-      "apple_requirements.missing",
-      "APPLE_APP_STORE_REQUIREMENTS.md is required before an iOS app is pushed to App Store Connect.",
-      relative,
-    ),
+    issue("error", "apple_requirements.missing", "APPLE_APP_STORE_REQUIREMENTS.md is required before an iOS app is pushed to App Store Connect.", relative),
   );
 } else {
   const requiredPhrases = [
@@ -177,7 +184,7 @@ if (appleRequirementsSkipped) {
 
   for (const phrase of requiredPhrases) {
     if (!normalizedIncludes(text, phrase)) {
-      issues.push(issue("error", missingPhraseCode(phrase), `APPLE_APP_STORE_REQUIREMENTS.md should include ${phrase}.`, relative));
+      issues.push(issue("error", missingPhraseCode("apple_requirements", phrase), `APPLE_APP_STORE_REQUIREMENTS.md should include ${phrase}.`, relative));
     }
   }
 

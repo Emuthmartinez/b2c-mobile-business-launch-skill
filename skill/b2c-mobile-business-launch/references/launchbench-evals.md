@@ -69,7 +69,23 @@ npm run launchbench
 npm run test:validators
 ```
 
-The bundled LaunchBench harness validates scenario structure, maps scenarios to deterministic validators, and runs the validator-fixture harness for positive and negative launch-state examples. Neither is a full LLM judge. For live agent behavior, use these scenarios as prompts for a fresh agent or subagent and compare the answer to `must_catch` and `should_say`.
+Be precise about what executes: `npm run launchbench` is a scenario **definition lint** plus the deterministic validator-fixture suite. It checks that every scenario YAML has the required fields and references known validators, then runs positive/negative fixtures against the validators themselves. **Scenario `prompt`s are never executed against a live agent by this harness**, and `run-agent-evals.ts` likewise validates eval definitions only. Do not describe LaunchBench output as behavioral coverage. For live agent behavior, use these scenarios as prompts for a fresh agent or subagent and compare the answer to `must_catch` and `should_say`.
+
+## Validator Phrase Contracts
+
+Most artifact validators are deterministic phrase/regex gates over Markdown and state files. That is a deliberate design (reproducible, fast, no model in the loop) with two known edges:
+
+- **False negative wording:** a genuinely correct artifact can fail because it used a synonym the validator does not accept. The accepted vocabulary for each gate lives in its validator source under `scripts/` — that file is the contract, not this prose. When a validator rejects wording that is semantically right, either adopt the canonical phrase or extend the validator's accepted list (with a fixture) in the same change.
+- **Gaming:** pasting the magic phrases without doing the work passes the gate. The anti-gaming helpers in `scripts/lib/launch-state.ts` (dated, substantive reasons; stall staleness) raise the bar but cannot prove work happened. Founder review and provider-proof artifacts are the backstop, as the validators' own comments state.
+
+Frequently-tripped literal tokens worth knowing before authoring artifacts by hand:
+
+- `ONBOARDING.md` (`check:onboarding`): must contain the literal analytics event names `review_prompt_eligible` and `review_prompt_requested`, a named native review API (`SKStoreReviewController`, `requestReview`, StoreKit, or Google Play In-App Review), a cooldown/frequency cap, and a suppressed-prompt fallback — see `scripts/check-onboarding-conversion.ts` for the full accepted lists.
+- `growth/LAUNCH_NARRATIVE.md` (`check:launch-narrative`): fenced post copy is scanned against the 2026 guardrails (no hashtags, no emojis, no link in the main post) — see `scripts/check-launch-narrative.ts`.
+- `ANALYTICS.md` (`check:attribution`): expects the stable event/person-property names (e.g. `attribution_source_selected`, `self_reported_source`) plus backend persistence and reconciliation language — see `scripts/check-attribution-contract.ts`.
+- `SCREENSHOTS.md` (`check:store-screenshots`): expects raw-vs-final separation, device wells, and composition routing phrases — see `scripts/check-store-screenshots.ts`.
+
+When a new validator gains a phrase vocabulary, add the high-traffic literals here and to the shipped template so authors discover the contract before the red X.
 
 ## Independent Audit Use
 

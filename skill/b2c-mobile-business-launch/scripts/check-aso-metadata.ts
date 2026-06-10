@@ -173,10 +173,8 @@ function checkDescriptionLength(text: string, file: string): void {
 
 function checkStaleLogMetadataSource(text: string, file: string): void {
   // Detect patterns that suggest a build log was cited as ASC metadata truth.
-  const logSourcePattern =
-    /\b(found|read|source|using|from|in)\b[^`\n]{0,80}?build\/[^\s`'"]*\.log[^\n]{0,120}?(?:metadata|asc|app store|payload|field)/i;
-  const reversePattern =
-    /\b(?:metadata|asc|app store|payload|field)\b[^`\n]{0,80}?build\/[^\s`'"]*\.log/i;
+  const logSourcePattern = /\b(found|read|source|using|from|in)\b[^`\n]{0,80}?build\/[^\s`'"]*\.log[^\n]{0,120}?(?:metadata|asc|app store|payload|field)/i;
+  const reversePattern = /\b(?:metadata|asc|app store|payload|field)\b[^`\n]{0,80}?build\/[^\s`'"]*\.log/i;
 
   if (logSourcePattern.test(text) || reversePattern.test(text)) {
     issues.push(

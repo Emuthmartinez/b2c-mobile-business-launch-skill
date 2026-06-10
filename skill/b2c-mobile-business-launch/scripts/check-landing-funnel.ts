@@ -11,16 +11,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import {
-  asString,
-  collectFiles,
-  getPath,
-  issue,
-  loadProjectState,
-  parseCliArgs,
-  readText,
-  reportAndExit,
-} from "./lib/launch-state.js";
+import { asString, collectFiles, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -37,9 +28,7 @@ function mentionsAny(text: string, terms: string[]): boolean {
 
 // Determine whether a landing/funnel lane is in scope
 function laneStatus(name: string): string | undefined {
-  return state
-    ? asString(getPath(state, `lanes.${name}.status`))?.toLowerCase()
-    : undefined;
+  return state ? asString(getPath(state, `lanes.${name}.status`))?.toLowerCase() : undefined;
 }
 
 // The funnel lane may be tracked under different names across projects.
@@ -48,9 +37,7 @@ const landingStatus = laneStatus("landing") ?? laneStatus("funnel");
 // marks it in progress/done, or landing artifacts exist on disk. Skip cleanly
 // otherwise so the validator never false-positives on a non-landing repo.
 const hasLandingArtifacts =
-  existsSync(path.join(args.root, "landing")) ||
-  existsSync(path.join(args.root, "public")) ||
-  existsSync(path.join(args.root, "landing", "README.md"));
+  existsSync(path.join(args.root, "landing")) || existsSync(path.join(args.root, "public")) || existsSync(path.join(args.root, "landing", "README.md"));
 const explicitlyOut = landingStatus === "not_needed" || landingStatus === "deferred";
 const inScope = !explicitlyOut && (Boolean(landingStatus) || hasLandingArtifacts);
 
@@ -60,13 +47,7 @@ if (!inScope) {
 }
 
 // Collect the candidate docs where gate evidence should be recorded
-const candidateDocs = [
-  "README.md",
-  "landing/README.md",
-  "PRODUCTION_READINESS.md",
-  "landing/PRODUCTION_READINESS.md",
-  "LAUNCH_TRACE.md",
-];
+const candidateDocs = ["README.md", "landing/README.md", "PRODUCTION_READINESS.md", "landing/PRODUCTION_READINESS.md", "LAUNCH_TRACE.md"];
 
 const docTexts: Array<{ path: string; text: string }> = [];
 for (const rel of candidateDocs) {
@@ -77,9 +58,7 @@ for (const rel of candidateDocs) {
 }
 
 const combinedText = docTexts.map((d) => d.text).join("\n");
-const primaryDoc =
-  docTexts.find((d) => d.path === "README.md" || d.path === "landing/README.md")
-    ?.path ?? candidateDocs[0];
+const primaryDoc = docTexts.find((d) => d.path === "README.md" || d.path === "landing/README.md")?.path ?? candidateDocs[0];
 
 if (docTexts.length === 0) {
   issues.push(
@@ -94,16 +73,7 @@ if (docTexts.length === 0) {
 }
 
 // ── Gate 1: git clean before deploy ──────────────────────────────────────────
-if (
-  !mentionsAny(combinedText, [
-    "git clean",
-    "uncommitted",
-    "working tree",
-    "git status",
-    "committed before deploy",
-    "no uncommitted",
-  ])
-) {
+if (!mentionsAny(combinedText, ["git clean", "uncommitted", "working tree", "git status", "committed before deploy", "no uncommitted"])) {
   issues.push(
     issue(
       "error",
@@ -116,16 +86,7 @@ if (
 }
 
 // ── Gate 2: wrangler version current ─────────────────────────────────────────
-if (
-  !mentionsAny(combinedText, [
-    "wrangler version",
-    "wrangler v4",
-    "wrangler@4",
-    "wrangler upgrade",
-    "wrangler current",
-    "updated wrangler",
-  ])
-) {
+if (!mentionsAny(combinedText, ["wrangler version", "wrangler v4", "wrangler@4", "wrangler upgrade", "wrangler current", "updated wrangler"])) {
   issues.push(
     issue(
       "error",
@@ -138,16 +99,7 @@ if (
 }
 
 // ── Gate 3: wrangler whoami / token scope ─────────────────────────────────────
-if (
-  !mentionsAny(combinedText, [
-    "wrangler whoami",
-    "pages:edit",
-    "workers:edit",
-    "api token",
-    "token scope",
-    "cloudflare token",
-  ])
-) {
+if (!mentionsAny(combinedText, ["wrangler whoami", "pages:edit", "workers:edit", "api token", "token scope", "cloudflare token"])) {
   issues.push(
     issue(
       "error",
@@ -176,16 +128,7 @@ const usesAlpine =
 
 if (
   usesAlpine &&
-  !mentionsAny(combinedText, [
-    "alpinejs/csp",
-    "@alpinejs/csp",
-    "csp-safe",
-    "csp build",
-    "alpine csp",
-    "x-model csp",
-    "inline expression",
-    "csp alpine",
-  ])
+  !mentionsAny(combinedText, ["alpinejs/csp", "@alpinejs/csp", "csp-safe", "csp build", "alpine csp", "x-model csp", "inline expression", "csp alpine"])
 ) {
   issues.push(
     issue(
@@ -235,10 +178,7 @@ if (
 }
 
 // ── Done state guard ──────────────────────────────────────────────────────────
-if (
-  landingStatus === "done" &&
-  /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(combinedText)
-) {
+if (landingStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(combinedText)) {
   issues.push(
     issue(
       "error",

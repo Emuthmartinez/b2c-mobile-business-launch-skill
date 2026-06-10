@@ -21,7 +21,10 @@ function includes(text: string, phrase: string): boolean {
 }
 
 function codeFor(label: string): string {
-  return label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function mentionsAny(text: string, terms: string[]): boolean {
@@ -130,18 +133,46 @@ if (markdown) {
   const linkPattern = /https?:\/\/|\bwww\.[^\s]+/i;
   for (const block of blocks) {
     if (hashtagPattern.test(block)) {
-      issues.push(issue("error", "launch_narrative.copy_hashtag", "Launch post copy must not use hashtags — they read as marketing and depress reach in 2026.", markdown.relativePath));
+      issues.push(
+        issue(
+          "error",
+          "launch_narrative.copy_hashtag",
+          "Launch post copy must not use hashtags — they read as marketing and depress reach in 2026.",
+          markdown.relativePath,
+        ),
+      );
     }
     if (emojiPattern.test(block)) {
-      issues.push(issue("error", "launch_narrative.copy_emoji", "Launch post copy must not lean on emojis; let the hook and the video carry the feeling.", markdown.relativePath));
+      issues.push(
+        issue(
+          "error",
+          "launch_narrative.copy_emoji",
+          "Launch post copy must not lean on emojis; let the hook and the video carry the feeling.",
+          markdown.relativePath,
+        ),
+      );
     }
     if (linkPattern.test(block)) {
-      issues.push(issue("error", "launch_narrative.copy_link_in_post", "Do not put the link in the main announcement post; place it in a reply so the post is not deprioritized.", markdown.relativePath));
+      issues.push(
+        issue(
+          "error",
+          "launch_narrative.copy_link_in_post",
+          "Do not put the link in the main announcement post; place it in a reply so the post is not deprioritized.",
+          markdown.relativePath,
+        ),
+      );
     }
   }
 
   if (growthStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "launch_narrative.placeholder_complete", "Launch narrative cannot be done while TODO/TBD/unknown/placeholder/pending language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "launch_narrative.placeholder_complete",
+        "Launch narrative cannot be done while TODO/TBD/unknown/placeholder/pending language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 

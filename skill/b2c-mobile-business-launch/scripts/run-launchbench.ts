@@ -4,17 +4,14 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { asArray, asString, isRecord, issue, reportAndExit } from "./lib/launch-state.js";
+import { asArray, asString, isRecord, issue, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(scriptDir, "..");
 const scenarioDir = path.resolve(scriptDir, "../evals/launchbench");
-const issues = [];
+const issues: Issue[] = [];
 function resolveTsxBin(): string {
-  const candidates = [
-    path.join(skillRoot, "node_modules/.bin/tsx"),
-    path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx"),
-  ];
+  const candidates = [path.join(skillRoot, "node_modules/.bin/tsx"), path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx")];
   return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
 }
 
@@ -64,7 +61,9 @@ const knownValidators = new Set([
 if (!existsSync(scenarioDir)) {
   issues.push(issue("error", "launchbench.scenario_dir_missing", `Scenario directory is missing: ${scenarioDir}`));
 } else {
-  const files = readdirSync(scenarioDir).filter((file) => file.endsWith(".yaml")).sort();
+  const files = readdirSync(scenarioDir)
+    .filter((file) => file.endsWith(".yaml"))
+    .sort();
   if (files.length === 0) {
     issues.push(issue("error", "launchbench.no_scenarios", "No LaunchBench scenarios exist."));
   }
@@ -83,7 +82,9 @@ if (!existsSync(scenarioDir)) {
       }
     }
 
-    const validators = asArray(parsed.validators).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+    const validators = asArray(parsed.validators)
+      .map((item) => asString(item))
+      .filter((item): item is string => Boolean(item));
     if (validators.length === 0) {
       issues.push(issue("error", `launchbench.${file}.validators.missing`, `${file} must name at least one deterministic validator.`, fullPath));
     }
@@ -97,12 +98,18 @@ if (!existsSync(scenarioDir)) {
       issues.push(issue("error", `launchbench.${file}.must_catch.missing`, `${file} should list the failure facts the agent must catch.`, fullPath));
     }
     if (asArray(parsed.should_say).length === 0) {
-      issues.push(issue("warning", `launchbench.${file}.should_say.missing`, `${file} should list the high-level response behavior expected from the agent.`, fullPath));
+      issues.push(
+        issue("warning", `launchbench.${file}.should_say.missing`, `${file} should list the high-level response behavior expected from the agent.`, fullPath),
+      );
     }
   }
 }
 
-reportAndExit("LaunchBench scenario validation", issues);
+// Honest naming: this gate lints scenario definitions (fields + known-validator
+// references) and then runs the deterministic validator fixtures. Scenario
+// prompts are NOT executed against a live agent here — see
+// references/launchbench-evals.md "Harness Shape".
+reportAndExit("LaunchBench scenario definition lint (prompts are not executed against an agent)", issues);
 
 if (issues.some((item) => item.severity === "error")) {
   process.exitCode = 1;

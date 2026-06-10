@@ -21,7 +21,14 @@ const secretsPath = readText(args.root, "SECRETS.md") ? "SECRETS.md" : "secrets/
 const secretsText = readText(args.root, secretsPath);
 
 if (!secretsText) {
-  issues.push(issue("error", "secrets.doc_missing", "SECRETS.md is required when the launch uses API keys, tokens, webhooks, store credentials, CI secrets, or local env files.", secretsPath));
+  issues.push(
+    issue(
+      "error",
+      "secrets.doc_missing",
+      "SECRETS.md is required when the launch uses API keys, tokens, webhooks, store credentials, CI secrets, or local env files.",
+      secretsPath,
+    ),
+  );
 } else {
   for (const phrase of ["Doppler", "provider", "doppler run --", "CI", "production", "no raw secrets"]) {
     if (!secretsText.toLowerCase().includes(phrase.toLowerCase())) {
@@ -37,10 +44,14 @@ if (state) {
       if (!value || typeof value !== "object" || Array.isArray(value)) {
         continue;
       }
-      const requiredSecrets = asArray((value as Record<string, unknown>).required_secrets).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+      const requiredSecrets = asArray((value as Record<string, unknown>).required_secrets)
+        .map((item) => asString(item))
+        .filter((item): item is string => Boolean(item));
       for (const secretName of requiredSecrets) {
         if (/key|token|secret|password|private/i.test(secretName) && !/^[A-Z0-9_]+$/.test(secretName)) {
-          issues.push(issue("error", `secrets.${toolName}.name_format`, `${secretName} should be a names-only env var, not a value or prose.`, "PROJECT_STATE.yaml"));
+          issues.push(
+            issue("error", `secrets.${toolName}.name_format`, `${secretName} should be a names-only env var, not a value or prose.`, "PROJECT_STATE.yaml"),
+          );
         }
       }
     }
@@ -97,7 +108,25 @@ for (const file of collectAllFiles(args.root, 10000)) {
 }
 
 const secretLike = /\b(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{12,}|whsec_[A-Za-z0-9]{12,}|ghp_[A-Za-z0-9]{20,}|-----BEGIN (PRIVATE|RSA|EC) PRIVATE KEY-----/;
-const textFileExtensions = new Set([".md", ".yaml", ".yml", ".json", ".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".swift", ".kt", ".dart", ".plist", ".example", ".txt", ".toml"]);
+const textFileExtensions = new Set([
+  ".md",
+  ".yaml",
+  ".yml",
+  ".json",
+  ".ts",
+  ".tsx",
+  ".js",
+  ".jsx",
+  ".mjs",
+  ".cjs",
+  ".swift",
+  ".kt",
+  ".dart",
+  ".plist",
+  ".example",
+  ".txt",
+  ".toml",
+]);
 const envReference = /\b[A-Z][A-Z0-9_]*(?:KEY|TOKEN|SECRET|PASSWORD|DSN|PRIVATE_KEY|ISSUER_ID|KEY_ID)\b/g;
 for (const file of collectFiles(args.root, textFileExtensions, 5000)) {
   const relative = path.relative(args.root, file);
@@ -128,7 +157,8 @@ for (const file of collectFiles(args.root, textFileExtensions, 5000)) {
 // Scan wrangler.toml / wrangler.json [vars] for committed credential-shaped values.
 // Supabase anon/publishable keys are public-by-design, so this is a warning (smell), while
 // true secret patterns (handled above by secretLike) remain errors.
-const credentialShaped = /\b(sb_publishable_[A-Za-z0-9]{12,}|sb_secret_[A-Za-z0-9]{12,}|https:\/\/[a-z0-9]{16,}\.supabase\.co|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,})\b/;
+const credentialShaped =
+  /\b(sb_publishable_[A-Za-z0-9]{12,}|sb_secret_[A-Za-z0-9]{12,}|https:\/\/[a-z0-9]{16,}\.supabase\.co|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,})\b/;
 for (const wranglerFile of ["wrangler.toml", "wrangler.json"]) {
   const wranglerText = readText(args.root, wranglerFile);
   if (!wranglerText) continue;
@@ -149,8 +179,7 @@ for (const wranglerFile of ["wrangler.toml", "wrangler.json"]) {
 // These patterns print raw credential values (from .env, .p8, or similar files)
 // into a shell variable or stdout, which is unsafe in committed docs.
 // Allowed in SECRETS.md itself (which is about naming/locations) — flag everywhere else.
-const credentialExtractionPattern =
-  /(?:awk|grep|sed)[^`\n]*(?:\.env|\.p8|\.p12|\.pem|clueless\.env|credentials)[^`\n]*/i;
+const credentialExtractionPattern = /(?:awk|grep|sed)[^`\n]*(?:\.env|\.p8|\.p12|\.pem|clueless\.env|credentials)[^`\n]*/i;
 const markdownExtensions = new Set([".md"]);
 for (const file of collectFiles(args.root, markdownExtensions, 5000)) {
   const relative = path.relative(args.root, file);

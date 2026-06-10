@@ -2,7 +2,8 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { issue, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { flagString, issue, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { auditExcludedScripts, buildAuditPlan, type AuditLayout } from "./lib/audit-plan.js";
 
 interface PackageJson {
   name?: string;
@@ -35,7 +36,14 @@ if (rootPackage.value && runtimePackage.value && skillVersion.value) {
     ["runtime package.json", runtimePackage.value],
   ] as const) {
     if (pkg.version !== expectedVersion) {
-      issues.push(issue("error", `package_parity.${code(label)}.version_mismatch`, `${label} version ${pkg.version ?? "(missing)"} must match skill-version.json ${expectedVersion}.`, "package.json"));
+      issues.push(
+        issue(
+          "error",
+          `package_parity.${code(label)}.version_mismatch`,
+          `${label} version ${pkg.version ?? "(missing)"} must match skill-version.json ${expectedVersion}.`,
+          "package.json",
+        ),
+      );
     }
   }
 }
@@ -52,25 +60,63 @@ if (rootPackage.value && runtimePackage.value) {
     }
   }
 
-  const runtimeAuditCommands = npmRunCommands(runtimeScripts.audit ?? "");
-  const rootAuditCommands = npmRunCommands(rootScripts.audit ?? "");
-  const rootCiCommands = npmRunCommands(rootScripts["audit:ci"] ?? "");
-  for (const command of runtimeAuditCommands) {
-    if (!rootAuditCommands.has(command)) {
-      issues.push(issue("error", "package_parity.root_audit_missing_command", `Root audit must include npm run ${command} to match runtime audit coverage.`, "package.json"));
-    }
-    if (command !== "validate:skill" && !rootCiCommands.has(command)) {
-      issues.push(issue("error", "package_parity.root_audit_ci_missing_command", `Root audit:ci must include npm run ${command} to match runtime audit coverage.`, "package.json"));
+  // The audit pipeline is defined once in lib/audit-plan.ts; both audit
+  // entrypoints must route through the orchestrator, and every gate-shaped
+  // script must be a plan step or an explicitly excluded script.
+  for (const [label, scriptName, script] of [
+    ["root audit", "audit", rootScripts.audit],
+    ["root audit:ci", "audit:ci", rootScripts["audit:ci"]],
+    ["runtime audit", "audit", runtimeScripts.audit],
+  ] as const) {
+    if (!script?.includes("run-audit.ts")) {
+      issues.push(
+        issue(
+          "error",
+          `package_parity.${code(label)}.not_orchestrated`,
+          `${label} (${scriptName}) must invoke scripts/run-audit.ts so the audit pipeline stays defined in one place.`,
+          "package.json",
+        ),
+      );
     }
   }
+  if (rootScripts["audit:ci"] && !rootScripts["audit:ci"].includes("--ci")) {
+    issues.push(issue("error", "package_parity.root_audit_ci.missing_ci_flag", "Root audit:ci must pass --ci to run-audit.ts.", "package.json"));
+  }
+  if (rootScripts.audit?.includes("--ci")) {
+    issues.push(
+      issue(
+        "error",
+        "package_parity.root_audit.unexpected_ci_flag",
+        "Root audit must not pass --ci; the full audit includes maintainer-only steps.",
+        "package.json",
+      ),
+    );
+  }
+
+  checkAuditPlanCoverage("root", "repo", rootScripts);
+  checkAuditPlanCoverage("runtime", "skill", runtimeScripts);
 
   const rootDevDeps = rootPackage.value.devDependencies ?? {};
   const runtimeDevDeps = runtimePackage.value.devDependencies ?? {};
   for (const [dep, version] of Object.entries(rootDevDeps)) {
     if (!runtimeDevDeps[dep]) {
-      issues.push(issue("error", "package_parity.runtime_dependency_missing", `Runtime package.json is missing devDependency ${dep}, present in root package.json.`, "skill/b2c-mobile-business-launch/package.json"));
+      issues.push(
+        issue(
+          "error",
+          "package_parity.runtime_dependency_missing",
+          `Runtime package.json is missing devDependency ${dep}, present in root package.json.`,
+          "skill/b2c-mobile-business-launch/package.json",
+        ),
+      );
     } else if (runtimeDevDeps[dep] !== version) {
-      issues.push(issue("warning", "package_parity.runtime_dependency_version_drift", `Runtime devDependency ${dep} (${runtimeDevDeps[dep]}) differs from root (${version}).`, "skill/b2c-mobile-business-launch/package.json"));
+      issues.push(
+        issue(
+          "warning",
+          "package_parity.runtime_dependency_version_drift",
+          `Runtime devDependency ${dep} (${runtimeDevDeps[dep]}) differs from root (${version}).`,
+          "skill/b2c-mobile-business-launch/package.json",
+        ),
+      );
     }
   }
 }
@@ -79,20 +125,67 @@ issues.push(...rootPackage.issues, ...runtimePackage.issues, ...rootLock.issues,
 reportAndExit("Package parity check", issues);
 
 function parseArgs(argv: string[]): Args {
-  let repoRoot = defaultRepoRoot;
-  let skillRoot = defaultSkillRoot;
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--repo-root" && value) {
-      repoRoot = path.resolve(expandHome(value));
-      index += 1;
-    } else if ((token === "--skill-root" || token === "--root") && value) {
-      skillRoot = path.resolve(expandHome(value));
-      index += 1;
+  const flags = parseFlags(argv, [
+    { flags: ["--repo-root"], key: "repoRoot" },
+    { flags: ["--skill-root", "--root"], key: "skillRoot" },
+  ]);
+  return {
+    repoRoot: flagString(flags, "repoRoot") ?? defaultRepoRoot,
+    skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot,
+  };
+}
+
+/**
+ * Every gate-shaped script (check:*, validate:*, launchbench, audit:links,
+ * test:validators) must be an audit-plan step or an explicitly excluded
+ * script with a recorded reason; and every plan step must resolve to a real
+ * script in this package.
+ */
+function checkAuditPlanCoverage(label: string, layout: AuditLayout, scripts: Record<string, string>): void {
+  const plan = buildAuditPlan(layout);
+  const planIds = new Set(plan.map((step) => step.id));
+
+  const gateScripts = Object.keys(scripts).filter(
+    (name) => name.startsWith("check:") || name.startsWith("validate:") || ["launchbench", "audit:links", "test:validators"].includes(name),
+  );
+  for (const name of gateScripts) {
+    if (!planIds.has(name) && !(name in auditExcludedScripts)) {
+      issues.push(
+        issue(
+          "error",
+          `package_parity.${label}_audit_plan_gap`,
+          `${label} package.json script ${name} is neither an audit-plan step nor listed in auditExcludedScripts with a reason. Add it to lib/audit-plan.ts or exclude it explicitly.`,
+          "package.json",
+        ),
+      );
     }
   }
-  return { repoRoot, skillRoot };
+
+  for (const step of plan) {
+    if (step.kind !== "tsc" && !scripts[step.id]) {
+      issues.push(
+        issue(
+          "error",
+          `package_parity.${label}_audit_step_unresolved`,
+          `Audit-plan step ${step.id} has no matching script in the ${label} package.json.`,
+          "package.json",
+        ),
+      );
+    }
+  }
+
+  for (const [name, reason] of Object.entries(auditExcludedScripts)) {
+    if (!reason.trim() || reason.trim().length < 20) {
+      issues.push(
+        issue(
+          "error",
+          "package_parity.audit_exclusion_reason_thin",
+          `auditExcludedScripts entry ${name} needs a concrete reason (>= 20 chars).`,
+          "scripts/lib/audit-plan.ts",
+        ),
+      );
+    }
+  }
 }
 
 function readJson<T>(filePath: string, label: string): { value?: T; issues: Issue[] } {
@@ -109,16 +202,14 @@ function readJson<T>(filePath: string, label: string): { value?: T; issues: Issu
 
 function requiredScriptNames(runtimeScripts: Record<string, string>): string[] {
   return Object.keys(runtimeScripts)
-    .filter((name) => name.startsWith("check:") || name.startsWith("validate:") || name.startsWith("render:") || ["test:validators", "launchbench", "audit:links"].includes(name))
+    .filter(
+      (name) =>
+        name.startsWith("check:") ||
+        name.startsWith("validate:") ||
+        name.startsWith("render:") ||
+        ["test:validators", "launchbench", "audit:links"].includes(name),
+    )
     .sort();
-}
-
-function npmRunCommands(script: string): Set<string> {
-  const commands = new Set<string>();
-  for (const match of script.matchAll(/\bnpm\s+run\s+([^\s&]+)/g)) {
-    commands.add(match[1] ?? "");
-  }
-  return commands;
 }
 
 function checkLockVersion(label: string, pkg?: PackageJson, lock?: Record<string, unknown>, filePath?: string): void {
@@ -126,7 +217,14 @@ function checkLockVersion(label: string, pkg?: PackageJson, lock?: Record<string
   const rootPackage = isRecord(packages) ? packages[""] : undefined;
   const lockVersion = isRecord(rootPackage) && typeof rootPackage.version === "string" ? rootPackage.version : undefined;
   if (pkg?.version && lockVersion !== pkg.version) {
-    issues.push(issue("error", `package_parity.${label}_lock_version_mismatch`, `${label} package-lock root version ${lockVersion ?? "(missing)"} must match package.json ${pkg.version}.`, filePath));
+    issues.push(
+      issue(
+        "error",
+        `package_parity.${label}_lock_version_mismatch`,
+        `${label} package-lock root version ${lockVersion ?? "(missing)"} must match package.json ${pkg.version}.`,
+        filePath,
+      ),
+    );
   }
 }
 
@@ -135,15 +233,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function code(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }

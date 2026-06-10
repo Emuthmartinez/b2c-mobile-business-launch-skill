@@ -69,10 +69,7 @@ if (storeSkipped || !hasStorePlatform) {
 
 // ── File discovery ──────────────────────────────────────────────────────────
 
-const research = firstExistingText([
-  "LOCALIZATION_MARKET_RESEARCH.md",
-  "localization-market-research/LOCALIZATION_MARKET_RESEARCH.md",
-]);
+const research = firstExistingText(["LOCALIZATION_MARKET_RESEARCH.md", "localization-market-research/LOCALIZATION_MARKET_RESEARCH.md"]);
 
 const listing = firstExistingText(["APP_STORE_LISTING.md", "app-store-listing/APP_STORE_LISTING.md"]);
 const storeConsole = firstExistingText(["STORE_CONSOLE.md"]);
@@ -162,13 +159,7 @@ if (!includes(text, "difficulty")) {
 
 // ── Check 3: demand-research tool sourcing ──────────────────────────────────
 
-const hasToolSource = includesAny(text, [
-  "appkittie",
-  "apple search ads",
-  "app analytics",
-  "google play statistics",
-  "xpoz",
-]);
+const hasToolSource = includesAny(text, ["appkittie", "apple search ads", "app analytics", "google play statistics", "xpoz"]);
 
 if (!hasToolSource) {
   issues.push(

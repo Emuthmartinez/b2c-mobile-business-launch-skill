@@ -3,22 +3,14 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { asArray, asString, isRecord, issue, reportAndExit } from "./lib/launch-state.js";
+import { asArray, asString, flagString, isRecord, issue, parseFlags, reportAndExit } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
 
 function parseArgs(argv: string[]): { skillRoot: string } {
-  let skillRoot = defaultSkillRoot;
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if ((token === "--skill-root" || token === "--root") && value) {
-      skillRoot = path.resolve(value);
-      index += 1;
-    }
-  }
-  return { skillRoot };
+  const flags = parseFlags(argv, [{ flags: ["--skill-root", "--root"], key: "skillRoot" }]);
+  return { skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot };
 }
 
 function includesCaseInsensitive(text: string, needle: string): boolean {
@@ -79,13 +71,19 @@ if (existsSync(skillPath) && existsSync(evalPath)) {
       issues.push(issue("error", "autopilot.description.missing", "Skill frontmatter must include a description.", "SKILL.md"));
     }
     if (description.length > maxChars) {
-      issues.push(issue("error", "autopilot.description.too_long", `Description is ${description.length} characters; keep it at or below ${maxChars}.`, "SKILL.md"));
+      issues.push(
+        issue("error", "autopilot.description.too_long", `Description is ${description.length} characters; keep it at or below ${maxChars}.`, "SKILL.md"),
+      );
     }
     if (/[<>]/.test(description)) {
-      issues.push(issue("error", "autopilot.description.angle_bracket", "Anthropic-compatible skill descriptions must not contain XML angle brackets.", "SKILL.md"));
+      issues.push(
+        issue("error", "autopilot.description.angle_bracket", "Anthropic-compatible skill descriptions must not contain XML angle brackets.", "SKILL.md"),
+      );
     }
 
-    for (const term of asArray(contract.required_terms).map(asString).filter((item): item is string => Boolean(item))) {
+    for (const term of asArray(contract.required_terms)
+      .map(asString)
+      .filter((item): item is string => Boolean(item))) {
       if (!includesCaseInsensitive(description, term)) {
         issues.push(issue("error", "autopilot.description.required_term_missing", `Description should include trigger/scope term: ${term}.`, "SKILL.md"));
       }
@@ -93,34 +91,75 @@ if (existsSync(skillPath) && existsSync(evalPath)) {
 
     for (const item of asArray(evals.should_trigger)) {
       if (!isRecord(item)) {
-        issues.push(issue("error", "autopilot.should_trigger.invalid", "Each should_trigger eval must be an object.", "evals/triggering/autopilot-triggering.yaml"));
+        issues.push(
+          issue("error", "autopilot.should_trigger.invalid", "Each should_trigger eval must be an object.", "evals/triggering/autopilot-triggering.yaml"),
+        );
         continue;
       }
       const id = asString(item.id) ?? "unknown";
       const prompt = asString(item.prompt);
       if (!prompt?.trim()) {
-        issues.push(issue("error", `autopilot.should_trigger.${id}.prompt_missing`, "Each should_trigger eval needs a realistic prompt.", "evals/triggering/autopilot-triggering.yaml"));
+        issues.push(
+          issue(
+            "error",
+            `autopilot.should_trigger.${id}.prompt_missing`,
+            "Each should_trigger eval needs a realistic prompt.",
+            "evals/triggering/autopilot-triggering.yaml",
+          ),
+        );
       }
-      for (const term of asArray(item.description_terms).map(asString).filter((value): value is string => Boolean(value))) {
+      for (const term of asArray(item.description_terms)
+        .map(asString)
+        .filter((value): value is string => Boolean(value))) {
         if (!includesCaseInsensitive(description, term)) {
-          issues.push(issue("error", `autopilot.should_trigger.${id}.description_term_missing`, `Description should cover trigger prompt with term: ${term}.`, "SKILL.md"));
+          issues.push(
+            issue(
+              "error",
+              `autopilot.should_trigger.${id}.description_term_missing`,
+              `Description should cover trigger prompt with term: ${term}.`,
+              "SKILL.md",
+            ),
+          );
         }
       }
     }
 
     for (const item of asArray(evals.should_not_trigger)) {
       if (!isRecord(item)) {
-        issues.push(issue("error", "autopilot.should_not_trigger.invalid", "Each should_not_trigger eval must be an object.", "evals/triggering/autopilot-triggering.yaml"));
+        issues.push(
+          issue(
+            "error",
+            "autopilot.should_not_trigger.invalid",
+            "Each should_not_trigger eval must be an object.",
+            "evals/triggering/autopilot-triggering.yaml",
+          ),
+        );
         continue;
       }
       const id = asString(item.id) ?? "unknown";
       const prompt = asString(item.prompt);
       if (!prompt?.trim()) {
-        issues.push(issue("error", `autopilot.should_not_trigger.${id}.prompt_missing`, "Each should_not_trigger eval needs a realistic prompt.", "evals/triggering/autopilot-triggering.yaml"));
+        issues.push(
+          issue(
+            "error",
+            `autopilot.should_not_trigger.${id}.prompt_missing`,
+            "Each should_not_trigger eval needs a realistic prompt.",
+            "evals/triggering/autopilot-triggering.yaml",
+          ),
+        );
       }
-      for (const term of asArray(item.negative_terms).map(asString).filter((value): value is string => Boolean(value))) {
+      for (const term of asArray(item.negative_terms)
+        .map(asString)
+        .filter((value): value is string => Boolean(value))) {
         if (!includesCaseInsensitive(description, term)) {
-          issues.push(issue("error", `autopilot.should_not_trigger.${id}.negative_term_missing`, `Description should include negative trigger guard: ${term}.`, "SKILL.md"));
+          issues.push(
+            issue(
+              "error",
+              `autopilot.should_not_trigger.${id}.negative_term_missing`,
+              `Description should include negative trigger guard: ${term}.`,
+              "SKILL.md",
+            ),
+          );
         }
       }
     }
@@ -128,7 +167,9 @@ if (existsSync(skillPath) && existsSync(evalPath)) {
 
   if (isRecord(evals)) {
     const bodyContract = isRecord(evals.body_contract) ? evals.body_contract : {};
-    for (const term of asArray(bodyContract.required_terms).map(asString).filter((item): item is string => Boolean(item))) {
+    for (const term of asArray(bodyContract.required_terms)
+      .map(asString)
+      .filter((item): item is string => Boolean(item))) {
       if (!includesCaseInsensitive(parsedSkill.body, term)) {
         issues.push(issue("error", "autopilot.body.required_term_missing", `SKILL.md body should include autopilot run-contract term: ${term}.`, "SKILL.md"));
       }

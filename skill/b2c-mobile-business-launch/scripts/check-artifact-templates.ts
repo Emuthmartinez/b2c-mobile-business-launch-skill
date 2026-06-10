@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { asArray, asString, isRecord, issue, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { asArray, asString, flagString, isRecord, issue, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
@@ -22,15 +22,26 @@ if (!existsSync(args.templatesRoot)) {
   const lowerExactPaths = new Set(Array.from(exactPaths).map((file) => file.toLowerCase()));
 
   if (!isRecord(state) || !isRecord(state.lanes)) {
-    issues.push(issue("error", "artifact_templates.lanes_missing", "Template PROJECT_STATE.yaml must include lanes.", path.relative(args.skillRoot, statePath)));
+    issues.push(
+      issue("error", "artifact_templates.lanes_missing", "Template PROJECT_STATE.yaml must include lanes.", path.relative(args.skillRoot, statePath)),
+    );
   } else {
     for (const [laneName, laneValue] of Object.entries(state.lanes)) {
       if (!isRecord(laneValue)) {
         continue;
       }
-      const evidence = asArray(laneValue.evidence).map((entry) => asString(entry)).filter((entry): entry is string => Boolean(entry?.trim()));
+      const evidence = asArray(laneValue.evidence)
+        .map((entry) => asString(entry))
+        .filter((entry): entry is string => Boolean(entry?.trim()));
       if (evidence.length === 0) {
-        issues.push(issue("error", `artifact_templates.${laneName}.evidence_missing`, `${laneName} must list at least one starter evidence path.`, "templates/PROJECT_STATE.yaml"));
+        issues.push(
+          issue(
+            "error",
+            `artifact_templates.${laneName}.evidence_missing`,
+            `${laneName} must list at least one starter evidence path.`,
+            "templates/PROJECT_STATE.yaml",
+          ),
+        );
       }
       for (const evidencePath of evidence) {
         const normalized = evidencePath.replaceAll("\\", "/");
@@ -59,29 +70,17 @@ interface Args {
 }
 
 function parseArgs(argv: string[]): Args {
-  let skillRoot = defaultSkillRoot;
-  let templatesRoot: string | undefined;
-  let statePath: string | undefined;
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--skill-root" && value) {
-      skillRoot = path.resolve(expandHome(value));
-      index += 1;
-    } else if ((token === "--root" || token === "--templates") && value) {
-      templatesRoot = path.resolve(expandHome(value));
-      index += 1;
-    } else if (token === "--state" && value) {
-      statePath = path.resolve(expandHome(value));
-      index += 1;
-    }
-  }
+  const flags = parseFlags(argv, [
+    { flags: ["--skill-root"], key: "skillRoot" },
+    { flags: ["--root", "--templates"], key: "templatesRoot" },
+    { flags: ["--state"], key: "statePath" },
+  ]);
+  const skillRoot = flagString(flags, "skillRoot") ?? defaultSkillRoot;
 
   return {
     skillRoot,
-    templatesRoot: templatesRoot ?? path.join(skillRoot, "templates"),
-    statePath,
+    templatesRoot: flagString(flags, "templatesRoot") ?? path.join(skillRoot, "templates"),
+    statePath: flagString(flags, "statePath"),
   };
 }
 
@@ -102,14 +101,4 @@ function collectTemplateFiles(root: string): string[] {
   }
   visit(root);
   return files;
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
 }

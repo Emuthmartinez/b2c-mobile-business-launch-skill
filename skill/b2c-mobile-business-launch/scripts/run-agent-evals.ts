@@ -3,7 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { asArray, asString, isRecord, issue, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { asArray, asString, flagString, isRecord, issue, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const skillRoot = path.resolve(scriptDir, "..");
@@ -13,9 +13,18 @@ const issues: Issue[] = [];
 if (!existsSync(args.evalDir)) {
   issues.push(issue("error", "agent_evals.dir_missing", `Agent behavior eval directory is missing: ${args.evalDir}`, args.evalDir));
 } else {
-  const files = readdirSync(args.evalDir).filter((file) => file.endsWith(".yaml")).sort();
+  const files = readdirSync(args.evalDir)
+    .filter((file) => file.endsWith(".yaml"))
+    .sort();
   if (files.length < 4) {
-    issues.push(issue("error", "agent_evals.too_few", "Add at least four agent behavior evals covering stale skill, CE routing, Design Room, onboarding, and provider proof.", args.evalDir));
+    issues.push(
+      issue(
+        "error",
+        "agent_evals.too_few",
+        "Add at least four agent behavior evals covering stale skill, CE routing, Design Room, onboarding, and provider proof.",
+        args.evalDir,
+      ),
+    );
   }
 
   requirePinnedEval(args.evalDir, "session-continuity-resume.yaml", [
@@ -77,22 +86,15 @@ interface Args {
 }
 
 function parseArgs(argv: string[]): Args {
-  let evalDir = path.join(skillRoot, "evals/agent-behavior");
-  let responsesDir: string | undefined;
+  const flags = parseFlags(argv, [
+    { flags: ["--eval-dir", "--root"], key: "evalDir" },
+    { flags: ["--responses"], key: "responsesDir" },
+  ]);
 
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if ((token === "--eval-dir" || token === "--root") && value) {
-      evalDir = path.resolve(expandHome(value));
-      index += 1;
-    } else if (token === "--responses" && value) {
-      responsesDir = path.resolve(expandHome(value));
-      index += 1;
-    }
-  }
-
-  return { evalDir, responsesDir };
+  return {
+    evalDir: flagString(flags, "evalDir") ?? path.join(skillRoot, "evals/agent-behavior"),
+    responsesDir: flagString(flags, "responsesDir"),
+  };
 }
 
 function readResponse(responsesDir: string, id: string): string | undefined {
@@ -113,14 +115,4 @@ function requirePinnedEval(evalDir: string, fileName: string, terms: string[]): 
       issues.push(issue("error", `agent_evals.${fileName}.term_missing`, `${fileName} must include ${term}.`, fullPath));
     }
   }
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
 }

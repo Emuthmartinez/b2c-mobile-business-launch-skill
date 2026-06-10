@@ -1,7 +1,18 @@
 #!/usr/bin/env node
 import { existsSync } from "node:fs";
 import path from "node:path";
-import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
+import {
+  asArray,
+  asString,
+  getPath,
+  issue,
+  loadProjectState,
+  missingPhraseCode,
+  normalizedIncludes,
+  parseCliArgs,
+  readText,
+  reportAndExit,
+} from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -11,14 +22,6 @@ const markdownPath = "SECURITY.md";
 const htmlPath = "security-review.html";
 const markdown = readText(args.root, markdownPath);
 const htmlExists = existsSync(path.join(args.root, htmlPath));
-
-function normalizedIncludes(text: string, phrase: string): boolean {
-  return text.toLowerCase().includes(phrase.toLowerCase());
-}
-
-function missingPhraseCode(prefix: string, phrase: string): string {
-  return `${prefix}.${phrase.replaceAll(/[^a-zA-Z0-9]+/g, "_").replace(/^_+|_+$/g, "").toLowerCase()}.missing`;
-}
 
 function requirePhrases(text: string, phrases: string[], prefix: string, file: string): void {
   for (const phrase of phrases) {
@@ -87,7 +90,11 @@ function checkUnresolvedSecurityLines(text: string): void {
   }
 }
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter((item): item is string => Boolean(item))
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
@@ -97,7 +104,14 @@ const securityNotNeeded = securityStatus === "not_needed";
 const mobileInScope = hasIos || hasAndroid || platforms.length > 0;
 
 if (securityNotNeeded && mobileInScope) {
-  issues.push(issue("error", "security.not_needed_invalid", "Mobile launches require a security lane; use deferred or blocked with a reason if proof cannot be completed yet.", "PROJECT_STATE.yaml"));
+  issues.push(
+    issue(
+      "error",
+      "security.not_needed_invalid",
+      "Mobile launches require a security lane; use deferred or blocked with a reason if proof cannot be completed yet.",
+      "PROJECT_STATE.yaml",
+    ),
+  );
 }
 
 if (!markdown && !securityNotNeeded) {
@@ -160,7 +174,14 @@ if (markdown) {
   checkUnresolvedSecurityLines(markdown);
 
   if (/\b(complete|launch-ready|production-ready|done)\b/i.test(markdown) && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown)) {
-    issues.push(issue("error", "security.complete_with_placeholder", "SECURITY.md cannot claim done/launch-ready while unresolved placeholder language remains.", markdownPath));
+    issues.push(
+      issue(
+        "error",
+        "security.complete_with_placeholder",
+        "SECURITY.md cannot claim done/launch-ready while unresolved placeholder language remains.",
+        markdownPath,
+      ),
+    );
   }
 }
 

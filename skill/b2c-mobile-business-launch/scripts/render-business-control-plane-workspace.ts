@@ -7,10 +7,14 @@ import {
   asArray,
   asBoolean,
   asString,
+  expandHome,
+  flagBoolean,
+  flagString,
   getPath,
   isRecord,
   issue,
   loadProjectState,
+  parseFlags,
   reportAndExit,
   type Issue,
 } from "./lib/launch-state.js";
@@ -104,10 +108,7 @@ if (issues.some((item) => item.severity === "error")) {
   reportAndExit("Business Control Plane workspace render", issues);
 }
 
-const workspace = buildWorkspace(
-  businessStateResult.value as Record<string, unknown>,
-  projectStateResult.state as Record<string, unknown>,
-);
+const workspace = buildWorkspace(businessStateResult.value as Record<string, unknown>, projectStateResult.state as Record<string, unknown>);
 
 issues.push(...validateWorkspace(workspace, schemaResult.value, args.schemaPath));
 const rendered = `${JSON.stringify(workspace, null, 2)}\n`;
@@ -140,35 +141,19 @@ if (args.outputPath) {
 reportAndExit("Business Control Plane workspace render", issues);
 
 function parseArgs(argv: string[]): Args {
-  let root = process.cwd();
-  let businessStatePath = "state/business.json";
-  let launchStatePath = "PROJECT_STATE.yaml";
-  let schemaPath = path.join(skillRoot, "state/schema/workspace.schema.json");
-  let outputPath: string | undefined;
-  let check = false;
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--root" && value) {
-      root = path.resolve(expandHome(value));
-      index += 1;
-    } else if (token === "--business-state" && value) {
-      businessStatePath = value;
-      index += 1;
-    } else if ((token === "--launch-state" || token === "--state") && value) {
-      launchStatePath = value;
-      index += 1;
-    } else if (token === "--schema" && value) {
-      schemaPath = value;
-      index += 1;
-    } else if ((token === "--out" || token === "--output") && value) {
-      outputPath = value;
-      index += 1;
-    } else if (token === "--check") {
-      check = true;
-    }
-  }
+  const flags = parseFlags(argv, [
+    { flags: ["--root"], key: "root" },
+    { flags: ["--business-state"], key: "businessState", kind: "string" },
+    { flags: ["--launch-state", "--state"], key: "launchState", kind: "string" },
+    { flags: ["--schema"], key: "schema", kind: "string" },
+    { flags: ["--out", "--output"], key: "output", kind: "string" },
+    { flags: ["--check"], key: "check", kind: "boolean" },
+  ]);
+  const root = flagString(flags, "root") ?? process.cwd();
+  const businessStatePath = flagString(flags, "businessState") ?? "state/business.json";
+  const launchStatePath = flagString(flags, "launchState") ?? "PROJECT_STATE.yaml";
+  const schemaPath = flagString(flags, "schema") ?? path.join(skillRoot, "state/schema/workspace.schema.json");
+  const outputPath = flagString(flags, "output");
 
   return {
     root,
@@ -176,7 +161,7 @@ function parseArgs(argv: string[]): Args {
     launchStatePath: resolveFrom(root, launchStatePath),
     schemaPath: path.resolve(expandHome(schemaPath)),
     outputPath: outputPath ? resolveFrom(root, outputPath) : undefined,
-    check,
+    check: flagBoolean(flags, "check"),
   };
 }
 
@@ -187,7 +172,9 @@ function buildWorkspace(businessState: Record<string, unknown>, projectState: Re
   const businessSlug = concreteString(getPath(business, "slug")) || concreteString(getPath(project, "slug")) || slugify(businessName);
   const businessStage = concreteString(getPath(business, "stage")) || concreteString(getPath(project, "phase")) || "concept";
   const updatedAt = concreteString(businessState.updatedAt) || concreteString(getPath(projectState, "updated_at")) || new Date().toISOString().slice(0, 10);
-  const platforms = asArray(getPath(project, "platforms")).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+  const platforms = asArray(getPath(project, "platforms"))
+    .map((item) => asString(item))
+    .filter((item): item is string => Boolean(item));
   const productType = concreteString(getPath(businessState, "designBrief.productType"));
   const subtitle =
     concreteString(getPath(business, "positioning")) ||
@@ -276,10 +263,14 @@ function agentLanes(
   launchLanes: Array<[string, Record<string, unknown>]>,
   blockedCount: number,
 ): AgentLane[] {
-  const sourceFiles = asArray(getPath(projectState, "continuity.source_files")).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+  const sourceFiles = asArray(getPath(projectState, "continuity.source_files"))
+    .map((item) => asString(item))
+    .filter((item): item is string => Boolean(item));
   const integrationOwner = asString(getPath(projectState, "orchestration.integration_owner")) || "orchestrator";
   const designPanel = controlPanels(businessState).find((panel) => asString(panel.id) === "design-room");
-  const designRefs = asArray(designPanel?.stateRefs).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+  const designRefs = asArray(designPanel?.stateRefs)
+    .map((item) => asString(item))
+    .filter((item): item is string => Boolean(item));
 
   return [
     {
@@ -307,8 +298,12 @@ function workspaceLanes(
   launchLanes: Array<[string, Record<string, unknown>]>,
 ): WorkspaceLane[] {
   const panels = controlPanels(businessState).map((panel) => {
-    const stateRefs = asArray(panel.stateRefs).map((item) => asString(item)).filter((item): item is string => Boolean(item));
-    const renderedArtifacts = asArray(panel.renderedArtifacts).map((item) => asString(item)).filter((item): item is string => Boolean(item));
+    const stateRefs = asArray(panel.stateRefs)
+      .map((item) => asString(item))
+      .filter((item): item is string => Boolean(item));
+    const renderedArtifacts = asArray(panel.renderedArtifacts)
+      .map((item) => asString(item))
+      .filter((item): item is string => Boolean(item));
     const panelStatus = asString(panel.status) || "planned";
     const name = asString(panel.name) || titleize(asString(panel.id) || "panel");
     return {
@@ -444,7 +439,12 @@ function initials(value: string): string {
 }
 
 function slugify(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "business";
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "business"
+  );
 }
 
 function defaultTemplates(): WorkspaceTemplate[] {
@@ -485,14 +485,4 @@ function defaultTemplates(): WorkspaceTemplate[] {
 function resolveFrom(root: string, targetPath: string): string {
   const expanded = expandHome(targetPath);
   return path.isAbsolute(expanded) ? expanded : path.resolve(root, expanded);
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
 }

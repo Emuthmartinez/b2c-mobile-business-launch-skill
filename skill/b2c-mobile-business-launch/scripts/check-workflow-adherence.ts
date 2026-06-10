@@ -2,26 +2,20 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Issue, issue, reportAndExit } from "./lib/launch-state.js";
+import { flagString, type Issue, issue, parseFlags, reportAndExit } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
 
 function parseArgs(argv: string[]): { skillRoot: string; repoRoot?: string } {
-  let skillRoot = defaultSkillRoot;
-  let repoRoot: string | undefined;
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if ((token === "--skill-root" || token === "--root") && value) {
-      skillRoot = path.resolve(value);
-      index += 1;
-    } else if (token === "--repo-root" && value) {
-      repoRoot = path.resolve(value);
-      index += 1;
-    }
-  }
-  return { skillRoot, repoRoot };
+  const flags = parseFlags(argv, [
+    { flags: ["--skill-root", "--root"], key: "skillRoot" },
+    { flags: ["--repo-root"], key: "repoRoot" },
+  ]);
+  return {
+    skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot,
+    repoRoot: flagString(flags, "repoRoot"),
+  };
 }
 
 function readRequired(filePath: string, label: string, issues: Issue[]): string {
@@ -190,11 +184,11 @@ requireTerms(
     "continuity:",
     "last_state_review:",
     "source_files:",
-    "- \"AGENTS.md\"",
+    '- "AGENTS.md"',
     "git_status_reviewed:",
     "next_action:",
     "drift_risks:",
-    "strategy: \"not_evaluated\"",
+    'strategy: "not_evaluated"',
     "No orchestration preflight has been evaluated yet.",
     "compound_engineering:",
     "availability:",

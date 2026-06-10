@@ -44,7 +44,9 @@ function hasFounderStopGuard(line: string): boolean {
   if (/\b(without|no)\s+founder approval\b/i.test(line)) {
     return false;
   }
-  return /(founder approval|founder-approved|stop|do not continue|do not retry|must not retry|requires approval|ask the founder|confirm with the founder)/i.test(line);
+  return /(founder approval|founder-approved|stop|do not continue|do not retry|must not retry|requires approval|ask the founder|confirm with the founder)/i.test(
+    line,
+  );
 }
 
 function ascManualOnlyLines(markdownText: string): string[] {
@@ -90,7 +92,11 @@ function checkUnresolvedStoreLines(text: string, file: string, terms: string[]):
   }
 }
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter((item): item is string => Boolean(item))
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
@@ -102,23 +108,25 @@ const storeConsoleDone = storeConsoleStatus === "done";
 const storeConsoleSkipped = ["not_needed", "deferred"].includes(storeConsoleStatus ?? "");
 
 function statusLineClaimsReady(text: string): boolean {
-  return text.split(/\r?\n/).some((line) => /^\s*(status|launch status|upload status)\s*:/i.test(line) && /\b(done|complete|completed|ready|verified|approved)\b/i.test(line));
+  return text
+    .split(/\r?\n/)
+    .some((line) => /^\s*(status|launch status|upload status)\s*:/i.test(line) && /\b(done|complete|completed|ready|verified|approved)\b/i.test(line));
 }
 
 if (!markdown) {
   if (!storeConsoleSkipped) {
     const severity = storeConsoleDone || !state ? "error" : "warning";
-    issues.push(issue(severity, "store_console.markdown_missing", "STORE_CONSOLE.md is required for copy-paste App Store Connect and Google Play guidance.", markdownPath));
+    issues.push(
+      issue(
+        severity,
+        "store_console.markdown_missing",
+        "STORE_CONSOLE.md is required for copy-paste App Store Connect and Google Play guidance.",
+        markdownPath,
+      ),
+    );
   }
 } else {
-  const requiredPhrases = [
-    "click path",
-    "privacy",
-    "screenshots",
-    "review notes",
-    "account deletion",
-    "founder approval",
-  ];
+  const requiredPhrases = ["click path", "privacy", "screenshots", "review notes", "account deletion", "founder approval"];
   if (hasIos) {
     requiredPhrases.push(
       "App Store Connect",
@@ -197,7 +205,8 @@ if (!markdown) {
     }
     // Detect any line that sets the app container price to a non-free value alongside "lifetime".
     const paidContainerPattern = /price[:\s]+\$?\d+(\.\d+)?\b(?!.*free)/i;
-    const containerPriceConfirmedFree = /container.*price.*free|app.*price.*free|price.*free.*download|pricing.*and.*availability.*free|download.*price.*free/i.test(markdown);
+    const containerPriceConfirmedFree =
+      /container.*price.*free|app.*price.*free|price.*free.*download|pricing.*and.*availability.*free|download.*price.*free/i.test(markdown);
     const paidContainerMentioned = paidContainerPattern.test(markdown) && !containerPriceConfirmedFree;
     if (paidContainerMentioned) {
       issues.push(
@@ -243,7 +252,14 @@ if (!htmlExists) {
 
 if (hasIos) {
   if (!appListingMarkdown) {
-    issues.push(issue("error", "store_console.app_store_listing.markdown_missing", "APP_STORE_LISTING.md is required for iOS listing, privacy, pricing, localization, and App Store marketing prep.", appListingPath));
+    issues.push(
+      issue(
+        "error",
+        "store_console.app_store_listing.markdown_missing",
+        "APP_STORE_LISTING.md is required for iOS listing, privacy, pricing, localization, and App Store marketing prep.",
+        appListingPath,
+      ),
+    );
   } else {
     const appListingRequiredPhrases = [
       "App Privacy",
@@ -283,10 +299,24 @@ if (hasIos) {
   }
 
   if (!appListingHtml) {
-    issues.push(issue("error", "store_console.app_store_listing.html_missing", "app-store-listing.html should render the iOS listing packet as a copy-paste founder surface.", appListingHtmlPath));
+    issues.push(
+      issue(
+        "error",
+        "store_console.app_store_listing.html_missing",
+        "app-store-listing.html should render the iOS listing packet as a copy-paste founder surface.",
+        appListingHtmlPath,
+      ),
+    );
   }
   if (!appPrivacyQuestionnaire) {
-    issues.push(issue("error", "store_console.app_privacy_questionnaire.html_missing", "app-privacy-questionnaire.html should render the interactive Apple App Privacy worksheet.", appPrivacyQuestionnairePath));
+    issues.push(
+      issue(
+        "error",
+        "store_console.app_privacy_questionnaire.html_missing",
+        "app-privacy-questionnaire.html should render the interactive Apple App Privacy worksheet.",
+        appPrivacyQuestionnairePath,
+      ),
+    );
   }
 }
 

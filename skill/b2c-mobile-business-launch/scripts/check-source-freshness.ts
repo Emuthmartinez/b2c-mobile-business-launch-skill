@@ -3,7 +3,7 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
-import { collectAllFiles, isRecord, issue, reportAndExit } from "./lib/launch-state.js";
+import { collectAllFiles, flagBoolean, flagNumber, flagString, isRecord, issue, parseFlags, reportAndExit } from "./lib/launch-state.js";
 
 type MutableRecord = Record<string, unknown>;
 
@@ -25,33 +25,21 @@ const ignoredPathParts = new Set(["node_modules", ".git", "package-lock.json"]);
 const ignoredHosts = new Set(["example.com", "localhost", "127.0.0.1"]);
 
 function parseArgs(argv: string[]): Args {
-  let root = process.cwd();
-  let registryPath = "references/source-registry.yaml";
-  let sinceDays = 8;
-  let writeDiscovered = false;
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--root" && value) {
-      root = path.resolve(value);
-      index += 1;
-    } else if (token === "--registry" && value) {
-      registryPath = value;
-      index += 1;
-    } else if (token === "--since-days" && value) {
-      sinceDays = Number(value);
-      index += 1;
-    } else if (token === "--write-discovered") {
-      writeDiscovered = true;
-    }
-  }
+  const flags = parseFlags(argv, [
+    { flags: ["--root"], key: "root" },
+    { flags: ["--registry"], key: "registry", kind: "string" },
+    { flags: ["--since-days"], key: "sinceDays", kind: "number" },
+    { flags: ["--write-discovered"], key: "writeDiscovered", kind: "boolean" },
+  ]);
+  const root = flagString(flags, "root") ?? process.cwd();
+  const registryPath = flagString(flags, "registry") ?? "references/source-registry.yaml";
+  const sinceDays = flagNumber(flags, "sinceDays") ?? 8;
 
   return {
     root,
     registryPath: path.isAbsolute(registryPath) ? registryPath : path.resolve(root, registryPath),
     sinceDays: Number.isFinite(sinceDays) && sinceDays > 0 ? sinceDays : 8,
-    writeDiscovered,
+    writeDiscovered: flagBoolean(flags, "writeDiscovered"),
   };
 }
 
@@ -150,7 +138,10 @@ function recentAddedUrls(args: Args): Set<string> {
   if (log.status !== 0) {
     return urls;
   }
-  for (const commit of log.stdout.split(/\r?\n/).map((line) => line.trim()).filter(Boolean)) {
+  for (const commit of log.stdout
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)) {
     const show = spawnSync("git", ["show", "--format=", "--unified=0", "--no-ext-diff", commit, "--", "."], {
       cwd: args.root,
       encoding: "utf8",
@@ -207,12 +198,13 @@ function classifySource(url: string): string {
 
 function sourceIdFor(url: string, usedIds: Set<string>): string {
   const parsed = new URL(url);
-  const base = `${parsed.hostname}${parsed.pathname}`
-    .replace(/^www\./, "")
-    .replace(/[^a-zA-Z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .toLowerCase()
-    .slice(0, 80) || "source";
+  const base =
+    `${parsed.hostname}${parsed.pathname}`
+      .replace(/^www\./, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .toLowerCase()
+      .slice(0, 80) || "source";
   let candidate = base;
   let suffix = 2;
   while (usedIds.has(candidate)) {
@@ -226,7 +218,11 @@ function sourceIdFor(url: string, usedIds: Set<string>): string {
 function appendDiscoveredSources(registry: MutableRecord, missing: DiscoveredUrl[]): void {
   const sources = Array.isArray(registry.sources) ? registry.sources : [];
   registry.sources = sources;
-  const usedIds = new Set(sourceRecords(registry).map((source) => String(source.id ?? "")).filter(Boolean));
+  const usedIds = new Set(
+    sourceRecords(registry)
+      .map((source) => String(source.id ?? ""))
+      .filter(Boolean),
+  );
   for (const item of missing.sort((a, b) => a.url.localeCompare(b.url))) {
     sources.push({
       id: sourceIdFor(item.url, usedIds),
@@ -283,14 +279,35 @@ for (const [index, source] of sourceRecords(registry).entries()) {
   const prefix = `sources.${index}`;
   for (const field of ["id", "name", "source_type", "url", "owner"]) {
     if (typeof source[field] !== "string" || !String(source[field]).trim()) {
-      issues.push(issue("error", `source_freshness.${prefix}.${field}.missing`, `${prefix}.${field} must be a non-empty string.`, path.relative(args.root, args.registryPath)));
+      issues.push(
+        issue(
+          "error",
+          `source_freshness.${prefix}.${field}.missing`,
+          `${prefix}.${field} must be a non-empty string.`,
+          path.relative(args.root, args.registryPath),
+        ),
+      );
     }
   }
   if (!normalizeUrl(String(source.url ?? ""))) {
-    issues.push(issue("error", `source_freshness.${prefix}.url.invalid`, `${prefix}.url must be a valid external http(s) URL.`, path.relative(args.root, args.registryPath)));
+    issues.push(
+      issue(
+        "error",
+        `source_freshness.${prefix}.url.invalid`,
+        `${prefix}.url must be a valid external http(s) URL.`,
+        path.relative(args.root, args.registryPath),
+      ),
+    );
   }
   if (typeof source.refresh_cadence_days !== "number" || source.refresh_cadence_days < 1) {
-    issues.push(issue("error", `source_freshness.${prefix}.refresh_cadence_days.invalid`, `${prefix}.refresh_cadence_days must be a positive number.`, path.relative(args.root, args.registryPath)));
+    issues.push(
+      issue(
+        "error",
+        `source_freshness.${prefix}.refresh_cadence_days.invalid`,
+        `${prefix}.refresh_cadence_days must be a positive number.`,
+        path.relative(args.root, args.registryPath),
+      ),
+    );
   }
 }
 

@@ -35,17 +35,9 @@ for (const file of markdownFiles) {
 
     const target = path.resolve(path.dirname(file), href);
     if (!existsSync(target)) {
-      issues.push(
-        issue(
-          "error",
-          "skill_links.broken_local_link",
-          `Broken local markdown link: ${rawHref}`,
-          path.relative(skillRoot, file),
-        ),
-      );
+      issues.push(issue("error", "skill_links.broken_local_link", `Broken local markdown link: ${rawHref}`, path.relative(skillRoot, file)));
     }
   }
 }
 
 reportAndExit("Skill local-link audit", issues);
-

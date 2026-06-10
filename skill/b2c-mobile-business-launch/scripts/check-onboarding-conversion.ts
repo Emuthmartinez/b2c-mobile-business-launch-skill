@@ -19,7 +19,9 @@ const onboardingExpected = onboardingDone || onboardingEvidence.some((item) => /
 if (onboardingDone && !markdown) {
   issues.push(issue("error", "onboarding.markdown_missing", "ONBOARDING.md is required before the onboarding lane can be done.", "ONBOARDING.md"));
 } else if (onboardingExpected && !markdown) {
-  issues.push(issue("warning", "onboarding.markdown_missing_partial", "ONBOARDING.md is listed as onboarding evidence but is not present yet.", "ONBOARDING.md"));
+  issues.push(
+    issue("warning", "onboarding.markdown_missing_partial", "ONBOARDING.md is listed as onboarding evidence but is not present yet.", "ONBOARDING.md"),
+  );
 }
 
 if (markdown) {
@@ -141,7 +143,10 @@ function validateMarkdown(text: string, filePath: string): void {
     filePath,
   );
 
-  if (/\b(todo|tbd|unknown|placeholder)\b/.test(normalized) && /\b(status:\s*(done|complete|launch-ready)|launch-ready|ready for build|ready for handoff)\b/.test(normalized)) {
+  if (
+    /\b(todo|tbd|unknown|placeholder)\b/.test(normalized) &&
+    /\b(status:\s*(done|complete|launch-ready)|launch-ready|ready for build|ready for handoff)\b/.test(normalized)
+  ) {
     issues.push(issue("error", "onboarding.placeholder_complete", "ONBOARDING.md cannot claim done/complete while placeholder language remains.", filePath));
   }
 }
@@ -180,11 +185,29 @@ function requireAny(text: string, patterns: RegExp[], code: string, message: str
 }
 
 function findFirstValueIndex(text: string): number {
-  return findAnyIndex(text, [/first value/, /first-value/, /value reveal/, /value-reveal/, /personalized plan/, /plan reveal/, /aha moment/, /first win/, /demo result/]);
+  return findAnyIndex(text, [
+    /first value/,
+    /first-value/,
+    /value reveal/,
+    /value-reveal/,
+    /personalized plan/,
+    /plan reveal/,
+    /aha moment/,
+    /first win/,
+    /demo result/,
+  ]);
 }
 
 function findReviewIndex(text: string): number {
-  return findAnyIndex(text, [/app review/, /review prompt/, /native review/, /rating prompt/, /skstorereviewcontroller/, /requestreview/, /google play in-app review/]);
+  return findAnyIndex(text, [
+    /app review/,
+    /review prompt/,
+    /native review/,
+    /rating prompt/,
+    /skstorereviewcontroller/,
+    /requestreview/,
+    /google play in-app review/,
+  ]);
 }
 
 function findAnyIndex(text: string, patterns: RegExp[]): number {

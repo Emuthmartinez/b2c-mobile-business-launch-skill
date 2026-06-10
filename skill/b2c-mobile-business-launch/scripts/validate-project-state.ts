@@ -51,7 +51,7 @@ if (state) {
     }
     requireStatus(state, `${lanePath}.status`, issues);
     const evidence = asArray(getPath(state, `${lanePath}.evidence`));
-    const nonEmptyEvidence = evidence.filter((item) => typeof item === "string" ? item.trim().length > 0 : Boolean(item));
+    const nonEmptyEvidence = evidence.filter((item) => (typeof item === "string" ? item.trim().length > 0 : Boolean(item)));
     for (const [index, evidenceItem] of evidence.entries()) {
       if (typeof evidenceItem === "string" && evidenceItem.trim().length === 0) {
         issues.push(issue("error", `${lanePath}.evidence.${index}.blank`, `${lanePath}.evidence entries must not be blank.`, "PROJECT_STATE.yaml"));
@@ -62,7 +62,7 @@ if (state) {
       issues.push(issue("error", `${lanePath}.done_without_evidence`, `${lanePath} cannot be done without evidence paths.`, "PROJECT_STATE.yaml"));
     }
     const blockers = asArray(getPath(state, `${lanePath}.blockers`));
-    const nonEmptyBlockers = blockers.filter((item) => typeof item === "string" ? item.trim().length > 0 : Boolean(item));
+    const nonEmptyBlockers = blockers.filter((item) => (typeof item === "string" ? item.trim().length > 0 : Boolean(item)));
     for (const [index, blocker] of blockers.entries()) {
       if (typeof blocker === "string" && blocker.trim().length === 0) {
         issues.push(issue("error", `${lanePath}.blockers.${index}.blank`, `${lanePath}.blockers entries must not be blank.`, "PROJECT_STATE.yaml"));
@@ -177,7 +177,14 @@ if (state) {
 
   const tools = getPath(state, "tools");
   if (!isRecord(tools)) {
-    issues.push(issue("error", "tools.missing", "tools must map provider names to route, docs, secrets, preflight, validation, and fallback state.", "PROJECT_STATE.yaml"));
+    issues.push(
+      issue(
+        "error",
+        "tools.missing",
+        "tools must map provider names to route, docs, secrets, preflight, validation, and fallback state.",
+        "PROJECT_STATE.yaml",
+      ),
+    );
   } else {
     for (const [toolName, value] of Object.entries(tools)) {
       if (!isRecord(value)) {
@@ -192,7 +199,9 @@ if (state) {
       const requiredSecrets = asArray(value.required_secrets);
       for (const secretName of requiredSecrets) {
         if (!asString(secretName)?.trim()) {
-          issues.push(issue("error", `tools.${toolName}.required_secrets.invalid`, `tools.${toolName}.required_secrets must contain names only.`, "PROJECT_STATE.yaml"));
+          issues.push(
+            issue("error", `tools.${toolName}.required_secrets.invalid`, `tools.${toolName}.required_secrets must contain names only.`, "PROJECT_STATE.yaml"),
+          );
         }
       }
     }
@@ -206,7 +215,9 @@ if (state) {
     }
     for (const field of ["id", "severity", "owner", "status", "next_action"]) {
       if (!asString(card[field])?.trim()) {
-        issues.push(issue("error", `failure_cards.active.${index}.${field}.missing`, `Active failure card ${index} is missing ${field}.`, "PROJECT_STATE.yaml"));
+        issues.push(
+          issue("error", `failure_cards.active.${index}.${field}.missing`, `Active failure card ${index} is missing ${field}.`, "PROJECT_STATE.yaml"),
+        );
       }
     }
   }

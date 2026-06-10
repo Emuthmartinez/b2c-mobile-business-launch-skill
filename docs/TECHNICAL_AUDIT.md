@@ -235,3 +235,32 @@ Approach: keep `runFixture`/`makeFixture`/`writeComplete*` builders in `scripts/
 4. **`docs/` prototypes lifecycle:** `business-control-plane-prototype.html` (55 KB) and `remotion-content-assets-plan.html` are design-time artifacts. Are they still load-bearing references, or deprecation candidates once the Control Plane ships?
 5. **CI time budget:** Is there a target wall-time for the PR gate? P1's fix is sized differently for "under 2 minutes" vs "whatever, keep it simple."
 6. **Hook strictness in generated repos (3.2):** When `jq`/`SKILL_ROOT` are missing, should hooks hard-fail the agent turn (strict) or warn loudly (current intent, today silent)? This changes shipped behavior for every generated business repo.
+
+---
+
+## Resolution Log (2026-06-10)
+
+All findings from this audit were resolved on this branch (skill version bumped 0.9.0 → 0.10.0). Compound Engineering tooling was unavailable in this environment; per `AGENTS.md`, validator/fixture coverage served as the readiness gate, and the full `audit:ci` pipeline plus the fixture suite were run green before each push.
+
+| Finding | Resolution | Evidence |
+|---|---|---|
+| A1 audit pipeline as duplicated shell strings | `scripts/run-audit.ts` orchestrator over a declarative plan in `scripts/lib/audit-plan.ts`; `audit`/`audit:ci` are one-liners in both packages | `package.json` scripts; `npm run audit:ci -- --list` |
+| A2 2,083-line fixture god-file | Split into `scripts/fixtures/` harness + builder/state modules + 8 domain modules (all <600 lines); entrypoint is ~45 lines; PASS-list byte-identical before/after | `scripts/fixtures/`, oracle diff in PR history |
+| A3 eval gate overstates coverage | Gate output renamed to "scenario definition lint (prompts are not executed against an agent)"; README and `references/launchbench-evals.md` state the executed scope explicitly | `run-launchbench.ts`, README, launchbench-evals.md "Harness Shape" |
+| A4 phrase-list brittleness undocumented | New "Validator Phrase Contracts" section documents the literal-vocabulary design, its two edges, and the most-tripped tokens | `references/launchbench-evals.md` |
+| C1 13 duplicate `parseArgs`, duplicated helpers | Shared kernel (`expandHome`, `parseFlags`, flag accessors, `normalizedIncludes`, `missingPhraseCode`, `normalizedStringArray`) in `lib/launch-state.ts`; all 13 scripts migrated with byte-identical CLI semantics; one deliberate non-dedupe (`check-parallel-orchestration`'s space-only `missingPhraseCode`) kept to preserve emitted issue codes | `scripts/lib/launch-state.ts` + migrated validators |
+| C2 untyped `issues` array | `const issues: Issue[]` in `run-launchbench.ts` | `run-launchbench.ts:12` |
+| C4 fixture temp dirs never cleaned | `try/finally` + `rmSync(tempRoot)`; `--keep-temp` opt-out | `run-validator-fixtures.ts` |
+| S1 workflow-level write permissions | Workflow defaults to `contents: read`; write scopes re-granted only to `weekly-source-refresh` | `.github/workflows/source-freshness.yml` |
+| S2 tag-pinned actions | All four actions pinned to full commit SHAs (resolved via `git ls-remote`) with version comments | `.github/workflows/source-freshness.yml` |
+| T2 untested probes/grader/hooks | 12 new fixtures: probe no-credential paths, four `grade-screenshots` paths, six hook executions with sample `CLAUDE_TOOL_INPUT` payloads; plus a latent ESM `require()` bug found and fixed in `grade-screenshots.ts` (PNG dimension read was unreachable under tsx) | `scripts/fixtures/probes-and-grading.fixtures.ts`, `scripts/fixtures/hooks.fixtures.ts` |
+| T3/DOC Node + layout drift | README declares Node 22 (matches CI/CONTRIBUTING); layout lists `evals/agent-behavior/` and `evals/triggering/` | README.md |
+| P1 ~50 sequential npm boots | Orchestrator spawns tsx directly with a concurrency pool (typecheck barrier first, launchbench serialized); full `audit:ci` measured at ~1m23s wall | `scripts/run-audit.ts` |
+| P2 ~49-minute worst-case weekly refresh | Per-host-serialized fetch pool (5 workers) keeps politeness per docs site | `refresh-source-freshness.ts` |
+| X1 no lint/format enforcement | Prettier adopted (printWidth 160), `lint:format` step in the audit plan, one-time mechanical reformat of `scripts/**/*.ts` | `.prettierrc.json`, audit plan |
+| X2 silent hook failure modes | Missing `jq`/`SKILL_ROOT` now warn loudly to stderr and exit 0; blocking screenshot gates still fire without `SKILL_ROOT`; behavior covered by executed-hook fixtures | `templates/repo-agent-entrypoints/settings.json`, `fixtures/hooks.fixtures.ts` |
+| X3 impossible maintainer-machine instructions | Runtime-sync guidance in root `AGENTS.md`/`CLAUDE.md` is now conditional on the maintainer machine; clones/CI are told `audit:ci` is the gate | AGENTS.md, CLAUDE.md |
+
+Additionally, `check-package-parity` now enforces audit-plan coverage structurally (every `check:*`/`validate:*` script must be a plan step or carry a recorded exclusion reason; every step must resolve in both packages; both audit entrypoints must route through `run-audit.ts`) — this supersedes and strengthens the old string-derived coverage check.
+
+Remaining open (deliberate): the S-vs-XL fork on executing LaunchBench scenarios against a live agent (Open Question 1) — the rename resolves the honesty gap; a behavioral harness stays a product decision. Major dependency upgrades (Vite 8, TS 6) remain non-urgent.

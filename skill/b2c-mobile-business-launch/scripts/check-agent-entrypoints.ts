@@ -2,26 +2,20 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Issue, issue, reportAndExit } from "./lib/launch-state.js";
+import { flagString, type Issue, issue, parseFlags, reportAndExit } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
 
 function parseArgs(argv: string[]): { skillRoot: string; repoRoot?: string } {
-  let skillRoot = defaultSkillRoot;
-  let repoRoot: string | undefined;
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if ((token === "--skill-root" || token === "--root") && value) {
-      skillRoot = path.resolve(value);
-      index += 1;
-    } else if (token === "--repo-root" && value) {
-      repoRoot = path.resolve(value);
-      index += 1;
-    }
-  }
-  return { skillRoot, repoRoot };
+  const flags = parseFlags(argv, [
+    { flags: ["--skill-root", "--root"], key: "skillRoot" },
+    { flags: ["--repo-root"], key: "repoRoot" },
+  ]);
+  return {
+    skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot,
+    repoRoot: flagString(flags, "repoRoot"),
+  };
 }
 
 function readIfExists(filePath: string): string | undefined {
@@ -136,7 +130,7 @@ if (templateClaude) {
       "{{APP_NAME}}",
       "Read `AGENTS.md` first",
       "b2c-mobile-business-launch",
-      "Do not ask the founder to say \"use the skill\" again",
+      'Do not ask the founder to say "use the skill" again',
       "Session Continuity",
       "Do not rely on prior chat context",
       "APP_AGENTS.md",
@@ -179,7 +173,16 @@ if (appAgents) {
 if (designGuru) {
   requireTerms(
     designGuru,
-    ["Session Continuity", "Do not rely on chat memory", "EMOTIONAL_DESIGN.md", "EMOTIONAL_AUDIT.md", "Experience Card", "check:emotional-design", "BRAND.md", "DEMO_VIDEO.md"],
+    [
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "EMOTIONAL_DESIGN.md",
+      "EMOTIONAL_AUDIT.md",
+      "Experience Card",
+      "check:emotional-design",
+      "BRAND.md",
+      "DEMO_VIDEO.md",
+    ],
     "design_guru",
     designGuruPath,
     issues,
@@ -243,11 +246,7 @@ if (repoRoot) {
   if (repoClaude) {
     requireTerms(
       repoClaude,
-      [
-        "maintainer-only",
-        "Do not copy it into businesses created by the skill",
-        "templates/repo-agent-entrypoints/CLAUDE.md",
-      ],
+      ["maintainer-only", "Do not copy it into businesses created by the skill", "templates/repo-agent-entrypoints/CLAUDE.md"],
       "repo_claude",
       repoClaudePath,
       issues,

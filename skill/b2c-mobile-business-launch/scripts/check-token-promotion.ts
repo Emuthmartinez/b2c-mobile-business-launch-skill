@@ -18,7 +18,14 @@ if (loaded.tokens) {
 
   for (const filePath of [tokenJsonPath, cssPath, swiftPath]) {
     if (!existsSync(filePath)) {
-      issues.push(issue("error", "token_promotion.output_missing", `Missing promoted token output: ${path.relative(args.root, filePath)}`, path.relative(args.root, filePath)));
+      issues.push(
+        issue(
+          "error",
+          "token_promotion.output_missing",
+          `Missing promoted token output: ${path.relative(args.root, filePath)}`,
+          path.relative(args.root, filePath),
+        ),
+      );
     }
   }
 
@@ -26,7 +33,9 @@ if (loaded.tokens) {
     try {
       const promoted = JSON.parse(readFileSync(tokenJsonPath, "utf8")) as { tokenHash?: unknown };
       if (promoted.tokenHash !== expectedHash) {
-        issues.push(issue("error", "token_promotion.json_stale", "design-system/tokens.json hash does not match state/theme.tokens.json.", "design-system/tokens.json"));
+        issues.push(
+          issue("error", "token_promotion.json_stale", "design-system/tokens.json hash does not match state/theme.tokens.json.", "design-system/tokens.json"),
+        );
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
@@ -37,7 +46,9 @@ if (loaded.tokens) {
   if (existsSync(cssPath)) {
     const css = readFileSync(cssPath, "utf8");
     if (!css.includes(`design-token-hash: ${expectedHash}`)) {
-      issues.push(issue("error", "token_promotion.css_stale", "design-system/tokens.css hash does not match state/theme.tokens.json.", "design-system/tokens.css"));
+      issues.push(
+        issue("error", "token_promotion.css_stale", "design-system/tokens.css hash does not match state/theme.tokens.json.", "design-system/tokens.css"),
+      );
     }
     for (const tokenPath of ["color.background", "color.primary", "color.accent", "color.text", "radius.md", "space.md"]) {
       const varName = `--${tokenPath.replace(".", "-").replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}`;
@@ -47,7 +58,14 @@ if (loaded.tokens) {
     }
     for (const motionVar of ["--motion-duration-fast", "--motion-duration-base", "--motion-easing"]) {
       if (!css.includes(motionVar)) {
-        issues.push(issue("error", "token_promotion.css_motion_missing", `tokens.css must promote ${motionVar} so web surfaces (framer-motion/motion, landing, funnel) share the tokenized motion scale.`, "design-system/tokens.css"));
+        issues.push(
+          issue(
+            "error",
+            "token_promotion.css_motion_missing",
+            `tokens.css must promote ${motionVar} so web surfaces (framer-motion/motion, landing, funnel) share the tokenized motion scale.`,
+            "design-system/tokens.css",
+          ),
+        );
       }
     }
   }
@@ -55,13 +73,29 @@ if (loaded.tokens) {
   if (existsSync(swiftPath)) {
     const swift = readFileSync(swiftPath, "utf8");
     if (!swift.includes(`design-token-hash: ${expectedHash}`)) {
-      issues.push(issue("error", "token_promotion.swift_stale", "DesignTokens.swift hash does not match state/theme.tokens.json.", "design-system/DesignTokens.swift"));
+      issues.push(
+        issue("error", "token_promotion.swift_stale", "DesignTokens.swift hash does not match state/theme.tokens.json.", "design-system/DesignTokens.swift"),
+      );
     }
     if (!swift.includes("enum DesignTokens") || !swift.includes(String(getToken(loaded.tokens, "color.primary") ?? ""))) {
-      issues.push(issue("error", "token_promotion.swift_contract_missing", "DesignTokens.swift must expose DesignTokens and the current primary color.", "design-system/DesignTokens.swift"));
+      issues.push(
+        issue(
+          "error",
+          "token_promotion.swift_contract_missing",
+          "DesignTokens.swift must expose DesignTokens and the current primary color.",
+          "design-system/DesignTokens.swift",
+        ),
+      );
     }
     if (!swift.includes("enum Motion") || !swift.includes("durationBase")) {
-      issues.push(issue("error", "token_promotion.swift_motion_missing", "DesignTokens.swift must expose a Motion enum so the shipped SwiftUI app shares the tokenized motion scale (durations/easing) with web surfaces.", "design-system/DesignTokens.swift"));
+      issues.push(
+        issue(
+          "error",
+          "token_promotion.swift_motion_missing",
+          "DesignTokens.swift must expose a Motion enum so the shipped SwiftUI app shares the tokenized motion scale (durations/easing) with web surfaces.",
+          "design-system/DesignTokens.swift",
+        ),
+      );
     }
   }
 }

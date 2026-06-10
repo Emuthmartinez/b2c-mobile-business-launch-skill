@@ -94,17 +94,7 @@ export const requiredLanes = [
   "growth",
 ];
 
-const ignoredDirs = new Set([
-  ".git",
-  "node_modules",
-  ".next",
-  "dist",
-  "build",
-  "DerivedData",
-  ".expo",
-  ".turbo",
-  "coverage",
-]);
+const ignoredDirs = new Set([".git", "node_modules", ".next", "dist", "build", "DerivedData", ".expo", ".turbo", "coverage"]);
 
 export function parseCliArgs(argv: string[]): CliArgs {
   let root = process.cwd();
@@ -135,6 +125,116 @@ export function parseCliArgs(argv: string[]): CliArgs {
 
 export function issue(severity: Severity, code: string, message: string, file?: string): Issue {
   return { severity, code, message, file };
+}
+
+/** Expands a leading `~`/`~/` to $HOME, mirroring shell behavior for CLI path flags. */
+export function expandHome(value: string): string {
+  if (value === "~") {
+    return process.env.HOME ?? value;
+  }
+  if (value.startsWith("~/")) {
+    return path.join(process.env.HOME ?? "", value.slice(2));
+  }
+  return value;
+}
+
+export type FlagValue = string | number | boolean;
+
+export interface FlagSpec {
+  /** Flag aliases that set this key, e.g. ["--skill-root", "--root"]. */
+  flags: string[];
+  /** Key in the returned record. */
+  key: string;
+  /**
+   * - "path" (default): consumes a value, expands `~`, resolves to an absolute path.
+   * - "string": consumes a raw value.
+   * - "number": consumes a value via Number().
+   * - "boolean": consumes no value; presence sets true.
+   */
+  kind?: "path" | "string" | "number" | "boolean";
+  /** When true, a matched flag without a value throws instead of being skipped. */
+  strict?: boolean;
+}
+
+/**
+ * Shared token/value CLI flag parser used by the validator scripts.
+ * Last occurrence wins; unknown tokens are ignored (callers pass positional
+ * arguments through their own handling when needed).
+ */
+export function parseFlags(argv: string[], specs: FlagSpec[]): Partial<Record<string, FlagValue>> {
+  const byFlag = new Map<string, FlagSpec>();
+  for (const spec of specs) {
+    for (const flag of spec.flags) {
+      byFlag.set(flag, spec);
+    }
+  }
+
+  const out: Partial<Record<string, FlagValue>> = {};
+  for (let index = 0; index < argv.length; index += 1) {
+    const token = argv[index];
+    if (token === undefined) {
+      continue;
+    }
+    const spec = byFlag.get(token);
+    if (!spec) {
+      continue;
+    }
+    if (spec.kind === "boolean") {
+      out[spec.key] = true;
+      continue;
+    }
+    const value = argv[index + 1];
+    if (value === undefined || value === "") {
+      if (spec.strict) {
+        throw new Error(`${token} requires a value`);
+      }
+      continue;
+    }
+    index += 1;
+    if (spec.kind === "number") {
+      out[spec.key] = Number(value);
+    } else if (spec.kind === "string") {
+      out[spec.key] = value;
+    } else {
+      out[spec.key] = path.resolve(expandHome(value));
+    }
+  }
+  return out;
+}
+
+export function flagString(flags: Partial<Record<string, FlagValue>>, key: string): string | undefined {
+  const value = flags[key];
+  return typeof value === "string" ? value : undefined;
+}
+
+export function flagNumber(flags: Partial<Record<string, FlagValue>>, key: string): number | undefined {
+  const value = flags[key];
+  return typeof value === "number" ? value : undefined;
+}
+
+export function flagBoolean(flags: Partial<Record<string, FlagValue>>, key: string): boolean {
+  return flags[key] === true;
+}
+
+/** Case-insensitive substring check shared by phrase-gated validators. */
+export function normalizedIncludes(haystack: string, needle: string): boolean {
+  return haystack.toLowerCase().includes(needle.toLowerCase());
+}
+
+/** Stable issue-code suffix for a missing phrase, shared by phrase-gated validators. */
+export function missingPhraseCode(prefix: string, phrase: string): string {
+  return `${prefix}.${phrase
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")}.missing`;
+}
+
+/** Trimmed non-empty strings from an unknown array value. */
+export function normalizedStringArray(value: unknown): string[] {
+  return asArray(value)
+    .map((item) => asString(item))
+    .filter((item): item is string => Boolean(item?.trim()))
+    .map((item) => item.trim());
 }
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -191,9 +291,7 @@ export function loadProjectState(args: CliArgs): { state?: unknown; raw?: string
     const message = error instanceof Error ? error.message : String(error);
     return {
       raw,
-      issues: [
-        issue("error", "project_state.invalid_yaml", `PROJECT_STATE.yaml is not valid YAML: ${message}`, path.relative(args.root, args.statePath)),
-      ],
+      issues: [issue("error", "project_state.invalid_yaml", `PROJECT_STATE.yaml is not valid YAML: ${message}`, path.relative(args.root, args.statePath))],
     };
   }
 }
@@ -208,14 +306,7 @@ export function requireString(state: unknown, dottedPath: string, issues: Issue[
 export function requireStatus(state: unknown, dottedPath: string, issues: Issue[]): void {
   const value = asString(getPath(state, dottedPath));
   if (!value || !statusValues.has(value)) {
-    issues.push(
-      issue(
-        "error",
-        `${dottedPath}.invalid_status`,
-        `${dottedPath} must be one of ${Array.from(statusValues).join(", ")}.`,
-        "PROJECT_STATE.yaml",
-      ),
-    );
+    issues.push(issue("error", `${dottedPath}.invalid_status`, `${dottedPath} must be one of ${Array.from(statusValues).join(", ")}.`, "PROJECT_STATE.yaml"));
   }
 }
 
@@ -279,7 +370,11 @@ export function collectAllFiles(root: string, maxFiles = 10000): string[] {
   return files;
 }
 
-export function findText(root: string, needles: string[], extensions = new Set([".md", ".ts", ".tsx", ".js", ".jsx", ".swift", ".kt", ".java", ".dart", ".yaml", ".yml", ".html"])): Map<string, string[]> {
+export function findText(
+  root: string,
+  needles: string[],
+  extensions = new Set([".md", ".ts", ".tsx", ".js", ".jsx", ".swift", ".kt", ".java", ".dart", ".yaml", ".yml", ".html"]),
+): Map<string, string[]> {
   const found = new Map<string, string[]>();
   for (const file of collectFiles(root, extensions)) {
     const text = readFileSync(file, "utf8");
@@ -393,12 +488,7 @@ export function isReasonStale(text: string, asOf: Date = new Date()): boolean {
  * @param context  A short phrase for the human-readable message (e.g. "partial stall" or "deferred").
  * @param issues   Mutable array to push warnings into.
  */
-export function validateReason(
-  reason: string | undefined,
-  lanePath: string,
-  context: string,
-  issues: Issue[],
-): void {
+export function validateReason(reason: string | undefined, lanePath: string, context: string, issues: Issue[]): void {
   if (!reason || !isReasonSubstantive(reason)) {
     issues.push(
       issue(
@@ -428,8 +518,7 @@ export function validateReason(
       issue(
         "warning",
         `${lanePath}.stall_reason_stale`,
-        `${lanePath} ${context} reason is dated more than ${STALL_STALE_DAYS} days ago. ` +
-          `Revisit and update the rationale or advance the lane status.`,
+        `${lanePath} ${context} reason is dated more than ${STALL_STALE_DAYS} days ago. ` + `Revisit and update the rationale or advance the lane status.`,
         "PROJECT_STATE.yaml",
       ),
     );
