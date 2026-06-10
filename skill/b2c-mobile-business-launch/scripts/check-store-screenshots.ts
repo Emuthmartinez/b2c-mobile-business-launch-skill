@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, readSync } from "node:fs";
 import path from "node:path";
 import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
 
@@ -399,13 +399,11 @@ const PNG_MIN_HEADER_BYTES = 29;
 function parsePngIhdr(absPath: string): PngIhdr | { error: string } {
   let buf: Buffer;
   try {
-    // Read only the first 29 bytes — we only need the IHDR
-    const fd = (() => {
-      const { openSync } = require("node:fs") as typeof import("node:fs");
-      return openSync(absPath, "r");
-    })();
+    // Read only the first 29 bytes — we only need the IHDR.
+    // node:fs functions are imported at module top — require() is unavailable
+    // in the tsx ESM runtime and previously made every IHDR parse fail.
+    const fd = openSync(absPath, "r");
     buf = Buffer.alloc(PNG_MIN_HEADER_BYTES);
-    const { readSync, closeSync } = require("node:fs") as typeof import("node:fs");
     const bytesRead = readSync(fd, buf, 0, PNG_MIN_HEADER_BYTES, 0);
     closeSync(fd);
     if (bytesRead < PNG_MIN_HEADER_BYTES) {

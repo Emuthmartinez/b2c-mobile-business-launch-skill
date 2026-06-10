@@ -13,8 +13,6 @@
  * Run:
  *   npm run check:aso-metadata -- --root <app-repo-root>
  */
-import { existsSync } from "node:fs";
-import path from "node:path";
 import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
@@ -197,8 +195,19 @@ function checkStaleLogMetadataSource(text: string, file: string): void {
 // reveals a different pixel dimension, flag it for manual sips verification.
 
 function checkScreenshotFolderDimensionAlignment(text: string, file: string): void {
-  // Pattern: folder name contains "67" but dimension suggests 69 (1320x2868),
-  // or folder contains "69" but dimension suggests 67 (1290x2796).
+  // ASC reality check (verified live 2026-06-10 via `asc screenshots sizes`):
+  // APP_IPHONE_67 and APP_IPHONE_69 accept IDENTICAL dimension lists — both
+  // wells take 1260x2736, 1290x2796, AND 1320x2868 (and their landscape
+  // mirrors). A 6.9-inch asset (1320x2868) in an iphone-67-named folder is
+  // therefore a legitimate, uploadable combination, not a wrong-well error.
+  // The old error-level cross-flag here produced false positives against live,
+  // approved listings. Keep only a low-noise warning when the doc shows no
+  // sign of live-well verification, and skip entirely when the doc records the
+  // authoritative read (`asc screenshots list`), which is the only way to know
+  // which well a set actually lives in.
+  if (/asc\s+screenshots\s+list/i.test(text)) {
+    return;
+  }
   const lines = text.split(/\r?\n/);
   for (const line of lines) {
     const trimmed = line.trim();
@@ -212,30 +221,18 @@ function checkScreenshotFolderDimensionAlignment(text: string, file: string): vo
       continue;
     }
     const [, w, h] = dimension.map(Number);
-    // 6.7-inch: 1290x2796; 6.9-inch: 1320x2868
     const is69Dimension = (w === 1320 && h === 2868) || (w === 2868 && h === 1320);
     const is67Dimension = (w === 1290 && h === 2796) || (w === 2796 && h === 1290);
 
-    if (has67Folder && is69Dimension) {
+    if ((has67Folder && is69Dimension) || (has69Folder && is67Dimension)) {
       issues.push(
         issue(
-          "error",
-          "aso_metadata.screenshot_folder_dimension_mismatch",
-          `${file}: folder name suggests 6.7-inch (iphone-67) but dimension ${w}x${h} is the 6.9-inch size (APP_IPHONE_69). ` +
-            "Rename the folder or correct the dimension to avoid uploading screenshots to the wrong device well. " +
-            "Verify with: sips -g pixelWidth -g pixelHeight <file>",
-          file,
-        ),
-      );
-    }
-    if (has69Folder && is67Dimension) {
-      issues.push(
-        issue(
-          "error",
-          "aso_metadata.screenshot_folder_dimension_mismatch",
-          `${file}: folder name suggests 6.9-inch (iphone-69) but dimension ${w}x${h} is the 6.7-inch size (APP_IPHONE_67). ` +
-            "Rename the folder or correct the dimension to avoid uploading screenshots to the wrong device well. " +
-            "Verify with: sips -g pixelWidth -g pixelHeight <file>",
+          "warning",
+          "aso_metadata.screenshot_folder_dimension_mixed",
+          `${file}: folder naming (${has67Folder ? "iphone-67" : "iphone-69"}) and dimension ${w}x${h} reference different iPhone display generations. ` +
+            "ASC accepts this dimension in BOTH the APP_IPHONE_67 and APP_IPHONE_69 wells, so this may be intentional — " +
+            "verify the live well with `asc screenshots list --version-localization <LOC_ID>` and record it in the doc to silence this warning. " +
+            "Local dimension check: sips -g pixelWidth -g pixelHeight <file>",
           file,
         ),
       );
