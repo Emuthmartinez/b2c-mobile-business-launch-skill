@@ -13,7 +13,7 @@ This skill is **highly opinionated** and built for **subscription / freemium con
 To use it you need:
 
 - **An AI coding agent that supports skills** — [Claude Code](https://claude.com/claude-code) or Codex. The skill is a set of markdown playbooks plus TypeScript validators that the agent reads and runs; it is **not** a standalone app you launch by itself.
-- **Node.js 18+** to run the validators (`npm install`).
+- **Node.js 22** to run the validators (`npm install`); this matches CI and CONTRIBUTING.md.
 - *(Optional, swappable)* accounts for the third-party providers the playbooks reference — RevenueCat, Doppler, PostHog, Stripe, Resend, Apple App Store Connect / Google Play, Firecrawl, and similar. Most have free tiers. **None are required to read the playbooks or run the validators**, and the skill always routes an explicit fallback when a paid tool is unavailable.
 
 Install it as a skill (see [Install](#install) below), then give your agent one broad launch request — examples are in [Autopilot Usage](#autopilot-usage).
@@ -171,7 +171,7 @@ The scripts are intentionally simple:
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.
 - `audit-skill-links.ts` checks bundled Markdown files for broken local links.
 - `render-launch-cockpit.ts` renders `launch-cockpit.html` from `PROJECT_STATE.yaml`.
-- `run-launchbench.ts` validates reusable regression scenarios under `evals/launchbench/` and runs deterministic validator fixtures.
+- `run-launchbench.ts` lints the reusable regression scenario definitions under `evals/launchbench/` (required fields, known-validator references) and then runs the deterministic validator fixtures. Scenario prompts are definitions for agents and reviewers; they are not executed against a live agent by this harness.
 - `run-validator-fixtures.ts` exercises positive and negative fixtures so validator false negatives become audit failures.
 
 ## Resend Starter Templates
@@ -227,6 +227,8 @@ skill/
     tsconfig.json
     agents/openai.yaml
     evals/launchbench/
+    evals/agent-behavior/
+    evals/triggering/
     state/
       business.json
       theme.tokens.json
@@ -260,6 +262,8 @@ skill/
 npm install
 npm run audit
 ```
+
+`audit` and `audit:ci` run `scripts/run-audit.ts`, the single orchestrator over the pipeline defined in `scripts/lib/audit-plan.ts` (typecheck first, then every gate, with independent steps run through a small concurrency pool). Useful flags: `--list` (print the resolved plan), `--only <step>` (run a subset), `--serial`, `--concurrency N`. `check:package-parity` fails if a `check:*`/`validate:*` script is neither an audit step nor explicitly excluded with a reason, so gates cannot be silently dropped from the pipeline.
 
 Before broad launch/design work, compare the installed runtime to the source skill:
 
