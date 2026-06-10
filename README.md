@@ -48,7 +48,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Experience | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, and surface translation |
 | Product | `SPEC.md`, `TECH_SPEC.md`, `LAUNCH_TRACE.md`, scope locks, acceptance criteria, and builder prompts |
-| App Archetypes | Reusable boilerplate prompt packs for known B2C product shapes, enforced by `check:app-archetype`: the Social / Community Platform lane (`references/social-network-lane.md`) and the AI Chat / Companion lane (`references/ai-chat-companion-lane.md`). Each does upfront AskUserQuestion archetype/variant detection (web vs native), names its core systems, and ships a dependency-ordered prompt sequence (e.g. schema, auth, core loop, model/feed, memory/search, monetization, safety/invites) that threads into the research, design, security, revenue, and growth lanes rather than bypassing them |
+| App Archetypes | Reusable packs for known B2C product shapes, enforced by `check:app-archetype` and `check:archetype-starter`: Social / Community Platform (`references/social-network-lane.md`), AI Chat / Companion (`references/ai-chat-companion-lane.md`), Habit Tracker / Utility (`references/habit-tracker-lane.md`), and Photo / AI Media (`references/photo-ai-media-lane.md`). Each does upfront AskUserQuestion archetype/variant detection (web vs native), names its core systems, ships a **runnable starter scaffold** (Next.js + Supabase with tested RLS, Stripe/RevenueCat stubs, PostHog event catalog, names-only env, CI) plus a dependency-ordered prompt sequence as the customization layer, and threads into the research, design, security, revenue, and growth lanes rather than bypassing them |
 | Security | `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool routing, OWASP MASVS/ASVS basis, platform hardening, app integrity, abuse controls, scanner/review proof, and accepted risks |
 | Design | `DESIGN.md`, lowercase `design.md`, `UX_PATTERNS.md`, HTML visual proofs, Refero/fallback UX pattern research, Higgsfield visual guidance, Remotion content assets, screenshot systems, and audit gates |
 | Analytics | `ANALYTICS.md`, `analytics-plan.html`, PostHog event catalog, attribution contract, dashboards, and QA probes |
@@ -108,6 +108,7 @@ npm run check:paid-ua -- --root /path/to/app
 npm run check:post-launch -- --root /path/to/app
 npm run check:google-play -- --root /path/to/app
 npm run check:backend-contract -- --root /path/to/app
+npm run check:analytics-catalog -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:continuity-contract
@@ -123,10 +124,14 @@ npm run design:version -- baseline onboarding-v1 --root /path/to/app
 npm run check:source-registry
 npm run refresh:source-freshness
 npm run check:autopilot
+npm run check:app-archetype
+npm run check:archetype-starter
+npm run check:reference-size
 npm run audit:links
 npm run render:launch-cockpit -- --root /path/to/app
 npm run launchbench
 npm run test:validators
+npm run evals:behavioral -- --list
 ```
 
 When running from an installed skill instead of this repo:
@@ -169,6 +174,10 @@ The scripts are intentionally simple:
 - `check-live-provider-proof.ts` blocks provider-backed readiness claims until `PROVIDER_PROOF.md` has live evidence or founder-only gates.
 - `check-artifact-templates.ts` checks that every template `PROJECT_STATE.yaml` evidence path has a starter artifact.
 - `run-agent-evals.ts` validates behavior eval definitions for routing choices that deterministic validators cannot fully simulate.
+- `check-archetype-starter.ts` checks the runnable starter scaffolds inside the archetype packs: structure completeness with lockfiles, names-only `.env.example`, no secret patterns, RLS migrations plus pgTAP tests, snake_case event catalogs, and a prompt-to-scaffold map covering every pack prompt.
+- `check-reference-size.ts` enforces a per-file context budget (64KB) over `references/`, with an explicit reasoned exclusion list, so oversized references become deliberate split/index decisions.
+- `check-analytics-catalog.ts` reconciles events named in `ONBOARDING.md`/`EMOTIONAL_DESIGN.md`/`VIRAL_GROWTH.md` against `ANALYTICS.md`'s catalog (warning at partial, error at done).
+- `run-behavioral-evals.ts` is the manual live execution layer: it runs the opt-in `behavioral: true` flagship scenarios against a live Claude agent and grades must_catch/should_say/forbidden with a structured grader — outside the PR gate by design (see the behavioral-evals workflow).
 - `promote-design-tokens.ts` and `check-token-promotion.ts` promote `state/theme.tokens.json` into `design-system/` and block stale token handoff.
 - `refresh-source-freshness.ts` fetches registered sources, writes a Markdown/HTML/JSON report, and lets the weekly workflow open a reviewable PR.
 - `check-autopilot-contract.ts` checks Anthropic-style trigger coverage, negative trigger guards, and the hands-off run contract.

@@ -34,6 +34,10 @@ Record the answers in `PROJECT_STATE.yaml` (under the product lane, e.g. `lanes.
 
 Honesty note on the stack: the bundled prompts target **web (Next.js + Supabase + Vercel)** because that is the fastest path to a working multi-user social product. If the founder picks native mobile, say so plainly — the schema, RLS, real-time, and storage prompts carry over unchanged, but the auth/feed/profile/DM client prompts are web prompts and must be adapted, and the full iOS signing/ASC/store lanes become required rather than optional.
 
+## Runnable Starter
+
+The pack ships a runnable scaffold at [`../templates/app-archetypes/social-network/starter/`](../templates/app-archetypes/social-network/starter/README.md): Next.js App Router + Supabase pre-wired with magic-link auth, schema migrations with **tested** RLS (pgTAP, per `backend-data-contract.md`), Stripe and RevenueCat stubs, a PostHog event catalog matching the analytics lane's snake_case conventions, a names-only `.env.example`, and a CI workflow. Copy it into the business repo as the floor and customize it with the prompts below — its README maps each prompt to the scaffold area it customizes. Do not improvise the same wiring from scratch; `check:archetype-starter` enforces the starter contract. If the founder selects Firebase or a custom backend, adapt through the data-contract lane instead of running the Supabase pieces verbatim.
+
 ## The Five Core Systems
 
 Every social platform — text, image, or video — is built on the same five systems. If any one is missing or broken, the product does not work. The build sequence exists to complete them in dependency order.

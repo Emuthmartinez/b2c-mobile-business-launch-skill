@@ -14,6 +14,13 @@
  *   - proof/email-test-send-log.* exists and is non-empty
  *   - SECRETS.md lists RESEND_API_KEY and references Doppler (keys not in raw .env)
  *
+ * PRESENT+ (warning when partial, error when done — beyond template presence):
+ *   - EMAIL_OPS.md references the sender-domain DNS records (SPF and DKIM)
+ *     that the proof artifacts attest to
+ *   - EMAIL_OPS.md documents unsubscribe handling
+ *   - EMAIL_OPS.md maps brand tokens from DESIGN.md (the resend
+ *     email-templates.ts LaunchEmailDesignSystem contract)
+ *
  * OPTIMIZED (warning always, regardless of lane status):
  *   - critical lifecycle automations are wired: trial-expiry, payment-failure,
  *     welcome/activation.  Missing or TODO rows fire warnings.
@@ -141,6 +148,44 @@ if (!emailOpsText) {
         presentSeverity(),
         "email.sending_domain_missing",
         "EMAIL_OPS.md does not record a sending subdomain (e.g. mail.example.com). Fill in the Domain/DNS Status table before marking this lane done.",
+        emailOpsPath,
+      ),
+    );
+  }
+
+  // Sender-domain DNS proof reference: the doc must name the SPF and DKIM
+  // records the proof/email-spf-dkim-pass.* artifact attests to.
+  if (!/\bSPF\b/i.test(emailOpsText) || !/\bDKIM\b/i.test(emailOpsText)) {
+    issues.push(
+      issue(
+        presentSeverity(),
+        "email.dns_proof_reference_missing",
+        "EMAIL_OPS.md does not reference the sender-domain DNS records (SPF and DKIM). Fill the Domain/DNS Status table so the proof artifacts have a documented basis.",
+        emailOpsPath,
+      ),
+    );
+  }
+
+  // Unsubscribe handling must be documented, not implied.
+  if (!/unsubscribe/i.test(emailOpsText)) {
+    issues.push(
+      issue(
+        presentSeverity(),
+        "email.unsubscribe_handling_missing",
+        "EMAIL_OPS.md does not document unsubscribe handling. Classify every sender-map row (transactional vs lifecycle/marketing) and record how lifecycle unsubscribes are honored.",
+        emailOpsPath,
+      ),
+    );
+  }
+
+  // Brand tokens: production templates pull their design system from DESIGN.md
+  // (templates/resend/email-templates.ts LaunchEmailDesignSystem contract).
+  if (!emailOpsText.includes("DESIGN.md")) {
+    issues.push(
+      issue(
+        presentSeverity(),
+        "email.brand_tokens_missing",
+        "EMAIL_OPS.md does not record the DESIGN.md brand-token mapping. Email templates must pull colors/typography/radius/spacing from DESIGN.md (the email-templates.ts LaunchEmailDesignSystem contract) before production sends.",
         emailOpsPath,
       ),
     );

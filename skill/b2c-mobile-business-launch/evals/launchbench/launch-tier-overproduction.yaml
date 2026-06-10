@@ -1,4 +1,5 @@
 id: launch-tier-overproduction
+behavioral: true
 title: Simple utility launch buried under the full flagship artifact burden with no tier decision
 prompt: >
   The founder asks for a quick launch of a simple one-feature utility app to test a

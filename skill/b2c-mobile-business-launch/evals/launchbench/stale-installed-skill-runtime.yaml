@@ -1,4 +1,5 @@
 id: stale-installed-skill-runtime
+behavioral: true
 title: Installed runtime is behind the latest source skill
 prompt: >
   The installed b2c-mobile-business-launch skill reports version 0.1.0 in

@@ -1,4 +1,4 @@
-import { rmSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { type Harness, type MutableRecord, expectRecord, getLane, readState, writeCompleteCompoundEngineering, writeState } from "./_harness.js";
 
@@ -183,6 +183,84 @@ export function register(h: Harness): void {
     "utf8",
   );
   runFixture("ce unavailable with standalone loop in plan passes", ceFallbackWithLoop, "check-compound-engineering-routing.ts", 0);
+
+  // ── Email lane deepening (DNS reference, unsubscribe, brand tokens) ──────
+
+  function setEmailDone(root: string): void {
+    const state = readState(root);
+    const lane = getLane(state, "email");
+    lane["status"] = "done";
+    lane["evidence"] = ["EMAIL_OPS.md"];
+    writeState(root, state);
+    mkdirSync(path.join(root, "proof"), { recursive: true });
+    for (const proof of ["email-domain-verified.txt", "email-spf-dkim-pass.txt", "email-test-send-log.txt"]) {
+      writeFileSync(path.join(root, "proof", proof), "captured 2026-06-10\n", "utf8");
+    }
+    appendFileSync(
+      path.join(root, "SECRETS.md"),
+      "\n| `RESEND_API_KEY` | Resend | server_secret | local/staging/prod | backend | server-only | Doppler project/config | founder | quarterly | routed |\n",
+      "utf8",
+    );
+    // Populate the sender map / domain rows the template ships as placeholders.
+    const emailOpsPath = path.join(root, "EMAIL_OPS.md");
+    const emailOps = readFileSync(emailOpsPath, "utf8")
+      .replaceAll("<!-- e.g. hello@mail.example.com -->", "hello@mail.example.com")
+      .replaceAll("<!-- e.g. support@example.com -->", "support@example.com")
+      .replaceAll("<!-- e.g. mail.example.com -->", "mail.example.com");
+    writeFileSync(emailOpsPath, emailOps, "utf8");
+  }
+
+  const emailDoneComplete = makeFixture("email-done-complete");
+  setEmailDone(emailDoneComplete);
+  runFixture("email lane done with dns/unsubscribe/brand contract passes", emailDoneComplete, "check-email.ts", 0);
+
+  const emailDoneUnbranded = makeFixture("email-done-unbranded");
+  setEmailDone(emailDoneUnbranded);
+  {
+    const emailOpsPath = path.join(emailDoneUnbranded, "EMAIL_OPS.md");
+    writeFileSync(emailOpsPath, readFileSync(emailOpsPath, "utf8").replaceAll("DESIGN.md", "the design doc"), "utf8");
+  }
+  runFixture("email lane done without DESIGN.md brand tokens fails", emailDoneUnbranded, "check-email.ts", 1, "email.brand_tokens_missing");
+
+  const emailDoneNoDns = makeFixture("email-done-no-dns");
+  setEmailDone(emailDoneNoDns);
+  writeFileSync(
+    path.join(emailDoneNoDns, "EMAIL_OPS.md"),
+    [
+      "# Email Ops",
+      "Sender map:",
+      "| Email | From address | Template | Unsubscribe required |",
+      "| --- | --- | --- | --- |",
+      "| welcome | hello@mail.example.com | resend/email-templates.ts `welcomeEmail` | no (transactional) |",
+      "Brand tokens pulled from DESIGN.md per email-templates.ts.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture("email lane done without SPF/DKIM reference fails", emailDoneNoDns, "check-email.ts", 1, "email.dns_proof_reference_missing");
+
+  // ── Analytics event-catalog completeness ─────────────────────────────────
+
+  function setAnalyticsDone(root: string): void {
+    const state = readState(root);
+    const lane = getLane(state, "analytics_attribution");
+    lane["status"] = "done";
+    writeState(root, state);
+  }
+
+  const catalogReconciled = makeFixture("analytics-catalog-reconciled");
+  setAnalyticsDone(catalogReconciled);
+  runFixture("analytics done with reconciled event catalog passes", catalogReconciled, "check-analytics-catalog.ts", 0);
+
+  const catalogDrift = makeFixture("analytics-catalog-drift");
+  setAnalyticsDone(catalogDrift);
+  appendFileSync(path.join(catalogDrift, "growth", "VIRAL_GROWTH.md"), "\n- `invented_share_event`\n", "utf8");
+  runFixture(
+    "analytics done with an uncataloged doc event fails",
+    catalogDrift,
+    "check-analytics-catalog.ts",
+    1,
+    "analytics_catalog.invented_share_event.uncataloged",
+  );
 
   // ── Launch tier state field ───────────────────────────────────────────────
 

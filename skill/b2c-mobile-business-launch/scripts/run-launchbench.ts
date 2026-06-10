@@ -41,6 +41,7 @@ const knownValidators = new Set([
   "check-continuity-contract",
   "check-skill-version",
   "check-version-discipline",
+  "check-package-parity",
   "check-compound-engineering-routing",
   "check-aso-metadata",
   "check-localization-research",
@@ -57,9 +58,24 @@ const knownValidators = new Set([
   "check-live-provider-proof",
   "check-artifact-templates",
   "check-app-archetype",
+  "check-archetype-starter",
+  "check-reference-size",
+  "check-email",
+  "check-analytics-catalog",
+  "run-behavioral-evals",
   "run-agent-evals",
   "check-token-promotion",
   "render-launch-cockpit",
+]);
+
+// Flagship scenarios that must stay in the live behavioral subset
+// (run-behavioral-evals.ts; opted in with `behavioral: true`).
+const requiredBehavioral = new Set([
+  "stale-installed-skill-runtime",
+  "live-provider-proof-missing",
+  "post-launch-ops-runbook-missing",
+  "launch-tier-overproduction",
+  "monetization-cozy-default-stack-unexamined",
 ]);
 
 if (!existsSync(scenarioDir)) {
@@ -96,6 +112,21 @@ if (!existsSync(scenarioDir)) {
       if (!knownValidators.has(validator)) {
         issues.push(issue("error", `launchbench.${file}.validator.unknown`, `${validator} is not a known validator.`, fullPath));
       }
+    }
+
+    if (parsed.behavioral !== undefined && typeof parsed.behavioral !== "boolean") {
+      issues.push(issue("error", `launchbench.${file}.behavioral.invalid`, `${file} behavioral must be true or false when present.`, fullPath));
+    }
+    const scenarioId = asString(parsed.id);
+    if (scenarioId && requiredBehavioral.has(scenarioId) && parsed.behavioral !== true) {
+      issues.push(
+        issue(
+          "error",
+          `launchbench.${file}.behavioral.flagship_missing`,
+          `${file} is a flagship behavioral scenario and must keep behavioral: true so run-behavioral-evals executes it.`,
+          fullPath,
+        ),
+      );
     }
 
     if (asArray(parsed.must_catch).length === 0) {

@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -43,6 +43,8 @@
     "check:provider-proof": "tsx skill/b2c-mobile-business-launch/scripts/check-live-provider-proof.ts",
     "check:artifact-templates": "tsx skill/b2c-mobile-business-launch/scripts/check-artifact-templates.ts",
     "check:app-archetype": "tsx skill/b2c-mobile-business-launch/scripts/check-app-archetype.ts",
+    "check:archetype-starter": "tsx skill/b2c-mobile-business-launch/scripts/check-archetype-starter.ts",
+    "check:reference-size": "tsx skill/b2c-mobile-business-launch/scripts/check-reference-size.ts",
     "check:agent-evals": "tsx skill/b2c-mobile-business-launch/scripts/run-agent-evals.ts",
     "check:token-promotion": "tsx skill/b2c-mobile-business-launch/scripts/check-token-promotion.ts",
     "check:template-safety": "tsx skill/b2c-mobile-business-launch/scripts/check-template-safety.ts",
@@ -55,6 +57,7 @@
     "render:business-control-plane-workspace": "tsx skill/b2c-mobile-business-launch/scripts/render-business-control-plane-workspace.ts",
     "test:validators": "tsx skill/b2c-mobile-business-launch/scripts/run-validator-fixtures.ts",
     "launchbench": "tsx skill/b2c-mobile-business-launch/scripts/run-launchbench.ts",
+    "evals:behavioral": "tsx skill/b2c-mobile-business-launch/scripts/run-behavioral-evals.ts",
     "audit:ci": "tsx skill/b2c-mobile-business-launch/scripts/run-audit.ts --ci",
     "audit": "tsx skill/b2c-mobile-business-launch/scripts/run-audit.ts",
     "check:paid-tool-decisions": "tsx skill/b2c-mobile-business-launch/scripts/check-paid-tool-decisions.ts",
@@ -62,6 +65,7 @@
     "check:lane-coverage": "tsx skill/b2c-mobile-business-launch/scripts/check-lane-coverage.ts",
     "check:revenue": "tsx skill/b2c-mobile-business-launch/scripts/check-revenue.ts",
     "check:email": "tsx skill/b2c-mobile-business-launch/scripts/check-email.ts",
+    "check:analytics-catalog": "tsx skill/b2c-mobile-business-launch/scripts/check-analytics-catalog.ts",
     "check:post-launch": "tsx skill/b2c-mobile-business-launch/scripts/check-post-launch-ops.ts",
     "check:google-play": "tsx skill/b2c-mobile-business-launch/scripts/check-google-play-readiness.ts",
     "check:backend-contract": "tsx skill/b2c-mobile-business-launch/scripts/check-backend-data-contract.ts",
@@ -72,6 +76,7 @@
     "format": "prettier --write \"skill/b2c-mobile-business-launch/scripts/**/*.ts\""
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "0.104.1",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",

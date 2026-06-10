@@ -33,6 +33,8 @@ interface ShippedPack {
   requiredPrompts: string[];
   reference: string;
   eval: string;
+  /** Pack ships a runnable starter scaffold (deep checks live in check-archetype-starter). */
+  starter: boolean;
 }
 const SHIPPED_PACKS: ShippedPack[] = [
   {
@@ -40,12 +42,28 @@ const SHIPPED_PACKS: ShippedPack[] = [
     requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-feed-and-posts.md", "04-profiles-and-follow.md"],
     reference: "references/social-network-lane.md",
     eval: "evals/agent-behavior/social-network-archetype-prompt-pack.yaml",
+    starter: true,
   },
   {
     name: "ai-chat-companion",
     requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-chat-core-loop.md", "04-model-integration.md"],
     reference: "references/ai-chat-companion-lane.md",
     eval: "evals/agent-behavior/ai-chat-companion-archetype-prompt-pack.yaml",
+    starter: true,
+  },
+  {
+    name: "habit-tracker",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-habit-core-loop.md", "04-reminders-and-streaks.md"],
+    reference: "references/habit-tracker-lane.md",
+    eval: "evals/agent-behavior/habit-tracker-archetype-prompt-pack.yaml",
+    starter: true,
+  },
+  {
+    name: "photo-ai-media",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-capture-and-library.md", "04-ai-generation-pipeline.md"],
+    reference: "references/photo-ai-media-lane.md",
+    eval: "evals/agent-behavior/photo-ai-media-archetype-prompt-pack.yaml",
+    starter: true,
   },
 ];
 
@@ -173,6 +191,32 @@ for (const pack of SHIPPED_PACKS) {
         pack.eval,
       ),
     );
+  }
+  if (pack.starter) {
+    // The starter's deep contract (lockfile, RLS tests, event catalog, prompt
+    // map, template safety) is enforced by check-archetype-starter; here we
+    // only require that the starter exists and the pack README routes to it.
+    if (!existsSync(path.join(archetypesDir, pack.name, "starter", "README.md"))) {
+      issues.push(
+        issue(
+          "error",
+          `app_archetype.${pack.name}.starter_missing`,
+          `${packRel}/starter/README.md is missing. This pack ships a runnable starter scaffold; run check:archetype-starter for the full contract.`,
+          `${packRel}/starter`,
+        ),
+      );
+    }
+    const packReadmePath = path.join(archetypesDir, pack.name, "README.md");
+    if (existsSync(packReadmePath) && !readFileSync(packReadmePath, "utf8").includes("starter/")) {
+      issues.push(
+        issue(
+          "error",
+          `app_archetype.${pack.name}.starter_unrouted`,
+          `${packRel}/README.md must route to the starter/ scaffold so agents copy it instead of improvising the wiring.`,
+          `${packRel}/README.md`,
+        ),
+      );
+    }
   }
 }
 

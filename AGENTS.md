@@ -15,7 +15,7 @@ New contributor (human or agent)? Start with [`CONTRIBUTING.md`](CONTRIBUTING.md
 - `skill/b2c-mobile-business-launch/state/`: Design Room seed state, theme tokens, and JSON schema.
 - `skill/b2c-mobile-business-launch/render/`: React/Vite Design Room renderer; `scripts/render-design-room.ts` also writes the static fallback.
 - `skill/b2c-mobile-business-launch/templates/`: reusable launch artifacts copied into app repos.
-- `skill/b2c-mobile-business-launch/templates/app-archetypes/`: per-product-shape boilerplate prompt packs (e.g. `social-network`, `ai-chat-companion`), routed by their lane references and enforced by `check-app-archetype`.
+- `skill/b2c-mobile-business-launch/templates/app-archetypes/`: per-product-shape packs (`social-network`, `ai-chat-companion`, `habit-tracker`, `photo-ai-media`) — each a lane-routed prompt pack plus a runnable `starter/` scaffold, enforced by `check-app-archetype` and `check-archetype-starter`.
 - `skill/b2c-mobile-business-launch/templates/repo-agent-entrypoints/`: business-repo `AGENTS.md` and `CLAUDE.md` templates that keep future agents on the launch skill workflow.
 - `skill/b2c-mobile-business-launch/scripts/`: deterministic validators, renderers, LaunchBench harness, and source freshness tooling.
 - `skill/b2c-mobile-business-launch/evals/launchbench/`: known failure-mode scenarios.
@@ -64,6 +64,11 @@ npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --
 npm run check:post-launch -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:google-play -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:backend-contract -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:analytics-catalog -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:app-archetype -- --skill-root skill/b2c-mobile-business-launch
+npm run check:archetype-starter -- --skill-root skill/b2c-mobile-business-launch
+npm run check:reference-size -- --skill-root skill/b2c-mobile-business-launch
+npm run evals:behavioral -- --list
 npm pack --dry-run --json
 ```
 

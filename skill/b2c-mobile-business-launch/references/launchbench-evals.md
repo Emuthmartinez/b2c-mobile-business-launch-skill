@@ -69,7 +69,18 @@ npm run launchbench
 npm run test:validators
 ```
 
-Be precise about what executes: `npm run launchbench` is a scenario **definition lint** plus the deterministic validator-fixture suite. It checks that every scenario YAML has the required fields and references known validators, then runs positive/negative fixtures against the validators themselves. **Scenario `prompt`s are never executed against a live agent by this harness**, and `run-agent-evals.ts` likewise validates eval definitions only. Do not describe LaunchBench output as behavioral coverage. For live agent behavior, use these scenarios as prompts for a fresh agent or subagent and compare the answer to `must_catch` and `should_say`.
+Be precise about what executes: `npm run launchbench` is a scenario **definition lint** plus the deterministic validator-fixture suite. It checks that every scenario YAML has the required fields and references known validators, then runs positive/negative fixtures against the validators themselves. **Scenario `prompt`s are never executed against a live agent by this harness**, and `run-agent-evals.ts` likewise validates eval definitions only. Do not describe LaunchBench output as behavioral coverage. For live agent behavior, use the Behavioral Eval Harness below (or run a scenario prompt against a fresh agent manually and compare to `must_catch`/`should_say`).
+
+## Behavioral Eval Harness (manual, not PR-gating)
+
+`npm run evals:behavioral` (`scripts/run-behavioral-evals.ts`) is the execution layer the definition lint deliberately lacks. It runs the **opt-in flagship subset** — scenarios carrying `behavioral: true` in `evals/launchbench/*.yaml` or `evals/agent-behavior/*.yaml` — against a live Claude agent primed with `SKILL.md`, grades every `must_catch` / `should_say` / `must_use` / `forbidden` assertion with a structured-output grader call, and writes a JSON results artifact (agent model, grader model, per-assertion verdicts with quoted evidence). `must_catch`/`must_use`/`forbidden` failures are hard (nonzero exit); `should_say` misses are soft.
+
+The honest split, on purpose:
+
+- **Deterministic gate (PR-blocking):** `npm run audit:ci`, including the launchbench definition lint and validator fixtures. No model in the loop; reproducible; cheap.
+- **Behavioral runs (manual, advisory):** the `behavioral-evals` GitHub Actions workflow (`workflow_dispatch`, `ANTHROPIC_API_KEY` repo secret) or a local run. Live model calls cost money and carry variance/flake, so they never gate PRs; results are an artifact a human reviews, and regressions become validator/scenario tightening, not a red X on someone's unrelated PR.
+
+The flagship set (enforced by the launchbench lint — these must keep `behavioral: true`): `stale-installed-skill-runtime`, `live-provider-proof-missing` (the provider-proof-before-ready behavior; its agent-behavior twin is also opted in), `post-launch-ops-runbook-missing`, `launch-tier-overproduction`, `monetization-cozy-default-stack-unexamined`. Current model ids come from the `claude-api` skill (default `claude-opus-4-8` as of 2026-06-10) — never hardcode date-suffixed ids. Only the deterministic surfaces (`--list`, the missing-credential gate) are covered by validator fixtures; the live path is exercised by the workflow itself.
 
 ## Validator Phrase Contracts
 

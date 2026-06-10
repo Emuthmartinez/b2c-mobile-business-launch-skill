@@ -4,10 +4,12 @@ prompt: "Add analytics to the new first-use coach flow. The coach shows three st
 expected_guardrail: "Any proposed event name not already present in the onboarding-conversion.md approved catalog must be cross-referenced against ANALYTICS.md before being proposed or added to implementation code. New names require an explicit ANALYTICS.md entry first."
 validators:
   - "validate-project-state"
+  - "check-analytics-catalog"
 must_catch:
   - "proposed event names must exist in ANALYTICS.md before appearing in implementation docs or code"
   - "do not invent coach or tutorial event names without first checking ANALYTICS.md"
   - "if no equivalent event exists in ANALYTICS.md, add it there explicitly before referencing it elsewhere"
+  - "check-analytics-catalog reconciles events named in ONBOARDING.md/EMOTIONAL_DESIGN.md/VIRAL_GROWTH.md against the ANALYTICS.md catalog — warning while the analytics lane is partial, error at done"
 should_say:
   - "Check ANALYTICS.md for an existing equivalent before proposing new event names."
   - "Add the candidate event to ANALYTICS.md explicitly, then reference it in implementation."

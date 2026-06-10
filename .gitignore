@@ -5,3 +5,5 @@ node_modules/
 .venv/
 dist/
 build/
+behavioral-results/
+skill/b2c-mobile-business-launch/evals/behavioral-results/
