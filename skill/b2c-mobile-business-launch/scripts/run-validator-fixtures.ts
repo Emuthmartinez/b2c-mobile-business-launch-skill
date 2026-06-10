@@ -16,6 +16,7 @@ import { register as registerStore } from "./fixtures/store.fixtures.js";
 import { register as registerDesign } from "./fixtures/design.fixtures.js";
 import { register as registerGrowth } from "./fixtures/growth.fixtures.js";
 import { register as registerEngineering } from "./fixtures/engineering.fixtures.js";
+import { register as registerLifecycle } from "./fixtures/lifecycle.fixtures.js";
 import { register as registerProbesAndGrading } from "./fixtures/probes-and-grading.fixtures.js";
 import { register as registerHooks } from "./fixtures/hooks.fixtures.js";
 
@@ -29,6 +30,7 @@ try {
   registerDesign(harness);
   registerGrowth(harness);
   registerEngineering(harness);
+  registerLifecycle(harness);
   registerProbesAndGrading(harness);
   registerHooks(harness);
 } finally {

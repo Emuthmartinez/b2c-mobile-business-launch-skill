@@ -61,6 +61,9 @@ npm run check:provider-proof -- --root skill/b2c-mobile-business-launch/template
 npm run check:token-promotion -- --root skill/b2c-mobile-business-launch/templates
 npm run check:template-safety
 npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:post-launch -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:google-play -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
+npm run check:backend-contract -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm pack --dry-run --json
 ```
 

@@ -6,6 +6,34 @@ Status: partial until implementation contracts, data model, provider boundaries,
 
 For core engineering work, check Compound Engineering freshness, route through CE skills when available, and record plan, work, review, test, and proof evidence.
 
+## Data Contract
+
+The backend-agnostic contract the build must satisfy regardless of provider. See `references/backend-data-contract.md`; gate with `npm run check:backend-contract -- --root . --state PROJECT_STATE.yaml`.
+
+### Backend Selection
+
+- Route: supabase (default) | firebase | custom — record the route and the reason it fits this product; switching later is a change-cascade event, never a silent substitution.
+- Archetype prompt packs assume Supabase; when another route is selected, adapt the schema/auth prompts via the parity table in `references/backend-data-contract.md` instead of running them verbatim.
+
+### Data Model
+
+| Entity | Owner | Key relationships | PII class | Retention / deletion path |
+| --- | --- | --- | --- | --- |
+
+- Account deletion maps to a real data-layer path (soft/hard delete per entity), reconciled with `PRIVACY.md`.
+
+### Authorization Model
+
+- Enforcement: Postgres RLS policies (supabase) | Firestore security rules (firebase) | middleware authz (custom). Deny-by-default; every table/collection carries owner/read/write rules.
+- Service-role/admin keys never ship in clients; routed per `secrets/SECRETS.md`.
+- Authorization rules are tested (authenticated vs anonymous vs other-user access), with proof recorded in `PRODUCTION_READINESS.md`.
+
+### Migrations And Environments
+
+- Migration tool and history location per route; dev/staging/prod separation with Doppler-routed secrets.
+- Seed data / fixtures for tests; backup and restore posture.
+- A migration has been applied to a fresh environment as proof before the engineering lane is done.
+
 ## Experience Card Frontstage / Backstage
 
 Required when `EMOTIONAL_DESIGN.md` applies Experience Cards. For each card-carrying screen, name the frontstage (what the user sees) and the backstage (the real operation behind it). This is what makes the Perceived Effort Delay honest and the Variable Reward genuinely variable — the bright-line proof lives here and in `PRODUCTION_READINESS.md`.

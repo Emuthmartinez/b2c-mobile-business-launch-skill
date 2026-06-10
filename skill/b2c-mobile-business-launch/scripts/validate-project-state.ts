@@ -9,6 +9,7 @@ import {
   isRecord,
   isPastOrientPhase,
   issue,
+  launchTiers,
   loadProjectState,
   parseCliArgs,
   reportAndExit,
@@ -37,6 +38,20 @@ if (state) {
   const mode = asString(getPath(state, "autonomy.mode"));
   if (!mode || !autonomyModes.has(mode)) {
     issues.push(issue("error", "autonomy.mode.invalid", `autonomy.mode must be one of ${Array.from(autonomyModes).join(", ")}.`, "PROJECT_STATE.yaml"));
+  }
+
+  // Launch tier is optional (defaults to full) but must be a known value when present,
+  // so a typo cannot silently exempt lanes from coverage expectations.
+  const launchTier = asString(getPath(state, "project.launch_tier"));
+  if (launchTier !== undefined && !launchTiers.has(launchTier)) {
+    issues.push(
+      issue(
+        "error",
+        "project.launch_tier.invalid",
+        `project.launch_tier must be one of ${Array.from(launchTiers).join(", ")} when present.`,
+        "PROJECT_STATE.yaml",
+      ),
+    );
   }
 
   // Phase-gated coverage: used inside the lane loop below.

@@ -1,0 +1,148 @@
+#!/usr/bin/env node
+/**
+ * check-post-launch-ops
+ *
+ * Enforces the Post-Launch Operations contract: a launched app is a live
+ * business, and "launched" is not the end state of the launch package. When
+ * the post_launch_ops lane is claimed (partial/done) or the project reaches
+ * the post-launch phases (phase_6/phase_6b), this validator requires:
+ *   1. POST_LAUNCH_OPS.md to exist (the operating runbook).
+ *   2. The runbook to carry the operating sections: Weekly Operating Rhythm,
+ *      Crash Triage, Review Responses, Release And Hotfix Cadence,
+ *      Retention Review, Support Operations, Launch Retro.
+ *   3. done additionally requires: a named crash route (Sentry or store crash
+ *      reports), a stated review-response SLA, a retention cohort source, and
+ *      LAUNCH_RETRO.md on disk so the retro loop feeds failure cards.
+ *
+ * Launch-and-vanish — shipping the store release with no operating rhythm —
+ * is the failure this catches. See references/post-launch-operations.md.
+ *
+ * Run:
+ *   npm run check:post-launch -- --root <app-repo-root>
+ */
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
+
+const args = parseCliArgs(process.argv.slice(2));
+const loaded = loadProjectState(args);
+const issues = [...loaded.issues];
+const state = loaded.state;
+
+function includes(text: string, phrase: string): boolean {
+  return text.toLowerCase().includes(phrase.toLowerCase());
+}
+
+function includesAny(text: string, phrases: string[]): boolean {
+  return phrases.some((phrase) => includes(text, phrase));
+}
+
+// ── Scope guard ─────────────────────────────────────────────────────────────
+
+const laneStatus = state ? asString(getPath(state, "lanes.post_launch_ops.status"))?.toLowerCase() : undefined;
+const phase = state ? (asString(getPath(state, "project.phase"))?.toLowerCase() ?? "") : "";
+const postLaunchPhase = phase === "phase_6" || phase === "phase_6b";
+const laneClaimed = laneStatus === "partial" || laneStatus === "done";
+const laneDone = laneStatus === "done";
+
+if (!laneClaimed && !postLaunchPhase) {
+  // Pre-launch work: the lane sits not_started/deferred under normal
+  // lane-coverage rules until the app is live.
+  reportAndExit("Post-launch operations check", issues);
+  process.exit(0);
+}
+
+// ── Check 0: runbook exists ─────────────────────────────────────────────────
+
+const runbookCandidates = ["POST_LAUNCH_OPS.md", "post-launch/POST_LAUNCH_OPS.md"];
+const runbookPath = runbookCandidates.find((candidate) => Boolean(readText(args.root, candidate)));
+const runbook = runbookPath ? readText(args.root, runbookPath) : undefined;
+
+if (!runbook || !runbookPath) {
+  issues.push(
+    issue(
+      "error",
+      "post_launch_ops.runbook_missing",
+      "POST_LAUNCH_OPS.md is required once the project is post-launch (phase_6/phase_6b) or the post_launch_ops lane is claimed. " +
+        "A launched app with no operating runbook is the launch-and-vanish anti-pattern. " +
+        "See references/post-launch-operations.md.",
+      "POST_LAUNCH_OPS.md",
+    ),
+  );
+  reportAndExit("Post-launch operations check", issues);
+  process.exit();
+}
+
+// ── Check 1: operating sections present ─────────────────────────────────────
+
+const requiredSections = [
+  "Weekly Operating Rhythm",
+  "Crash Triage",
+  "Review Responses",
+  "Release And Hotfix Cadence",
+  "Retention Review",
+  "Support Operations",
+  "Launch Retro",
+];
+
+for (const section of requiredSections) {
+  if (!includes(runbook, section)) {
+    issues.push(
+      issue(
+        laneDone ? "error" : "warning",
+        `post_launch_ops.section_missing.${section.toLowerCase().replaceAll(" ", "_")}`,
+        `${runbookPath} is missing the "${section}" section. The operating runbook must cover the full weekly rhythm, not a subset.`,
+        runbookPath,
+      ),
+    );
+  }
+}
+
+// ── Check 2: done-status proof floor ────────────────────────────────────────
+
+if (laneDone) {
+  if (!includesAny(runbook, ["sentry", "store crash reports", "crash reports in app store connect", "play console vitals"])) {
+    issues.push(
+      issue(
+        "error",
+        "post_launch_ops.crash_route_missing",
+        `${runbookPath} names no crash route. Record Sentry (or store crash reports as the fallback) with alert routing before the lane is done.`,
+        runbookPath,
+      ),
+    );
+  }
+  if (!includes(runbook, "sla")) {
+    issues.push(
+      issue(
+        "error",
+        "post_launch_ops.review_sla_missing",
+        `${runbookPath} states no review-response SLA. Record how fast reviews get replies so reputation work is a contract, not a mood.`,
+        runbookPath,
+      ),
+    );
+  }
+  if (!includes(runbook, "cohort")) {
+    issues.push(
+      issue(
+        "error",
+        "post_launch_ops.retention_source_missing",
+        `${runbookPath} names no retention cohort source. Record the D0/D7/D30 cohort source (PostHog plus RevenueCat renewals) before the lane is done.`,
+        runbookPath,
+      ),
+    );
+  }
+  const retroExists = ["LAUNCH_RETRO.md", "post-launch/LAUNCH_RETRO.md"].some((candidate) => existsSync(path.join(args.root, candidate)));
+  if (!retroExists) {
+    issues.push(
+      issue(
+        "error",
+        "post_launch_ops.launch_retro_missing",
+        "LAUNCH_RETRO.md is required before post_launch_ops is done. The retro is how this launch's misses become failure cards " +
+          "and LaunchBench scenarios instead of oral lore.",
+        "LAUNCH_RETRO.md",
+      ),
+    );
+  }
+}
+
+reportAndExit("Post-launch operations check", issues);

@@ -49,6 +49,7 @@ export const phaseOrder: string[] = [
   "phase_5b",
   "phase_5c",
   "phase_6",
+  "phase_6b",
 ];
 
 /** Index in phaseOrder at which the orient/scaffold window ends. */
@@ -69,6 +70,14 @@ export function isPastOrientPhase(phase: string): boolean {
 }
 
 export const autonomyModes = new Set(["scout", "draft", "prepare", "apply", "mutate", "ship"]);
+
+/**
+ * Launch tiers scope the artifact burden to the product (launch-phases.md
+ * "Launch Tiers"). "full" runs every lane; "lite" defers the named optional
+ * lanes with dated reasons through the normal deferral mechanics — the tier
+ * never silently disables a validator.
+ */
+export const launchTiers = new Set(["full", "lite"]);
 
 export const requiredLanes = [
   "paid_tool_routing",
@@ -92,6 +101,7 @@ export const requiredLanes = [
   "orchestration",
   "engineering",
   "growth",
+  "post_launch_ops",
 ];
 
 const ignoredDirs = new Set([".git", "node_modules", ".next", "dist", "build", "DerivedData", ".expo", ".turbo", "coverage"]);

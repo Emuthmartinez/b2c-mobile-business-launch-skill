@@ -105,6 +105,9 @@ npm run check:11-star -- --root /path/to/app
 npm run check:emotional-design -- --root /path/to/app
 npm run check:viral-growth -- --root /path/to/app
 npm run check:paid-ua -- --root /path/to/app
+npm run check:post-launch -- --root /path/to/app
+npm run check:google-play -- --root /path/to/app
+npm run check:backend-contract -- --root /path/to/app
 npm run check:agent-entrypoints
 npm run check:workflow-adherence
 npm run check:continuity-contract

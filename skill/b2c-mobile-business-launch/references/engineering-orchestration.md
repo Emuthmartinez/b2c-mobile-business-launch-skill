@@ -9,6 +9,7 @@ The goal is to turn the launch package into shippable software without losing st
 ## Contents
 
 - 1. Compound Engineering Routing
+- 1b. Standalone Engineering Loop (CE Unavailable)
 - 2. Autonomy And Project State
 - 3. 11-Star Experience And Product Brainstorm Checkpoint
 - 4. Agent Entrypoints
@@ -37,7 +38,21 @@ Use Compound Engineering skills for non-trivial engineering-heavy work when avai
 
 Do not route tiny doc-only edits or one-file copy changes through the full pipeline. Use Compound Engineering where the app build is multi-step, cross-surface, or production-sensitive. For core engineering work, record the route in `PROJECT_STATE.yaml` `compound_engineering`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, and `PRODUCTION_READINESS.md`.
 
-If Compound Engineering skills are unavailable in the current runtime, do not silently skip them. Record the unavailable route and equivalent fallback in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`, then keep the engineering lane partial until the fallback has comparable plan, work, review, and proof.
+If Compound Engineering skills are unavailable in the current runtime, do not silently skip them. Record the unavailable route and equivalent fallback in `ORCHESTRATION.md`, `PROJECT_STATE.yaml`, and `ENGINEERING_PLAN.md`, then run the Standalone Engineering Loop below — a fallback reason alone is documentation, not a path. `check:compound-engineering` errors when CE is unavailable and `ENGINEERING_PLAN.md` does not record the loop.
+
+## 1b. Standalone Engineering Loop (CE Unavailable)
+
+The Standalone Engineering Loop is the in-skill engineering path when `compound_engineering.availability` is `unavailable` or the route is `ce_fallback`. It works in any runtime — clone, CI, cloud session, or a machine without the CE plugin — and holds the same evidence bar as the CE pipeline. Record `Standalone Engineering Loop` in `ENGINEERING_PLAN.md` together with the `fallback_reason` in `PROJECT_STATE.yaml`.
+
+The five stages, each with a CE-equivalent artifact:
+
+1. **Plan** (replaces `ce-plan`): write `ENGINEERING_PLAN.md` to the full §6 contract — requirements trace, implementation units with repo-relative paths, orchestration strategy, secret/flag/migration impacts, and test scenarios. If product shape is still ambiguous, resolve it with founder questions or an explicit assumptions block (replaces `ce-brainstorm`) before planning.
+2. **Bounded slices** (replaces `ce-work`): execute one implementation unit at a time against the plan; never let a slice grow past its named files without updating `ORCHESTRATION.md`. Use worktrees or subagent file-ownership lanes per `parallel-agent-orchestration.md` when isolation helps (replaces `ce-worktree`).
+3. **Adversarial review** (replaces `ce-code-review`): review each slice against the plan's requirements with a separate pass — a different agent, subagent, or at minimum a fresh session that reads the diff against `ENGINEERING_PLAN.md` and `TECH_SPEC.md` contracts. The producer of a slice is not its only reviewer.
+4. **Test** (replaces `ce-test-browser`/`ce-test-xcode`): run the plan's test scenarios — happy path, edge, error, integration — plus the device/simulator routes from §8 when mobile journeys are in scope.
+5. **Proof** (replaces `ce-proof`/`ce-demo-reel`): produce inspectable evidence — screenshots, run logs, validator output, backend records — and attach it to `PRODUCTION_READINESS.md` exactly as the CE route would.
+
+Do not downgrade the bar because CE is missing: the engineering lane stays `partial` until all five stages have evidence, and §7 production-readiness gates apply unchanged.
 
 ## 2. Autonomy And Project State
 
