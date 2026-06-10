@@ -21,7 +21,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { issue, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { flagString, issue, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const defaultSkillRoot = path.resolve(scriptDir, "..");
@@ -150,7 +150,9 @@ for (const pack of SHIPPED_PACKS) {
     issues.push(issue("error", `app_archetype.${pack.name}.pack_missing`, `Shipped pack ${packRel} is missing.`, packRel));
   }
   if (!existsSync(path.join(args.skillRoot, pack.reference))) {
-    issues.push(issue("error", `app_archetype.${pack.name}.reference_missing`, `${pack.reference} must exist for the shipped ${pack.name} lane.`, pack.reference));
+    issues.push(
+      issue("error", `app_archetype.${pack.name}.reference_missing`, `${pack.reference} must exist for the shipped ${pack.name} lane.`, pack.reference),
+    );
   }
   if (skillText !== undefined && !skillText.includes(pack.reference)) {
     issues.push(
@@ -181,17 +183,9 @@ interface Args {
 }
 
 function parseArgs(argv: string[]): Args {
-  let skillRoot = defaultSkillRoot;
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    // Only --skill-root is authoritative; ignore a stray --root from the fixture harness.
-    if (token === "--skill-root" && value) {
-      skillRoot = path.resolve(expandHome(value));
-      index += 1;
-    }
-  }
-  return { skillRoot };
+  // Only --skill-root is authoritative; ignore a stray --root from the fixture harness.
+  const flags = parseFlags(argv, [{ flags: ["--skill-root"], key: "skillRoot" }]);
+  return { skillRoot: flagString(flags, "skillRoot") ?? defaultSkillRoot };
 }
 
 function collectMarkdown(root: string): string[] {
@@ -211,14 +205,4 @@ function collectMarkdown(root: string): string[] {
   }
   visit(root);
   return files.sort();
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
 }

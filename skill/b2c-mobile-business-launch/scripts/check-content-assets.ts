@@ -31,7 +31,9 @@ function includes(text: string, phrase: string): boolean {
 }
 
 function hasFallbackApproval(text: string): boolean {
-  return /\b(founder approval|founder-approved|approved fallback|fallback approved|blocked waiting for access|stop for founder approval|requires founder approval)\b/i.test(text);
+  return /\b(founder approval|founder-approved|approved fallback|fallback approved|blocked waiting for access|stop for founder approval|requires founder approval)\b/i.test(
+    text,
+  );
 }
 
 function hasLicenseStatus(text: string): boolean {
@@ -65,7 +67,9 @@ function requireStringField(asset: Record<string, unknown>, field: string, index
 }
 
 function requireArrayField(asset: Record<string, unknown>, field: string, index: number, file: string): void {
-  const values = asArray(asset[field]).map(asString).filter((item): item is string => Boolean(item?.trim()));
+  const values = asArray(asset[field])
+    .map(asString)
+    .filter((item): item is string => Boolean(item?.trim()));
   if (values.length === 0) {
     issues.push(issue("error", `content_assets.manifest.assets.${index}.${field}.missing`, `Manifest asset ${index} must include non-empty ${field}.`, file));
   }
@@ -76,7 +80,9 @@ function maybeRequireDoneOutputs(asset: Record<string, unknown>, index: number, 
   if (!status || !["done", "ready", "production", "approved"].includes(status)) {
     return;
   }
-  for (const output of asArray(asset.outputs).map(asString).filter((item): item is string => Boolean(item?.trim()))) {
+  for (const output of asArray(asset.outputs)
+    .map(asString)
+    .filter((item): item is string => Boolean(item?.trim()))) {
     if (/^[a-z]+:/i.test(output) || output.startsWith("#")) {
       continue;
     }
@@ -157,12 +163,21 @@ if (markdown) {
   }
 
   if (/\b(TODO|TBD|unknown|placeholder)\b/i.test(markdown.text) && /\b(status:\s*done|launch-ready|complete|production-ready)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "content_assets.placeholder_complete", "CONTENT_ASSETS.md cannot claim done/complete while placeholder language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "content_assets.placeholder_complete",
+        "CONTENT_ASSETS.md cannot claim done/complete while placeholder language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 
 if (!skip && !htmlPath) {
-  issues.push(issue("warning", "content_assets.html_missing", "content-assets.html should render the media route and output proof board.", "content-assets.html"));
+  issues.push(
+    issue("warning", "content_assets.html_missing", "content-assets.html should render the media route and output proof board.", "content-assets.html"),
+  );
 }
 
 if (!skip && !manifestText) {
@@ -183,7 +198,9 @@ if (manifestText) {
     issues.push(issue("error", "content_assets.manifest.assets.invalid", "manifest.assets must be an array.", manifestText.relativePath));
   }
   if (assets.length === 0 && contentStatus === "done") {
-    issues.push(issue("error", "content_assets.manifest.assets.empty_done", "content asset lane is done but manifest contains no assets.", manifestText.relativePath));
+    issues.push(
+      issue("error", "content_assets.manifest.assets.empty_done", "content asset lane is done but manifest contains no assets.", manifestText.relativePath),
+    );
   }
 
   for (const [index, asset] of assets.entries()) {

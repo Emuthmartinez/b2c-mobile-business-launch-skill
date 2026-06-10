@@ -15,7 +15,7 @@ function escapeHtml(value: unknown): string {
 
 function list(items: unknown[]): string {
   if (items.length === 0) {
-    return "<span class=\"muted\">None recorded</span>";
+    return '<span class="muted">None recorded</span>';
   }
   return `<ul>${items.map((item) => `<li>${escapeHtml(typeof item === "string" ? item : JSON.stringify(item))}</li>`).join("")}</ul>`;
 }
@@ -37,7 +37,7 @@ if (!loaded.state) {
 
   const laneRows = Object.entries(lanes)
     .map(([name, value]) => {
-      const status = isRecord(value) ? asString(value.status) ?? "unknown" : "unknown";
+      const status = isRecord(value) ? (asString(value.status) ?? "unknown") : "unknown";
       const evidence = isRecord(value) ? asArray(value.evidence) : [];
       const blockers = isRecord(value) ? asArray(value.blockers) : [];
       return `<tr><td>${escapeHtml(name)}</td><td><span class="status ${escapeHtml(status)}">${escapeHtml(status)}</span></td><td>${list(evidence)}</td><td>${list(blockers)}</td></tr>`;
@@ -143,11 +143,11 @@ if (!loaded.state) {
     </section>
     <section>
       <h2>Active Failure Cards</h2>
-      <div class="grid">${cardMarkup || "<p class=\"muted\">None recorded</p>"}</div>
+      <div class="grid">${cardMarkup || '<p class="muted">None recorded</p>'}</div>
     </section>
     <section>
       <h2>Proof</h2>
-      <div class="grid">${commandMarkup || "<p class=\"muted\">No proof commands recorded yet</p>"}</div>
+      <div class="grid">${commandMarkup || '<p class="muted">No proof commands recorded yet</p>'}</div>
     </section>
   </main>
 </body>

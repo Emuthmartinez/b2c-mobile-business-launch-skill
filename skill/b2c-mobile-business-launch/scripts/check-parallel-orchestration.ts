@@ -9,6 +9,7 @@ import {
   isRecord,
   issue,
   loadProjectState,
+  normalizedStringArray,
   parseCliArgs,
   readText,
   reportAndExit,
@@ -47,13 +48,6 @@ function requiresParallelSafety(strategy: string | undefined, spawnedAgents: unk
   return strategy === "parallel_subagents" || strategy === "worktrees" || strategy === "hybrid" || spawnedAgents.length > 0;
 }
 
-function normalizedStringArray(value: unknown): string[] {
-  return asArray(value)
-    .map((item) => asString(item))
-    .filter((item): item is string => Boolean(item?.trim()))
-    .map((item) => item.trim());
-}
-
 function unitId(unit: Record<string, unknown>, index: number): string {
   return asString(unit.id)?.trim() || `unit-${index}`;
 }
@@ -76,7 +70,14 @@ if (!skip && !markdown) {
 }
 
 if (!skip && !htmlPath) {
-  issues.push(issue("warning", "orchestration.html_missing", "orchestration.html should render the parallel-agent board when orchestration is in scope.", "orchestration.html"));
+  issues.push(
+    issue(
+      "warning",
+      "orchestration.html_missing",
+      "orchestration.html should render the parallel-agent board when orchestration is in scope.",
+      "orchestration.html",
+    ),
+  );
 }
 
 if (markdown) {
@@ -100,7 +101,11 @@ if (markdown) {
     }
   }
 
-  if (/\b(?:subagent|subagents|worker|workers|specialist|specialists)\b[^\n.]{0,160}\b(?:can|may|should|will)\s+(?:stage|commit|push|merge)\b/i.test(markdown.text)) {
+  if (
+    /\b(?:subagent|subagents|worker|workers|specialist|specialists)\b[^\n.]{0,160}\b(?:can|may|should|will)\s+(?:stage|commit|push|merge)\b/i.test(
+      markdown.text,
+    )
+  ) {
     issues.push(
       issue(
         "error",
@@ -124,14 +129,25 @@ if (markdown) {
 
   const mentionsParallel = /\b(parallel|subagent|worker|worktree)\b/i.test(markdown.text);
   if (mentionsParallel && !/\bdo not\b[\s\S]{0,160}\bstage\b/i.test(markdown.text)) {
-    issues.push(issue("error", "orchestration.no_stage_instruction_missing", "Subagent instructions should explicitly say not to stage files.", markdown.relativePath));
+    issues.push(
+      issue("error", "orchestration.no_stage_instruction_missing", "Subagent instructions should explicitly say not to stage files.", markdown.relativePath),
+    );
   }
   if (mentionsParallel && !/\bdo not\b[\s\S]{0,160}\bcommit\b/i.test(markdown.text)) {
-    issues.push(issue("error", "orchestration.no_commit_instruction_missing", "Subagent instructions should explicitly say not to commit.", markdown.relativePath));
+    issues.push(
+      issue("error", "orchestration.no_commit_instruction_missing", "Subagent instructions should explicitly say not to commit.", markdown.relativePath),
+    );
   }
 
   if (/\b(TODO|TBD|unknown|placeholder)\b/i.test(markdown.text) && /\b(status:\s*done|launch-ready|complete|production-ready)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "orchestration.placeholder_complete", "ORCHESTRATION.md cannot claim done/complete while placeholder language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "orchestration.placeholder_complete",
+        "ORCHESTRATION.md cannot claim done/complete while placeholder language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 
@@ -152,7 +168,14 @@ if (state && !skip) {
       );
     }
 
-    for (const field of ["preflight_done", "manager_pattern", "file_overlap_checked", "actual_file_collision_check", "agent_outputs_reviewed", "state_reconciled"]) {
+    for (const field of [
+      "preflight_done",
+      "manager_pattern",
+      "file_overlap_checked",
+      "actual_file_collision_check",
+      "agent_outputs_reviewed",
+      "state_reconciled",
+    ]) {
       if (asBoolean(orchestration[field]) === undefined) {
         issues.push(issue("error", `orchestration.${field}.missing_boolean`, `orchestration.${field} must be true or false.`, "PROJECT_STATE.yaml"));
       }
@@ -180,7 +203,9 @@ if (state && !skip) {
     }
 
     if (requiresParallelSafety(strategy, spawnedAgents) && asBoolean(orchestration.file_overlap_checked) !== true) {
-      issues.push(issue("error", "orchestration.file_overlap_unchecked", "Parallel or spawned-agent work requires file_overlap_checked: true.", "PROJECT_STATE.yaml"));
+      issues.push(
+        issue("error", "orchestration.file_overlap_unchecked", "Parallel or spawned-agent work requires file_overlap_checked: true.", "PROJECT_STATE.yaml"),
+      );
     }
 
     if (spawnedAgents.length > 0 && strategy === "inline") {
@@ -196,7 +221,9 @@ if (state && !skip) {
       const id = unitId(unit, index);
       for (const field of ["role", "objective", "mode", "status"]) {
         if (!asString(unit[field])?.trim()) {
-          issues.push(issue("error", `orchestration.candidate_units.${index}.${field}.missing`, `Candidate unit ${id} must include ${field}.`, "PROJECT_STATE.yaml"));
+          issues.push(
+            issue("error", `orchestration.candidate_units.${index}.${field}.missing`, `Candidate unit ${id} must include ${field}.`, "PROJECT_STATE.yaml"),
+          );
         }
       }
       const files = normalizedStringArray(unit.files);
@@ -241,7 +268,9 @@ if (state && !skip) {
       }
       for (const field of ["id", "role", "objective", "mode", "status"]) {
         if (!asString(agent[field])?.trim()) {
-          issues.push(issue("error", `orchestration.spawned_agents.${index}.${field}.missing`, `Spawned agent ${index} must include ${field}.`, "PROJECT_STATE.yaml"));
+          issues.push(
+            issue("error", `orchestration.spawned_agents.${index}.${field}.missing`, `Spawned agent ${index} must include ${field}.`, "PROJECT_STATE.yaml"),
+          );
         }
       }
       const forbidden = normalizedStringArray(agent.forbidden_actions).join(" ").toLowerCase();
@@ -269,13 +298,24 @@ if (state && !skip) {
 
     const doneOrReady = orchestrationLaneStatus === "done" || engineeringLaneStatus === "done";
     if (doneOrReady && asBoolean(orchestration.preflight_done) !== true) {
-      issues.push(issue("error", "orchestration.done_without_preflight", "Done engineering/orchestration lanes require preflight_done: true.", "PROJECT_STATE.yaml"));
+      issues.push(
+        issue("error", "orchestration.done_without_preflight", "Done engineering/orchestration lanes require preflight_done: true.", "PROJECT_STATE.yaml"),
+      );
     }
     if (doneOrReady && asBoolean(orchestration.state_reconciled) !== true) {
-      issues.push(issue("error", "orchestration.done_without_state_reconciled", "Done engineering/orchestration lanes require state_reconciled: true.", "PROJECT_STATE.yaml"));
+      issues.push(
+        issue(
+          "error",
+          "orchestration.done_without_state_reconciled",
+          "Done engineering/orchestration lanes require state_reconciled: true.",
+          "PROJECT_STATE.yaml",
+        ),
+      );
     }
     if (doneOrReady && spawnedAgents.length > 0 && asBoolean(orchestration.agent_outputs_reviewed) !== true) {
-      issues.push(issue("error", "orchestration.done_without_agent_review", "Spawned-agent outputs must be reviewed before done/readiness claims.", "PROJECT_STATE.yaml"));
+      issues.push(
+        issue("error", "orchestration.done_without_agent_review", "Spawned-agent outputs must be reviewed before done/readiness claims.", "PROJECT_STATE.yaml"),
+      );
     }
     if (doneOrReady && requiresParallelSafety(strategy, spawnedAgents) && asBoolean(orchestration.actual_file_collision_check) !== true) {
       issues.push(

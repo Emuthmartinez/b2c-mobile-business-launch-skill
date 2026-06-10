@@ -1,17 +1,7 @@
 #!/usr/bin/env node
 import { existsSync } from "node:fs";
 import path from "node:path";
-import {
-  asArray,
-  asString,
-  getPath,
-  issue,
-  loadProjectState,
-  parseCliArgs,
-  readText,
-  reportAndExit,
-  type Issue,
-} from "./lib/launch-state.js";
+import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -21,7 +11,11 @@ const state = loaded.state;
 const readiness = firstExistingText(["PRODUCTION_READINESS.md", "engineering/PRODUCTION_READINESS.md"]);
 const screenshots = firstExistingText(["SCREENSHOTS.md", "screenshots/SCREENSHOTS.md", "app-store-listing/SCREENSHOTS.md"]);
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter(Boolean) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter(Boolean)
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const hasIos = state ? platforms.includes("ios") || platforms.includes("ipados") || Boolean(iosBundleId?.trim()) : true;
 const engineeringStatus = state ? asString(getPath(state, "lanes.engineering.status"))?.toLowerCase() : undefined;

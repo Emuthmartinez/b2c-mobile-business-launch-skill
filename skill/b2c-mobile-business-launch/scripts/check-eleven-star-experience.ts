@@ -27,15 +27,14 @@ function includesPhrase(text: string, phrase: string): boolean {
 }
 
 function codeFor(label: string): string {
-  return label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function hasStarLevel(text: string, star: number): boolean {
-  const patterns = [
-    new RegExp(`\\b${star}\\s*[- ]?star\\b`, "i"),
-    new RegExp(`\\bstars?\\s*[:#-]?\\s*${star}\\b`, "i"),
-    new RegExp(`\\|\\s*${star}\\s*\\|`),
-  ];
+  const patterns = [new RegExp(`\\b${star}\\s*[- ]?star\\b`, "i"), new RegExp(`\\bstars?\\s*[:#-]?\\s*${star}\\b`, "i"), new RegExp(`\\|\\s*${star}\\s*\\|`)];
   return patterns.some((pattern) => pattern.test(text));
 }
 
@@ -97,7 +96,14 @@ if (markdown) {
   const requiredSurfaces = ["Product", "Onboarding", "Ad", "App Store", "Engineering"];
   for (const surface of requiredSurfaces) {
     if (!includesPhrase(markdown.text, surface)) {
-      issues.push(issue("error", `eleven_star.surface_${codeFor(surface)}.missing`, `Surface Matrix should translate the experience for ${surface}.`, markdown.relativePath));
+      issues.push(
+        issue(
+          "error",
+          `eleven_star.surface_${codeFor(surface)}.missing`,
+          `Surface Matrix should translate the experience for ${surface}.`,
+          markdown.relativePath,
+        ),
+      );
     }
   }
 
@@ -120,7 +126,14 @@ if (markdown) {
   }
 
   if (experienceStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "eleven_star.placeholder_complete", "11-star experience cannot be done while TODO/TBD/unknown/placeholder/pending language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "eleven_star.placeholder_complete",
+        "11-star experience cannot be done while TODO/TBD/unknown/placeholder/pending language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 
@@ -150,12 +163,7 @@ if (experienceStatus === "done") {
     const text = existingLocalDoc(doc);
     if (text && !/\b(11_STAR_EXPERIENCE\.md|11-star|11 star|EXP-\d+)/i.test(text)) {
       issues.push(
-        issue(
-          "error",
-          `eleven_star.${codeFor(doc)}.unlinked`,
-          `${doc} exists but does not reference the 11-star experience contract or trace IDs.`,
-          doc,
-        ),
+        issue("error", `eleven_star.${codeFor(doc)}.unlinked`, `${doc} exists but does not reference the 11-star experience contract or trace IDs.`, doc),
       );
     }
   }

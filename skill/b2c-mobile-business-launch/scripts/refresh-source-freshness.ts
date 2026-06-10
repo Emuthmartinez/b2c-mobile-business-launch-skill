@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { parse as parseYaml } from "yaml";
-import { isRecord } from "./lib/launch-state.js";
+import { flagNumber, flagString, isRecord, parseFlags } from "./lib/launch-state.js";
 
 interface SourceRecord {
   id: string;
@@ -40,28 +40,16 @@ interface Args {
 }
 
 function parseArgs(argv: string[]): Args {
-  let root = process.cwd();
-  let registryPath = "references/source-registry.yaml";
-  let outDir = "docs/source-freshness";
-  let timeoutMs = 15000;
-
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if (token === "--root" && value) {
-      root = path.resolve(value);
-      index += 1;
-    } else if (token === "--registry" && value) {
-      registryPath = value;
-      index += 1;
-    } else if (token === "--out-dir" && value) {
-      outDir = value;
-      index += 1;
-    } else if (token === "--timeout-ms" && value) {
-      timeoutMs = Number(value);
-      index += 1;
-    }
-  }
+  const flags = parseFlags(argv, [
+    { flags: ["--root"], key: "root" },
+    { flags: ["--registry"], key: "registry", kind: "string" },
+    { flags: ["--out-dir"], key: "outDir", kind: "string" },
+    { flags: ["--timeout-ms"], key: "timeoutMs", kind: "number" },
+  ]);
+  const root = flagString(flags, "root") ?? process.cwd();
+  const registryPath = flagString(flags, "registry") ?? "references/source-registry.yaml";
+  const outDir = flagString(flags, "outDir") ?? "docs/source-freshness";
+  const timeoutMs = flagNumber(flags, "timeoutMs") ?? 15000;
 
   return {
     root,
@@ -244,11 +232,44 @@ const previous = previousSnapshots(snapshotPath);
 const checkedAt = new Date().toISOString();
 mkdirSync(snapshotDir, { recursive: true });
 
-const snapshots: SourceSnapshot[] = [];
-for (const source of sources) {
-  // Sequential fetches are deliberate: this job should be gentle on third-party docs sites.
-  snapshots.push(await fetchSource(source, previous.get(source.id), args.timeoutMs, checkedAt));
+// Politeness is per host, not global: sources on the same host are fetched
+// strictly in sequence, while distinct hosts go through a small concurrency
+// pool. At ~190 registered sources this turns a worst-case ~49-minute serial
+// run into a few minutes without hammering any single docs site.
+const FETCH_CONCURRENCY = 5;
+
+function hostOf(url: string): string {
+  try {
+    return new URL(url).host;
+  } catch {
+    return url;
+  }
 }
+
+const byHost = new Map<string, SourceRecord[]>();
+for (const source of sources) {
+  const host = hostOf(source.url);
+  const group = byHost.get(host) ?? [];
+  group.push(source);
+  byHost.set(host, group);
+}
+
+const snapshots: SourceSnapshot[] = [];
+const hostQueues = Array.from(byHost.values());
+let nextQueue = 0;
+const workers = Array.from({ length: Math.max(1, Math.min(FETCH_CONCURRENCY, hostQueues.length)) }, async () => {
+  while (nextQueue < hostQueues.length) {
+    const queue = hostQueues[nextQueue];
+    nextQueue += 1;
+    if (!queue) {
+      continue;
+    }
+    for (const source of queue) {
+      snapshots.push(await fetchSource(source, previous.get(source.id), args.timeoutMs, checkedAt));
+    }
+  }
+});
+await Promise.all(workers);
 
 snapshots.sort((a, b) => a.id.localeCompare(b.id));
 const payload = { generated_at: checkedAt, registry: path.relative(args.root, args.registryPath), sources: snapshots };
@@ -257,5 +278,7 @@ writeFileSync(path.join(args.outDir, "SOURCE_REFRESH_REPORT.md"), renderMarkdown
 writeFileSync(path.join(args.outDir, "source-refresh.html"), renderHtml(snapshots), "utf8");
 
 console.log("Source freshness refresh");
-console.log(`sources=${snapshots.length} changed=${snapshots.filter((item) => item.changed).length} blocked=${snapshots.filter((item) => item.status === "blocked").length}`);
+console.log(
+  `sources=${snapshots.length} changed=${snapshots.filter((item) => item.changed).length} blocked=${snapshots.filter((item) => item.status === "blocked").length}`,
+);
 console.log(`report=${path.join(args.outDir, "SOURCE_REFRESH_REPORT.md")}`);

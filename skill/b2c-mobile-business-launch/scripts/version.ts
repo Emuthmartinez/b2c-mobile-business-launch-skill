@@ -94,10 +94,7 @@ function runChecked(binary: string, commandArgs: string[], cwd: string): void {
 }
 
 function resolveTsxBin(cwd: string): string {
-  const candidates = [
-    path.join(cwd, "node_modules/.bin/tsx"),
-    path.join(path.dirname(path.dirname(cwd)), "node_modules/.bin/tsx"),
-  ];
+  const candidates = [path.join(cwd, "node_modules/.bin/tsx"), path.join(path.dirname(path.dirname(cwd)), "node_modules/.bin/tsx")];
   return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
 }
 

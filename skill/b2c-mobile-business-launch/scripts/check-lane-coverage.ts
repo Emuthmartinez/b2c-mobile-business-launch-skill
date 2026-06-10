@@ -35,12 +35,7 @@ import {
  * Calls validateReason and returns the count of new warnings pushed (0 or 1+).
  * This lets the caller keep the counts.warning ledger accurate.
  */
-function validateReasonAndCount(
-  reason: string | undefined,
-  lanePath: string,
-  context: string,
-  issues: Issue[],
-): number {
+function validateReasonAndCount(reason: string | undefined, lanePath: string, context: string, issues: Issue[]): number {
   const before = issues.length;
   validateReason(reason, lanePath, context, issues);
   // Count only warnings that were actually pushed.
@@ -81,13 +76,9 @@ if (state) {
 
     const status = asString(getPath(state, `${lanePath}.status`));
     const evidence = asArray(getPath(state, `${lanePath}.evidence`));
-    const nonEmptyEvidence = evidence.filter(
-      (item): item is string => typeof item === "string" && item.trim().length > 0,
-    );
+    const nonEmptyEvidence = evidence.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
     const blockers = asArray(getPath(state, `${lanePath}.blockers`));
-    const nonEmptyBlockers = blockers.filter(
-      (item): item is string => typeof item === "string" && item.trim().length > 0,
-    );
+    const nonEmptyBlockers = blockers.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
     const reason = asString(getPath(state, `${lanePath}.reason`));
     const hasReason = Boolean(reason?.trim());
     const hasAnyEvidence = nonEmptyEvidence.length > 0;
@@ -222,12 +213,8 @@ if (state) {
   // Ledger summary line always printed regardless of errors.
   const total = requiredLanes.length;
   const phaseLabel = currentPhase || "unknown";
-  console.log(
-    `Lane coverage ledger — phase: ${phaseLabel} | past-orient enforcement: ${pastOrient ? "ON" : "OFF"}`,
-  );
-  console.log(
-    `  ${counts.clean}/${total} clean  |  ${counts.warning} warning(s)  |  ${counts.error} error(s)  |  ${counts.missing} missing`,
-  );
+  console.log(`Lane coverage ledger — phase: ${phaseLabel} | past-orient enforcement: ${pastOrient ? "ON" : "OFF"}`);
+  console.log(`  ${counts.clean}/${total} clean  |  ${counts.warning} warning(s)  |  ${counts.error} error(s)  |  ${counts.missing} missing`);
 }
 
 reportAndExit("Lane coverage check", issues);

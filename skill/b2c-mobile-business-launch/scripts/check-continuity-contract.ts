@@ -3,6 +3,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { parse as parseYaml } from "yaml";
+import { flagString, parseFlags } from "./lib/launch-state.js";
 
 type Issue = {
   code: string;
@@ -26,31 +27,21 @@ type ContractPaths = {
 };
 
 function parseArgs(argv: string[]): Args {
-  let skillRoot = process.cwd();
-  let businessRoot: string | undefined;
-  let mode: "skill" | "business" = "skill";
+  const flags = parseFlags(argv, [
+    { flags: ["--skill-root"], key: "skillRoot", strict: true },
+    { flags: ["--root"], key: "businessRoot", strict: true },
+  ]);
+  const skillRoot = flagString(flags, "skillRoot") ?? process.cwd();
+  const businessRoot = flagString(flags, "businessRoot");
 
+  // Mode follows the last mode flag seen, mirroring the original scan: each
+  // flag consumes its value token, so a value is never itself read as a flag.
+  let mode: "skill" | "business" = "skill";
   for (let index = 0; index < argv.length; index += 1) {
-    const arg = argv[index];
-    if (arg === "--skill-root") {
-      const value = argv[index + 1];
-      if (!value) {
-        throw new Error("--skill-root requires a value");
-      }
-      skillRoot = path.resolve(value);
-      mode = "skill";
+    const token = argv[index];
+    if (token === "--skill-root" || token === "--root") {
+      mode = token === "--root" ? "business" : "skill";
       index += 1;
-      continue;
-    }
-    if (arg === "--root") {
-      const value = argv[index + 1];
-      if (!value) {
-        throw new Error("--root requires a value");
-      }
-      businessRoot = path.resolve(value);
-      mode = "business";
-      index += 1;
-      continue;
     }
   }
 
@@ -93,14 +84,7 @@ function contractPaths(args: Args): ContractPaths {
 }
 
 function specialistPromptNames(): string[] {
-  return [
-    "customer-success.md",
-    "design-guru.md",
-    "engineering-leader.md",
-    "marketing-guru.md",
-    "product-leader.md",
-    "security-architect.md",
-  ];
+  return ["customer-success.md", "design-guru.md", "engineering-leader.md", "marketing-guru.md", "product-leader.md", "security-architect.md"];
 }
 
 function readRequired(filePath: string, label: string, issues: Issue[]): string | undefined {
@@ -198,11 +182,7 @@ function validateProjectState(text: string | undefined, issues: Issue[]): Record
     });
   }
 
-  if (
-    asString(continuity.last_state_review) &&
-    continuity.last_state_review !== "not_reviewed" &&
-    continuity.git_status_reviewed !== true
-  ) {
+  if (asString(continuity.last_state_review) && continuity.last_state_review !== "not_reviewed" && continuity.git_status_reviewed !== true) {
     issues.push({
       code: "continuity.project_state_git_status_unreviewed",
       message: "continuity.git_status_reviewed must be true after a recorded state review",
@@ -219,14 +199,7 @@ function validateProjectState(text: string | undefined, issues: Issue[]): Record
   }
 
   const sourceFileSet = new Set(sourceFiles.filter((value): value is string => typeof value === "string"));
-  for (const required of [
-    "AGENTS.md",
-    "PROJECT_STATE.yaml",
-    "launch-cockpit.html",
-    "ORCHESTRATION.md",
-    "PRODUCTION_READINESS.md",
-    "FAILURE_CARDS.md",
-  ]) {
+  for (const required of ["AGENTS.md", "PROJECT_STATE.yaml", "launch-cockpit.html", "ORCHESTRATION.md", "PRODUCTION_READINESS.md", "FAILURE_CARDS.md"]) {
     if (!sourceFileSet.has(required)) {
       issues.push({
         code: "continuity.project_state_source_missing",
@@ -297,48 +270,21 @@ function main(): void {
   requireTerms(
     "CLAUDE.md",
     claude,
-    [
-      "Session Continuity",
-      "Do not rely on prior chat context",
-      "PROJECT_STATE.yaml",
-      "launch-cockpit.html",
-      "ORCHESTRATION.md",
-    ],
+    ["Session Continuity", "Do not rely on prior chat context", "PROJECT_STATE.yaml", "launch-cockpit.html", "ORCHESTRATION.md"],
     issues,
   );
 
   requireTerms(
     "APP_AGENTS.md",
     appAgents,
-    [
-      "Session Continuity",
-      "Do not rely on chat memory",
-      "role prompts",
-      "PROJECT_STATE.yaml",
-      "ORCHESTRATION.md",
-    ],
+    ["Session Continuity", "Do not rely on chat memory", "role prompts", "PROJECT_STATE.yaml", "ORCHESTRATION.md"],
     issues,
   );
 
-  requireTerms(
-    "orchestrator role prompt",
-    orchestrator,
-    [
-      "Session Continuity",
-      "git status --short",
-      "Do not rely on chat memory",
-      "state updates",
-    ],
-    issues,
-  );
+  requireTerms("orchestrator role prompt", orchestrator, ["Session Continuity", "git status --short", "Do not rely on chat memory", "state updates"], issues);
 
   for (const specialist of specialistPrompts) {
-    requireTerms(
-      specialist.label,
-      specialist.text,
-      ["Session Continuity", "Do not rely on chat memory", "drift risks", "failure cards"],
-      issues,
-    );
+    requireTerms(specialist.label, specialist.text, ["Session Continuity", "Do not rely on chat memory", "drift risks", "failure cards"], issues);
   }
 
   requireTerms(
@@ -368,9 +314,7 @@ function main(): void {
     process.exit(1);
   }
 
-  console.log(
-    `Continuity contract passed for ${args.mode === "skill" ? args.skillRoot : args.businessRoot}`,
-  );
+  console.log(`Continuity contract passed for ${args.mode === "skill" ? args.skillRoot : args.businessRoot}`);
 }
 
 main();

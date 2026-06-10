@@ -149,8 +149,7 @@ export function loadDesignState(args: DesignCliArgs): LoadedDesignState {
     issues.push(...validateCrossSurfaceState(stateResult.value, tokensResult.value, args.statePath));
   }
 
-  const stateHash =
-    stateResult.value && tokensResult.value ? hashDesignState(stateResult.value, tokensResult.value) : undefined;
+  const stateHash = stateResult.value && tokensResult.value ? hashDesignState(stateResult.value, tokensResult.value) : undefined;
 
   return {
     state: stateResult.value,
@@ -228,8 +227,12 @@ function validateCrossSurfaceState(state: unknown, tokens: unknown, filePath: st
   if (!isRecord(latestVersion)) {
     issues.push(issue("error", "design_state.version_log_missing", "designRoom.versionLog must include at least one mutation entry.", filePath));
   } else {
-    const statePaths = asArray(latestVersion.statePaths).map((entry) => asString(entry)).filter(Boolean);
-    const renderedArtifacts = asArray(latestVersion.renderedArtifacts).map((entry) => asString(entry)).filter(Boolean);
+    const statePaths = asArray(latestVersion.statePaths)
+      .map((entry) => asString(entry))
+      .filter(Boolean);
+    const renderedArtifacts = asArray(latestVersion.renderedArtifacts)
+      .map((entry) => asString(entry))
+      .filter(Boolean);
     if (!statePaths.includes("state/business.json")) {
       issues.push(issue("error", "design_state.version_log.business_missing", "Latest version entry must include state/business.json.", filePath));
     }
@@ -332,10 +335,7 @@ function getRecordPath(value: unknown, segments: string[]): Record<string, unkno
 }
 
 export function hashDesignState(state: unknown, tokens: unknown): string {
-  return createHash("sha256")
-    .update(JSON.stringify({ state, tokens }))
-    .digest("hex")
-    .slice(0, 16);
+  return createHash("sha256").update(JSON.stringify({ state, tokens })).digest("hex").slice(0, 16);
 }
 
 export function summarizeSurfaces(state: unknown): SurfaceSummary[] {

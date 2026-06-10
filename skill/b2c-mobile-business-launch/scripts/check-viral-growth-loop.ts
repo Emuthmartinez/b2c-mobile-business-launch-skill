@@ -27,7 +27,10 @@ function includes(text: string, phrase: string): boolean {
 }
 
 function codeFor(label: string): string {
-  return label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function mentionsAny(text: string, terms: string[]): boolean {
@@ -70,14 +73,7 @@ if (markdown) {
     }
   }
 
-  const requiredRefs = [
-    "ANALYTICS.md",
-    "ONBOARDING.md",
-    "REVENUE_OPS.md",
-    "UGC_PLAYBOOK.md",
-    "LAUNCH_TRACE.md",
-    "11_STAR_EXPERIENCE.md",
-  ];
+  const requiredRefs = ["ANALYTICS.md", "ONBOARDING.md", "REVENUE_OPS.md", "UGC_PLAYBOOK.md", "LAUNCH_TRACE.md", "11_STAR_EXPERIENCE.md"];
   for (const ref of requiredRefs) {
     if (!markdown.text.includes(ref)) {
       issues.push(issue("error", `viral_growth.ref_${codeFor(ref)}.missing`, `VIRAL_GROWTH.md should reference ${ref}.`, markdown.relativePath));
@@ -119,17 +115,19 @@ if (markdown) {
 
   if (!mentionsAny(markdown.text, ["PostHog", "event", "dashboard", "analytics-plan.html"])) {
     issues.push(
-      issue(
-        "error",
-        "viral_growth.analytics_link.missing",
-        "Viral growth should define event/dashboard proof, not only content ideas.",
-        markdown.relativePath,
-      ),
+      issue("error", "viral_growth.analytics_link.missing", "Viral growth should define event/dashboard proof, not only content ideas.", markdown.relativePath),
     );
   }
 
   if (growthStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "viral_growth.placeholder_complete", "Viral growth cannot be done while TODO/TBD/unknown/placeholder/pending language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "viral_growth.placeholder_complete",
+        "Viral growth cannot be done while TODO/TBD/unknown/placeholder/pending language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 

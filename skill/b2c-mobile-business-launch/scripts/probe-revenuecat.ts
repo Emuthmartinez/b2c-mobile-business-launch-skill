@@ -192,27 +192,18 @@ async function run(): Promise<void> {
           items[0]!;
         result.offering_id = defaultOffering.id ?? null;
         result.package_ids = (defaultOffering.packages ?? []).map((p) => p.id);
-        console.log(
-          `  Offering found: ${String(result.offering_id)} ` +
-            `(${(result.package_ids as string[]).length} package(s))`,
-        );
+        console.log(`  Offering found: ${String(result.offering_id)} ` + `(${(result.package_ids as string[]).length} package(s))`);
       } else {
         warnings.push("No offerings returned from /v2/projects/{project_id}/offerings.");
         console.warn("  WARNING: No offerings returned.");
       }
     } else if (offeringsResp.status === 401 || offeringsResp.status === 403) {
       warnings.push(
-        `Offerings API returned ${offeringsResp.status}. ` +
-          "Check that REVENUECAT_SECRET_API_KEY is a secret key (sk_*) with project-level read access.",
+        `Offerings API returned ${offeringsResp.status}. ` + "Check that REVENUECAT_SECRET_API_KEY is a secret key (sk_*) with project-level read access.",
       );
-      console.error(
-        `  ERROR: Offerings API returned ${offeringsResp.status}. ` +
-          "Verify REVENUECAT_SECRET_API_KEY permissions.",
-      );
+      console.error(`  ERROR: Offerings API returned ${offeringsResp.status}. ` + "Verify REVENUECAT_SECRET_API_KEY permissions.");
     } else {
-      warnings.push(
-        `Offerings API returned unexpected status ${offeringsResp.status}.`,
-      );
+      warnings.push(`Offerings API returned unexpected status ${offeringsResp.status}.`);
       console.warn(`  WARNING: Unexpected HTTP ${offeringsResp.status} from offerings endpoint.`);
     }
 
@@ -232,15 +223,10 @@ async function run(): Promise<void> {
         console.warn("  WARNING: No entitlements found. Create entitlements in RevenueCat before marking revenue done.");
       }
     } else if (entitlementsResp.status === 401 || entitlementsResp.status === 403) {
-      warnings.push(
-        `Entitlements API returned ${entitlementsResp.status}. ` +
-          "Check REVENUECAT_SECRET_API_KEY permissions.",
-      );
+      warnings.push(`Entitlements API returned ${entitlementsResp.status}. ` + "Check REVENUECAT_SECRET_API_KEY permissions.");
       console.error(`  ERROR: Entitlements API returned ${entitlementsResp.status}.`);
     } else {
-      warnings.push(
-        `Entitlements API returned unexpected status ${entitlementsResp.status}.`,
-      );
+      warnings.push(`Entitlements API returned unexpected status ${entitlementsResp.status}.`);
       console.warn(`  WARNING: Unexpected HTTP ${entitlementsResp.status} from entitlements endpoint.`);
     }
   }
@@ -275,22 +261,14 @@ async function run(): Promise<void> {
   // ---
   // 3. Summary
   // ---
-  const hasErrors =
-    !artifact.offering_resolved ||
-    !artifact.entitlements_present ||
-    warnings.some((w) => w.includes("401") || w.includes("403"));
+  const hasErrors = !artifact.offering_resolved || !artifact.entitlements_present || warnings.some((w) => w.includes("401") || w.includes("403"));
 
   if (hasErrors) {
-    console.error(
-      "\n  PROBE INCOMPLETE — one or more checks failed. " +
-        "Resolve warnings above and re-run before marking the revenue lane done.\n",
-    );
+    console.error("\n  PROBE INCOMPLETE — one or more checks failed. " + "Resolve warnings above and re-run before marking the revenue lane done.\n");
     process.exit(1);
   } else {
     console.log(
-      "\n  Probe complete. Review the artifact at " +
-        ARTIFACT_REL_PATH +
-        " and record sandbox/entitlement evidence before marking the revenue lane done.",
+      "\n  Probe complete. Review the artifact at " + ARTIFACT_REL_PATH + " and record sandbox/entitlement evidence before marking the revenue lane done.",
     );
   }
 }

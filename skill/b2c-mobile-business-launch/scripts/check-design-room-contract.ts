@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import {
-  getToken,
-  loadDesignState,
-  parseDesignCliArgs,
-  rel,
-} from "./lib/design-state.js";
+import { getToken, loadDesignState, parseDesignCliArgs, rel } from "./lib/design-state.js";
 import { collectAllFiles, issue, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const args = parseDesignCliArgs(process.argv.slice(2));
@@ -63,12 +58,21 @@ if (hasDesignState) {
   if (loaded.state && loaded.stateHash) {
     const renderPath = path.join(args.root, "design-room.html");
     if (!existsSync(renderPath)) {
-      issues.push(issue("error", "design_room.render_missing", "design-room.html must be rendered from state before design is claimed ready.", rel(args.root, renderPath)));
+      issues.push(
+        issue(
+          "error",
+          "design_room.render_missing",
+          "design-room.html must be rendered from state before design is claimed ready.",
+          rel(args.root, renderPath),
+        ),
+      );
     } else {
       const html = readFileSync(renderPath, "utf8");
       const match = html.match(/<meta name="design-state-hash" content="([^"]+)"/);
       if (!match) {
-        issues.push(issue("error", "design_room.render_hash_missing", "design-room.html must include the design-state-hash meta tag.", rel(args.root, renderPath)));
+        issues.push(
+          issue("error", "design_room.render_hash_missing", "design-room.html must include the design-state-hash meta tag.", rel(args.root, renderPath)),
+        );
       } else if (match[1] !== loaded.stateHash) {
         issues.push(
           issue(
@@ -123,12 +127,14 @@ function parseHex(value: string): [number, number, number] | undefined {
   if (!captured) {
     return undefined;
   }
-  const hex = captured.length === 3 ? captured.split("").map((char) => char + char).join("") : captured;
-  return [
-    Number.parseInt(hex.slice(0, 2), 16),
-    Number.parseInt(hex.slice(2, 4), 16),
-    Number.parseInt(hex.slice(4, 6), 16),
-  ];
+  const hex =
+    captured.length === 3
+      ? captured
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : captured;
+  return [Number.parseInt(hex.slice(0, 2), 16), Number.parseInt(hex.slice(2, 4), 16), Number.parseInt(hex.slice(4, 6), 16)];
 }
 
 function relativeLuminance([r, g, b]: [number, number, number]): number {

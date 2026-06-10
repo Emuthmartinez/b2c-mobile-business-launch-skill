@@ -28,7 +28,9 @@ const markdown = firstExistingText(["UX_PATTERNS.md", "ux-patterns/UX_PATTERNS.m
 const htmlPath = existsAny(["ux-patterns.html", "ux-patterns/ux-patterns.html", "design.html"]);
 
 if (!skip && !markdown) {
-  issues.push(issue("error", "ux_patterns.markdown_missing", "UX_PATTERNS.md is required to record Refero or approved fallback UX pattern decisions.", "UX_PATTERNS.md"));
+  issues.push(
+    issue("error", "ux_patterns.markdown_missing", "UX_PATTERNS.md is required to record Refero or approved fallback UX pattern decisions.", "UX_PATTERNS.md"),
+  );
 }
 
 if (markdown) {
@@ -45,7 +47,9 @@ if (markdown) {
   ];
   for (const phrase of requiredPhrases) {
     if (!markdown.text.toLowerCase().includes(phrase.toLowerCase())) {
-      issues.push(issue("error", `ux_patterns.${phrase.replaceAll(" ", "_").toLowerCase()}.missing`, `UX_PATTERNS.md should include ${phrase}.`, markdown.relativePath));
+      issues.push(
+        issue("error", `ux_patterns.${phrase.replaceAll(" ", "_").toLowerCase()}.missing`, `UX_PATTERNS.md should include ${phrase}.`, markdown.relativePath),
+      );
     }
   }
 
@@ -63,12 +67,26 @@ if (markdown) {
   }
 
   if (/\b(TODO|TBD|unknown|placeholder)\b/i.test(markdown.text) && /\b(status:\s*done|launch-ready|complete)\b/i.test(markdown.text)) {
-    issues.push(issue("error", "ux_patterns.placeholder_complete", "UX_PATTERNS.md cannot claim done/complete while placeholder language remains.", markdown.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "ux_patterns.placeholder_complete",
+        "UX_PATTERNS.md cannot claim done/complete while placeholder language remains.",
+        markdown.relativePath,
+      ),
+    );
   }
 }
 
 if (!skip && !htmlPath) {
-  issues.push(issue("warning", "ux_patterns.html_missing", "ux-patterns.html or design.html should render the pattern inventory, flow maps, and state matrix.", "ux-patterns.html"));
+  issues.push(
+    issue(
+      "warning",
+      "ux_patterns.html_missing",
+      "ux-patterns.html or design.html should render the pattern inventory, flow maps, and state matrix.",
+      "ux-patterns.html",
+    ),
+  );
 }
 
 reportAndExit("UX pattern packet check", issues);

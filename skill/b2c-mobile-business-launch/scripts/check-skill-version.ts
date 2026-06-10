@@ -3,7 +3,7 @@ import { existsSync, readFileSync, realpathSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { issue, isRecord, reportAndExit, type Issue } from "./lib/launch-state.js";
+import { flagString, issue, isRecord, parseFlags, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 interface VersionManifest {
   skill: string;
@@ -93,49 +93,35 @@ if (installed.manifest && latest.manifest) {
 reportAndExit("Skill version freshness check", issues);
 
 function parseArgs(argv: string[]): VersionArgs {
-  let source = process.env.B2C_SKILL_SOURCE ? path.resolve(process.env.B2C_SKILL_SOURCE) : findDefaultSource();
-  let installed = process.env.B2C_SKILL_INSTALLED ? path.resolve(process.env.B2C_SKILL_INSTALLED) : skillRoot;
-  let remoteUrl: string | undefined;
-  let sourceExplicit = Boolean(process.env.B2C_SKILL_SOURCE);
+  const flags = parseFlags(argv, [
+    { flags: ["--source", "--latest"], key: "source" },
+    { flags: ["--installed", "--runtime"], key: "installed" },
+    { flags: ["--remote-url", "--remote"], key: "remoteUrl", kind: "string" },
+    { flags: ["--root"], key: "rootFallback" },
+  ]);
 
-  for (let index = 0; index < argv.length; index += 1) {
-    const token = argv[index];
-    const value = argv[index + 1];
-    if ((token === "--source" || token === "--latest") && value) {
-      source = path.resolve(expandHome(value));
-      sourceExplicit = true;
-      index += 1;
-    } else if ((token === "--installed" || token === "--runtime") && value) {
-      installed = path.resolve(expandHome(value));
-      index += 1;
-    } else if ((token === "--remote-url" || token === "--remote") && value) {
-      remoteUrl = value;
-      index += 1;
-    } else if (token === "--root" && value && !argv.includes("--installed") && !argv.includes("--runtime")) {
-      installed = path.resolve(expandHome(value));
-      index += 1;
-    }
+  const explicitSource = flagString(flags, "source");
+  const source = explicitSource ?? (process.env.B2C_SKILL_SOURCE ? path.resolve(process.env.B2C_SKILL_SOURCE) : findDefaultSource());
+  let installed = flagString(flags, "installed") ?? (process.env.B2C_SKILL_INSTALLED ? path.resolve(process.env.B2C_SKILL_INSTALLED) : skillRoot);
+
+  // --root only acts as an installed-path fallback when neither --installed
+  // nor --runtime appears anywhere on the command line.
+  const rootFallback = flagString(flags, "rootFallback");
+  if (rootFallback !== undefined && !argv.includes("--installed") && !argv.includes("--runtime")) {
+    installed = rootFallback;
   }
 
-  return { source, installed, remoteUrl, sourceExplicit };
+  return {
+    source,
+    installed,
+    remoteUrl: flagString(flags, "remoteUrl"),
+    sourceExplicit: Boolean(process.env.B2C_SKILL_SOURCE) || explicitSource !== undefined,
+  };
 }
 
 function findDefaultSource(): string {
-  const candidates = [
-    process.env.B2C_SKILL_SOURCE,
-    skillRoot,
-  ].filter((candidate): candidate is string => Boolean(candidate));
+  const candidates = [process.env.B2C_SKILL_SOURCE, skillRoot].filter((candidate): candidate is string => Boolean(candidate));
   return candidates.find((candidate) => existsSync(path.join(candidate, "skill-version.json"))) ?? skillRoot;
-}
-
-function expandHome(value: string): string {
-  if (value === "~") {
-    return process.env.HOME ?? value;
-  }
-  if (value.startsWith("~/")) {
-    return path.join(process.env.HOME ?? "", value.slice(2));
-  }
-  return value;
 }
 
 function samePath(left: string, right: string): boolean {
@@ -218,7 +204,9 @@ function loadRemoteManifest(remoteUrl: string): { manifest?: VersionManifest; is
     const skill = parsed.skill;
     const version = parsed.version;
     if (typeof skill !== "string" || typeof version !== "string") {
-      return { issues: [issue("error", "skill_version.remote_manifest_missing_fields", "Remote skill-version.json must include skill and version.", remoteUrl)] };
+      return {
+        issues: [issue("error", "skill_version.remote_manifest_missing_fields", "Remote skill-version.json must include skill and version.", remoteUrl)],
+      };
     }
     return {
       manifest: {

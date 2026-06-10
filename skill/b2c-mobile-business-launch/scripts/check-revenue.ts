@@ -41,16 +41,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import {
-  asString,
-  getPath,
-  issue,
-  loadProjectState,
-  parseCliArgs,
-  readText,
-  reportAndExit,
-  type Issue,
-} from "./lib/launch-state.js";
+import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -74,9 +65,7 @@ const revenueOpsText = readText(args.root, revenueOpsPath);
 const providerProofText = readText(args.root, providerProofPath);
 const productionReadinessText = readText(args.root, productionReadinessPath);
 
-const revenueStatus = state
-  ? asString(getPath(state, "lanes.revenue.status"))?.toLowerCase()
-  : undefined;
+const revenueStatus = state ? asString(getPath(state, "lanes.revenue.status"))?.toLowerCase() : undefined;
 const revenueDone = revenueStatus === "done";
 const revenueSkipped = revenueStatus === "not_needed" || revenueStatus === "deferred";
 
@@ -357,14 +346,7 @@ function loadAndVerifyProofJson(proofContent: string): ProofJson | undefined {
   const probeWarnings = Array.isArray(obj.warnings) ? obj.warnings : [];
   for (const warn of probeWarnings) {
     if (typeof warn === "string" && warn.trim()) {
-      issues.push(
-        issue(
-          "warning",
-          "revenue.proof_json.probe_warning",
-          `Probe warning from revenuecat-proof.json: ${warn}`,
-          proofJsonRelPath,
-        ),
-      );
+      issues.push(issue("warning", "revenue.proof_json.probe_warning", `Probe warning from revenuecat-proof.json: ${warn}`, proofJsonRelPath));
     }
   }
 
@@ -393,7 +375,6 @@ if (!revenueSkipped) {
 // ---------------------------------------------------------------------------
 
 if (revenueDone && revenueOpsText) {
-
   // 1. currentOffering must be identified (not a template placeholder).
   const hasCurrentOffering =
     textHasPattern(revenueOpsText, /current offering\s*id\s*:/i) ||
@@ -429,10 +410,7 @@ if (revenueDone && revenueOpsText) {
 
   // 3. MISSING_METADATA check — no product may still be in MISSING_METADATA.
   if (textHasPattern(revenueOpsText, /MISSING_METADATA/)) {
-    const missingMetadataResolved = textHasPattern(
-      revenueOpsText,
-      /MISSING_METADATA.*cleared|cleared.*MISSING_METADATA|MISSING_METADATA.*yes/i,
-    );
+    const missingMetadataResolved = textHasPattern(revenueOpsText, /MISSING_METADATA.*cleared|cleared.*MISSING_METADATA|MISSING_METADATA.*yes/i);
     if (!missingMetadataResolved) {
       issues.push(
         issue(
@@ -447,12 +425,8 @@ if (revenueDone && revenueOpsText) {
 
   // 4. Product-type reconciliation — non_renewing_subscription is wrong for lifetime.
   if (textHasPattern(revenueOpsText, /non_renewing_subscription/i)) {
-    const rowsWithWrongType = revenueOpsText
-      .split(/\r?\n/)
-      .filter((line) => /non_renewing_subscription/i.test(line));
-    const appearsInDataRow = rowsWithWrongType.some(
-      (line) => !line.trim().startsWith("#") && !line.trim().startsWith("<!--"),
-    );
+    const rowsWithWrongType = revenueOpsText.split(/\r?\n/).filter((line) => /non_renewing_subscription/i.test(line));
+    const appearsInDataRow = rowsWithWrongType.some((line) => !line.trim().startsWith("#") && !line.trim().startsWith("<!--"));
     if (appearsInDataRow) {
       issues.push(
         issue(
@@ -540,10 +514,7 @@ if (revenueDone && revenueOpsText) {
       );
     }
 
-    const confirmsRelease = textHasPattern(
-      proofMdText,
-      /release build tested.*yes|release.*scheme.*release|currentoffering non-empty in release.*yes/i,
-    );
+    const confirmsRelease = textHasPattern(proofMdText, /release build tested.*yes|release.*scheme.*release|currentoffering non-empty in release.*yes/i);
     if (!confirmsRelease) {
       issues.push(
         issue(
@@ -560,9 +531,7 @@ if (revenueDone && revenueOpsText) {
   const restoreInProofMd = proofMdText
     ? textHasPattern(proofMdText, /restore.*purchase|purchase.*restore|restore.*tested|restore.*verified|restore result.*succeeded/i)
     : false;
-  const restoreInReadiness = productionReadinessText
-    ? textHasPattern(productionReadinessText, /restore.*purchase|purchase.*restore/i)
-    : false;
+  const restoreInReadiness = productionReadinessText ? textHasPattern(productionReadinessText, /restore.*purchase|purchase.*restore/i) : false;
   if (!restoreInProofMd && !restoreInReadiness) {
     issues.push(
       issue(
@@ -635,14 +604,7 @@ if (revenueDone && revenueOpsText) {
   }
 
   // 8. Check for unresolved placeholder text in REVENUE_OPS.md.
-  const placeholderPatterns = [
-    /<!--\s*fill in/i,
-    /example:\s*com\.app\./i,
-    /_example_/i,
-    /\bTODO\b/,
-    /\bTBD\b/,
-    /\bpending\b.*model/i,
-  ];
+  const placeholderPatterns = [/<!--\s*fill in/i, /example:\s*com\.app\./i, /_example_/i, /\bTODO\b/, /\bTBD\b/, /\bpending\b.*model/i];
   for (const pattern of placeholderPatterns) {
     if (textHasPattern(revenueOpsText, pattern)) {
       issues.push(
@@ -663,10 +625,8 @@ if (revenueDone && revenueOpsText) {
 // ---------------------------------------------------------------------------
 
 if (!revenueSkipped && revenueOpsText) {
-
   const hasPaWallModelDecision =
-    /model\s*:\s*(hard_paywall|freemium|reverse_trial|web_funnel)/i.test(revenueOpsText) ||
-    /paywall model\s*decision/i.test(revenueOpsText);
+    /model\s*:\s*(hard_paywall|freemium|reverse_trial|web_funnel)/i.test(revenueOpsText) || /paywall model\s*decision/i.test(revenueOpsText);
   if (!hasPaWallModelDecision) {
     issues.push(
       issue(
@@ -678,8 +638,7 @@ if (!revenueSkipped && revenueOpsText) {
     );
   }
 
-  const hasPricingDecision =
-    /trial duration\s*:/i.test(revenueOpsText) || /price.*annual\s*:/i.test(revenueOpsText);
+  const hasPricingDecision = /trial duration\s*:/i.test(revenueOpsText) || /price.*annual\s*:/i.test(revenueOpsText);
   if (!hasPricingDecision) {
     issues.push(
       issue(
@@ -721,9 +680,7 @@ if (!revenueSkipped && revenueOpsText) {
 
   if (revenueDone) {
     const hasChurnRecovery = /involuntary.churn|billing.issue|grace.period|dunning|billing.recovery/i.test(revenueOpsText);
-    const addressedInReadiness = productionReadinessText
-      ? /billing.issue|grace.period|dunning/i.test(productionReadinessText)
-      : false;
+    const addressedInReadiness = productionReadinessText ? /billing.issue|grace.period|dunning/i.test(productionReadinessText) : false;
     if (!hasChurnRecovery && !addressedInReadiness) {
       issues.push(
         issue(

@@ -193,12 +193,7 @@ async function queryEventCount(): Promise<{ count: number | "at_least_1" | "unkn
   }
 
   // HogQL result shape: { results: [[countValue]], columns: ["c"] }
-  if (
-    typeof json === "object" &&
-    json !== null &&
-    "results" in json &&
-    Array.isArray((json as Record<string, unknown>).results)
-  ) {
+  if (typeof json === "object" && json !== null && "results" in json && Array.isArray((json as Record<string, unknown>).results)) {
     const results = (json as Record<string, unknown>).results as unknown[][];
     const row = results[0];
     if (Array.isArray(row) && typeof row[0] === "number") {
@@ -308,7 +303,7 @@ async function main(): Promise<void> {
   console.log(`probe:posthog — SUCCESS: "${EVENT_NAME}" count=${countDisplay} in last ${WINDOW_DAYS} days.`);
   console.log(`  Artifact written to: ${ARTIFACT_REL}`);
 
-  if ((typeof count === "number" && count === 0)) {
+  if (typeof count === "number" && count === 0) {
     console.warn("");
     console.warn(`probe:posthog — WARNING: event count is 0 in the last ${WINDOW_DAYS} days.`);
     console.warn("  Attribution events have not arrived yet. Keep the analytics_attribution lane");

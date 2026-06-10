@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill-runtime",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -52,7 +52,7 @@
     "render:business-control-plane-workspace": "tsx scripts/render-business-control-plane-workspace.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
-    "audit": "npm exec tsc -- --noEmit && npm run validate:skill && npm run audit:links && npm run check:source-registry && npm run check:agent-entrypoints && npm run check:workflow-adherence && npm run check:continuity-contract && npm run check:autopilot && npm run check:skill-version -- --source . --installed . && npm run check:version-discipline -- --skill-root . && npm run check:artifact-templates -- --skill-root . && npm run check:app-archetype -- --skill-root . && npm run check:agent-evals && npm run launchbench && npm run validate:launch-state -- --root templates --state PROJECT_STATE.yaml && npm run validate:design-state -- --root templates && npm run check:design-room -- --root templates && npm run check:control-plane -- --root templates && npm run check:business-control-plane-workspace && npm run check:token-promotion -- --root templates && npm run check:template-safety && npm run check:provider-proof -- --root templates --state PROJECT_STATE.yaml && npm run check:compound-engineering -- --root templates --state PROJECT_STATE.yaml && npm run check:ux-patterns -- --root templates --state PROJECT_STATE.yaml && npm run check:onboarding -- --root templates --state PROJECT_STATE.yaml && npm run check:11-star -- --root templates --state PROJECT_STATE.yaml && npm run check:security -- --root templates --state PROJECT_STATE.yaml && npm run check:content-assets -- --root templates --state PROJECT_STATE.yaml && npm run check:viral-growth -- --root templates --state PROJECT_STATE.yaml && npm run check:launch-narrative -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-ua -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-signing -- --root templates --state PROJECT_STATE.yaml && npm run check:apple-requirements -- --root templates --state PROJECT_STATE.yaml && npm run check:store-console -- --root templates --state PROJECT_STATE.yaml && npm run check:store-screenshots -- --root templates --state PROJECT_STATE.yaml && npm run check:orchestration -- --root templates --state PROJECT_STATE.yaml && npm run check:emotional-design -- --root templates --state PROJECT_STATE.yaml && npm run check:attribution -- --root templates --state PROJECT_STATE.yaml && npm run check:secrets -- --root templates --state PROJECT_STATE.yaml && npm run check:aso-metadata -- --root templates --state PROJECT_STATE.yaml && npm run check:localization-research -- --root templates --state PROJECT_STATE.yaml && npm run check:paid-tool-decisions -- --root templates --state PROJECT_STATE.yaml && npm run check:lane-coverage -- --root templates --state PROJECT_STATE.yaml && npm run check:revenue -- --root templates --state PROJECT_STATE.yaml && npm run check:email -- --root templates --state PROJECT_STATE.yaml && npm run render:launch-cockpit -- --root templates --state PROJECT_STATE.yaml --out /tmp/b2c-launch-cockpit.html && npm run render:design-room -- --root templates --out /tmp/b2c-design-room.html --static-only",
+    "audit": "tsx scripts/run-audit.ts",
     "check:aso-metadata": "tsx scripts/check-aso-metadata.ts",
     "check:localization-research": "tsx scripts/check-localization-research.ts",
     "check:emotional-design": "tsx scripts/check-emotional-design.ts",
@@ -61,7 +61,9 @@
     "check:email": "tsx scripts/check-email.ts",
     "probe:revenuecat": "tsx scripts/probe-revenuecat.ts",
     "probe:posthog": "tsx scripts/probe-posthog.ts",
-    "grade:screenshots": "tsx scripts/grade-screenshots.ts"
+    "grade:screenshots": "tsx scripts/grade-screenshots.ts",
+    "lint:format": "prettier --check \"scripts/**/*.ts\"",
+    "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
@@ -70,6 +72,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "ajv": "^8.20.0",
     "motion": "^12.40.0",
+    "prettier": "^3.6.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "tsx": "^4.19.2",

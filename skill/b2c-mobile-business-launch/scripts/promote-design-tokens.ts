@@ -13,7 +13,11 @@ if (loaded.tokens) {
   const outputDir = path.join(args.root, "design-system");
   const tokenHash = hashTokens(loaded.tokens);
   mkdirSync(outputDir, { recursive: true });
-  writeFileSync(path.join(outputDir, "tokens.json"), `${JSON.stringify({ tokenHash, source: "state/theme.tokens.json", ...asObject(loaded.tokens) }, null, 2)}\n`, "utf8");
+  writeFileSync(
+    path.join(outputDir, "tokens.json"),
+    `${JSON.stringify({ tokenHash, source: "state/theme.tokens.json", ...asObject(loaded.tokens) }, null, 2)}\n`,
+    "utf8",
+  );
   writeFileSync(path.join(outputDir, "tokens.css"), renderCss(loaded.tokens, tokenHash), "utf8");
   writeFileSync(path.join(outputDir, "DesignTokens.swift"), renderSwift(loaded.tokens, tokenHash), "utf8");
   console.log(`Promoted design tokens to ${rel(args.root, outputDir)} with hash ${tokenHash}`);

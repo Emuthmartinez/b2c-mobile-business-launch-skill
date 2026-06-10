@@ -122,9 +122,7 @@ if (toolDecisions) {
 
   for (const tool of tools) {
     // Does any lane doc (other than TOOL_DECISIONS.md) mention a fallback for this tool?
-    const fallbackInLanes = laneDocs.some(
-      (doc) => doc.path !== "TOOL_DECISIONS.md" && tool.fallbackSignals.test(doc.text),
-    );
+    const fallbackInLanes = laneDocs.some((doc) => doc.path !== "TOOL_DECISIONS.md" && tool.fallbackSignals.test(doc.text));
 
     // Does TOOL_DECISIONS.md mention this tool at all?
     const entryInDecisions = tool.entrySignals.test(toolDecisions);
@@ -146,9 +144,7 @@ if (toolDecisions) {
       const paragraphs = toolDecisions.split(/\n{2,}/);
       const toolParagraphs = paragraphs.filter((p) => tool.entrySignals.test(p));
       const anyApproved = toolParagraphs.some(
-        (p) =>
-          hasFallbackApproval(p) ||
-          /\b(paid|provisioned|access confirmed|tool used|tool available|mcp confirmed|mcp path used)\b/i.test(p),
+        (p) => hasFallbackApproval(p) || /\b(paid|provisioned|access confirmed|tool used|tool available|mcp confirmed|mcp path used)\b/i.test(p),
       );
       if (!anyApproved) {
         issues.push(
@@ -185,8 +181,9 @@ if (toolDecisions) {
   // Confidence / limitation labels: fallback outputs must be labeled.
   // -------------------------------------------------------------------------
   const hasFallbackMention = /\b(fallback|free route|free baseline|free fallback|manual research)\b/i.test(toolDecisions);
-  const hasLimitationLabel =
-    /\b(fallback limitation|confidence|limitation|lower confidence|not equivalent|weaker than|what .* would have improved)\b/i.test(toolDecisions);
+  const hasLimitationLabel = /\b(fallback limitation|confidence|limitation|lower confidence|not equivalent|weaker than|what .* would have improved)\b/i.test(
+    toolDecisions,
+  );
   if (hasFallbackMention && !hasLimitationLabel) {
     issues.push(
       issue(

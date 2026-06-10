@@ -56,11 +56,20 @@ function checkReadyDeviceRows(text: string, file: string): void {
       issues.push(issue("error", "store_screenshots.ready_well_dimensions_missing", `Ready Apple screenshot row needs exact dimensions: "${trimmed}"`, file));
     }
     if (!/\b(ASC device_type|device_type|IPHONE_[A-Z0-9_]+|IPAD_[A-Z0-9_]+)\b/i.test(trimmed)) {
-      issues.push(issue("error", "store_screenshots.ready_well_device_type_missing", `Ready Apple screenshot row needs ASC device_type or equivalent: "${trimmed}"`, file));
+      issues.push(
+        issue(
+          "error",
+          "store_screenshots.ready_well_device_type_missing",
+          `Ready Apple screenshot row needs ASC device_type or equivalent: "${trimmed}"`,
+          file,
+        ),
+      );
     }
     const countMatch = trimmed.match(/\b(\d{1,2})\s+screenshots?\b|\b(?:count|screenshots?)\s*:?\s*(\d{1,2})\b/i);
     if (!countMatch) {
-      issues.push(issue("error", "store_screenshots.ready_well_count_missing", `Ready Apple screenshot row needs screenshot count between 1 and 10: "${trimmed}"`, file));
+      issues.push(
+        issue("error", "store_screenshots.ready_well_count_missing", `Ready Apple screenshot row needs screenshot count between 1 and 10: "${trimmed}"`, file),
+      );
     } else {
       const count = Number(countMatch[1] ?? countMatch[2]);
       if (!Number.isInteger(count) || count < 1 || count > 10) {
@@ -99,12 +108,7 @@ function checkRawOnlyReadiness(text: string, file: string, storeStatus?: string)
     const rawUploadClaim = /\b(raw|plain)\s+(device\s+)?screenshots?\b/i.test(trimmed) && /\b(upload|ready|final|complete|done)\b/i.test(trimmed);
     if (rawUploadClaim && !/\b(compos|frame|proof|source layer|intermediate)\b/i.test(trimmed)) {
       issues.push(
-        issue(
-          "error",
-          "store_screenshots.raw_capture_as_final",
-          `Raw screenshot line appears to treat capture as final upload art: "${trimmed}"`,
-          file,
-        ),
+        issue("error", "store_screenshots.raw_capture_as_final", `Raw screenshot line appears to treat capture as final upload art: "${trimmed}"`, file),
       );
     }
   }
@@ -182,12 +186,7 @@ function checkRawCapturesExist(text: string, file: string): void {
     const absPath = path.join(args.root, rawPath);
     if (!existsSync(absPath)) {
       issues.push(
-        issue(
-          "error",
-          "store_screenshots.raw_capture_missing_on_disk",
-          `Raw capture path listed in ${file} does not exist on disk: ${rawPath}`,
-          rawPath,
-        ),
+        issue("error", "store_screenshots.raw_capture_missing_on_disk", `Raw capture path listed in ${file} does not exist on disk: ${rawPath}`, rawPath),
       );
     }
   }
@@ -202,14 +201,7 @@ function checkFinalPngsExist(text: string, file: string): void {
   for (const finalPath of finalPaths) {
     const absPath = path.join(args.root, finalPath);
     if (!existsSync(absPath)) {
-      issues.push(
-        issue(
-          "error",
-          "store_screenshots.final_png_missing",
-          `Final PNG path listed in ${file} does not exist on disk: ${finalPath}`,
-          finalPath,
-        ),
-      );
+      issues.push(issue("error", "store_screenshots.final_png_missing", `Final PNG path listed in ${file} does not exist on disk: ${finalPath}`, finalPath));
     }
   }
 }
@@ -329,11 +321,7 @@ function isRubricLedger(value: unknown): value is RubricLedger {
  * override declared in SCREENSHOTS.md as `screenshot-rubric-scores.<name>.json`.
  */
 function findRubricLedgerPath(): string | undefined {
-  const candidates = [
-    "screenshot-rubric-scores.json",
-    "screenshots/screenshot-rubric-scores.json",
-    "app-store-listing/screenshot-rubric-scores.json",
-  ];
+  const candidates = ["screenshot-rubric-scores.json", "screenshots/screenshot-rubric-scores.json", "app-store-listing/screenshot-rubric-scores.json"];
   return candidates.find((candidate) => existsSync(path.join(args.root, candidate)));
 }
 
@@ -505,9 +493,7 @@ function checkPngDimensions(slot: RubricSlot, storeStatus: string | undefined): 
   if (acceptedSizes && acceptedSizes.length > 0) {
     // PNG can be portrait or landscape — check both orientations for each accepted size
     const matches = acceptedSizes.some(
-      (size) =>
-        (ihdr.width === size.width && ihdr.height === size.height) ||
-        (ihdr.width === size.height && ihdr.height === size.width),
+      (size) => (ihdr.width === size.width && ihdr.height === size.height) || (ihdr.width === size.height && ihdr.height === size.width),
     );
     if (!matches) {
       const acceptedStr = acceptedSizes.map((size) => `${size.width}x${size.height}`).join(" or ");
@@ -835,10 +821,7 @@ function checkRubricScores(storeStatus: string | undefined): void {
     // TIER 2: suspicious perfect — all three high dimensions are 3 but notes are thin
     const dims = slot.dimensions;
     if (dims) {
-      const allHighDimsMaxed =
-        dims.thumbnail_legibility === 3 &&
-        dims.hook_first === 3 &&
-        dims.truthfulness === 3;
+      const allHighDimsMaxed = dims.thumbnail_legibility === 3 && dims.hook_first === 3 && dims.truthfulness === 3;
       if (allHighDimsMaxed && graderNotes.length < SUSPICIOUS_PERFECT_NOTES_THRESHOLD) {
         issues.push(
           issue(
@@ -912,7 +895,11 @@ function checkRubricScores(storeStatus: string | undefined): void {
 // Main gate: read project state and decide what to check
 // ---------------------------------------------------------------------------
 
-const platforms = state ? asArray(getPath(state, "project.platforms")).map((item) => asString(item)?.toLowerCase()).filter((item): item is string => Boolean(item)) : [];
+const platforms = state
+  ? asArray(getPath(state, "project.platforms"))
+      .map((item) => asString(item)?.toLowerCase())
+      .filter((item): item is string => Boolean(item))
+  : [];
 const iosBundleId = state ? asString(getPath(state, "project.bundle_ids.ios")) : undefined;
 const androidBundleId = state ? asString(getPath(state, "project.bundle_ids.android")) : undefined;
 const hasIos = state ? platforms.includes("ios") || Boolean(iosBundleId?.trim()) : true;
@@ -925,7 +912,11 @@ const screenshotPacket = firstExistingText(["SCREENSHOTS.md", "screenshots/SCREE
 const appListing = firstExistingText(["APP_STORE_LISTING.md", "app-store-listing/APP_STORE_LISTING.md"]);
 const contentAssets = firstExistingText(["CONTENT_ASSETS.md", "content-assets/CONTENT_ASSETS.md"]);
 const screenshotHtml = existsAny(["screenshots/index.html", "screenshots/screenshots.html", "app-store-listing/screenshots.html"]);
-const appStoreScreenshotsStateRelPath = existsAny(["app-store-screenshots.json", "screenshots/app-store-screenshots.json", "app-store-listing/app-store-screenshots.json"]);
+const appStoreScreenshotsStateRelPath = existsAny([
+  "app-store-screenshots.json",
+  "screenshots/app-store-screenshots.json",
+  "app-store-listing/app-store-screenshots.json",
+]);
 
 if (shouldCheck && !screenshotPacket) {
   issues.push(

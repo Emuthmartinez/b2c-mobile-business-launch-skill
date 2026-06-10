@@ -2,14 +2,7 @@
 import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
-import {
-  getToken,
-  loadDesignState,
-  parseDesignCliArgs,
-  rel,
-  skillRoot,
-  summarizeSurfaces,
-} from "./lib/design-state.js";
+import { getToken, loadDesignState, parseDesignCliArgs, rel, skillRoot, summarizeSurfaces } from "./lib/design-state.js";
 import { asArray, asString, isRecord, reportAndExit } from "./lib/launch-state.js";
 
 const args = parseDesignCliArgs(process.argv.slice(2));
@@ -62,10 +55,7 @@ if (!args.staticOnly) {
 reportAndExit("Design Room render", loaded.issues);
 
 function resolveViteBin(): string | undefined {
-  const candidates = [
-    path.join(skillRoot, "node_modules/.bin/vite"),
-    path.resolve(skillRoot, "../../..", "node_modules/.bin/vite"),
-  ];
+  const candidates = [path.join(skillRoot, "node_modules/.bin/vite"), path.resolve(skillRoot, "../../..", "node_modules/.bin/vite")];
   return candidates.find((candidate) => existsSync(candidate));
 }
 
@@ -167,20 +157,24 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
     <section>
       <h2>Business Frame</h2>
       <div class="grid">
-        <article class="panel"><h3>Positioning</h3><p>${escapeHtml(business.positioning ?? "") || "<span class=\"muted\">Not defined</span>"}</p></article>
-        <article class="panel"><h3>Audience</h3><p>${escapeHtml(business.targetAudience ?? "") || "<span class=\"muted\">Not defined</span>"}</p></article>
+        <article class="panel"><h3>Positioning</h3><p>${escapeHtml(business.positioning ?? "") || '<span class="muted">Not defined</span>'}</p></article>
+        <article class="panel"><h3>Audience</h3><p>${escapeHtml(business.targetAudience ?? "") || '<span class="muted">Not defined</span>'}</p></article>
         <article class="panel"><h3>Latest Mutation</h3><p>${escapeHtml(isRecord(latestVersion) ? latestVersion.summary : "No mutation recorded")}</p></article>
       </div>
     </section>
-    ${designBrief ? `<section>
+    ${
+      designBrief
+        ? `<section>
       <h2>Design Brief</h2>
       <p class="muted">source: ${escapeHtml(designBrief.source)} · web surfaces animate with framer-motion from motion.* tokens; mobile uses native animation</p>
       <div class="grid">
-        <article class="panel"><h3>Style</h3><p>${escapeHtml(designBrief.recommendedStyle) || "<span class=\"muted\">Not set</span>"}</p></article>
-        <article class="panel"><h3>Palette</h3><p>${escapeHtml(designBrief.paletteMood) || "<span class=\"muted\">Not set</span>"}</p></article>
-        <article class="panel"><h3>Typography</h3><p>${escapeHtml(designBrief.typographyMood) || "<span class=\"muted\">Not set</span>"}</p></article>
+        <article class="panel"><h3>Style</h3><p>${escapeHtml(designBrief.recommendedStyle) || '<span class="muted">Not set</span>'}</p></article>
+        <article class="panel"><h3>Palette</h3><p>${escapeHtml(designBrief.paletteMood) || '<span class="muted">Not set</span>'}</p></article>
+        <article class="panel"><h3>Typography</h3><p>${escapeHtml(designBrief.typographyMood) || '<span class="muted">Not set</span>'}</p></article>
       </div>
-    </section>` : ""}
+    </section>`
+        : ""
+    }
     <section>
       <h2>Surface Coverage</h2>
       <div class="deck">${surfaceCards}</div>
@@ -190,8 +184,12 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
       <div class="list">
         ${panels
           .map((panel) => {
-            const stateRefs = asArray(panel.stateRefs).map((entry) => asString(entry)).filter(Boolean);
-            const artifacts = asArray(panel.renderedArtifacts).map((entry) => asString(entry)).filter(Boolean);
+            const stateRefs = asArray(panel.stateRefs)
+              .map((entry) => asString(entry))
+              .filter(Boolean);
+            const artifacts = asArray(panel.renderedArtifacts)
+              .map((entry) => asString(entry))
+              .filter(Boolean);
             return `<article class="row">
               <div>
                 <h3>${escapeHtml(panel.name ?? panel.id)}</h3>
@@ -215,7 +213,10 @@ function renderStaticHtml(state: unknown, tokens: unknown, stateHash: string): s
       <h2>Theme Tokens</h2>
       <div class="deck">
         ${["color.background", "color.primary", "color.accent", "color.text", "color.border"]
-          .map((tokenPath) => `<article class="metric"><span>${escapeHtml(tokenPath)}</span><strong style="font-size:18px">${escapeHtml(String(getToken(tokens, tokenPath) ?? ""))}</strong></article>`)
+          .map(
+            (tokenPath) =>
+              `<article class="metric"><span>${escapeHtml(tokenPath)}</span><strong style="font-size:18px">${escapeHtml(String(getToken(tokens, tokenPath) ?? ""))}</strong></article>`,
+          )
           .join("")}
       </div>
     </section>

@@ -23,17 +23,7 @@
  * scans always run when the artifacts exist.
  */
 
-import {
-  asString,
-  getPath,
-  issue,
-  loadProjectState,
-  parseCliArgs,
-  readText,
-  reportAndExit,
-  type Issue,
-  type Severity,
-} from "./lib/launch-state.js";
+import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue, type Severity } from "./lib/launch-state.js";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
@@ -51,7 +41,10 @@ function includesPhrase(text: string, phrase: string): boolean {
 }
 
 function codeFor(label: string): string {
-  return label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+  return label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
 }
 
 function firstExistingText(candidates: string[]): { relativePath: string; text: string } | undefined {
@@ -84,7 +77,10 @@ interface CardBlock {
 }
 
 function unquote(value: string): string {
-  return value.trim().replace(/^["']|["']$/g, "").trim();
+  return value
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
 }
 
 function extractCardBlocks(filePath: string, text: string): CardBlock[] {
@@ -168,13 +164,7 @@ const EXTRA_FIELD_REQUIREMENTS: Record<string, string[]> = {
 };
 
 // Cards whose moment animates → must declare a reduced-motion fallback.
-const MOTION_MECHANISMS = new Set([
-  "commitment",
-  "variable_reward",
-  "perceived_effort_delay",
-  "intent_mirroring",
-  "peak_end",
-]);
+const MOTION_MECHANISMS = new Set(["commitment", "variable_reward", "perceived_effort_delay", "intent_mirroring", "peak_end"]);
 
 const COMPUTATION_TYPE_ALLOWLIST = new Set(["real_api_call", "real_data_processing", "ui_composition"]);
 
@@ -189,17 +179,38 @@ function checkCardBlock(block: CardBlock): void {
   const label = `card "${appliedTo}" [${mechanism || "no-mechanism"}]`;
 
   if (!mechanism) {
-    issues.push(issue("error", "emotional_design.card_missing_mechanism", `Experience card ${appliedTo} in ${where} must declare a "mechanism" (e.g. commitment, variable_reward, perceived_effort_delay, intent_mirroring).`, where));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.card_missing_mechanism",
+        `Experience card ${appliedTo} in ${where} must declare a "mechanism" (e.g. commitment, variable_reward, perceived_effort_delay, intent_mirroring).`,
+        where,
+      ),
+    );
   }
 
   for (const f of BASE_REQUIRED_FIELDS) {
     if (field(block, f).length < 10) {
-      issues.push(issue("error", `emotional_design.card_missing_${f}`, `${label} in ${where} is missing or has an empty "${f}". Every applied card must declare its bright-line, dark-line, and guardrail.`, where));
+      issues.push(
+        issue(
+          "error",
+          `emotional_design.card_missing_${f}`,
+          `${label} in ${where} is missing or has an empty "${f}". Every applied card must declare its bright-line, dark-line, and guardrail.`,
+          where,
+        ),
+      );
     }
   }
 
   if (field(block, "posthog_event").length < 3) {
-    issues.push(issue("error", "emotional_design.card_missing_posthog_event", `${label} in ${where} is missing "posthog_event". Every emotional moment must emit a named PostHog event from ANALYTICS.md.`, where));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.card_missing_posthog_event",
+        `${label} in ${where} is missing "posthog_event". Every emotional moment must emit a named PostHog event from ANALYTICS.md.`,
+        where,
+      ),
+    );
   }
 
   // Reduced-motion fallback for animated cards (in guardrail text or a dedicated field).
@@ -208,7 +219,14 @@ function checkCardBlock(block: CardBlock): void {
     const reducedMotion = field(block, "reduced_motion");
     const hasFallback = /reduce[- ]?motion|reduced[- ]motion|prefers-reduced-motion|accessibility/i.test(`${guardrail} ${reducedMotion}`);
     if (!hasFallback) {
-      issues.push(issue("error", "emotional_design.card_missing_reduced_motion", `Motion-bearing ${label} in ${where} must declare a prefers-reduced-motion / OS reduce-motion fallback in its "guardrail" or "reduced_motion" field.`, where));
+      issues.push(
+        issue(
+          "error",
+          "emotional_design.card_missing_reduced_motion",
+          `Motion-bearing ${label} in ${where} must declare a prefers-reduced-motion / OS reduce-motion fallback in its "guardrail" or "reduced_motion" field.`,
+          where,
+        ),
+      );
     }
   }
 
@@ -216,7 +234,14 @@ function checkCardBlock(block: CardBlock): void {
   const extras = EXTRA_FIELD_REQUIREMENTS[mechanism] ?? [];
   for (const f of extras) {
     if (field(block, f).length < 8) {
-      issues.push(issue("error", `emotional_design.${codeFor(mechanism)}_missing_${f}`, `${label} in ${where} requires a non-empty "${f}" field per references/ethics-guardrail.md §Guardrail Contract.`, where));
+      issues.push(
+        issue(
+          "error",
+          `emotional_design.${codeFor(mechanism)}_missing_${f}`,
+          `${label} in ${where} requires a non-empty "${f}" field per references/ethics-guardrail.md §Guardrail Contract.`,
+          where,
+        ),
+      );
     }
   }
 
@@ -224,14 +249,28 @@ function checkCardBlock(block: CardBlock): void {
   if (mechanism === "perceived_effort_delay") {
     const computation = field(block, "computation_type");
     if (computation && !COMPUTATION_TYPE_ALLOWLIST.has(computation)) {
-      issues.push(issue("error", "emotional_design.perceived_effort_bad_computation_type", `${label} in ${where} has computation_type "${computation}". Must be one of: real_api_call, real_data_processing, ui_composition. A sleep timer with no real work is a dark pattern.`, where));
+      issues.push(
+        issue(
+          "error",
+          "emotional_design.perceived_effort_bad_computation_type",
+          `${label} in ${where} has computation_type "${computation}". Must be one of: real_api_call, real_data_processing, ui_composition. A sleep timer with no real work is a dark pattern.`,
+          where,
+        ),
+      );
     }
     const maxDelayRaw = field(block, "max_delay_ms");
     if (maxDelayRaw) {
       const maxDelay = Number(maxDelayRaw.replace(/[^0-9]/g, ""));
       const cap = computation === "ui_composition" ? 15000 : 90000;
       if (Number.isFinite(maxDelay) && maxDelay > cap) {
-        issues.push(issue("error", "emotional_design.perceived_effort_delay_too_long", `${label} in ${where} sets max_delay_ms=${maxDelay} which exceeds the ${cap}ms cap for computation_type "${computation || "non-ui"}". Inflated waits over real-work duration are user-hostile.`, where));
+        issues.push(
+          issue(
+            "error",
+            "emotional_design.perceived_effort_delay_too_long",
+            `${label} in ${where} sets max_delay_ms=${maxDelay} which exceeds the ${cap}ms cap for computation_type "${computation || "non-ui"}". Inflated waits over real-work duration are user-hostile.`,
+            where,
+          ),
+        );
       }
     }
   }
@@ -240,16 +279,37 @@ function checkCardBlock(block: CardBlock): void {
   if (mechanism === "intent_mirroring") {
     const prohibited = field(block, "prohibited_surfaces");
     if (prohibited && !/cancel|downgrade|unsubscribe/i.test(prohibited)) {
-      issues.push(issue("error", "emotional_design.intent_mirror_prohibited_surfaces_weak", `${label} in ${where} must list cancel/downgrade/unsubscribe in "prohibited_surfaces" — mirroring intent on retention-friction flows is a dark pattern.`, where));
+      issues.push(
+        issue(
+          "error",
+          "emotional_design.intent_mirror_prohibited_surfaces_weak",
+          `${label} in ${where} must list cancel/downgrade/unsubscribe in "prohibited_surfaces" — mirroring intent on retention-friction flows is a dark pattern.`,
+          where,
+        ),
+      );
     }
     if (/free[_ ]?text|verbatim|typed/i.test(field(block, "guardrail") + field(block, "applied_to")) && field(block, "free_text_sanitization").length < 8) {
-      issues.push(issue("warning", "emotional_design.intent_mirror_free_text_unsanitized", `${label} in ${where} reflects free-text user input but declares no "free_text_sanitization" approach (trim/truncate, strip markup, allowlist).`, where));
+      issues.push(
+        issue(
+          "warning",
+          "emotional_design.intent_mirror_free_text_unsanitized",
+          `${label} in ${where} reflects free-text user input but declares no "free_text_sanitization" approach (trim/truncate, strip markup, allowlist).`,
+          where,
+        ),
+      );
     }
   }
 
   // Endowed progress must not fabricate the head start (low severity → warning).
   if (mechanism === "endowed_progress" && field(block, "progress_sourcing_attestation").length < 8) {
-    issues.push(issue("warning", "emotional_design.endowed_progress_unsourced", `${label} in ${where} should declare "progress_sourcing_attestation" confirming the head start derives from real onboarding input or prior actions, not a marketing constant.`, where));
+    issues.push(
+      issue(
+        "warning",
+        "emotional_design.endowed_progress_unsourced",
+        `${label} in ${where} should declare "progress_sourcing_attestation" confirming the head start derives from real onboarding input or prior actions, not a marketing constant.`,
+        where,
+      ),
+    );
   }
 }
 
@@ -315,23 +375,51 @@ function scanLiveCopy(relativePath: string, rawText: string, spendScan: boolean)
 
   const unprovenScarcity = findUnprovenClaim(lines, FAKE_SCARCITY_PATTERNS, LOCAL_SCARCITY_PROOF_PATTERN);
   if (unprovenScarcity) {
-    issues.push(issue("error", "emotional_design.fake_scarcity_phrase", `${relativePath}:${unprovenScarcity.line} contains scarcity/urgency copy matching /${unprovenScarcity.pattern.source}/ without adjacent real enforcement proof. Back the exact claim with live inventory/capacity evidence or remove it.`, relativePath));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.fake_scarcity_phrase",
+        `${relativePath}:${unprovenScarcity.line} contains scarcity/urgency copy matching /${unprovenScarcity.pattern.source}/ without adjacent real enforcement proof. Back the exact claim with live inventory/capacity evidence or remove it.`,
+        relativePath,
+      ),
+    );
   }
 
   const unprovenSocialProof = findUnprovenClaim(lines, FAKE_SOCIAL_PROOF_PATTERNS, LOCAL_SOCIAL_PROOF_PATTERN);
   if (unprovenSocialProof) {
-    issues.push(issue("error", "emotional_design.fake_social_proof_phrase", `${relativePath}:${unprovenSocialProof.line} contains social-proof copy matching /${unprovenSocialProof.pattern.source}/ without adjacent real source proof. Source the exact count from store data, analytics, or a verified source, or remove it.`, relativePath));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.fake_social_proof_phrase",
+        `${relativePath}:${unprovenSocialProof.line} contains social-proof copy matching /${unprovenSocialProof.pattern.source}/ without adjacent real source proof. Source the exact count from store data, analytics, or a verified source, or remove it.`,
+        relativePath,
+      ),
+    );
   }
 
   for (const pattern of CONFIRMSHAMING_PATTERNS) {
     if (pattern.test(text)) {
-      issues.push(issue("error", "emotional_design.confirmshaming_phrase", `${relativePath} contains a confirmshaming opt-out label matching /${pattern.source}/. Use a neutral, non-self-deprecating label.`, relativePath));
+      issues.push(
+        issue(
+          "error",
+          "emotional_design.confirmshaming_phrase",
+          `${relativePath} contains a confirmshaming opt-out label matching /${pattern.source}/. Use a neutral, non-self-deprecating label.`,
+          relativePath,
+        ),
+      );
       break;
     }
   }
   for (const pattern of COMMITMENT_GUILT_PATTERNS) {
     if (pattern.test(text)) {
-      issues.push(issue("error", "emotional_design.commitment_guilt_phrase", `${relativePath} contains commitment-guilt copy matching /${pattern.source}/ as live text. Commitment echoes must inform, never shame. Move it into a dark_line example or remove it.`, relativePath));
+      issues.push(
+        issue(
+          "error",
+          "emotional_design.commitment_guilt_phrase",
+          `${relativePath} contains commitment-guilt copy matching /${pattern.source}/ as live text. Commitment echoes must inform, never shame. Move it into a dark_line example or remove it.`,
+          relativePath,
+        ),
+      );
       break;
     }
   }
@@ -347,7 +435,14 @@ function scanLiveCopy(relativePath: string, rawText: string, spendScan: boolean)
     });
     const tooClose = rewardLines.some((r) => spendLines.some((s) => Math.abs(r - s) <= 4));
     if (tooClose) {
-      issues.push(issue("warning", "emotional_design.spend_prompt_after_reward", `${relativePath} places a spend prompt (paywall/purchase/subscribe) within a few lines of a streak or reward moment. Spend prompts inside streak-break or reward screens are a non-negotiable dark pattern — separate them by at least one user interaction and confirm they are not on the same screen.`, relativePath));
+      issues.push(
+        issue(
+          "warning",
+          "emotional_design.spend_prompt_after_reward",
+          `${relativePath} places a spend prompt (paywall/purchase/subscribe) within a few lines of a streak or reward moment. Spend prompts inside streak-break or reward screens are a non-negotiable dark pattern — separate them by at least one user interaction and confirm they are not on the same screen.`,
+          relativePath,
+        ),
+      );
     }
   }
 }
@@ -368,11 +463,25 @@ const designBlocks = design ? extractCardBlocks(design.relativePath, design.text
 const auditCardBlocks = audit ? extractCardBlocks(audit.relativePath, audit.text) : [];
 
 if (!skip && laneAbsent) {
-  issues.push(issue("error", "emotional_design.lane_missing", "PROJECT_STATE.yaml must include lanes.emotional_design unless the emotional design lane is explicitly not_needed or deferred with founder-approved rationale.", "PROJECT_STATE.yaml"));
+  issues.push(
+    issue(
+      "error",
+      "emotional_design.lane_missing",
+      "PROJECT_STATE.yaml must include lanes.emotional_design unless the emotional design lane is explicitly not_needed or deferred with founder-approved rationale.",
+      "PROJECT_STATE.yaml",
+    ),
+  );
 }
 
 if (!skip && !design) {
-  issues.push(issue("error", "emotional_design.contract_missing", "EMOTIONAL_DESIGN.md is required to define the Emotional North Star, target emotional journey, card application map, ethics attestation, and measurement plan.", "EMOTIONAL_DESIGN.md"));
+  issues.push(
+    issue(
+      "error",
+      "emotional_design.contract_missing",
+      "EMOTIONAL_DESIGN.md is required to define the Emotional North Star, target emotional journey, card application map, ethics attestation, and measurement plan.",
+      "EMOTIONAL_DESIGN.md",
+    ),
+  );
 }
 
 if (design) {
@@ -387,24 +496,52 @@ if (design) {
   ];
   for (const section of requiredSections) {
     if (!includesPhrase(design.text, section)) {
-      issues.push(issue("error", `emotional_design.section_${codeFor(section)}_missing`, `EMOTIONAL_DESIGN.md should include the ${section} section.`, design.relativePath));
+      issues.push(
+        issue(
+          "error",
+          `emotional_design.section_${codeFor(section)}_missing`,
+          `EMOTIONAL_DESIGN.md should include the ${section} section.`,
+          design.relativePath,
+        ),
+      );
     }
   }
 
   for (const ref of ["11_STAR_EXPERIENCE.md", "ANALYTICS.md", "DESIGN.md", "ONBOARDING.md"]) {
     if (!design.text.includes(ref)) {
-      issues.push(issue("error", `emotional_design.ref_${codeFor(ref)}_missing`, `EMOTIONAL_DESIGN.md should reference ${ref} so the emotional contract threads the star ladder, analytics catalog, design tokens, and onboarding.`, design.relativePath));
+      issues.push(
+        issue(
+          "error",
+          `emotional_design.ref_${codeFor(ref)}_missing`,
+          `EMOTIONAL_DESIGN.md should reference ${ref} so the emotional contract threads the star ladder, analytics catalog, design tokens, and onboarding.`,
+          design.relativePath,
+        ),
+      );
     }
   }
 
   const blocks = designBlocks;
   if (blocks.length === 0) {
-    issues.push(issue("error", "emotional_design.no_card_blocks", "EMOTIONAL_DESIGN.md has no experience_card: attestation blocks. Each applied card needs a machine-checkable block under Ethics Attestation.", design.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.no_card_blocks",
+        "EMOTIONAL_DESIGN.md has no experience_card: attestation blocks. Each applied card needs a machine-checkable block under Ethics Attestation.",
+        design.relativePath,
+      ),
+    );
   }
   const mechanisms = new Set(blocks.map((b) => field(b, "mechanism")));
   for (const required of ["commitment", "variable_reward", "perceived_effort_delay", "intent_mirroring"]) {
     if (!mechanisms.has(required)) {
-      issues.push(issue("warning", `emotional_design.card_${required}_not_applied`, `EMOTIONAL_DESIGN.md applies no "${required}" card. The four named cards are the default deck; mark a deferral with a founder-approved rationale if one is intentionally out of scope.`, design.relativePath));
+      issues.push(
+        issue(
+          "warning",
+          `emotional_design.card_${required}_not_applied`,
+          `EMOTIONAL_DESIGN.md applies no "${required}" card. The four named cards are the default deck; mark a deferral with a founder-approved rationale if one is intentionally out of scope.`,
+          design.relativePath,
+        ),
+      );
     }
   }
   for (const block of blocks) {
@@ -414,12 +551,26 @@ if (design) {
   scanLiveCopy(design.relativePath, design.text, false);
 
   if (laneStatus === "done" && /\b(TODO|TBD|unknown|placeholder|pending|\[fill)\b/i.test(stripFencedBlocks(design.text))) {
-    issues.push(issue("error", "emotional_design.placeholder_complete", "The emotional_design lane cannot be done while TODO/TBD/unknown/placeholder/pending/[fill language remains in EMOTIONAL_DESIGN.md.", design.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "emotional_design.placeholder_complete",
+        "The emotional_design lane cannot be done while TODO/TBD/unknown/placeholder/pending/[fill language remains in EMOTIONAL_DESIGN.md.",
+        design.relativePath,
+      ),
+    );
   }
 }
 
 if (!skip && !designHtml) {
-  issues.push(issue("error", "emotional_design.html_missing", "emotional-design.html should render the emotional curve and card application map for founder review. A generic design.html proof does not satisfy the emotional design board.", "emotional-design.html"));
+  issues.push(
+    issue(
+      "error",
+      "emotional_design.html_missing",
+      "emotional-design.html should render the emotional curve and card application map for founder review. A generic design.html proof does not satisfy the emotional design board.",
+      "emotional-design.html",
+    ),
+  );
 }
 
 if (designHtml) {
@@ -433,24 +584,31 @@ if (designHtml) {
 
 // EMOTIONAL_AUDIT.md (auditor deliverable) — checked whenever present.
 if (audit) {
-  const requiredAuditPhrases = [
-    "Journey Discovery",
-    "Six-Lens Review",
-    "Card Application",
-    "Counter-Metric",
-    "Star Level",
-    "Pathway to Better State",
-  ];
+  const requiredAuditPhrases = ["Journey Discovery", "Six-Lens Review", "Card Application", "Counter-Metric", "Star Level", "Pathway to Better State"];
   for (const phrase of requiredAuditPhrases) {
     if (!includesPhrase(audit.text, phrase)) {
-      issues.push(issue("error", `emotional_audit.section_${codeFor(phrase)}_missing`, `EMOTIONAL_AUDIT.md should include ${phrase} so every journey is enumerated, scored, and given a concrete upgrade path.`, audit.relativePath));
+      issues.push(
+        issue(
+          "error",
+          `emotional_audit.section_${codeFor(phrase)}_missing`,
+          `EMOTIONAL_AUDIT.md should include ${phrase} so every journey is enumerated, scored, and given a concrete upgrade path.`,
+          audit.relativePath,
+        ),
+      );
     }
   }
   const auditBlocks = auditCardBlocks;
   const namedCards = ["Commitment Card", "Variable Reward Card", "Perceived Effort Delay Card", "Intent Mirroring Card"];
   const allNamed = namedCards.every((c) => audit.text.includes(c));
   if (auditBlocks.length === 0 && !allNamed) {
-    issues.push(issue("error", "emotional_audit.no_card_mapping", "EMOTIONAL_AUDIT.md must map findings to cards: include at least one experience_card: block or reference all four named cards (Commitment Card, Variable Reward Card, Perceived Effort Delay Card, Intent Mirroring Card). Prose-only findings are rejected.", audit.relativePath));
+    issues.push(
+      issue(
+        "error",
+        "emotional_audit.no_card_mapping",
+        "EMOTIONAL_AUDIT.md must map findings to cards: include at least one experience_card: block or reference all four named cards (Commitment Card, Variable Reward Card, Perceived Effort Delay Card, Intent Mirroring Card). Prose-only findings are rejected.",
+        audit.relativePath,
+      ),
+    );
   }
   for (const block of auditBlocks) {
     checkCardBlock(block);
@@ -470,35 +628,59 @@ if (!skip) {
 }
 
 // Children audience check — business.json field plus age-language in scope docs (incl. EMOTIONAL_DESIGN.md).
-const ageRange = state
-  ? asString(getPath(state, "business.audience.age_range")) ?? asString(getPath(state, "audience.age_range"))
-  : undefined;
+const ageRange = state ? (asString(getPath(state, "business.audience.age_range")) ?? asString(getPath(state, "audience.age_range"))) : undefined;
 const scopeText = [
   ageRange ?? "",
   readText(args.root, "SPEC.md"),
   readText(args.root, "ONBOARDING.md"),
   readText(args.root, "APP_STORE_LISTING.md"),
   design?.text,
-].filter(Boolean).join("\n");
+]
+  .filter(Boolean)
+  .join("\n");
 // Under-13 is the COPPA hard legal boundary → error. 13-17 (teen) → warning.
 const under13 = /\b(under.?1[0-3]|for kids|for children|kids app|children'?s app|coppa|ages? [4-9]\b|ages 1[0-2]\b)\b/i.test(scopeText);
-const targetsMinors = under13 ||
-  /\b(teens?|tweens?|kids|youth|minors?|under.?1[4-8]|under-1[4-8]|ages 1[3-7]|13-17|K-12|high[- ]school|middle[- ]school|family app|parental controls|for teens)\b/i.test(scopeText);
+const targetsMinors =
+  under13 ||
+  /\b(teens?|tweens?|kids|youth|minors?|under.?1[4-8]|under-1[4-8]|ages 1[3-7]|13-17|K-12|high[- ]school|middle[- ]school|family app|parental controls|for teens)\b/i.test(
+    scopeText,
+  );
 if (!skip && design && targetsMinors) {
-  const privacy = (readText(args.root, "ETHICS.md") ?? "") + (readText(args.root, "PRIVACY.md") ?? "") + (readText(args.root, "PRIVACY_POLICY.md") ?? "") + design.text;
+  const privacy =
+    (readText(args.root, "ETHICS.md") ?? "") + (readText(args.root, "PRIVACY.md") ?? "") + (readText(args.root, "PRIVACY_POLICY.md") ?? "") + design.text;
   const reviewed = /COPPA|Children'?s Code|Age-Appropriate Design|AADC|under 13|under-13/i.test(privacy);
   if (!reviewed) {
     const severity: Severity = under13 ? "error" : "warning";
-    issues.push(issue(severity, "emotional_design.children_unreviewed", `The audience appears to include minors${under13 ? " under 13 (the COPPA hard legal boundary)" : ""}, but no COPPA / UK Age-Appropriate Design Code review is documented. High-risk cards (variable reward, streak) and any beyond-conscious persuasion need a children's-compliance review (and DPIA where required) before ship.`, design.relativePath));
+    issues.push(
+      issue(
+        severity,
+        "emotional_design.children_unreviewed",
+        `The audience appears to include minors${under13 ? " under 13 (the COPPA hard legal boundary)" : ""}, but no COPPA / UK Age-Appropriate Design Code review is documented. High-risk cards (variable reward, streak) and any beyond-conscious persuasion need a children's-compliance review (and DPIA where required) before ship.`,
+        design.relativePath,
+      ),
+    );
   }
 }
 
 // Reference integrity — ethics-guardrail.md must keep its load-bearing sections.
 const ethicsRef = readText(path.join(args.root, ".."), "references/ethics-guardrail.md") ?? readText(args.root, "references/ethics-guardrail.md");
 if (ethicsRef) {
-  for (const section of ["Bright-Line Vs Dark-Line Distinction", "Regulatory And Platform Landscape", "Per-Mechanism Risk Table", "Guardrail Contract", "Acceptance Checklist"]) {
+  for (const section of [
+    "Bright-Line Vs Dark-Line Distinction",
+    "Regulatory And Platform Landscape",
+    "Per-Mechanism Risk Table",
+    "Guardrail Contract",
+    "Acceptance Checklist",
+  ]) {
     if (!includesPhrase(ethicsRef, section)) {
-      issues.push(issue("error", `emotional_design.reference_${codeFor(section)}_missing`, `references/ethics-guardrail.md must contain a section with the phrase "${section}".`, "references/ethics-guardrail.md"));
+      issues.push(
+        issue(
+          "error",
+          `emotional_design.reference_${codeFor(section)}_missing`,
+          `references/ethics-guardrail.md must contain a section with the phrase "${section}".`,
+          "references/ethics-guardrail.md",
+        ),
+      );
     }
   }
 }

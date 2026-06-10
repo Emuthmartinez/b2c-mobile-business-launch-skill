@@ -21,16 +21,7 @@
 
 import { existsSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
-import {
-  asString,
-  getPath,
-  issue,
-  loadProjectState,
-  parseCliArgs,
-  readText,
-  reportAndExit,
-  type Issue,
-} from "./lib/launch-state.js";
+import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);

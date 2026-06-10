@@ -33,7 +33,7 @@
  * The orchestrator registers this as: npm run grade:screenshots
  */
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { closeSync, existsSync, openSync, readFileSync, readSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { parseCliArgs } from "./lib/launch-state.js";
 
@@ -52,7 +52,6 @@ const PNG_MIN_HEADER_BYTES = 29;
 function readPngDimensions(absPath: string): PngDimensions | { error: string } {
   let buf: Buffer;
   try {
-    const { openSync, readSync, closeSync } = require("node:fs") as typeof import("node:fs");
     const fd = openSync(absPath, "r");
     buf = Buffer.alloc(PNG_MIN_HEADER_BYTES);
     const bytesRead = readSync(fd, buf, 0, PNG_MIN_HEADER_BYTES, 0);
@@ -414,7 +413,9 @@ function validateGradingLedger(ledger: GradingLedger): ValidationResult {
     // grader_notes required and substantive
     const graderNotes = typeof slot["grader_notes"] === "string" ? slot["grader_notes"].trim() : "";
     if (graderNotes.length < 20) {
-      errors.push(`${id}: grader_notes is missing or too short (${graderNotes.length} chars, minimum 20). The grader must explain the score for each dimension.`);
+      errors.push(
+        `${id}: grader_notes is missing or too short (${graderNotes.length} chars, minimum 20). The grader must explain the score for each dimension.`,
+      );
     }
 
     // observed_evidence required — this is the anti-fabrication control

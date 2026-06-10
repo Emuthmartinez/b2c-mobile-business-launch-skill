@@ -9,15 +9,7 @@ const issues: Issue[] = [...loaded.issues];
 const proofPath = path.join(args.root, "PROVIDER_PROOF.md");
 const proofText = existsSync(proofPath) ? readFileSync(proofPath, "utf8") : "";
 
-const proofRequiredLanes = [
-  "analytics_attribution",
-  "revenue",
-  "email",
-  "store_console",
-  "apple_signing",
-  "security",
-  "engineering",
-];
+const proofRequiredLanes = ["analytics_attribution", "revenue", "email", "store_console", "apple_signing", "security", "engineering"];
 
 let requiresProof = false;
 if (loaded.state && isRecord(loaded.state)) {
@@ -35,7 +27,14 @@ if (readinessText && /\b(ready|done|verified|launch[- ]ready|production[- ]ready
 
 if (!proofText.trim()) {
   if (requiresProof) {
-    issues.push(issue("error", "provider_proof.file_missing", "Provider-backed readiness requires PROVIDER_PROOF.md with live evidence or explicit founder-only blockers.", "PROVIDER_PROOF.md"));
+    issues.push(
+      issue(
+        "error",
+        "provider_proof.file_missing",
+        "Provider-backed readiness requires PROVIDER_PROOF.md with live evidence or explicit founder-only blockers.",
+        "PROVIDER_PROOF.md",
+      ),
+    );
   }
 } else {
   for (const keyword of [
@@ -59,7 +58,14 @@ if (!proofText.trim()) {
   const claimsReady = /\b(verified|ready|launch[- ]ready|production[- ]ready|live proof complete)\b/i.test(proofText);
   const containsOpenBlocker = /\b(not verified|pending|todo|unknown|placeholder|blocked|founder-only blocker)\b/i.test(proofText);
   if (claimsReady && containsOpenBlocker) {
-    issues.push(issue("error", "provider_proof.ready_claim_with_blocker", "Do not claim provider proof is ready while unresolved placeholders, pending items, or founder-only blockers remain.", "PROVIDER_PROOF.md"));
+    issues.push(
+      issue(
+        "error",
+        "provider_proof.ready_claim_with_blocker",
+        "Do not claim provider proof is ready while unresolved placeholders, pending items, or founder-only blockers remain.",
+        "PROVIDER_PROOF.md",
+      ),
+    );
   }
 }
 
@@ -71,5 +77,8 @@ function readOptional(relativePath: string): string | undefined {
 }
 
 function slug(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "");
 }
