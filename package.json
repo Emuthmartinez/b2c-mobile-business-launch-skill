@@ -56,6 +56,7 @@
     "render:business-control-plane-workspace": "tsx skill/b2c-mobile-business-launch/scripts/render-business-control-plane-workspace.ts",
     "test:validators": "tsx skill/b2c-mobile-business-launch/scripts/run-validator-fixtures.ts",
     "launchbench": "tsx skill/b2c-mobile-business-launch/scripts/run-launchbench.ts",
+    "evals:behavioral": "tsx skill/b2c-mobile-business-launch/scripts/run-behavioral-evals.ts",
     "audit:ci": "tsx skill/b2c-mobile-business-launch/scripts/run-audit.ts --ci",
     "audit": "tsx skill/b2c-mobile-business-launch/scripts/run-audit.ts",
     "check:paid-tool-decisions": "tsx skill/b2c-mobile-business-launch/scripts/check-paid-tool-decisions.ts",
@@ -73,6 +74,7 @@
     "format": "prettier --write \"skill/b2c-mobile-business-launch/scripts/**/*.ts\""
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "0.104.1",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",

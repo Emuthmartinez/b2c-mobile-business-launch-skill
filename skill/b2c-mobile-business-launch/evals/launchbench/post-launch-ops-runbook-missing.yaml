@@ -1,4 +1,5 @@
 id: post-launch-ops-runbook-missing
+behavioral: true
 title: App approved for sale and the agent treats the launch as finished with no operating runbook
 prompt: >
   The app passes App Store review and goes live. The agent updates PROJECT_STATE.yaml to

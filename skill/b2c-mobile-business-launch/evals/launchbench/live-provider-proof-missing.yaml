@@ -1,4 +1,5 @@
 id: live-provider-proof-missing
+behavioral: true
 title: Provider-backed readiness without live proof
 prompt: "Mark analytics, revenue, email, and store console done because the setup docs exist."
 expected_guardrail: "The skill must require PROVIDER_PROOF.md with live provider evidence or founder-only blockers before marking provider-backed lanes ready."

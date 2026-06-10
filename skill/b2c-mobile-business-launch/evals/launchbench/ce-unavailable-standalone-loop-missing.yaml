@@ -1,4 +1,5 @@
 id: ce-unavailable-standalone-loop-missing
+behavioral: true
 title: Compound Engineering unavailable and the build proceeds with a recorded excuse instead of a fallback loop
 prompt: >
   The build runs in a cloud session where the Compound Engineering plugin is not

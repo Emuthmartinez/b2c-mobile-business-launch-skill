@@ -20,6 +20,7 @@ import { register as registerLifecycle } from "./fixtures/lifecycle.fixtures.js"
 import { register as registerProbesAndGrading } from "./fixtures/probes-and-grading.fixtures.js";
 import { register as registerHooks } from "./fixtures/hooks.fixtures.js";
 import { register as registerArchetype } from "./fixtures/archetype.fixtures.js";
+import { register as registerBehavioral } from "./fixtures/behavioral.fixtures.js";
 
 const keepTemp = process.argv.includes("--keep-temp");
 const harness = createHarness();
@@ -35,6 +36,7 @@ try {
   registerProbesAndGrading(harness);
   registerHooks(harness);
   registerArchetype(harness);
+  registerBehavioral(harness);
 } finally {
   if (keepTemp) {
     console.log(`Keeping temp fixture root: ${harness.tempRoot}`);

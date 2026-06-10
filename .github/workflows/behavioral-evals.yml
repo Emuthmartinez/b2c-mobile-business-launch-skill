@@ -1,0 +1,56 @@
+name: Behavioral Evals (manual)
+
+# The live execution layer for the flagship LaunchBench subset
+# (behavioral: true). Deliberately manual-only: live agent runs cost money and
+# carry model variance, so they never gate PRs — `npm run audit:ci` remains the
+# deterministic gate. See references/launchbench-evals.md "Behavioral Eval
+# Harness".
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Agent model id (from the claude-api skill; never date-suffixed)"
+        required: false
+        default: "claude-opus-4-8"
+      grader_model:
+        description: "Grader model id"
+        required: false
+        default: "claude-opus-4-8"
+      only:
+        description: "Comma-separated scenario ids (default: full behavioral subset)"
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  behavioral-evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4 (v4.3.1)
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm ci --prefix skill/b2c-mobile-business-launch
+      - name: List behavioral subset
+        run: npm run evals:behavioral -- --list
+      - name: Run behavioral evals against a live agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          ARGS=(--model "${{ inputs.model }}" --grader-model "${{ inputs.grader_model }}" --out behavioral-results/results.json)
+          if [ -n "${{ inputs.only }}" ]; then
+            ARGS+=(--only "${{ inputs.only }}")
+          fi
+          npm run evals:behavioral -- "${ARGS[@]}"
+      - name: Upload results artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: behavioral-eval-results
+          path: behavioral-results/
+          if-no-files-found: warn

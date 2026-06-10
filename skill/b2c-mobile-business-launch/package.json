@@ -53,6 +53,7 @@
     "render:business-control-plane-workspace": "tsx scripts/render-business-control-plane-workspace.ts",
     "test:validators": "tsx scripts/run-validator-fixtures.ts",
     "launchbench": "tsx scripts/run-launchbench.ts",
+    "evals:behavioral": "tsx scripts/run-behavioral-evals.ts",
     "audit": "tsx scripts/run-audit.ts",
     "check:aso-metadata": "tsx scripts/check-aso-metadata.ts",
     "check:localization-research": "tsx scripts/check-localization-research.ts",
@@ -70,6 +71,7 @@
     "format": "prettier --write \"scripts/**/*.ts\""
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "0.104.1",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
