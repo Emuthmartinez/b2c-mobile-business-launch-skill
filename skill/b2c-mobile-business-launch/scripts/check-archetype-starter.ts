@@ -109,6 +109,20 @@ const STARTER_PACKS: StarterPack[] = [
     extraEnvNames: ["ANTHROPIC_API_KEY", "ANTHROPIC_MODEL"],
     coreLoopEvents: ["conversation_started", "chat_message_sent", "chat_response_completed", "usage_limit_reached"],
   },
+  {
+    name: "habit-tracker",
+    extraFiles: ["app/today/page.tsx"],
+    extraDeps: [],
+    extraEnvNames: [],
+    coreLoopEvents: ["habit_created", "habit_checked_in", "streak_extended", "streak_recovered"],
+  },
+  {
+    name: "photo-ai-media",
+    extraFiles: ["app/library/page.tsx", "app/api/generate/route.ts"],
+    extraDeps: [],
+    extraEnvNames: ["MEDIA_GENERATION_API_KEY"],
+    coreLoopEvents: ["media_uploaded", "generation_started", "generation_completed", "media_shared"],
+  },
 ];
 
 // Same family of patterns as check-secret-routing's secretLike: a starter must

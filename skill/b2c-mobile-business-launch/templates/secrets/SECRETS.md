@@ -34,6 +34,7 @@ Archetype starter names (pre-routed by `templates/app-archetypes/*/starter/.env.
 | `STRIPE_WEBHOOK_SECRET` | Stripe | server-only |
 | `REVENUECAT_WEBHOOK_AUTH_TOKEN` | RevenueCat | server-only |
 | `ANTHROPIC_API_KEY` | Claude API (ai-chat starter) | server-only |
+| `MEDIA_GENERATION_API_KEY` | Founder-approved AI media provider (photo-ai-media starter) | server-only |
 
 ## Command Map
 

@@ -51,6 +51,20 @@ const SHIPPED_PACKS: ShippedPack[] = [
     eval: "evals/agent-behavior/ai-chat-companion-archetype-prompt-pack.yaml",
     starter: true,
   },
+  {
+    name: "habit-tracker",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-habit-core-loop.md", "04-reminders-and-streaks.md"],
+    reference: "references/habit-tracker-lane.md",
+    eval: "evals/agent-behavior/habit-tracker-archetype-prompt-pack.yaml",
+    starter: true,
+  },
+  {
+    name: "photo-ai-media",
+    requiredPrompts: ["01-database-schema.md", "02-auth-system.md", "03-capture-and-library.md", "04-ai-generation-pipeline.md"],
+    reference: "references/photo-ai-media-lane.md",
+    eval: "evals/agent-behavior/photo-ai-media-archetype-prompt-pack.yaml",
+    starter: true,
+  },
 ];
 
 const args = parseArgs(process.argv.slice(2));
