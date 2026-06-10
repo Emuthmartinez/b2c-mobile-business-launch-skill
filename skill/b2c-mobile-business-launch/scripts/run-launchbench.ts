@@ -57,6 +57,7 @@ const knownValidators = new Set([
   "check-live-provider-proof",
   "check-artifact-templates",
   "check-app-archetype",
+  "check-archetype-starter",
   "run-agent-evals",
   "check-token-promotion",
   "render-launch-cockpit",

@@ -27,6 +27,10 @@ Record the answers in `PROJECT_STATE.yaml` (e.g. `lanes.product.archetype: ai-ch
 
 Honesty note: the bundled prompts target **web (Next.js + Supabase + Claude API)**. The Claude API key and all inference calls must be **server-side only** — never ship the key to the client. For native mobile, the inference proxy/backend carries over unchanged; the chat client is re-expressed for the native stack and IAP applies.
 
+## Runnable Starter
+
+The pack ships a runnable scaffold at [`../templates/app-archetypes/ai-chat-companion/starter/`](../templates/app-archetypes/ai-chat-companion/starter/README.md): Next.js App Router + Supabase pre-wired with magic-link auth, owner-only schema migrations with **tested** RLS (pgTAP, per `backend-data-contract.md`), a server-side streaming Claude route (`ANTHROPIC_API_KEY` never reaches the client; the model id lives in `ANTHROPIC_MODEL`, resolved via the `claude-api` skill), Stripe and RevenueCat stubs, a PostHog event catalog matching the analytics lane's snake_case conventions, a names-only `.env.example`, and a CI workflow. Copy it into the business repo as the floor and customize it with the prompts below — its README maps each prompt to the scaffold area it customizes. Do not improvise the same wiring from scratch; `check:archetype-starter` enforces the starter contract. If the founder selects Firebase or a custom backend, adapt through the data-contract lane instead of running the Supabase pieces verbatim.
+
 ## The Core Systems
 
 Every AI chat product is built on six systems. Inference and safety are the two that most teams under-build.

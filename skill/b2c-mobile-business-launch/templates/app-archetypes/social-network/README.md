@@ -7,10 +7,11 @@ These are **starting prompts**, not final code. Improve them per project. Each p
 ## How to use
 
 1. Confirm the product shape with the founder via **AskUserQuestion** (content format, primary surface, optional systems, niche) — see the reference. Record it in `PROJECT_STATE.yaml`.
-2. Run prompt **00** strategy work on the web interface / Claude.ai (it is about people, not systems).
-3. Run prompts **01 → 04** in order as Claude Code build prompts. Build one system, test it, then move on.
-4. Add optional prompts **05 → 08** based on the founder's selection.
-5. Apply a **variant** (image-first or video-first) if the founder did not pick text-first.
+2. **Copy the runnable starter** ([`starter/`](starter/README.md)) into the business repo and install it — it is the pre-wired floor (auth, tested RLS migrations, PostHog event catalog, Stripe/RevenueCat stubs, names-only `.env.example`, CI). Do not regenerate this wiring from scratch; `check:archetype-starter` enforces its contract.
+3. Run prompt **00** strategy work on the web interface / Claude.ai (it is about people, not systems).
+4. Run prompts **01 → 04** in order as Claude Code build prompts against the starter (the starter README maps each prompt to the scaffold area it customizes). Build one system, test it, then move on.
+5. Add optional prompts **05 → 08** based on the founder's selection.
+6. Apply a **variant** (image-first or video-first) if the founder did not pick text-first.
 
 ## Default stack
 

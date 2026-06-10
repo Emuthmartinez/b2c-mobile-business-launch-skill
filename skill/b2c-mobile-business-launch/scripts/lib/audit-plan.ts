@@ -85,6 +85,7 @@ export function buildAuditPlan(layout: AuditLayout): AuditStep[] {
     { id: "check:package-parity", kind: "script", repoOnly: true },
     { id: "check:artifact-templates", kind: "script", args: ["--skill-root", S] },
     { id: "check:app-archetype", kind: "script", args: ["--skill-root", S] },
+    { id: "check:archetype-starter", kind: "script", args: ["--skill-root", S] },
     { id: "check:agent-evals", kind: "script" },
     { id: "launchbench", kind: "script", serial: true },
     { id: "validate:launch-state", kind: "script", args: stateArgs },

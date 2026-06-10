@@ -22,6 +22,19 @@ No raw secrets: raw secret values must not be committed, pasted into docs, or in
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | `EXAMPLE_API_KEY` | Example | server_secret | local/staging/prod | backend | server-only | Doppler project/config | founder | before public launch | blocked |
 
+Archetype starter names (pre-routed by `templates/app-archetypes/*/starter/.env.example`; fill rows above as each service is provisioned — values always live in Doppler, never in the repo):
+
+| Name | Service | Public/server-only |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase | public-by-design (client) |
+| `SUPABASE_SECRET_KEY` | Supabase | server-only |
+| `NEXT_PUBLIC_POSTHOG_KEY` | PostHog | public-by-design (client) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe | public-by-design (client) |
+| `STRIPE_SECRET_KEY` | Stripe | server-only |
+| `STRIPE_WEBHOOK_SECRET` | Stripe | server-only |
+| `REVENUECAT_WEBHOOK_AUTH_TOKEN` | RevenueCat | server-only |
+| `ANTHROPIC_API_KEY` | Claude API (ai-chat starter) | server-only |
+
 ## Command Map
 
 | Purpose | Command | Required secrets | Proof |
