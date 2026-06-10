@@ -44,6 +44,7 @@
     "check:artifact-templates": "tsx skill/b2c-mobile-business-launch/scripts/check-artifact-templates.ts",
     "check:app-archetype": "tsx skill/b2c-mobile-business-launch/scripts/check-app-archetype.ts",
     "check:archetype-starter": "tsx skill/b2c-mobile-business-launch/scripts/check-archetype-starter.ts",
+    "check:reference-size": "tsx skill/b2c-mobile-business-launch/scripts/check-reference-size.ts",
     "check:agent-evals": "tsx skill/b2c-mobile-business-launch/scripts/run-agent-evals.ts",
     "check:token-promotion": "tsx skill/b2c-mobile-business-launch/scripts/check-token-promotion.ts",
     "check:template-safety": "tsx skill/b2c-mobile-business-launch/scripts/check-template-safety.ts",

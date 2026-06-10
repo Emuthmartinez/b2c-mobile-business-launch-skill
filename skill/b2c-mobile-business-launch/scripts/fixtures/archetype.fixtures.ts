@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, rmSync, appendFileSync } from "node:fs";
+import { appendFileSync, cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { type Harness, skillRoot } from "./_harness.js";
 
@@ -44,6 +44,15 @@ export function register(h: Harness): void {
     1,
     "archetype_starter.ai-chat-companion.env_not_names_only",
   );
+
+  // ── Reference context budget ──────────────────────────────────────────────
+
+  runScriptArgs("references within context budget pass", "check-reference-size.ts", ["--skill-root", skillRoot], 0);
+
+  const oversizedRef = makeEmptyFixture("reference-size-over-budget");
+  mkdirSync(path.join(oversizedRef, "references"), { recursive: true });
+  writeFileSync(path.join(oversizedRef, "references", "huge-lane.md"), `# Huge\n${"x".repeat(70 * 1024)}\n`, "utf8");
+  runScriptArgs("oversized reference fails the context budget", "check-reference-size.ts", ["--skill-root", oversizedRef], 1, "reference_size.over_budget");
 
   const untestedRls = makeArchetypeSkillRoot("archetype-starter-untested-rls");
   rmSync(path.join(untestedRls, "templates", "app-archetypes", "social-network", "starter", "supabase", "tests"), { recursive: true });
