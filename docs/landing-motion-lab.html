@@ -1,0 +1,1932 @@
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Landing Motion Lab — motionsites-grade sections on skill design tokens</title>
+    <meta
+      name="description"
+      content="A self-contained practice proof: high-motion landing-page sections (hero parallax, scrollytelling, bento, marquee, glass pricing, spotlight CTA) built entirely on the b2c-mobile-business-launch design tokens. No external dependencies."
+    />
+    <style>
+      /* ============================================================
+         DESIGN TOKENS
+         Mirrors skill/b2c-mobile-business-launch/design-system/tokens.css
+         (the canonical brand) and EXTENDS it with landing-only motion +
+         surface tokens. Every section below reads from these vars so the
+         section library stays brand-token-driven, not hard-coded.
+         ============================================================ */
+      :root {
+        /* --- canonical brand tokens (verbatim from tokens.css) --- */
+        --color-background: #f7f3ec;
+        --color-surface: #fffdfa;
+        --color-surface-elevated: #ffffff;
+        --color-primary: #0c7c59;
+        --color-accent: #ff6f5c;
+        --color-text: #161512;
+        --color-muted: #686159;
+        --color-border: #d8d0c3;
+        --color-success: #16784c;
+        --color-warning: #a05a00;
+        --color-danger: #b3261e;
+        --font-display: Fraunces, "Hoefler Text", Georgia, "Times New Roman", serif;
+        --font-body: "Source Sans 3", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+        --radius-sm: 4px;
+        --radius-md: 8px;
+        --radius-lg: 14px;
+        --space-xs: 4px;
+        --space-sm: 8px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 40px;
+        --motion-duration-fast: 120ms;
+        --motion-duration-base: 220ms;
+        --motion-duration-slow: 360ms;
+        --motion-duration-reduced: 0ms;
+        --motion-easing: cubic-bezier(0.2, 0, 0, 1);
+
+        /* --- landing-only EXTENSION tokens (candidate for promotion) --- */
+        /* Cinematic entrances run longer than in-app micro-motion, but the
+           perceived "snap" still lands inside the base scale via easing. */
+        --motion-duration-reveal: 620ms;
+        --motion-duration-cinematic: 1100ms;
+        --motion-easing-emphasis: cubic-bezier(0.16, 1, 0.3, 1); /* expo-out */
+        --motion-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* gentle overshoot */
+        --motion-stagger: 70ms;
+
+        --radius-xl: 28px;
+        --radius-pill: 999px;
+        --space-2xl: 64px;
+        --space-3xl: 104px;
+        --shadow-sm: 0 1px 2px rgba(22, 21, 18, 0.06), 0 2px 8px rgba(22, 21, 18, 0.05);
+        --shadow-md: 0 8px 24px rgba(22, 21, 18, 0.08), 0 2px 6px rgba(22, 21, 18, 0.05);
+        --shadow-lg: 0 30px 70px -28px rgba(22, 21, 18, 0.42);
+        --maxw: 1160px;
+
+        /* derived accents for gradient meshes (kept in brand hue family) */
+        --mesh-1: #0c7c59;
+        --mesh-2: #ff6f5c;
+        --mesh-3: #1f9e74;
+        --mesh-4: #f0b429;
+      }
+
+      /* Dark "stage" theme used by the hero + CTA. Deepened brand neutral so
+         the cinematic sections still read as the same brand, not a generic
+         dark-mode SaaS template. */
+      .stage {
+        --stage-bg: #14110d;
+        --stage-bg-2: #1d1813;
+        --stage-text: #f7f3ec;
+        --stage-muted: #b9b0a2;
+        --stage-border: rgba(247, 243, 236, 0.14);
+        color: var(--stage-text);
+        background: var(--stage-bg);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font-body);
+        color: var(--color-text);
+        background: var(--color-background);
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--font-display);
+        font-weight: 560;
+        line-height: 1.04;
+        letter-spacing: -0.018em;
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .wrap {
+        width: min(100% - 2 * var(--space-lg), var(--maxw));
+        margin-inline: auto;
+      }
+
+      .eyebrow {
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--color-primary);
+      }
+
+      .stage .eyebrow {
+        color: var(--mesh-2);
+      }
+
+      .lede {
+        font-size: clamp(1.02rem, 1.5vw, 1.22rem);
+        color: var(--color-muted);
+        max-width: 54ch;
+      }
+
+      .stage .lede {
+        color: var(--stage-muted);
+      }
+
+      /* ---------- buttons ---------- */
+      .btn {
+        --btn-bg: var(--color-primary);
+        --btn-fg: #fff;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: 0.85em 1.5em;
+        border-radius: var(--radius-pill);
+        background: var(--btn-bg);
+        color: var(--btn-fg);
+        font-family: var(--font-body);
+        font-weight: 650;
+        font-size: 0.98rem;
+        border: 0;
+        cursor: pointer;
+        transition:
+          transform var(--motion-duration-base) var(--motion-easing-spring),
+          box-shadow var(--motion-duration-base) var(--motion-easing),
+          filter var(--motion-duration-base) var(--motion-easing);
+        box-shadow: 0 10px 26px -12px color-mix(in srgb, var(--color-primary) 80%, transparent);
+        will-change: transform;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.05);
+        box-shadow: 0 18px 38px -14px color-mix(in srgb, var(--color-primary) 85%, transparent);
+      }
+      .btn:active {
+        transform: translateY(0) scale(0.98);
+      }
+      .btn--ghost {
+        --btn-bg: transparent;
+        --btn-fg: var(--color-text);
+        border: 1px solid var(--color-border);
+        box-shadow: none;
+      }
+      .stage .btn--ghost {
+        --btn-fg: var(--stage-text);
+        border-color: var(--stage-border);
+        background: rgba(247, 243, 236, 0.04);
+      }
+
+      /* ============================================================
+         SCROLL PROGRESS + CURSOR GLOW (interaction layer)
+         ============================================================ */
+      .progress {
+        position: fixed;
+        inset: 0 auto auto 0;
+        height: 3px;
+        width: 0%;
+        z-index: 90;
+        background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+        box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent) 60%, transparent);
+        transition: width 80ms linear;
+      }
+      .cursor-glow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 460px;
+        height: 460px;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1;
+        transform: translate3d(-50%, -50%, 0);
+        background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 26%, transparent), transparent 62%);
+        opacity: 0;
+        transition: opacity 400ms var(--motion-easing);
+        mix-blend-mode: screen;
+      }
+
+      /* ============================================================
+         REVEAL SYSTEM (progressive enhancement)
+         Content is fully visible with no JS / no support. Only when the
+         <html> element has the `js` class do we hide-then-reveal, so
+         crawlers and reduced-data users never lose text.
+         ============================================================ */
+      .js [data-reveal] {
+        opacity: 0;
+        transform: translateY(26px);
+        transition:
+          opacity var(--motion-duration-reveal) var(--motion-easing-emphasis),
+          transform var(--motion-duration-reveal) var(--motion-easing-emphasis);
+        transition-delay: calc(var(--i, 0) * var(--motion-stagger));
+        will-change: opacity, transform;
+      }
+      .js [data-reveal="left"] {
+        transform: translateX(-32px);
+      }
+      .js [data-reveal="right"] {
+        transform: translateX(32px);
+      }
+      .js [data-reveal="scale"] {
+        transform: scale(0.94);
+      }
+      .js [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ============================================================
+         PATTERN BADGE — turns this page into a self-documenting catalog.
+         Each section is tagged with its type + the motion technique it
+         demonstrates. Toggle with the control in the nav.
+         ============================================================ */
+      .badge {
+        position: absolute;
+        top: var(--space-md);
+        right: var(--space-md);
+        z-index: 6;
+        font-family: var(--font-body);
+        font-size: 0.7rem;
+        font-weight: 650;
+        letter-spacing: 0.02em;
+        padding: 6px 11px;
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--color-text) 84%, transparent);
+        color: var(--color-background);
+        box-shadow: var(--shadow-sm);
+        max-width: min(78vw, 360px);
+        opacity: 0;
+        transform: translateY(-6px);
+        transition:
+          opacity var(--motion-duration-base) var(--motion-easing),
+          transform var(--motion-duration-base) var(--motion-easing);
+        pointer-events: none;
+      }
+      .show-badges .badge {
+        opacity: 0.94;
+        transform: none;
+      }
+      .badge b {
+        color: var(--mesh-4);
+      }
+
+      section {
+        position: relative;
+      }
+
+      /* ============================================================
+         NAV
+         ============================================================ */
+      .nav {
+        position: fixed;
+        inset: 0 0 auto 0;
+        z-index: 80;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--space-md) clamp(var(--space-md), 4vw, var(--space-2xl));
+        transition:
+          background var(--motion-duration-slow) var(--motion-easing),
+          box-shadow var(--motion-duration-slow) var(--motion-easing),
+          padding var(--motion-duration-slow) var(--motion-easing);
+      }
+      .nav.is-condensed {
+        background: color-mix(in srgb, var(--color-background) 78%, transparent);
+        backdrop-filter: saturate(1.4) blur(14px);
+        -webkit-backdrop-filter: saturate(1.4) blur(14px);
+        box-shadow: 0 1px 0 var(--color-border);
+        padding-top: var(--space-sm);
+        padding-bottom: var(--space-sm);
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-display);
+        font-size: 1.18rem;
+        font-weight: 600;
+        color: var(--color-text);
+        letter-spacing: -0.01em;
+      }
+      .brand .mark {
+        width: 26px;
+        height: 26px;
+        border-radius: 9px;
+        background: conic-gradient(from 200deg, var(--color-primary), var(--color-accent), var(--mesh-4), var(--color-primary));
+        box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.4);
+      }
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+      }
+      .toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--color-muted);
+        cursor: pointer;
+        user-select: none;
+      }
+      .toggle .pip {
+        width: 30px;
+        height: 18px;
+        border-radius: var(--radius-pill);
+        background: var(--color-border);
+        position: relative;
+        transition: background var(--motion-duration-base) var(--motion-easing);
+      }
+      .toggle .pip::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: var(--shadow-sm);
+        transition: transform var(--motion-duration-base) var(--motion-easing-spring);
+      }
+      .toggle.is-on .pip {
+        background: var(--color-primary);
+      }
+      .toggle.is-on .pip::after {
+        transform: translateX(12px);
+      }
+      @media (max-width: 720px) {
+        .nav .links,
+        .nav .toggle span {
+          display: none;
+        }
+      }
+      .links {
+        display: flex;
+        gap: var(--space-lg);
+        font-size: 0.92rem;
+        font-weight: 550;
+        color: var(--color-muted);
+      }
+      .links a {
+        transition: color var(--motion-duration-base) var(--motion-easing);
+      }
+      .links a:hover {
+        color: var(--color-text);
+      }
+
+      /* ============================================================
+         §1 HERO — gradient-mesh stage, parallax layers, word stagger,
+         3D-tilt device, floating UI cards.
+         ============================================================ */
+      .hero {
+        min-height: 100svh;
+        display: grid;
+        align-items: center;
+        padding: clamp(96px, 14vh, 168px) 0 var(--space-3xl);
+        overflow: hidden;
+        isolation: isolate;
+      }
+      .mesh {
+        position: absolute;
+        inset: -25% -10%;
+        z-index: -2;
+        filter: blur(34px) saturate(1.25);
+      }
+      .mesh span {
+        position: absolute;
+        width: 56vmax;
+        height: 56vmax;
+        border-radius: 50%;
+        opacity: 0.55;
+        mix-blend-mode: screen;
+        animation: meshDrift 24s ease-in-out infinite;
+      }
+      .mesh span:nth-child(1) {
+        background: radial-gradient(circle, var(--mesh-1), transparent 60%);
+        top: -12%;
+        left: -8%;
+      }
+      .mesh span:nth-child(2) {
+        background: radial-gradient(circle, var(--mesh-2), transparent 60%);
+        top: 8%;
+        right: -14%;
+        animation-delay: -6s;
+        animation-duration: 30s;
+      }
+      .mesh span:nth-child(3) {
+        background: radial-gradient(circle, var(--mesh-3), transparent 62%);
+        bottom: -22%;
+        left: 18%;
+        animation-delay: -12s;
+        animation-duration: 28s;
+      }
+      .mesh span:nth-child(4) {
+        background: radial-gradient(circle, var(--mesh-4), transparent 64%);
+        bottom: -10%;
+        right: 6%;
+        opacity: 0.35;
+        animation-delay: -3s;
+        animation-duration: 34s;
+      }
+      .hero-grain {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.5;
+        background:
+          radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.4), transparent),
+          radial-gradient(1px 1px at 70% 60%, rgba(255, 255, 255, 0.3), transparent),
+          radial-gradient(1px 1px at 40% 80%, rgba(255, 255, 255, 0.25), transparent),
+          radial-gradient(1px 1px at 85% 20%, rgba(255, 255, 255, 0.3), transparent);
+        background-size: 240px 240px;
+        mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: clamp(var(--space-lg), 5vw, var(--space-3xl));
+        align-items: center;
+      }
+      @media (max-width: 900px) {
+        .hero-grid {
+          grid-template-columns: 1fr;
+          text-align: left;
+        }
+      }
+      .hero h1 {
+        font-size: clamp(2.7rem, 6.6vw, 4.7rem);
+        margin-bottom: var(--space-lg);
+      }
+      .hero h1 .word {
+        display: inline-block;
+        white-space: pre;
+      }
+      .js .hero h1 .word {
+        opacity: 0;
+        transform: translateY(0.5em) rotate(2deg);
+        transition:
+          opacity 700ms var(--motion-easing-emphasis),
+          transform 700ms var(--motion-easing-emphasis);
+        transition-delay: calc(var(--i) * 60ms + 120ms);
+      }
+      .js .hero.is-in h1 .word {
+        opacity: 1;
+        transform: none;
+      }
+      .hero h1 .accent {
+        background: linear-gradient(100deg, var(--mesh-2), var(--mesh-4));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .hero-cta {
+        display: flex;
+        gap: var(--space-md);
+        flex-wrap: wrap;
+        margin-top: var(--space-xl);
+      }
+      .hero-meta {
+        margin-top: var(--space-lg);
+        display: flex;
+        gap: var(--space-lg);
+        flex-wrap: wrap;
+        color: var(--stage-muted);
+        font-size: 0.85rem;
+      }
+      .hero-meta b {
+        color: var(--stage-text);
+      }
+
+      /* parallax wrapper — translated by scroll in JS via --py */
+      .hero-stage {
+        position: relative;
+        perspective: 1200px;
+        transform: translateY(calc(var(--py, 0) * -1px));
+        will-change: transform;
+      }
+      .phone {
+        position: relative;
+        width: min(300px, 74vw);
+        margin-inline: auto;
+        aspect-ratio: 9 / 19.2;
+        border-radius: 42px;
+        padding: 12px;
+        background: linear-gradient(160deg, #2a241d, #0f0c09);
+        box-shadow:
+          var(--shadow-lg),
+          inset 0 0 0 1.5px rgba(247, 243, 236, 0.08);
+        transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+        transform-style: preserve-3d;
+        transition: transform 300ms var(--motion-easing);
+      }
+      .phone-screen {
+        position: relative;
+        height: 100%;
+        border-radius: 32px;
+        overflow: hidden;
+        background: linear-gradient(180deg, #1b9e74 0%, #0c7c59 42%, #0a5f45 100%);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 22px 16px;
+      }
+      .phone-screen .status {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.62rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 650;
+      }
+      .phone-screen h4 {
+        font-family: var(--font-display);
+        color: #fff;
+        font-size: 1.32rem;
+        margin: 8px 2px 2px;
+        letter-spacing: -0.01em;
+      }
+      .phone-screen .sub {
+        color: rgba(255, 255, 255, 0.82);
+        font-size: 0.74rem;
+        margin: 0 2px 6px;
+      }
+      .ritual {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(6px);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .ritual .dot {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        flex: none;
+      }
+      .ritual.done .dot {
+        background: var(--mesh-4);
+        border-color: var(--mesh-4);
+      }
+      .ritual.done span {
+        opacity: 0.7;
+        text-decoration: line-through;
+      }
+      .ring {
+        margin: 6px auto 0;
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        background:
+          radial-gradient(closest-side, rgba(12, 124, 89, 0.9) 78%, transparent 80% 100%),
+          conic-gradient(var(--mesh-4) var(--ring, 72%), rgba(255, 255, 255, 0.22) 0);
+      }
+      /* floating UI cards orbiting the phone */
+      .floaty {
+        position: absolute;
+        z-index: 3;
+        background: color-mix(in srgb, #fffdfa 92%, transparent);
+        color: var(--color-text);
+        border-radius: var(--radius-lg);
+        padding: 10px 13px;
+        box-shadow: var(--shadow-md);
+        font-size: 0.78rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        animation: floaty 6s ease-in-out infinite;
+        backdrop-filter: blur(4px);
+      }
+      .floaty .emoji {
+        font-size: 1.1rem;
+      }
+      .floaty.a {
+        top: 12%;
+        left: -7%;
+        animation-delay: -1s;
+      }
+      .floaty.b {
+        bottom: 18%;
+        right: -9%;
+        animation-delay: -3.5s;
+      }
+      .floaty .tiny {
+        color: var(--color-muted);
+        font-weight: 550;
+        font-size: 0.66rem;
+      }
+
+      /* ============================================================
+         §2 MARQUEE — seamless infinite trust row
+         ============================================================ */
+      .marquee {
+        padding: var(--space-2xl) 0;
+        background: var(--color-surface);
+        border-block: 1px solid var(--color-border);
+      }
+      .marquee .label {
+        text-align: center;
+        color: var(--color-muted);
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        margin-bottom: var(--space-lg);
+      }
+      .marquee-track {
+        display: flex;
+        gap: var(--space-3xl);
+        width: max-content;
+        animation: marquee 26s linear infinite;
+      }
+      .marquee:hover .marquee-track {
+        animation-play-state: paused;
+      }
+      .marquee-mask {
+        overflow: hidden;
+        mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+      }
+      .logo {
+        font-family: var(--font-display);
+        font-size: 1.35rem;
+        font-weight: 600;
+        color: var(--color-text);
+        opacity: 0.62;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .logo::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        border-radius: 5px;
+        background: var(--color-primary);
+        opacity: 0.7;
+      }
+
+      /* ============================================================
+         §3 BENTO — staggered in-view reveal, hover lift, live cells
+         ============================================================ */
+      .section-head {
+        max-width: 640px;
+        margin-bottom: var(--space-2xl);
+      }
+      .section-head h2 {
+        font-size: clamp(2rem, 4.4vw, 3.1rem);
+        margin: var(--space-md) 0 var(--space-md);
+      }
+      .pad {
+        padding: var(--space-3xl) 0;
+      }
+      .bento {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-auto-rows: minmax(168px, auto);
+        gap: var(--space-md);
+      }
+      .cell {
+        position: relative;
+        border-radius: var(--radius-xl);
+        padding: var(--space-lg);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        overflow: hidden;
+        transition:
+          transform var(--motion-duration-base) var(--motion-easing-spring),
+          box-shadow var(--motion-duration-base) var(--motion-easing);
+        will-change: transform;
+      }
+      .cell:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+      }
+      .cell h3 {
+        font-size: 1.22rem;
+        margin-bottom: 6px;
+      }
+      .cell p {
+        color: var(--color-muted);
+        font-size: 0.9rem;
+      }
+      .cell.lg {
+        grid-column: span 4;
+      }
+      .cell.sm {
+        grid-column: span 2;
+      }
+      .cell.tall {
+        grid-column: span 2;
+        grid-row: span 2;
+      }
+      .cell.feature {
+        color: #fff;
+        border: 0;
+        background:
+          radial-gradient(120% 120% at 0% 0%, var(--mesh-3), transparent 55%),
+          linear-gradient(150deg, var(--color-primary), #0a5f45);
+      }
+      .cell.feature p {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      @media (max-width: 860px) {
+        .bento {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cell.lg,
+        .cell.sm,
+        .cell.tall {
+          grid-column: span 2;
+          grid-row: auto;
+        }
+      }
+      /* live streak bars */
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 7px;
+        height: 60px;
+        margin-top: var(--space-md);
+      }
+      .bars i {
+        flex: 1;
+        border-radius: 4px 4px 0 0;
+        background: color-mix(in srgb, var(--color-primary) 70%, var(--color-accent));
+        height: var(--h, 30%);
+        transform-origin: bottom;
+        animation: barPulse 3.4s var(--motion-easing) infinite;
+      }
+      .bars i:nth-child(2) {
+        animation-delay: 0.3s;
+      }
+      .bars i:nth-child(3) {
+        animation-delay: 0.6s;
+      }
+      .bars i:nth-child(4) {
+        animation-delay: 0.9s;
+      }
+      .bars i:nth-child(5) {
+        animation-delay: 1.2s;
+      }
+      .bars i:nth-child(6) {
+        animation-delay: 1.5s;
+      }
+      .bars i:nth-child(7) {
+        animation-delay: 1.8s;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.72rem;
+        font-weight: 650;
+        color: var(--color-primary);
+        background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
+      }
+
+      /* ============================================================
+         §4 SCROLLYTELLING — sticky pinned device, scroll-linked steps
+         ============================================================ */
+      .scrolly {
+        background: var(--color-background);
+      }
+      .scrolly-inner {
+        display: grid;
+        grid-template-columns: 1fr 0.9fr;
+        gap: var(--space-3xl);
+        align-items: start;
+      }
+      @media (max-width: 900px) {
+        .scrolly-inner {
+          grid-template-columns: 1fr;
+        }
+        .scrolly-sticky {
+          position: static !important;
+          height: auto !important;
+          margin-bottom: var(--space-xl);
+        }
+      }
+      .scrolly-sticky {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        display: grid;
+        place-items: center;
+      }
+      .scrolly-phone {
+        position: relative;
+        width: min(280px, 70vw);
+        aspect-ratio: 9 / 19.2;
+        border-radius: 40px;
+        padding: 11px;
+        background: linear-gradient(160deg, #2a241d, #0f0c09);
+        box-shadow: var(--shadow-lg);
+      }
+      .scrolly-screen {
+        position: absolute;
+        inset: 11px;
+        border-radius: 30px;
+        overflow: hidden;
+        opacity: 0;
+        transform: scale(1.03);
+        transition:
+          opacity var(--motion-duration-slow) var(--motion-easing),
+          transform var(--motion-duration-slow) var(--motion-easing);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 15px;
+        color: #fff;
+      }
+      .scrolly-screen.is-active {
+        opacity: 1;
+        transform: none;
+      }
+      .scrolly-screen h4 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        margin: 4px 0;
+      }
+      .scrolly-screen.s0 {
+        background: linear-gradient(180deg, #3a3026, #14110d);
+      }
+      .scrolly-screen.s1 {
+        background: linear-gradient(180deg, #1b9e74, #0a5f45);
+      }
+      .scrolly-screen.s2 {
+        background: linear-gradient(180deg, #ff8a76, #d6452f);
+      }
+      .glasscard {
+        background: rgba(255, 255, 255, 0.16);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 14px;
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+      }
+      .steps {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: 18vh 0;
+      }
+      .step {
+        padding: var(--space-lg) var(--space-lg) var(--space-lg) var(--space-xl);
+        border-left: 2px solid var(--color-border);
+        opacity: 0.4;
+        transition:
+          opacity var(--motion-duration-slow) var(--motion-easing),
+          border-color var(--motion-duration-slow) var(--motion-easing),
+          transform var(--motion-duration-slow) var(--motion-easing);
+        position: relative;
+      }
+      .step::before {
+        content: "";
+        position: absolute;
+        left: -7px;
+        top: var(--space-xl);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--color-border);
+        transition: background var(--motion-duration-slow) var(--motion-easing);
+      }
+      .step.is-active {
+        opacity: 1;
+        border-color: var(--color-primary);
+        transform: translateX(4px);
+      }
+      .step.is-active::before {
+        background: var(--color-primary);
+        box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-primary) 18%, transparent);
+      }
+      .step h3 {
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+      }
+      .step p {
+        color: var(--color-muted);
+      }
+
+      /* ============================================================
+         §5 STATS — count-up on view
+         ============================================================ */
+      .stats {
+        background: var(--color-surface);
+        border-block: 1px solid var(--color-border);
+      }
+      .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-lg);
+      }
+      @media (max-width: 740px) {
+        .stat-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat .num {
+        font-family: var(--font-display);
+        font-size: clamp(2.4rem, 5vw, 3.4rem);
+        color: var(--color-primary);
+        line-height: 1;
+      }
+      .stat .cap {
+        color: var(--color-muted);
+        font-size: 0.9rem;
+        margin-top: 8px;
+      }
+
+      /* ============================================================
+         §6 TESTIMONIALS — staggered cards, hover spotlight
+         ============================================================ */
+      .quotes {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-md);
+      }
+      @media (max-width: 860px) {
+        .quotes {
+          grid-template-columns: 1fr;
+        }
+      }
+      .quote {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-xl);
+        padding: var(--space-xl);
+        position: relative;
+        overflow: hidden;
+      }
+      .quote::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(240px 180px at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--color-accent) 14%, transparent), transparent 70%);
+        opacity: 0;
+        transition: opacity var(--motion-duration-base) var(--motion-easing);
+      }
+      .quote:hover::before {
+        opacity: 1;
+      }
+      .quote p {
+        font-size: 1.04rem;
+        position: relative;
+      }
+      .quote .who {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: var(--space-lg);
+        position: relative;
+      }
+      .quote .av {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: conic-gradient(from 120deg, var(--color-primary), var(--color-accent), var(--mesh-4));
+        flex: none;
+      }
+      .quote .who b {
+        display: block;
+        font-size: 0.92rem;
+      }
+      .quote .who small {
+        color: var(--color-muted);
+      }
+
+      /* ============================================================
+         §7 PRICING — glass cards, billing toggle, highlight glow
+         ============================================================ */
+      .price-toggle {
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+        border-radius: var(--radius-pill);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        margin-top: var(--space-lg);
+      }
+      .price-toggle button {
+        border: 0;
+        background: transparent;
+        font-family: var(--font-body);
+        font-weight: 650;
+        font-size: 0.88rem;
+        color: var(--color-muted);
+        padding: 8px 18px;
+        border-radius: var(--radius-pill);
+        cursor: pointer;
+        transition: color var(--motion-duration-base) var(--motion-easing);
+      }
+      .price-toggle button.is-active {
+        background: var(--color-primary);
+        color: #fff;
+      }
+      .save {
+        color: var(--color-success);
+        font-weight: 650;
+      }
+      .plans {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-md);
+        margin-top: var(--space-2xl);
+        align-items: stretch;
+      }
+      @media (max-width: 860px) {
+        .plans {
+          grid-template-columns: 1fr;
+        }
+      }
+      .plan {
+        border-radius: var(--radius-xl);
+        padding: var(--space-xl);
+        background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+        border: 1px solid var(--color-border);
+        backdrop-filter: blur(8px);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+      .plan.pop {
+        background: linear-gradient(160deg, color-mix(in srgb, var(--color-primary) 14%, var(--color-surface)), var(--color-surface));
+        border-color: color-mix(in srgb, var(--color-primary) 45%, transparent);
+        box-shadow: var(--shadow-md);
+        position: relative;
+      }
+      .plan.pop::after {
+        content: "Most chosen";
+        position: absolute;
+        top: -11px;
+        left: var(--space-xl);
+        background: var(--color-accent);
+        color: #fff;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 4px 11px;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+      }
+      .plan .tier {
+        font-weight: 700;
+        font-size: 0.86rem;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+      }
+      .plan .price {
+        font-family: var(--font-display);
+        font-size: 2.6rem;
+        line-height: 1;
+      }
+      .plan .price small {
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        color: var(--color-muted);
+        font-weight: 550;
+      }
+      .plan ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 0.92rem;
+        color: var(--color-muted);
+      }
+      .plan li {
+        display: flex;
+        gap: 9px;
+      }
+      .plan li::before {
+        content: "✓";
+        color: var(--color-success);
+        font-weight: 800;
+      }
+      .plan .btn {
+        margin-top: auto;
+        justify-content: center;
+      }
+
+      /* ============================================================
+         §8 CTA — spotlight glass on dark stage, gradient morph
+         ============================================================ */
+      .cta {
+        padding: var(--space-3xl) 0;
+        overflow: hidden;
+        position: relative;
+      }
+      .cta .panel {
+        position: relative;
+        border-radius: var(--radius-xl);
+        padding: clamp(var(--space-xl), 7vw, 96px) var(--space-xl);
+        text-align: center;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1d1813, #14110d);
+        border: 1px solid var(--stage-border);
+        isolation: isolate;
+      }
+      .cta .panel::before {
+        content: "";
+        position: absolute;
+        inset: -40%;
+        z-index: -1;
+        background: conic-gradient(from 0deg, var(--mesh-1), var(--mesh-2), var(--mesh-4), var(--mesh-3), var(--mesh-1));
+        opacity: 0.32;
+        filter: blur(60px);
+        animation: spin 18s linear infinite;
+      }
+      .cta .spot {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: radial-gradient(420px 420px at var(--sx, 50%) var(--sy, 50%), color-mix(in srgb, var(--mesh-4) 30%, transparent), transparent 60%);
+        transition: background 120ms linear;
+      }
+      .cta h2 {
+        font-size: clamp(2.2rem, 5.4vw, 3.8rem);
+        color: var(--stage-text);
+        margin-bottom: var(--space-md);
+      }
+      .cta p {
+        color: var(--stage-muted);
+        max-width: 46ch;
+        margin: 0 auto var(--space-xl);
+      }
+
+      /* ============================================================
+         FOOTER
+         ============================================================ */
+      footer {
+        padding: var(--space-3xl) 0 var(--space-2xl);
+        background: var(--color-surface);
+        border-top: 1px solid var(--color-border);
+      }
+      .foot-grid {
+        display: grid;
+        grid-template-columns: 1.4fr repeat(3, 1fr);
+        gap: var(--space-xl);
+      }
+      @media (max-width: 760px) {
+        .foot-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .foot-grid h5 {
+        font-size: 0.78rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-muted);
+        margin: 0 0 var(--space-md);
+      }
+      .foot-grid a {
+        display: block;
+        color: var(--color-text);
+        font-size: 0.92rem;
+        padding: 5px 0;
+        opacity: 0.78;
+        transition: opacity var(--motion-duration-base) var(--motion-easing);
+      }
+      .foot-grid a:hover {
+        opacity: 1;
+      }
+      .foot-note {
+        margin-top: var(--space-2xl);
+        padding-top: var(--space-lg);
+        border-top: 1px solid var(--color-border);
+        color: var(--color-muted);
+        font-size: 0.82rem;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+      }
+
+      .disclaimer {
+        background: color-mix(in srgb, var(--color-warning) 10%, var(--color-background));
+        color: var(--color-text);
+        text-align: center;
+        font-size: 0.8rem;
+        padding: 10px var(--space-md);
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      /* ============================================================
+         KEYFRAMES
+         ============================================================ */
+      @keyframes meshDrift {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        33% {
+          transform: translate3d(6%, -4%, 0) scale(1.12);
+        }
+        66% {
+          transform: translate3d(-5%, 5%, 0) scale(0.94);
+        }
+      }
+      @keyframes floaty {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+      @keyframes marquee {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      @keyframes barPulse {
+        0%,
+        100% {
+          transform: scaleY(0.7);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ============================================================
+         REDUCED MOTION — the single most important block.
+         Everything cinematic collapses to a calm, fully-legible
+         static state. Content never depends on motion to be readable.
+         ============================================================ */
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+        .js [data-reveal],
+        .js .hero h1 .word {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .mesh {
+          filter: blur(34px) saturate(1.1);
+        }
+        .cursor-glow {
+          display: none;
+        }
+        .scrolly-screen.s0 {
+          opacity: 1;
+        }
+        .scrolly-sticky {
+          position: static;
+          height: auto;
+        }
+        .step {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+    <p class="disclaimer">
+      Practice proof for the launch skill · fictional app “Hearth”, placeholder copy &amp; illustrative numbers · no external assets, fonts, or scripts
+    </p>
+
+    <!-- NAV -->
+    <nav class="nav" id="nav">
+      <a class="brand" href="#top"><span class="mark" aria-hidden="true"></span> Hearth</a>
+      <div class="links" aria-hidden="false">
+        <a href="#features">Rituals</a>
+        <a href="#how">How it works</a>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div class="nav-actions">
+        <button class="toggle is-on" id="badgeToggle" aria-pressed="true" title="Show the pattern + technique label on each section">
+          <span>Pattern labels</span><span class="pip" aria-hidden="true"></span>
+        </button>
+        <a class="btn" href="#pricing">Start tonight</a>
+      </div>
+    </nav>
+
+    <a id="top"></a>
+
+    <!-- §1 HERO -->
+    <section class="hero stage" id="hero">
+      <div class="badge">§1 Hero · <b>gradient-mesh + scroll parallax + word stagger + 3D tilt</b></div>
+      <div class="mesh" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+      <div class="hero-grain" aria-hidden="true"></div>
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow" data-reveal style="--i: 0">A calmer evening, on purpose</p>
+          <h1 id="heroTitle" aria-label="Wind down with one small ritual a night">
+            <!-- words injected by JS for stagger; this static fallback stays readable -->
+            Wind down with one <span class="accent">small ritual</span> a night.
+          </h1>
+          <p class="lede" data-reveal style="--i: 6">
+            Hearth turns “I should relax” into a two-minute evening ritual you actually finish — then quietly tracks the streak so the calm
+            compounds.
+          </p>
+          <div class="hero-cta" data-reveal style="--i: 8">
+            <a class="btn" href="#pricing">Start tonight — free</a>
+            <a class="btn btn--ghost" href="#how">See how it works</a>
+          </div>
+          <div class="hero-meta" data-reveal style="--i: 10">
+            <span><b>4.9★</b> illustrative rating</span>
+            <span><b>2&nbsp;min</b> a night</span>
+            <span><b>No</b> streak-shame</span>
+          </div>
+        </div>
+        <div class="hero-stage" id="heroStage" aria-hidden="true">
+          <div class="phone" id="heroPhone">
+            <div class="phone-screen">
+              <div class="status"><span>9:41</span><span>Tonight</span></div>
+              <h4>Tonight’s ritual</h4>
+              <p class="sub">Two minutes. That’s the whole ask.</p>
+              <div class="ritual done"><span class="dot"></span><span>Dim the lights</span></div>
+              <div class="ritual done"><span class="dot"></span><span>Three slow breaths</span></div>
+              <div class="ritual"><span class="dot"></span><span>One line in the journal</span></div>
+              <div class="ring" style="--ring: 68%">12</div>
+            </div>
+          </div>
+          <div class="floaty a"><span class="emoji">🔥</span><span>12-night streak<br /><span class="tiny">+1 just now</span></span></div>
+          <div class="floaty b"><span class="emoji">🌙</span><span>Wind-down at 9:40<br /><span class="tiny">on time tonight</span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §2 MARQUEE -->
+    <section class="marquee" id="trust">
+      <div class="badge">§2 Trust marquee · <b>seamless CSS marquee, pause-on-hover, edge mask</b></div>
+      <div class="wrap">
+        <p class="label">Loved by people who tried every other habit app</p>
+      </div>
+      <div class="marquee-mask">
+        <div class="marquee-track" id="marqueeTrack">
+          <span class="logo">Quietly</span><span class="logo">Northwind</span><span class="logo">Ember&nbsp;&amp;&nbsp;Co</span>
+          <span class="logo">Slowtide</span><span class="logo">Lumen</span><span class="logo">Field&nbsp;Notes</span>
+          <!-- duplicated set is injected by JS to guarantee a seamless -50% loop -->
+        </div>
+      </div>
+    </section>
+
+    <!-- §3 BENTO -->
+    <section class="pad" id="features">
+      <div class="badge">§3 Bento grid · <b>IntersectionObserver stagger + hover lift + live cells</b></div>
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Why it sticks</p>
+          <h2>Built for the nights you don’t feel like it.</h2>
+          <p class="lede">Every surface is designed to lower the activation energy of starting — not to guilt you into it.</p>
+        </div>
+        <div class="bento">
+          <div class="cell feature lg" data-reveal style="--i: 0">
+            <span class="chip" style="color: #fff; background: rgba(255, 255, 255, 0.18)">Core loop</span>
+            <h3 style="margin-top: 12px">One ritual, never a to-do list</h3>
+            <p>You see tonight’s single ritual — never a backlog. Finishing takes two minutes, so momentum survives bad days.</p>
+            <div class="bars" aria-hidden="true">
+              <i style="--h: 40%"></i><i style="--h: 65%"></i><i style="--h: 52%"></i><i style="--h: 80%"></i><i style="--h: 70%"></i
+              ><i style="--h: 92%"></i><i style="--h: 60%"></i>
+            </div>
+          </div>
+          <div class="cell tall" data-reveal style="--i: 1">
+            <span class="chip">Streaks</span>
+            <h3 style="margin-top: 12px">Gentle streaks</h3>
+            <p>Miss a night? Your streak pauses, it doesn’t shatter. Loss-aversion without the shame spiral.</p>
+            <div class="ring" style="--ring: 72%; margin-top: 18px; background:
+              radial-gradient(closest-side, var(--color-surface) 78%, transparent 80% 100%),
+              conic-gradient(var(--color-primary) 72%, var(--color-border) 0); color: var(--color-primary)">
+              12
+            </div>
+          </div>
+          <div class="cell sm" data-reveal style="--i: 2">
+            <h3>Wind-down time</h3>
+            <p>A nudge at the hour your past self chose.</p>
+          </div>
+          <div class="cell sm" data-reveal style="--i: 3">
+            <h3>Offline first</h3>
+            <p>Your journal lives on-device. Sync is optional.</p>
+          </div>
+          <div class="cell lg" data-reveal style="--i: 4">
+            <span class="chip">Reflection</span>
+            <h3 style="margin-top: 12px">One line is enough</h3>
+            <p>A single sentence beats an empty journal. Hearth asks for one line and celebrates it like a chapter.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §4 SCROLLYTELLING -->
+    <section class="scrolly" id="how">
+      <div class="badge">§4 Scrollytelling · <b>sticky pin + scroll-linked steps + cross-fade screens</b></div>
+      <div class="wrap">
+        <div class="section-head" data-reveal style="padding-top: 64px">
+          <p class="eyebrow">How it works</p>
+          <h2>Three taps from “too tired” to done.</h2>
+        </div>
+        <div class="scrolly-inner">
+          <div class="steps" id="steps">
+            <div class="step" data-step="0">
+              <h3>1 · Open to one thing</h3>
+              <p>No feed, no backlog, no red badges. Just tonight’s ritual, already chosen for you.</p>
+            </div>
+            <div class="step" data-step="1">
+              <h3>2 · Two quiet minutes</h3>
+              <p>Dim, breathe, write one line. The app fades into the background so the moment doesn’t.</p>
+            </div>
+            <div class="step" data-step="2">
+              <h3>3 · Watch the calm compound</h3>
+              <p>The streak ticks up, the wind-down time learns your rhythm, and tomorrow gets a little easier.</p>
+            </div>
+          </div>
+          <div class="scrolly-sticky">
+            <div class="scrolly-phone" aria-hidden="true">
+              <div class="scrolly-screen s0 is-active" data-screen="0">
+                <div class="status" style="display: flex; justify-content: space-between; font-size: 0.62rem; opacity: 0.8"><span>9:41</span><span>Tonight</span></div>
+                <h4>Tonight’s ritual</h4>
+                <div class="glasscard">🌙 Wind-down · one ritual waiting</div>
+                <div class="glasscard">Tap to begin — 2 min</div>
+              </div>
+              <div class="scrolly-screen s1" data-screen="1">
+                <h4>Breathe</h4>
+                <div class="ring" style="--ring: 50%; margin: 8px auto">∞</div>
+                <div class="glasscard">Three slow breaths…</div>
+                <div class="glasscard">One line in the journal</div>
+              </div>
+              <div class="scrolly-screen s2" data-screen="2">
+                <h4>Nice. Streak +1</h4>
+                <div class="ring" style="--ring: 78%; margin: 8px auto">13</div>
+                <div class="glasscard">Calm compounding · 13 nights</div>
+                <div class="glasscard">Tomorrow’s nudge: 9:38pm</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §5 STATS -->
+    <section class="stats pad" id="stats">
+      <div class="badge">§5 Stats · <b>count-up on in-view (rAF)</b></div>
+      <div class="wrap">
+        <div class="stat-grid">
+          <div class="stat" data-reveal style="--i: 0">
+            <div class="num" data-count="2" data-suffix=" min">0</div>
+            <div class="cap">to finish a ritual</div>
+          </div>
+          <div class="stat" data-reveal style="--i: 1">
+            <div class="num" data-count="87" data-suffix="%">0</div>
+            <div class="cap">come back the next night*</div>
+          </div>
+          <div class="stat" data-reveal style="--i: 2">
+            <div class="num" data-count="14" data-suffix="-night">0</div>
+            <div class="cap">median streak*</div>
+          </div>
+          <div class="stat" data-reveal style="--i: 3">
+            <div class="num" data-count="0" data-suffix=" ads">0</div>
+            <div class="cap">ever, on any plan</div>
+          </div>
+        </div>
+        <p style="text-align: center; color: var(--color-muted); font-size: 0.76rem; margin-top: 28px">
+          * Illustrative placeholder numbers for this motion proof — real launch copy must be backed by live data per the skill’s copy-compliance scan.
+        </p>
+      </div>
+    </section>
+
+    <!-- §6 TESTIMONIALS -->
+    <section class="pad" id="love">
+      <div class="badge">§6 Testimonials · <b>stagger reveal + cursor spotlight</b></div>
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">In their words</p>
+          <h2>The first habit app people don’t quit by Thursday.</h2>
+        </div>
+        <div class="quotes" id="quotes">
+          <div class="quote" data-reveal style="--i: 0">
+            <p>“It’s the only one that survived a bad week. The streak paused instead of resetting, and that tiny mercy kept me going.”</p>
+            <div class="who"><span class="av"></span><span><b>Maya R.</b><small>34-night streak</small></span></div>
+          </div>
+          <div class="quote" data-reveal style="--i: 1">
+            <p>“Two minutes felt too small to matter. Three weeks later my evenings feel completely different.”</p>
+            <div class="who"><span class="av"></span><span><b>Devin K.</b><small>21-night streak</small></span></div>
+          </div>
+          <div class="quote" data-reveal style="--i: 2">
+            <p>“No badges screaming at me. It just quietly shows up at the right time and then gets out of the way.”</p>
+            <div class="who"><span class="av"></span><span><b>Priya S.</b><small>50-night streak</small></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §7 PRICING -->
+    <section class="pad" id="pricing">
+      <div class="badge">§7 Pricing · <b>glassmorphism + animated billing toggle</b></div>
+      <div class="wrap">
+        <div class="section-head" data-reveal>
+          <p class="eyebrow">Pricing</p>
+          <h2>Start free. Upgrade when the calm sticks.</h2>
+          <div class="price-toggle" id="billing" role="group" aria-label="Billing period">
+            <button class="is-active" data-period="monthly" aria-pressed="true">Monthly</button>
+            <button data-period="annual" aria-pressed="false">Annual <span class="save">· save 33%</span></button>
+          </div>
+        </div>
+        <div class="plans">
+          <div class="plan" data-reveal style="--i: 0">
+            <span class="tier">Free</span>
+            <div class="price">$0</div>
+            <ul>
+              <li>One ritual a night</li>
+              <li>Gentle streaks</li>
+              <li>On-device journal</li>
+            </ul>
+            <a class="btn btn--ghost" href="#top">Start tonight</a>
+          </div>
+          <div class="plan pop" data-reveal style="--i: 1">
+            <span class="tier">Hearth Plus</span>
+            <div class="price"><span data-price='{"monthly":"$4","annual":"$2.67"}'>$4</span><small>/mo</small></div>
+            <ul>
+              <li>Custom ritual library</li>
+              <li>Smart wind-down timing</li>
+              <li>Cloud sync across devices</li>
+              <li>Mood &amp; sleep reflection</li>
+            </ul>
+            <a class="btn" href="#top">Try Plus free for 14 days</a>
+          </div>
+          <div class="plan" data-reveal style="--i: 2">
+            <span class="tier">Lifetime</span>
+            <div class="price"><span data-price='{"monthly":"$79","annual":"$79"}'>$79</span><small>once</small></div>
+            <ul>
+              <li>Everything in Plus</li>
+              <li>One-time payment</li>
+              <li>All future rituals</li>
+            </ul>
+            <a class="btn btn--ghost" href="#top">Buy once</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- §8 CTA -->
+    <section class="cta stage" id="cta">
+      <div class="badge">§8 Spotlight CTA · <b>conic gradient morph + cursor spotlight + glass</b></div>
+      <div class="wrap">
+        <div class="panel" id="ctaPanel">
+          <div class="spot" id="ctaSpot" aria-hidden="true"></div>
+          <p class="eyebrow" data-reveal>Tonight’s a good night to start</p>
+          <h2 data-reveal style="--i: 1">Your calmest evening is two&nbsp;minutes away.</h2>
+          <p data-reveal style="--i: 2">No streak-shame, no ads, no feed. Just one small ritual, starting tonight.</p>
+          <div data-reveal style="--i: 3"><a class="btn" href="#top" style="font-size: 1.05rem; padding: 1em 2em">Start free tonight</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+      <div class="badge">Footer · <b>reveal on enter</b></div>
+      <div class="wrap">
+        <div class="foot-grid">
+          <div data-reveal>
+            <a class="brand" href="#top" style="margin-bottom: 12px"><span class="mark" aria-hidden="true"></span> Hearth</a>
+            <p class="lede" style="font-size: 0.92rem">A calmer evening, one small ritual at a time.</p>
+          </div>
+          <div data-reveal style="--i: 1">
+            <h5>Product</h5><a href="#features">Rituals</a><a href="#how">How it works</a><a href="#pricing">Pricing</a>
+          </div>
+          <div data-reveal style="--i: 2">
+            <h5>Company</h5><a href="#top">About</a><a href="#top">Blog</a><a href="#top">Press kit</a>
+          </div>
+          <div data-reveal style="--i: 3">
+            <h5>Legal</h5><a href="#top">Privacy</a><a href="#top">Terms</a><a href="#top">Delete account</a>
+          </div>
+        </div>
+        <div class="foot-note">
+          <span>© Hearth — fictional demo for the b2c-mobile-business-launch skill.</span>
+          <span>Built with zero external dependencies · honors prefers-reduced-motion</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      /* ============================================================
+         INTERACTION LAYER — vanilla, dependency-free.
+         In the production skill this choreography is expressed with
+         motion/react (whileInView, useScroll/useTransform); here it is
+         hand-rolled so the proof opens anywhere with no build step.
+         Every effect is guarded so reduced-motion + no-JS stay correct.
+         ============================================================ */
+      (function () {
+        "use strict";
+        var root = document.documentElement;
+        root.classList.remove("no-js");
+        root.classList.add("js");
+
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* ---- pattern-label toggle ---- */
+        var body = document.body;
+        body.classList.add("show-badges");
+        var badgeToggle = document.getElementById("badgeToggle");
+        if (badgeToggle) {
+          badgeToggle.addEventListener("click", function () {
+            var on = body.classList.toggle("show-badges");
+            badgeToggle.classList.toggle("is-on", on);
+            badgeToggle.setAttribute("aria-pressed", String(on));
+          });
+        }
+
+        /* ---- hero headline: split into staggered words ---- */
+        var heroTitle = document.getElementById("heroTitle");
+        if (heroTitle) {
+          var accentEl = heroTitle.querySelector(".accent");
+          var accentText = accentEl ? accentEl.textContent : "";
+          var full = heroTitle.textContent.replace(/\s+/g, " ").trim();
+          var parts = full.split(" ");
+          heroTitle.innerHTML = "";
+          parts.forEach(function (w, idx) {
+            var span = document.createElement("span");
+            span.className = "word";
+            // re-mark the accent words so the gradient survives the split
+            if (accentText && accentText.indexOf(w) > -1) span.classList.add("accent");
+            span.style.setProperty("--i", idx);
+            span.textContent = w + (idx < parts.length - 1 ? " " : "");
+            heroTitle.appendChild(span);
+          });
+        }
+
+        /* ---- seamless marquee: duplicate the set so -50% loops cleanly ---- */
+        var track = document.getElementById("marqueeTrack");
+        if (track) {
+          track.innerHTML = track.innerHTML + track.innerHTML;
+        }
+
+        /* ---- IntersectionObserver reveals ---- */
+        var revealEls = document.querySelectorAll("[data-reveal]");
+        if ("IntersectionObserver" in window && !reduce) {
+          var io = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  e.target.classList.add("is-visible");
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.16, rootMargin: "0px 0px -8% 0px" }
+          );
+          revealEls.forEach(function (el) {
+            io.observe(el);
+          });
+        } else {
+          revealEls.forEach(function (el) {
+            el.classList.add("is-visible");
+          });
+        }
+
+        /* ---- hero in-view (kick the word stagger) ---- */
+        var hero = document.getElementById("hero");
+        if (hero) {
+          if (reduce || !("IntersectionObserver" in window)) {
+            hero.classList.add("is-in");
+          } else {
+            var heroIO = new IntersectionObserver(
+              function (entries) {
+                entries.forEach(function (e) {
+                  if (e.isIntersecting) {
+                    hero.classList.add("is-in");
+                    heroIO.disconnect();
+                  }
+                });
+              },
+              { threshold: 0.25 }
+            );
+            heroIO.observe(hero);
+          }
+        }
+
+        /* ---- count-up stats ---- */
+        function countUp(el) {
+          var target = parseFloat(el.getAttribute("data-count")) || 0;
+          var suffix = el.getAttribute("data-suffix") || "";
+          if (reduce) {
+            el.textContent = target + suffix;
+            return;
+          }
+          var dur = 1300,
+            start = null;
+          function tick(ts) {
+            if (start === null) start = ts;
+            var p = Math.min((ts - start) / dur, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            var val = target % 1 === 0 ? Math.round(target * eased) : (target * eased).toFixed(1);
+            el.textContent = val + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+        var counts = document.querySelectorAll("[data-count]");
+        if ("IntersectionObserver" in window) {
+          var cio = new IntersectionObserver(
+            function (entries) {
+              entries.forEach(function (e) {
+                if (e.isIntersecting) {
+                  countUp(e.target);
+                  cio.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.6 }
+          );
+          counts.forEach(function (el) {
+            cio.observe(el);
+          });
+        } else {
+          counts.forEach(countUp);
+        }
+
+        /* ---- billing toggle ---- */
+        var billing = document.getElementById("billing");
+        if (billing) {
+          billing.addEventListener("click", function (ev) {
+            var btn = ev.target.closest("button");
+            if (!btn) return;
+            var period = btn.getAttribute("data-period");
+            billing.querySelectorAll("button").forEach(function (b) {
+              var on = b === btn;
+              b.classList.toggle("is-active", on);
+              b.setAttribute("aria-pressed", String(on));
+            });
+            document.querySelectorAll("[data-price]").forEach(function (p) {
+              try {
+                var map = JSON.parse(p.getAttribute("data-price"));
+                if (map[period]) p.textContent = map[period];
+              } catch (e) {}
+            });
+            document.querySelectorAll(".plan .price small").forEach(function (s) {
+              if (s.textContent.indexOf("once") === -1) s.textContent = period === "annual" ? "/mo, billed yearly" : "/mo";
+            });
+          });
+        }
+
+        /* ============================================================
+           rAF scroll loop — progress bar, condensed nav, hero parallax,
+           and scrollytelling step activation. One listener, batched in
+           requestAnimationFrame, skipped entirely under reduced motion
+           for the parallax/tilt pieces.
+           ============================================================ */
+        var progress = document.getElementById("progress");
+        var nav = document.getElementById("nav");
+        var heroStage = document.getElementById("heroStage");
+        var steps = Array.prototype.slice.call(document.querySelectorAll(".step"));
+        var screens = Array.prototype.slice.call(document.querySelectorAll(".scrolly-screen"));
+        var howSection = document.getElementById("how");
+        var ticking = false;
+
+        function onScroll() {
+          var y = window.scrollY || window.pageYOffset;
+          var docH = document.documentElement.scrollHeight - window.innerHeight;
+          if (progress) progress.style.width = (docH > 0 ? (y / docH) * 100 : 0) + "%";
+          if (nav) nav.classList.toggle("is-condensed", y > 40);
+
+          if (!reduce) {
+            if (heroStage) heroStage.style.setProperty("--py", String(Math.min(y * 0.08, 90)));
+
+            /* scrollytelling: map scroll progress through the section to a step index */
+            if (howSection && steps.length) {
+              var rect = howSection.getBoundingClientRect();
+              var total = rect.height - window.innerHeight;
+              var passed = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+              var prog = total > 0 ? passed / total : 0;
+              var active = Math.min(steps.length - 1, Math.floor(prog * steps.length));
+              if (rect.top > window.innerHeight) active = 0;
+              steps.forEach(function (s, i) {
+                s.classList.toggle("is-active", i === active);
+              });
+              screens.forEach(function (s, i) {
+                s.classList.toggle("is-active", i === active);
+              });
+            }
+          }
+          ticking = false;
+        }
+        window.addEventListener(
+          "scroll",
+          function () {
+            if (!ticking) {
+              ticking = true;
+              requestAnimationFrame(onScroll);
+            }
+          },
+          { passive: true }
+        );
+        onScroll();
+
+        /* ============================================================
+           Pointer layer — cursor glow, hero 3D tilt, CTA spotlight,
+           testimonial spotlight. All disabled under reduced motion and
+           on coarse (touch) pointers.
+           ============================================================ */
+        var fine = window.matchMedia("(pointer: fine)").matches;
+        if (!reduce && fine) {
+          var glow = document.getElementById("cursorGlow");
+          var phone = document.getElementById("heroPhone");
+          var heroEl = document.getElementById("hero");
+
+          window.addEventListener(
+            "pointermove",
+            function (e) {
+              if (glow) {
+                glow.style.transform = "translate3d(" + (e.clientX - 230) + "px," + (e.clientY - 230) + "px,0)";
+                glow.style.opacity = "1";
+              }
+            },
+            { passive: true }
+          );
+
+          if (heroEl && phone) {
+            heroEl.addEventListener("pointermove", function (e) {
+              var r = heroEl.getBoundingClientRect();
+              var rx = (e.clientY - r.top) / r.height - 0.5;
+              var ry = (e.clientX - r.left) / r.width - 0.5;
+              phone.style.setProperty("--tilt-x", rx * -7 + "deg");
+              phone.style.setProperty("--tilt-y", ry * 9 + "deg");
+            });
+            heroEl.addEventListener("pointerleave", function () {
+              phone.style.setProperty("--tilt-x", "0deg");
+              phone.style.setProperty("--tilt-y", "0deg");
+            });
+          }
+
+          var ctaPanel = document.getElementById("ctaPanel");
+          var ctaSpot = document.getElementById("ctaSpot");
+          if (ctaPanel && ctaSpot) {
+            ctaPanel.addEventListener("pointermove", function (e) {
+              var r = ctaPanel.getBoundingClientRect();
+              ctaSpot.style.setProperty("--sx", ((e.clientX - r.left) / r.width) * 100 + "%");
+              ctaSpot.style.setProperty("--sy", ((e.clientY - r.top) / r.height) * 100 + "%");
+            });
+          }
+
+          document.querySelectorAll(".quote").forEach(function (q) {
+            q.addEventListener("pointermove", function (e) {
+              var r = q.getBoundingClientRect();
+              q.style.setProperty("--mx", ((e.clientX - r.left) / r.width) * 100 + "%");
+              q.style.setProperty("--my", ((e.clientY - r.top) / r.height) * 100 + "%");
+            });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
