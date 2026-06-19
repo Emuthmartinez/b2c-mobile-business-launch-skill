@@ -168,7 +168,7 @@ that grounds them. Conventions used in every loop:
   3. Render `launch-cockpit.html` early and re-render whenever lane/provider/orchestration/proof/gate state changes (`npm run render:launch-cockpit`). → `Start Here` step 2; *Operating Posture*.
 - **Proof:** `npm run validate:launch-state`; `launch-cockpit.html` re-rendered and reflects current lanes.
 - **Memory:** `PROJECT_STATE.yaml` + `launch-cockpit.html` are the durable state contract.
-- **Stopping condition:** `validate:launch-state` passes, `render:launch-cockpit` re-run exits 0 and is byte-identical on a second run (no drift), **and** `project.launch_tier` is set to `full|lite`.
+- **Stopping condition:** `validate:launch-state` passes, `render:launch-cockpit` exits 0 and writes `launch-cockpit.html`, **and** `project.launch_tier` is set to `full|lite`. (Single-pass: re-runs only when a lane/provider/proof/gate field changes, never on a timer, so it cannot spin.)
 
 ### L04 — Paid-tool routing & fallback
 - **Trigger:** Before using or replacing any paid/account-gated tool (AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, RevenueCat/Stripe/PostHog/Resend, etc.), or before a free fallback.
@@ -217,7 +217,7 @@ that grounds them. Conventions used in every loop:
   3. Re-render derived assets (screenshots/App Preview/ad creative) where copy/UI changed; reconcile the lexicon. → `change-cascade.md` *Process* steps 4–5; *Operating Posture* (Cascade every change).
 - **Proof:** Every impacted surface updated or marked unaffected; derived assets re-rendered; lexicon consistent across surfaces.
 - **Memory:** `LAUNCH_TRACE.md`/`CHANGE_LOG.md` + `PROJECT_STATE.yaml` lane evidence; `launch-cockpit.html` re-rendered.
-- **Stopping condition:** Every surface row in the cascade pass is marked `updated|unaffected` (grep finds none unmarked), the Lexicon Lock grep returns 0 cross-surface mismatches, and the cascade is recorded in `LAUNCH_TRACE.md`/`CHANGE_LOG.md` — otherwise the `change-cascade-incomplete` failure card stays open.
+- **Stopping condition:** The cascade table enumerates every surface from the matching Change Cascade Map rows (non-empty), every row is marked `updated|unaffected` (grep finds none unmarked), the Lexicon Lock grep returns 0 cross-surface mismatches, and the cascade is recorded in `LAUNCH_TRACE.md`/`CHANGE_LOG.md` — otherwise the `change-cascade-incomplete` failure card stays open.
 
 ### L09 — Research-backed spec
 - **Trigger:** Need category/pricing/keyword/competitor/review-social-language/name-collision evidence before the spec is treated as ready.
@@ -227,7 +227,7 @@ that grounds them. Conventions used in every loop:
   3. Produce the revised `SPEC.md` with the evidence ledger; lock the name before ASO/landing depend on it. → Phase 1; *Operating Posture* (Lock phase outputs).
 - **Proof:** `RESEARCH.md` evidence ledger + `SPEC.md` with each claim sourced to App Store/competitor/review/XPOZ/funnel evidence.
 - **Memory:** `RESEARCH.md`, `SPEC.md` + `PROJECT_STATE.yaml` research lane.
-- **Stopping condition:** Every claim row in the `RESEARCH.md`/`SPEC.md` evidence ledger has a non-empty source cell (grep finds no empty source), a name-collision result is recorded, and `lanes.research` reads `locked`.
+- **Stopping condition:** The `RESEARCH.md`/`SPEC.md` evidence ledger has ≥1 claim row and none has an empty source cell (grep finds no empty source), a name-collision result is recorded, and `lanes.research` reads `locked`.
 
 ### L10 — Localization market research
 - **Trigger:** Before localizing any surface (metadata/keywords/screenshots, paywall/offers, landing, email, paid storefronts) or choosing which locales to ship.
@@ -317,7 +317,7 @@ that grounds them. Conventions used in every loop:
   3. Run the Lexicon Lock so one vocabulary holds across surfaces. → `flow-traceability.md` (Lexicon Lock, per change-cascade pairing).
 - **Proof:** `LAUNCH_TRACE.md` connects each build decision back to evidence; `TECH_SPEC.md` exists when implementation is in scope.
 - **Memory:** `LAUNCH_TRACE.md`, `TECH_SPEC.md` + `PROJECT_STATE.yaml` trace lane.
-- **Stopping condition:** Every row in the `LAUNCH_TRACE.md` decision table has a non-empty evidence cell (grep) **and** the Lexicon Lock grep returns 0 cross-surface term mismatches; `TECH_SPEC.md` exists when implementation is in scope.
+- **Stopping condition:** The `LAUNCH_TRACE.md` decision table is non-empty and every row has a non-empty evidence cell (grep) **and** the Lexicon Lock grep returns 0 cross-surface term mismatches; `TECH_SPEC.md` exists when implementation is in scope.
 
 ### L19 — Security architecture & release gate
 - **Trigger:** Before threat modeling, hardening, OWASP MASVS/ASVS checks, MobSF/static scans, app-integrity decisions, Sentry/release-health, or any security-readiness claim.
@@ -412,7 +412,7 @@ that grounds them. Conventions used in every loop:
   2. Align pricing/subscription copy with RevenueCat/Stripe/web-funnel (L40) and mark founder-only approval gates. → `Start Here` step 17.
 - **Proof:** `APP_STORE_LISTING.md` packet complete; App Privacy answers reconcile with `PRIVACY.md` (L41) and `GOOGLE_PLAY_RELEASE.md` Data Safety (L34).
 - **Memory:** `APP_STORE_LISTING.md` + `PROJECT_STATE.yaml` listing lane.
-- **Stopping condition:** `APP_STORE_LISTING.md` has no `TODO`/empty required-field token (grep), its App Privacy answers diff-match `PRIVACY.md`, and a founder-approval gate row precedes ASC entry.
+- **Stopping condition:** `APP_STORE_LISTING.md` exists with every required-field section present and carries no `TODO`/empty token (grep), its App Privacy answers diff-match `PRIVACY.md`, and a founder-approval gate row precedes ASC entry.
 
 ### L29 — Apple signing & release readiness
 - **Trigger:** Before Apple Developer enrollment, Team ID, bundle/App IDs, signing, capabilities, certificates, profiles, archives, exports, uploads, or TestFlight.
@@ -502,7 +502,7 @@ that grounds them. Conventions used in every loop:
   2. Record raw capture, final export, captions, upload copy, and rerender path in `DEMO_VIDEO.md`/`CONTENT_ASSETS.md`. → Deliverable Standard (MobAI artifacts).
 - **Proof:** Demo artifacts recorded with `.mob`/`screenplay.json`, raw capture, export, captions, and rerender path; MobAI used per `paid-tool-routing.md` (L04).
 - **Memory:** `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` + `PROJECT_STATE.yaml` demo lane.
-- **Stopping condition:** `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` rows carry non-empty `source`/`rerender` fields (grep), or the MobAI-access blocker is recorded in `PROJECT_STATE.yaml`; no free-fallback downgrade without `check:paid-tool-decisions` approval.
+- **Stopping condition:** At least one demo artifact row exists in `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` with non-empty `source`/`rerender` fields (grep), **or** the MobAI-access blocker is recorded in `PROJECT_STATE.yaml`; no free-fallback downgrade without `check:paid-tool-decisions` approval.
 
 ### L39 — Native iOS / XcodeBuildMCP proof
 - **Trigger:** Before Codex Desktop native iOS / XcodeBuildMCP / serve-sim / SnapshotPreviews proof or command examples.
@@ -529,7 +529,7 @@ that grounds them. Conventions used in every loop:
   2. Reconcile App Store App Privacy answers + Play Data Safety with actual data collection/SDKs (pairs with L28/L30/L34). → `Start Here` step 20; `change-cascade.md` privacy row.
 - **Proof:** `PRIVACY.md`/`TERMS.md` published; privacy answers reconcile with the manifest, Data Safety, and analytics/SDK reality.
 - **Memory:** `PRIVACY.md`, `TERMS.md` + `PROJECT_STATE.yaml` legal lane.
-- **Stopping condition:** `PRIVACY.md`+`TERMS.md` have no placeholder token (grep) and their App Privacy/Data Safety answers diff-match the `check:apple-requirements`/`check:google-play` packets; publishing stays a founder gate.
+- **Stopping condition:** `PRIVACY.md` and `TERMS.md` exist, are non-empty, and carry no placeholder token (grep), and their App Privacy/Data Safety answers diff-match the `check:apple-requirements`/`check:google-play` packets; publishing stays a founder gate.
 
 ### L42 — Resend email ops
 - **Trigger:** Before Resend domains/keys, transactional/lifecycle/broadcast email, contacts/topics, webhooks, inbound, unsubscribe, or deliverability work.
@@ -565,7 +565,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `UGC_PLAYBOOK.md`: UGC fit decision, 90-day creator format-discovery plan, sourcing approach, creator budget, script/format loop, disclosure rules, and stop/scale thresholds. → Deliverable Standard (UGC fit).
 - **Proof:** `UGC_PLAYBOOK.md` complete with fit decision, 90-day plan, disclosure rules, and stop/scale thresholds; creator spend founder-gated (L04).
 - **Memory:** `UGC_PLAYBOOK.md` + `PROJECT_STATE.yaml` ugc lane.
-- **Stopping condition:** `UGC_PLAYBOOK.md` has non-empty rows for fit decision, 90-day plan, budget, disclosure rules, and stop/scale thresholds (grep finds none empty); creator payments/contracts stay a named founder gate.
+- **Stopping condition:** `UGC_PLAYBOOK.md` contains all five named rows — fit decision, 90-day plan, budget, disclosure rules, stop/scale thresholds — each present and non-empty (grep finds none missing or empty); creator payments/contracts stay a named founder gate.
 
 ### L46 — Fastlane growth ops
 - **Trigger:** After launch approval/public beta, or usefastlane.ai setup, social account connection, Blitz angles/preferences, generated content, scheduling, or social analytics.
@@ -574,7 +574,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `FASTLANE_OPS.md`; QA generated/rendered content and run the weekly iteration loop. → Phase 6.
 - **Proof:** `FASTLANE_OPS.md` workspace + connections + angles recorded; scheduling/posting founder-approved; analytics snapshots captured.
 - **Memory:** `FASTLANE_OPS.md` + `PROJECT_STATE.yaml` fastlane lane.
-- **Stopping condition:** `FASTLANE_OPS.md` records workspace + connections + Blitz angles + the weekly loop with a QA pass logged; social-account connection and posting/scheduling stay named founder gates.
+- **Stopping condition:** `FASTLANE_OPS.md` exists with the workspace, connections, Blitz-angles, and weekly-loop sections present and a QA-pass log line recorded; social-account connection and posting/scheduling stay named founder gates.
 
 ### L47 — Post-launch operations
 - **Trigger:** App live (phase_6/6b), "what now", weekly ops, incident response, review-response, or retention-review work.
