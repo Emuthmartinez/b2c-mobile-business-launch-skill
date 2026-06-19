@@ -83,6 +83,47 @@ two loops share trigger + primary artifact + validator (see Distinctness Notes).
 
 ---
 
+## Stopping-Condition Audit
+
+A loop's most dangerous failure mode is a **vague stop** — one that terminates on
+judgment ("until it looks good", "complete", "reconciles", "feels right",
+"matches reality", "evidence-backed") rather than on something a second observer
+could check without an opinion. The loops below were ranked by how subjective the
+original stop was, the worst rewritten first, then re-audited until none stopped
+on judgment.
+
+**Observable-stop rule (applied to every loop):** a stopping condition must name
+**one of** — (a) a `package.json` command and its pass state (`check:*`,
+`probe:*`, `launchbench`, `audit:ci`), (b) a grep/diff-checkable property of a
+named artifact (e.g., "zero `TODO`/placeholder tokens", "Lexicon Lock grep
+returns 0 cross-surface mismatches", "every surface row marked `updated|unaffected`"),
+or (c) a discrete recorded state in `PROJECT_STATE.yaml` (a lane set to
+`done|locked|blocked`, or a named founder-only gate). No stop may rest on an
+adjective alone.
+
+**Ranking (most-subjective originals, worst first) and the observable stop each now uses:**
+
+| Rank | Loop | Original stop (subjective phrase) | Rewritten to stop on |
+|---|---|---|---|
+| 1 | L24 Premium craft | "'feels right' details are not left to the build" | `check:ux-patterns` passes **and** the `UX_PATTERNS.md` Premium Craft Details checklist has every row marked `done\|n-a` (grep finds no unresolved row) |
+| 2 | L03 Orient/cockpit | "the cockpit matches reality" | `validate:launch-state` passes **and** `render:launch-cockpit` re-run exits 0 with no diff on a second run **and** `project.launch_tier` is set |
+| 3 | L09 Research spec | "spec and name are evidence-backed and locked" | every claim row in the `SPEC.md`/`RESEARCH.md` evidence ledger carries a source cell (grep finds no empty source) **and** `lanes.research: locked` |
+| 4 | L18 Launch trace | "every build decision traces to evidence and the lexicon is locked" | every row in the `LAUNCH_TRACE.md` decision table has a non-empty evidence cell (grep) **and** the Lexicon Lock grep returns 0 cross-surface term mismatches |
+| 5 | L28 Listing packet | "complete and reconciled" | `APP_STORE_LISTING.md` has no `TODO`/empty required-field token (grep) **and** its App Privacy answers diff-match `PRIVACY.md` **and** the founder-approval gate row exists |
+| 6 | L41 Privacy/terms | "exist and reconcile" | `PRIVACY.md`+`TERMS.md` have no placeholder token (grep) **and** App Privacy/Data Safety answers diff-match the `check:apple-requirements`/`check:google-play` packets |
+| 7 | L08 Change cascade | "all surfaces reconciled" | every surface row in the cascade pass is marked `updated\|unaffected` (grep finds none unmarked) **and** the Lexicon Lock grep returns 0 mismatches — else the `change-cascade-incomplete` failure card is open |
+| 8 | L43 GEO/SEO | "crawl/schema/AI-visibility checks pass" (unnamed) + unobservable "loaded before first edit" | `check:landing-funnel` passes (robots/sitemap/llms/schema asserts) **and** a live `curl` of the deployed page returns the JSON-LD block |
+| 9 | L17 Launch narrative | "public claims limited to what is true" | `check:launch-narrative` passes (guardrail + cadence asserts) **and** `lanes.launch_narrative: locked` |
+| 10 | L38 MobAI demos | "demo artifacts exist with a rerender path" | `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` rows have non-empty `source` + `rerender` fields (grep) — else the MobAI-access blocker is recorded in `PROJECT_STATE.yaml` |
+
+Loops 11–50 used softer completeness language ("exist", "recorded", "complete")
+but each already owned a validator or a checkable artifact; the re-audit pass
+below rewrites all 50 stops to name that command/artifact/state explicitly, so
+every stop is verifiable without an opinion. See the **Re-audit Result** at the
+end for the closed-loop confirmation.
+
+---
+
 ## Loops
 
 Each loop's **action** steps end with a `→` citation to the named skill section
@@ -91,9 +132,13 @@ that grounds them. Conventions used in every loop:
 - **Memory** always includes the relevant `PROJECT_STATE.yaml` lane plus the
   lane's durable artifact — grounded in SKILL.md *Operating Posture* ("Keep
   `PROJECT_STATE.yaml` current") and *Autopilot Run Contract*.
-- **Stopping condition** for provider-backed lanes always defers to live proof or
-  an explicit founder-only gate — grounded in SKILL.md *Autopilot Run Contract*
-  (provider-proof paragraph) and `references/provider-proof.md`.
+- **Stopping condition** for every loop names a verifiable terminator — a
+  `package.json` command's pass state, a grep/diff-checkable artifact property, or
+  a discrete `PROJECT_STATE.yaml` lane/gate state (per the Observable-stop rule
+  above). For provider-backed lanes that terminator is a probe/validator output or
+  a named founder-only gate — grounded in SKILL.md *Autopilot Run Contract*
+  (provider-proof paragraph) and `references/provider-proof.md`. No stop rests on
+  an adjective ("complete", "reconciles", "looks good", "feels right").
 
 ### L01 — Runtime freshness gate (consumer side)
 - **Trigger:** About to start substantial launch/design/store/revenue/build work and the installed skill runtime may be behind the source copy.
@@ -103,7 +148,7 @@ that grounds them. Conventions used in every loop:
   3. Load `references/skill-versioning.md` for the commands/sync rules before acting on the answer. → `When To Load` (skill-versioning).
 - **Proof:** `check:skill-version` output (fresh, or `skill_version.stale` recorded); the founder's decision captured.
 - **Memory:** `PROJECT_STATE.yaml` records freshness status + the founder's update/continue choice.
-- **Stopping condition:** Runtime is fresh, or the founder explicitly declined the upgrade / latest source is unavailable — then continue the original request. Never silently proceed on a stale runtime.
+- **Stopping condition:** `check:skill-version` reports not-stale, **or** `PROJECT_STATE.yaml` records the founder's decline / latest-source-unavailable as a named gate — then continue. Never proceed while `check:skill-version` reports `skill_version.stale` without a recorded decision.
 
 ### L02 — Session continuity / resume
 - **Trigger:** New session, resume, status check, or handoff on an existing launch.
@@ -113,7 +158,7 @@ that grounds them. Conventions used in every loop:
   3. Reconstruct phase/lane/provider/blocker state from durable files, not chat memory. → *Operating Posture*.
 - **Proof:** `npm run check:continuity-contract`; reconstructed state matches the durable files.
 - **Memory:** `PROJECT_STATE.yaml` (phase, lanes, blockers) re-confirmed; next action left in state before any pause.
-- **Stopping condition:** State is reconstructed from durable files and the next action is recorded; resume the in-flight lane.
+- **Stopping condition:** `check:continuity-contract` passes **and** the `next_action` field in `PROJECT_STATE.yaml` is non-empty; resume the in-flight lane.
 
 ### L03 — Orient, scaffold & state/cockpit upkeep
 - **Trigger:** Broad "launch this app / turn this transcript into a business" request; or any lane/provider/proof/blocker status change thereafter.
@@ -123,7 +168,7 @@ that grounds them. Conventions used in every loop:
   3. Render `launch-cockpit.html` early and re-render whenever lane/provider/orchestration/proof/gate state changes (`npm run render:launch-cockpit`). → `Start Here` step 2; *Operating Posture*.
 - **Proof:** `npm run validate:launch-state`; `launch-cockpit.html` re-rendered and reflects current lanes.
 - **Memory:** `PROJECT_STATE.yaml` + `launch-cockpit.html` are the durable state contract.
-- **Stopping condition:** State validates, the cockpit matches reality, and the launch tier is confirmed; hand off to the next lane.
+- **Stopping condition:** `validate:launch-state` passes, `render:launch-cockpit` re-run exits 0 and is byte-identical on a second run (no drift), **and** `project.launch_tier` is set to `full|lite`.
 
 ### L04 — Paid-tool routing & fallback
 - **Trigger:** Before using or replacing any paid/account-gated tool (AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane, RevenueCat/Stripe/PostHog/Resend, etc.), or before a free fallback.
@@ -133,7 +178,7 @@ that grounds them. Conventions used in every loop:
   3. Record decisions in `TOOL_DECISIONS.md`, separating blocked access from founder-approved fallback. → Phase 0b.
 - **Proof:** `npm run check:paid-tool-decisions`; `TOOL_DECISIONS.md` distinguishes blocked vs approved-fallback.
 - **Memory:** `TOOL_DECISIONS.md` + `PROJECT_STATE.yaml` tool-routing entries.
-- **Stopping condition:** Every paid lane is marked confirmed-paid, founder-approved-fallback, or blocked-pending-access — no silent downgrade remains.
+- **Stopping condition:** `check:paid-tool-decisions` passes **and** every lane row in `TOOL_DECISIONS.md` reads exactly one of `confirmed-paid|founder-approved-fallback|blocked-pending-access` (grep finds no unmarked row).
 
 ### L05 — Secrets baseline & routing
 - **Trigger:** Before any new API key, token, OAuth credential, webhook signing secret, service-account file, CI/deploy env var, or local `.env`.
@@ -143,7 +188,7 @@ that grounds them. Conventions used in every loop:
   3. Refresh current provider docs / CLI `--help` before any setup command and record the docs/version basis. → `Start Here` step 4; *Source Freshness*.
 - **Proof:** `npm run check:secrets` (secret-routing); `SECRETS.md` records the docs basis and no secret values are committed.
 - **Memory:** `SECRETS.md` + `PROJECT_STATE.yaml` secrets entries.
-- **Stopping condition:** Every secret has a routed home (Doppler/approved provider) with the docs basis recorded and no plaintext secrets in the repo.
+- **Stopping condition:** `check:secrets` and `check:template-safety` both pass (routed homes recorded, zero plaintext secret values) **and** `SECRETS.md` records the docs/version basis.
 
 ### L06 — App-archetype detection & starter
 - **Trigger:** Request matches a known product shape — social/community, AI chat/companion, habit/utility, or photo/AI-media.
@@ -153,7 +198,7 @@ that grounds them. Conventions used in every loop:
   3. Copy the runnable starter from `templates/app-archetypes/<pack>/starter/` as the floor and customize with the pack's prompts instead of improvising the wiring. → `Start Here` step 1a.
 - **Proof:** `npm run check:app-archetype` and `npm run check:archetype-starter`.
 - **Memory:** `PROJECT_STATE.yaml` archetype field + the copied starter scaffold.
-- **Stopping condition:** Archetype confirmed in state, starter copied, both validators pass; the pack feeds the normal research/11-star/design/security/revenue/growth lanes (it does not bypass them).
+- **Stopping condition:** `check:app-archetype` and `check:archetype-starter` both pass **and** the archetype field in `PROJECT_STATE.yaml` is set (the pack feeds the normal lanes; it does not bypass them).
 
 ### L07 — Provider-proof verification
 - **Trigger:** Before marking any provider-backed lane (analytics, revenue, email, store, security, engineering) done.
@@ -162,7 +207,7 @@ that grounds them. Conventions used in every loop:
   2. Record proof or an explicit founder-only gate in `PROVIDER_PROOF.md`; setup prose alone cannot mark the lane done. → *Autopilot Run Contract*.
 - **Proof:** `npm run check:provider-proof`; live probe output or a named founder-only gate in `PROVIDER_PROOF.md`.
 - **Memory:** `PROVIDER_PROOF.md` + `PROJECT_STATE.yaml` lane proof field.
-- **Stopping condition:** The lane carries live proof or an explicit founder-only gate; no provider lane is "done" on prose alone.
+- **Stopping condition:** `check:provider-proof` passes — each provider lane in `PROVIDER_PROOF.md` carries a probe/log artifact **or** a named founder-only gate; no provider lane reads `done` without one.
 
 ### L08 — Change cascade
 - **Trigger:** Any change to a launched/near-launch app's feature, copy, brand vocabulary, pricing, products, design, or data behavior once a listing/landing/assets exist.
@@ -172,7 +217,7 @@ that grounds them. Conventions used in every loop:
   3. Re-render derived assets (screenshots/App Preview/ad creative) where copy/UI changed; reconcile the lexicon. → `change-cascade.md` *Process* steps 4–5; *Operating Posture* (Cascade every change).
 - **Proof:** Every impacted surface updated or marked unaffected; derived assets re-rendered; lexicon consistent across surfaces.
 - **Memory:** `LAUNCH_TRACE.md`/`CHANGE_LOG.md` + `PROJECT_STATE.yaml` lane evidence; `launch-cockpit.html` re-rendered.
-- **Stopping condition:** `change-cascade.md` *Done Definition* met — all surfaces reconciled, derived assets re-rendered, public-surface edits founder-approved. (A surface left stale = `change-cascade-incomplete` failure card.)
+- **Stopping condition:** Every surface row in the cascade pass is marked `updated|unaffected` (grep finds none unmarked), the Lexicon Lock grep returns 0 cross-surface mismatches, and the cascade is recorded in `LAUNCH_TRACE.md`/`CHANGE_LOG.md` — otherwise the `change-cascade-incomplete` failure card stays open.
 
 ### L09 — Research-backed spec
 - **Trigger:** Need category/pricing/keyword/competitor/review-social-language/name-collision evidence before the spec is treated as ready.
@@ -182,7 +227,7 @@ that grounds them. Conventions used in every loop:
   3. Produce the revised `SPEC.md` with the evidence ledger; lock the name before ASO/landing depend on it. → Phase 1; *Operating Posture* (Lock phase outputs).
 - **Proof:** `RESEARCH.md` evidence ledger + `SPEC.md` with each claim sourced to App Store/competitor/review/XPOZ/funnel evidence.
 - **Memory:** `RESEARCH.md`, `SPEC.md` + `PROJECT_STATE.yaml` research lane.
-- **Stopping condition:** The spec and name are evidence-backed and locked; downstream lanes may depend on them.
+- **Stopping condition:** Every claim row in the `RESEARCH.md`/`SPEC.md` evidence ledger has a non-empty source cell (grep finds no empty source), a name-collision result is recorded, and `lanes.research` reads `locked`.
 
 ### L10 — Localization market research
 - **Trigger:** Before localizing any surface (metadata/keywords/screenshots, paywall/offers, landing, email, paid storefronts) or choosing which locales to ship.
@@ -192,7 +237,7 @@ that grounds them. Conventions used in every loop:
   3. Produce `LOCALIZATION_MARKET_RESEARCH.md` + `localization-market-research.html`. → `Start Here` step 17.
 - **Proof:** `npm run check:localization-research`; the opportunity matrix + priority tiers exist with demand evidence.
 - **Memory:** `LOCALIZATION_MARKET_RESEARCH.md` + `PROJECT_STATE.yaml` localization lane.
-- **Stopping condition:** Locales are chosen from a demand matrix with tiers (no translate-first); cascade and store lanes consume the tiers.
+- **Stopping condition:** `check:localization-research` passes — `LOCALIZATION_MARKET_RESEARCH.md` carries the per-storefront matrix and Tier 1/2/3 assignments with demand evidence on each row.
 
 ### L11 — Analytics & attribution blueprint
 - **Trigger:** Before onboarding/paywalls/funnels/store CTAs/referrals/email lifecycle/paid UA, or any build prompt that names events.
@@ -202,7 +247,7 @@ that grounds them. Conventions used in every loop:
   3. Render `analytics-plan.html` early so measurement is inspectable. → Phase 1b.
 - **Proof:** `npm run check:analytics-catalog` + `npm run check:attribution`; `analytics-plan.html` rendered.
 - **Memory:** `ANALYTICS.md` + `PROJECT_STATE.yaml` analytics lane.
-- **Stopping condition:** Every downstream-named event resolves in the catalog and the attribution contract is complete; surfaces may lock.
+- **Stopping condition:** `check:analytics-catalog` and `check:attribution` both pass — every event named in ONBOARDING/EMOTIONAL_DESIGN/VIRAL_GROWTH resolves in `ANALYTICS.md`, and the self-reported attribution fields are all present.
 
 ### L12 — 11-star experience
 - **Trigger:** "11-star run / pass" or before `SPEC.md`, onboarding, ads, store screenshots, content, or eng plans are treated as ready.
@@ -212,7 +257,7 @@ that grounds them. Conventions used in every loop:
   3. Produce `11_STAR_EXPERIENCE.md` + `11-star-experience.html`, then trace the V1 slice into product/design/analytics/revenue/store/content/build contracts. → `Start Here` step 9.
 - **Proof:** `npm run check:11-star`; the ladder, feasibility line, and V1 slice exist and trace outward.
 - **Memory:** `11_STAR_EXPERIENCE.md` + `PROJECT_STATE.yaml` 11-star lane.
-- **Stopping condition:** The V1 magical moment is chosen and traced; specs/design/store may harden on it.
+- **Stopping condition:** `check:11-star` passes — `11_STAR_EXPERIENCE.md` carries the 1–11 ladder, a marked line of feasibility, and a single named V1 slice traced outward.
 
 ### L13 — Emotional experience design (producer)
 - **Trigger:** Any product/onboarding/core-loop/paywall work whose 11-star target is 6★+; "charge this feature with emotion", "make users stick / build a habit", "apply the commitment/variable-reward/perceived-effort/intent-mirroring card".
@@ -222,7 +267,7 @@ that grounds them. Conventions used in every loop:
   3. For HIGH-risk cards (variable reward, streak, scarcity, urgency, social proof) add a user-control escape hatch, a counter-metric, and a truthfulness proof; run the bright-line dark-pattern test. → `Start Here` step 16a; `references/ethics-guardrail.md`.
 - **Proof:** `npm run check:emotional-design`; every applied card emits a named event + ethics attestation; dark patterns vetoed.
 - **Memory:** `EMOTIONAL_DESIGN.md` + `PROJECT_STATE.yaml` emotional_design lane.
-- **Stopping condition:** Each magical moment maps to a card+event+guardrail+fallback with HIGH-risk contracts satisfied; no bright-line dark pattern remains.
+- **Stopping condition:** `check:emotional-design` passes — every Card Application Map row names a card + PostHog event + bright-line guardrail + reduced-motion fallback, HIGH-risk rows carry escape-hatch/counter-metric/truthfulness fields, and the bright-line dark-pattern test reports none.
 
 ### L14 — Emotional design audit (auditor)
 - **Trigger:** "Audit this app's emotional design / emotional intelligence" or "emotional UX audit".
@@ -232,7 +277,7 @@ that grounds them. Conventions used in every loop:
   3. Produce `EMOTIONAL_AUDIT.md` giving each finding a concrete pathway to a better state, with ethics attestation on applied cards. → `Start Here` step 16a (auditor path).
 - **Proof:** `npm run check:emotional-design`; `EMOTIONAL_AUDIT.md` enumerates journeys with per-step Six-Lens scores and remediation paths.
 - **Memory:** `EMOTIONAL_AUDIT.md` + `PROJECT_STATE.yaml` emotional_design lane evidence.
-- **Stopping condition:** Every on-device journey step is scored and given a remediation pathway; dark-pattern findings raised as compliance vetoes.
+- **Stopping condition:** `check:emotional-design` passes against `EMOTIONAL_AUDIT.md` — every enumerated journey step has a Six-Lens score and a remediation row (grep finds no unscored step); dark-pattern findings are filed as compliance vetoes.
 
 ### L15 — Paid user-acquisition system
 - **Trigger:** Before paid ads, Apple Search Ads, Meta/TikTok/Google campaigns, CPP campaign routing, MMP/SDK choices, paid creative tests, or spend-readiness claims.
@@ -242,7 +287,7 @@ that grounds them. Conventions used in every loop:
   3. Mark founder-only spend gates explicitly. → `Start Here` step 11; *Autopilot Run Contract* (founder gates).
 - **Proof:** `npm run check:paid-ua`; one-channel choice + tracking baseline + stop/scale + spend gates present and traced.
 - **Memory:** `PAID_UA.md` + `PROJECT_STATE.yaml` paid_ua lane.
-- **Stopping condition:** The one-channel operating system is defined with tracking, economics, cadence, stop/scale rules, and a founder spend gate; no spend before that gate.
+- **Stopping condition:** `check:paid-ua` passes — `PAID_UA.md` records the one-channel choice, tracking baseline, RevenueCat LTV/CPA source, weekly cadence, and stop/scale rules; the `paid_user_acquisition` lane's spend gate stays unmet until founder-approved.
 
 ### L16 — Viral growth loop
 - **Trigger:** Before referral unlocks, share-to-unlock, invite systems, social/comment loops, or features meant to spread on TikTok/Reels/Shorts.
@@ -252,7 +297,7 @@ that grounds them. Conventions used in every loop:
   3. Add abuse controls and analytics proof for every loop. → `Start Here` step 12.
 - **Proof:** `npm run check:viral-growth`; loop + abuse controls + analytics proof + stop/scale present and traced.
 - **Memory:** `VIRAL_GROWTH.md` + `PROJECT_STATE.yaml` viral_growth lane.
-- **Stopping condition:** A product-led loop with abuse controls, analytics proof, and stop/scale rules is locked; growth claims may depend on it.
+- **Stopping condition:** `check:viral-growth` passes — `VIRAL_GROWTH.md` carries the product loop, abuse controls, analytics-event proof, and stop/scale rules, each traced to the named downstream docs.
 
 ### L17 — Launch narrative & cadence
 - **Trigger:** Before drafting the announcement, the launch-day sequence, or the weekly release rhythm.
@@ -262,7 +307,7 @@ that grounds them. Conventions used in every loop:
   3. Trace it into `EMOTIONAL_DESIGN.md`/`11_STAR_EXPERIENCE.md`/`CONTENT_ASSETS.md`/`VIRAL_GROWTH.md`/`APP_STORE_LISTING.md`/`ANALYTICS.md`/`LAUNCH_TRACE.md`. → `Start Here` step 12a.
 - **Proof:** `npm run check:launch-narrative`; copy passes the guardrails and the cadence/run-of-show exist.
 - **Memory:** `growth/LAUNCH_NARRATIVE.md` + `PROJECT_STATE.yaml` launch_narrative lane.
-- **Stopping condition:** Thesis, cadence, run-of-show, guardrail-clean copy, and posting gates are set; public claims limited to what is true and attributable.
+- **Stopping condition:** `check:launch-narrative` passes (2026 copy-guardrail + tentpole/weekly-cadence + run-of-show asserts) **and** `lanes.launch_narrative` reads `locked`.
 
 ### L18 — Launch trace & build contracts
 - **Trigger:** Moving from research to product experience / brand-design / implementation; deciding whether `TECH_SPEC.md` is needed.
@@ -272,7 +317,7 @@ that grounds them. Conventions used in every loop:
   3. Run the Lexicon Lock so one vocabulary holds across surfaces. → `flow-traceability.md` (Lexicon Lock, per change-cascade pairing).
 - **Proof:** `LAUNCH_TRACE.md` connects each build decision back to evidence; `TECH_SPEC.md` exists when implementation is in scope.
 - **Memory:** `LAUNCH_TRACE.md`, `TECH_SPEC.md` + `PROJECT_STATE.yaml` trace lane.
-- **Stopping condition:** Every build decision traces to evidence and the lexicon is locked; design/build may proceed.
+- **Stopping condition:** Every row in the `LAUNCH_TRACE.md` decision table has a non-empty evidence cell (grep) **and** the Lexicon Lock grep returns 0 cross-surface term mismatches; `TECH_SPEC.md` exists when implementation is in scope.
 
 ### L19 — Security architecture & release gate
 - **Trigger:** Before threat modeling, hardening, OWASP MASVS/ASVS checks, MobSF/static scans, app-integrity decisions, Sentry/release-health, or any security-readiness claim.
@@ -282,7 +327,7 @@ that grounds them. Conventions used in every loop:
   3. Render `security-review.html`, resolve/accept risks, and attach proof to `PRODUCTION_READINESS.md`. → Phase 5c.
 - **Proof:** `npm run check:security`; `security-review.html` rendered with scan/proof attached.
 - **Memory:** `SECURITY.md`, `security-review.html` + `PROJECT_STATE.yaml` security lane.
-- **Stopping condition:** Threat model, hardening, abuse controls, monitoring, and release proof exist or carry explicit accepted-risk/founder gates; the app is not "launch-ready from working screens alone."
+- **Stopping condition:** `check:security` passes and `security-review.html` is rendered with scan output attached to `PRODUCTION_READINESS.md` — each residual risk is marked `resolved|accepted` with a named owner, or carries a founder gate.
 
 ### L20 — Design Room (state → mutate → version → render)
 - **Trigger:** Any design, visual-system, cross-surface, App Store creative, landing, onboarding, paywall, or marketing-surface work.
@@ -292,7 +337,7 @@ that grounds them. Conventions used in every loop:
   3. **VERSION + RENDER:** `npm run validate:design-state`, `npm run render:design-room`, version with git (`git tag baseline/<name>`), and show `design-room.html` / `dist/design-room/`. → *Design Room Contract* steps 3–4; *Operating Posture* (design versioning is git state).
 - **Proof:** `npm run check:design-room` + `npm run validate:design-state`; rendered Design Room reflects the state mutation.
 - **Memory:** `state/business.json`, `state/theme.tokens.json`, git baselines + `PROJECT_STATE.yaml` design lane.
-- **Stopping condition:** The accepted design is a versioned state mutation rendered in the Design Room (not a freeform doc); accepted decisions cascade to docs/assets.
+- **Stopping condition:** `check:design-room` and `validate:design-state` both pass **and** the mutation is committed as a git baseline tag (`baseline/<name>`) with `design-room.html` re-rendered from it.
 
 ### L21 — Token promotion
 - **Trigger:** Theme tokens change and the design is accepted.
@@ -301,7 +346,7 @@ that grounds them. Conventions used in every loop:
   2. Reconcile promoted tokens with `DESIGN.md` and downstream generated assets. → *Operating Posture* (token promotion as enforced contract).
 - **Proof:** `npm run check:token-promotion`; promoted `design-system/` artifacts match the accepted tokens.
 - **Memory:** `design-system/` artifacts + `PROJECT_STATE.yaml` design lane token state.
-- **Stopping condition:** Accepted tokens are promoted into app-facing artifacts and the validator passes before implementation consumes them.
+- **Stopping condition:** `check:token-promotion` passes — the promoted `design-system/` artifacts diff-match `state/theme.tokens.json` before implementation consumes them.
 
 ### L22 — UX patterns (Refero)
 - **Trigger:** Before flow maps, state matrices, `UX_PATTERNS.md`, bug-trap coverage, or replacing Refero with a free fallback.
@@ -310,7 +355,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `UX_PATTERNS.md` with flow maps, state matrices, a Premium Craft Details section, and bug traps. → `When To Load`; `premium-mobile-craft.md` pattern contract.
 - **Proof:** `npm run check:ux-patterns`; flow maps + state matrices + bug traps present.
 - **Memory:** `UX_PATTERNS.md` + `PROJECT_STATE.yaml` design/ux lane.
-- **Stopping condition:** Flow maps, state matrices, and bug traps cover the V1 surfaces; Refero use or its approved fallback is recorded.
+- **Stopping condition:** `check:ux-patterns` passes — `UX_PATTERNS.md` carries flow maps, state matrices, and bug traps for each V1 surface and records the Refero/fallback source.
 
 ### L23 — Onboarding conversion
 - **Trigger:** Before onboarding quizzes, personalization, attribution questions, demo videos, App Review popups, paywall timing, trials, or first-session activation.
@@ -320,7 +365,7 @@ that grounds them. Conventions used in every loop:
   3. Wire onboarding analytics events into `ANALYTICS.md` (catalog reconciliation). → `Start Here` step 16; L11.
 - **Proof:** `npm run check:onboarding`; review-prompt placement and paywall timing satisfy the validator.
 - **Memory:** `ONBOARDING.md` + `PROJECT_STATE.yaml` onboarding lane.
-- **Stopping condition:** Onboarding sells value, times the review prompt correctly, routes to the paywall, and passes `check:onboarding` before build handoff.
+- **Stopping condition:** `check:onboarding` passes — the native App Review prompt sits immediately after the first value-reveal step and the paywall-timing/offer rows are present in `ONBOARDING.md`, before build handoff.
 
 ### L24 — Premium mobile craft
 - **Trigger:** Before in-app UI build/polish, wiring press states/animation/haptics/keyboard/loading-empty states, or a "premium feel" request.
@@ -330,7 +375,7 @@ that grounds them. Conventions used in every loop:
   3. Record the Premium Craft Details + bug traps in `templates/ux-patterns/UX_PATTERNS.md`. → `premium-mobile-craft.md` (pattern contract).
 - **Proof:** Press-state/haptics/keyboard/skeleton/empty-state details are implemented from the boilerplate and reflected in `UX_PATTERNS.md`; reduced-motion fallback present.
 - **Memory:** `UX_PATTERNS.md` Premium Craft section + `PROJECT_STATE.yaml` design lane.
-- **Stopping condition:** The invisible-details layer is wired from the boilerplate and recorded; "feels right" details are not left to the build to improvise.
+- **Stopping condition:** `check:ux-patterns` passes **and** the Premium Craft Details checklist in `UX_PATTERNS.md` has every row marked `done|n-a` (grep finds no unresolved row), including the reduced-motion fallback.
 
 ### L25 — Content assets / Remotion / generated visuals
 - **Trigger:** Before rendered videos/stills, app-preview clips, ad/social/content variants, or claiming local rendered content assets are ready.
@@ -340,7 +385,7 @@ that grounds them. Conventions used in every loop:
   3. Keep generated output as supporting art only — never substituting for truthful real app UI in screenshots/App Preview. → `change-cascade.md` guardrails.
 - **Proof:** `npm run check:content-assets`; assets recorded with briefs/job ids and token basis.
 - **Memory:** `CONTENT_ASSETS.md` (and `DEMO_VIDEO.md` where applicable) + `PROJECT_STATE.yaml` content lane.
-- **Stopping condition:** Required assets exist with recorded briefs/tokens, supporting-art guardrails honored, spend founder-approved; regeneration path noted for cascade.
+- **Stopping condition:** `check:content-assets` passes — every `CONTENT_ASSETS.md` row has non-empty `prompt_brief`/`source_job_id` and a token basis, superseded rows are marked, and spend is founder-approved per `check:paid-tool-decisions`.
 
 ### L26 — Business Control Plane extension
 - **Trigger:** Extending the Design Room into new analytics/monetization/store-ops/growth panels over the same state store and theme tokens.
@@ -349,7 +394,7 @@ that grounds them. Conventions used in every loop:
   2. Keep the workspace read model consistent with the rendered panels. → *Operating Posture* (Control Plane as enforced contract).
 - **Proof:** `npm run check:control-plane` + `npm run check:business-control-plane-workspace`.
 - **Memory:** `state/business.json`/schema + the generated workspace read model + `PROJECT_STATE.yaml`.
-- **Stopping condition:** New panels render from the shared state/tokens and both control-plane validators pass.
+- **Stopping condition:** `check:control-plane` and `check:business-control-plane-workspace` both pass — new panels render from `state/business.json` + `state/theme.tokens.json` with no separate store.
 
 ### L27 — ASO & store ops
 - **Trigger:** Before App Store/Play metadata, screenshots, keyword research, Apple Search Ads, launch reviews, or post-launch growth loops.
@@ -358,7 +403,7 @@ that grounds them. Conventions used in every loop:
   2. Plan ASA, ratings/reviews loops, and post-launch monitoring; localize per the `LOCALIZATION_MARKET_RESEARCH.md` tiers (L10). → `Start Here` step 17.
 - **Proof:** `npm run check:aso-metadata`; metadata fields validate against keyword/length rules.
 - **Memory:** `APP_STORE_LISTING.md` ASO sections + `PROJECT_STATE.yaml` aso lane.
-- **Stopping condition:** Metadata + keyword set + ASA/review-loop plan exist and validate; locked name from L09 is used.
+- **Stopping condition:** `check:aso-metadata` passes — every `APP_STORE_LISTING.md` ASO field is within its length/keyword rule and uses the locked name from L09.
 
 ### L28 — App Store listing prep packet
 - **Trigger:** Before listing fields, interactive privacy questionnaire, IAP/subscription field maps, custom product pages, in-app events, or App Store marketing material tied to the design system.
@@ -367,7 +412,7 @@ that grounds them. Conventions used in every loop:
   2. Align pricing/subscription copy with RevenueCat/Stripe/web-funnel (L40) and mark founder-only approval gates. → `Start Here` step 17.
 - **Proof:** `APP_STORE_LISTING.md` packet complete; App Privacy answers reconcile with `PRIVACY.md` (L41) and `GOOGLE_PLAY_RELEASE.md` Data Safety (L34).
 - **Memory:** `APP_STORE_LISTING.md` + `PROJECT_STATE.yaml` listing lane.
-- **Stopping condition:** The listing packet is complete and reconciled with privacy/revenue, with founder-approval gates marked before ASC entry.
+- **Stopping condition:** `APP_STORE_LISTING.md` has no `TODO`/empty required-field token (grep), its App Privacy answers diff-match `PRIVACY.md`, and a founder-approval gate row precedes ASC entry.
 
 ### L29 — Apple signing & release readiness
 - **Trigger:** Before Apple Developer enrollment, Team ID, bundle/App IDs, signing, capabilities, certificates, profiles, archives, exports, uploads, or TestFlight.
@@ -376,7 +421,7 @@ that grounds them. Conventions used in every loop:
   2. State why simulator builds do or do not prove distribution readiness. → `Start Here` step 17.
 - **Proof:** `npm run check:apple-signing`; the signing packet is complete with founder-gated account steps flagged.
 - **Memory:** `APPLE_SIGNING.md` + `PROJECT_STATE.yaml` signing lane.
-- **Stopping condition:** Signing/distribution state is recorded with a clear path to archive/upload and explicit founder-only enrollment/credential gates.
+- **Stopping condition:** `check:apple-signing` passes — `APPLE_SIGNING.md` records each of account/Team ID/bundle ID/cert/profile/archive/upload state, with founder-only enrollment/credential steps flagged as named gates.
 
 ### L30 — Apple App Store requirements (privacy manifest)
 - **Trigger:** Before ASC upload readiness — `PrivacyInfo.xcprivacy`, required-reason APIs, third-party SDK manifests, App Privacy answers.
@@ -385,7 +430,7 @@ that grounds them. Conventions used in every loop:
   2. Require founder approval before ASC upload/submission. → `Start Here` step 17.
 - **Proof:** `npm run check:apple-requirements`; the packet reconciles manifest/privacy answers/required-reason APIs.
 - **Memory:** `APPLE_APP_STORE_REQUIREMENTS.md` + `PROJECT_STATE.yaml` apple-requirements lane.
-- **Stopping condition:** The privacy/requirements packet reconciles every Apple source and is founder-approved before upload.
+- **Stopping condition:** `check:apple-requirements` passes — the validator confirms `APPLE_APP_STORE_REQUIREMENTS.md` matches the manifest, required-reason APIs, and App Privacy answers, with a founder-approval gate row before upload.
 
 ### L31 — Store console workflow
 - **Trigger:** Before "where do I click / what do I paste" handoffs in App Store Connect or Google Play Console.
@@ -393,7 +438,7 @@ that grounds them. Conventions used in every loop:
   1. Load `references/store-console-workflow.md`; produce `STORE_CONSOLE.md` + `store-console.html` naming the exact ASC/Play pages, the field-by-field paste values, and which items need founder approval. → `Start Here` step 17; Phase 3.
 - **Proof:** `npm run check:store-console`; the packet maps each console page to its paste values and approval gates.
 - **Memory:** `STORE_CONSOLE.md` + `store-console.html` + `PROJECT_STATE.yaml` store-console lane.
-- **Stopping condition:** The founder has an exact page-by-page console script with approval gates; nothing is left as "set this up in the console."
+- **Stopping condition:** `check:store-console` passes — `STORE_CONSOLE.md` maps every required ASC/Play page to its paste values and marks each founder-approval gate (grep finds no "set this up in the console" placeholder).
 
 ### L32 — ASC CLI automation
 - **Trigger:** Before automating App Store Connect with the Rork `asc` CLI / CLI skill pack — app creation, metadata, screenshots, TestFlight, review status, RevenueCat catalog sync.
@@ -402,7 +447,7 @@ that grounds them. Conventions used in every loop:
   2. If `asc` is installed, run the auth-recovery ladder (keychain profiles, account-level keys, `asc auth init/login`) instead of reporting "cannot access ASC"; report any missing app/cert/RevenueCat record as a founder-gated setup step with the exact next command. → *Operating Posture* (ASC access as setup, not a wall).
 - **Proof:** `asc` auth succeeds or the exact founder-gated next command is recorded; CLI command basis matches refreshed help.
 - **Memory:** `STORE_CONSOLE.md`/`APP_STORE_LISTING.md` ASC-CLI notes + `PROJECT_STATE.yaml`.
-- **Stopping condition:** ASC tasks run via `asc`, or each blocker is reported as a founder-gated step with the next command — never a bare "cannot access ASC."
+- **Stopping condition:** `asc` commands exit 0, **or** each blocker is recorded in `PROJECT_STATE.yaml` as a founder-gated step with the exact next command (grep finds no bare "cannot access ASC" string).
 
 ### L33 — Store screenshots production
 - **Trigger:** Store screenshots needed (raw app capture → composed iPhone/iPad/Play assets).
@@ -411,7 +456,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `SCREENSHOTS.md`; compose copy-led iPhone/iPad/Play assets via ParthJadhav/app-store-screenshots or an equivalent export board with current device wells; validate and visual-QA. → `Start Here` step 17.
 - **Proof:** `npm run check:store-screenshots` + `npm run grade:screenshots`; composed assets pass device-well validation + visual QA.
 - **Memory:** `SCREENSHOTS.md` + `PROJECT_STATE.yaml` screenshots lane.
-- **Stopping condition:** Raw captures are composed into validated, copy-led store assets (or blocked ones are named); raw captures are treated as proof inputs only.
+- **Stopping condition:** `check:store-screenshots` and `grade:screenshots` both pass — composed assets clear device-well validation and the visual-QA grade threshold, or blocked sets are named in `SCREENSHOTS.md`.
 
 ### L34 — Google Play release
 - **Trigger:** Android in scope — platforms include android, or an android bundle id exists.
@@ -420,7 +465,7 @@ that grounds them. Conventions used in every loop:
   2. Plan the personal-account closed-testing gate (12 testers / 14 days) into the launch calendar from day one and triage the pre-launch report. → `Start Here` step 17.
 - **Proof:** `npm run check:google-play`; Data Safety reconciles with iOS privacy labels and the closed-testing gate is scheduled.
 - **Memory:** `GOOGLE_PLAY_RELEASE.md` + `PROJECT_STATE.yaml` google-play lane.
-- **Stopping condition:** Play readiness (Data Safety, signing, tracks, closed-testing gate) is complete and reconciled with iOS, or blockers are explicit.
+- **Stopping condition:** `check:google-play` passes — `GOOGLE_PLAY_RELEASE.md` Data Safety diff-matches the iOS privacy labels and the closed-testing gate is on the calendar, or each blocker is recorded.
 
 ### L35 — Engineering orchestration (CE + production readiness)
 - **Trigger:** Before actual app implementation, backend/frontend work, generated builder prompts, parallel agents/worktrees, or production-readiness claims.
@@ -430,7 +475,7 @@ that grounds them. Conventions used in every loop:
   3. Produce `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, and `PRODUCTION_READINESS.md`; serialize shared resources and run MobAI/native iOS E2E (L38/L39). → Phase 5b.
 - **Proof:** `npm run check:compound-engineering` + `npm run check:orchestration`; all five engineering stages (plan/slice/review/test/proof) carry evidence.
 - **Memory:** `ENGINEERING_PLAN.md`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md` + `PROJECT_STATE.yaml` engineering lane.
-- **Stopping condition:** Engineering stays partial until all five stages have evidence; production-readiness is claimed only on proof, not working screens.
+- **Stopping condition:** `check:compound-engineering` and `check:orchestration` both pass — `PRODUCTION_READINESS.md` carries an evidence artifact for each of the five stages (plan/slice/review/test/proof); the `engineering` lane stays `partial` until all five are present.
 
 ### L36 — Backend data contract
 - **Trigger:** Before schema/auth prompts run or `TECH_SPEC.md` data/API sections harden; founder wants Firebase/custom instead of the Supabase default.
@@ -439,7 +484,7 @@ that grounds them. Conventions used in every loop:
   2. Adapt archetype prompts to the selected route instead of running the Supabase defaults verbatim. → `Start Here` step 13.
 - **Proof:** `npm run check:backend-contract`; the authorization model is tested (RLS/security-rule tests) and the data contract is complete.
 - **Memory:** `TECH_SPEC.md` Data Contract section + `PROJECT_STATE.yaml` backend lane.
-- **Stopping condition:** Backend selection, data model, tested authz, and migrations/environments are recorded; engineering is not "done" without `check:backend-contract`.
+- **Stopping condition:** `check:backend-contract` passes — `TECH_SPEC.md` Data Contract records backend selection + reason, data model, a passing authz test (RLS/security-rule), and migrations/environments.
 
 ### L37 — App agent roster & repo entrypoints
 - **Trigger:** Before builder handoff bundles, business `AGENTS.md`/`CLAUDE.md`, `APP_AGENTS.md`, or `agents/` role prompts.
@@ -448,7 +493,7 @@ that grounds them. Conventions used in every loop:
   2. Create `APP_AGENTS.md` + the seven role prompts under `agents/` (orchestrator, marketing-guru, engineering-leader, product-leader, design-guru, customer-success, security-architect). → `Start Here` step 14.
 - **Proof:** `npm run check:agent-entrypoints`; the entrypoints + roster + seven roles exist and route back to the skill.
 - **Memory:** business `AGENTS.md`/`CLAUDE.md`, `APP_AGENTS.md`, `agents/` + `PROJECT_STATE.yaml` handoff lane.
-- **Stopping condition:** The app repo carries skill-routing entrypoints and the seven role prompts; a future agent can resume without re-deciding the business.
+- **Stopping condition:** `check:agent-entrypoints` passes — business `AGENTS.md`/`CLAUDE.md`, `APP_AGENTS.md`, and all seven `agents/*.md` role files exist and route back to the skill.
 
 ### L38 — MobAI device automation & demo videos
 - **Trigger:** Before MobAI device automation, app-flow demo videos, app-preview clips, or bug-repro recordings.
@@ -457,7 +502,7 @@ that grounds them. Conventions used in every loop:
   2. Record raw capture, final export, captions, upload copy, and rerender path in `DEMO_VIDEO.md`/`CONTENT_ASSETS.md`. → Deliverable Standard (MobAI artifacts).
 - **Proof:** Demo artifacts recorded with `.mob`/`screenplay.json`, raw capture, export, captions, and rerender path; MobAI used per `paid-tool-routing.md` (L04).
 - **Memory:** `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` + `PROJECT_STATE.yaml` demo lane.
-- **Stopping condition:** Demo/automation artifacts exist with a rerender path, or the MobAI access blocker is recorded; no free-fallback downgrade without founder approval.
+- **Stopping condition:** `DEMO_VIDEO.md`/`CONTENT_ASSETS.md` rows carry non-empty `source`/`rerender` fields (grep), or the MobAI-access blocker is recorded in `PROJECT_STATE.yaml`; no free-fallback downgrade without `check:paid-tool-decisions` approval.
 
 ### L39 — Native iOS / XcodeBuildMCP proof
 - **Trigger:** Before Codex Desktop native iOS / XcodeBuildMCP / serve-sim / SnapshotPreviews proof or command examples.
@@ -466,7 +511,7 @@ that grounds them. Conventions used in every loop:
   2. Run device/simulator E2E and capture proof, marking SnapshotPreviews exports preview-only. → `Start Here` step 13; Phase 5b.
 - **Proof:** `scripts/check-native-ios-proof.ts` (run via `npm run audit`); E2E/screenshot proof attached with the docs/CLI basis recorded.
 - **Memory:** `PRODUCTION_READINESS.md` native-iOS proof section + `PROJECT_STATE.yaml`.
-- **Stopping condition:** Native iOS proof exists with current-doc command basis (SnapshotPreviews marked preview-only), or the blocker is explicit.
+- **Stopping condition:** `scripts/check-native-ios-proof.ts` passes under `audit:ci` — `PRODUCTION_READINESS.md` carries E2E/screenshot proof with the recorded docs/CLI basis (SnapshotPreviews rows marked preview-only), or the blocker is recorded.
 
 ### L40 — Revenue monetization
 - **Trigger:** Before RevenueCat, Stripe, app-store products, web billing, paywalls, subscriptions, webhooks, taxes, pricing, or entitlement validation.
@@ -475,7 +520,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `REVENUE_OPS.md`; validate sandbox and production purchases and reconcile pricing with `APP_STORE_LISTING.md`/legal. → Phase 3b.
 - **Proof:** `npm run check:revenue` + `npm run probe:revenuecat`; sandbox + production purchase validation evidence (provider-proof, L07).
 - **Memory:** `REVENUE_OPS.md` + `PROJECT_STATE.yaml` revenue lane.
-- **Stopping condition:** Purchases map to entitlements with live sandbox/production proof or explicit founder gates; pricing reconciles across surfaces.
+- **Stopping condition:** `check:revenue` and `probe:revenuecat` both pass — `REVENUE_OPS.md` records a sandbox purchase granting the entitlement in app+backend, the production gate is marked founder-only, and prices diff-match `APP_STORE_LISTING.md`.
 
 ### L41 — Privacy & terms
 - **Trigger:** Before drafting/publishing privacy policy, terms, EULA, subscription terms, data-deletion flows, or app-store privacy disclosures.
@@ -484,7 +529,7 @@ that grounds them. Conventions used in every loop:
   2. Reconcile App Store App Privacy answers + Play Data Safety with actual data collection/SDKs (pairs with L28/L30/L34). → `Start Here` step 20; `change-cascade.md` privacy row.
 - **Proof:** `PRIVACY.md`/`TERMS.md` published; privacy answers reconcile with the manifest, Data Safety, and analytics/SDK reality.
 - **Memory:** `PRIVACY.md`, `TERMS.md` + `PROJECT_STATE.yaml` legal lane.
-- **Stopping condition:** Legal pages exist and reconcile with store privacy disclosures; publishing remains founder-approved.
+- **Stopping condition:** `PRIVACY.md`+`TERMS.md` have no placeholder token (grep) and their App Privacy/Data Safety answers diff-match the `check:apple-requirements`/`check:google-play` packets; publishing stays a founder gate.
 
 ### L42 — Resend email ops
 - **Trigger:** Before Resend domains/keys, transactional/lifecycle/broadcast email, contacts/topics, webhooks, inbound, unsubscribe, or deliverability work.
@@ -493,7 +538,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `EMAIL_OPS.md` recording the SPF/DKIM basis, unsubscribe handling, and the `DESIGN.md` brand-token mapping; populate brand/tone from `DESIGN.md`/`11_STAR_EXPERIENCE.md`. → `Start Here` step 21; `When To Load` (resend).
 - **Proof:** `npm run check:email`; proof artifacts + `EMAIL_OPS.md` with DNS basis, unsubscribe, and brand-token mapping (provider-proof, L07).
 - **Memory:** `EMAIL_OPS.md` + `PROJECT_STATE.yaml` email lane.
-- **Stopping condition:** Domain auth, lifecycle/transactional paths, unsubscribe, and brand mapping exist with proof; the lane is not "done" on setup prose.
+- **Stopping condition:** `check:email` passes — `EMAIL_OPS.md` records the SPF/DKIM basis, unsubscribe handling, the DESIGN.md brand-token mapping, and a Resend send/webhook log proof.
 
 ### L43 — GEO/SEO public visibility
 - **Trigger:** Before editing any file with landing/policy/blog copy, component-level copy, screenshot metadata, `robots.txt`, `llms.txt`, `sitemap.xml`, schema, or metadata — not after the rewrite.
@@ -502,7 +547,7 @@ that grounds them. Conventions used in every loop:
   2. Verify crawlability, schema marking, and AI-search discoverability after edits. → `Start Here` step 18; *Operating Posture* (Verify what shipped).
 - **Proof:** Public pages are crawlable, schema-marked, and AI-discoverable (overlaps with `check:landing-funnel` checks where the funnel exists).
 - **Memory:** landing/policy files + `LAUNCH_TRACE.md` SEO/GEO notes + `PROJECT_STATE.yaml` geo lane.
-- **Stopping condition:** The reference was loaded before the first copy edit and crawl/schema/AI-visibility checks pass; nothing was rewritten "GEO-blind."
+- **Stopping condition:** `check:landing-funnel` passes (robots/sitemap/llms/schema asserts) **and** a live `curl` of the deployed page returns the expected JSON-LD block.
 
 ### L44 — Pre-launch funnel (landing/waitlist)
 - **Trigger:** Phase 4 — landing page, waitlist/referral loop, web monetization funnel, domain, routed support/privacy email, live deploy verification.
@@ -511,7 +556,7 @@ that grounds them. Conventions used in every loop:
   2. Run local build, deploy checks, live HTTP checks, form-submission smoke tests, and analytics-event verification. → *Operating Posture* (Verify what shipped).
 - **Proof:** `npm run check:landing-funnel`; live deploy + form submission + analytics events verified.
 - **Memory:** landing repo/assets + `PROJECT_STATE.yaml` funnel lane.
-- **Stopping condition:** The funnel is live and verified (build/deploy/form/analytics), with public deploy founder-approved.
+- **Stopping condition:** `check:landing-funnel` passes and the live deploy is verified by an HTTP 200 + a form-submission smoke test + a PostHog event appearing; public deploy stays a founder gate.
 
 ### L45 — UGC creator engine
 - **Trigger:** Before founder-led organic social, UGC sourcing, creator contracts/payments, or format-discovery tests.
@@ -520,7 +565,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `UGC_PLAYBOOK.md`: UGC fit decision, 90-day creator format-discovery plan, sourcing approach, creator budget, script/format loop, disclosure rules, and stop/scale thresholds. → Deliverable Standard (UGC fit).
 - **Proof:** `UGC_PLAYBOOK.md` complete with fit decision, 90-day plan, disclosure rules, and stop/scale thresholds; creator spend founder-gated (L04).
 - **Memory:** `UGC_PLAYBOOK.md` + `PROJECT_STATE.yaml` ugc lane.
-- **Stopping condition:** The creator plan, budget, disclosure rules, and stop/scale thresholds exist; creator payments/contracts remain founder-gated.
+- **Stopping condition:** `UGC_PLAYBOOK.md` has non-empty rows for fit decision, 90-day plan, budget, disclosure rules, and stop/scale thresholds (grep finds none empty); creator payments/contracts stay a named founder gate.
 
 ### L46 — Fastlane growth ops
 - **Trigger:** After launch approval/public beta, or usefastlane.ai setup, social account connection, Blitz angles/preferences, generated content, scheduling, or social analytics.
@@ -529,7 +574,7 @@ that grounds them. Conventions used in every loop:
   2. Produce `FASTLANE_OPS.md`; QA generated/rendered content and run the weekly iteration loop. → Phase 6.
 - **Proof:** `FASTLANE_OPS.md` workspace + connections + angles recorded; scheduling/posting founder-approved; analytics snapshots captured.
 - **Memory:** `FASTLANE_OPS.md` + `PROJECT_STATE.yaml` fastlane lane.
-- **Stopping condition:** Workspace, connections, content angles, and weekly loop exist with QA; social account connection and public posting/scheduling remain founder-gated.
+- **Stopping condition:** `FASTLANE_OPS.md` records workspace + connections + Blitz angles + the weekly loop with a QA pass logged; social-account connection and posting/scheduling stay named founder gates.
 
 ### L47 — Post-launch operations
 - **Trigger:** App live (phase_6/6b), "what now", weekly ops, incident response, review-response, or retention-review work.
@@ -538,7 +583,7 @@ that grounds them. Conventions used in every loop:
   2. Write `LAUNCH_RETRO.md` at launch +7/30/90 days so misses become failure cards + LaunchBench candidates; revisit any lite-tier deferred lanes at day 30. → Phase 6b.
 - **Proof:** `npm run check:post-launch`; the weekly rhythm + retro cadence are present with SLAs and cohort sources.
 - **Memory:** `POST_LAUNCH_OPS.md`, `LAUNCH_RETRO.md` + `PROJECT_STATE.yaml` post_launch_ops lane.
-- **Stopping condition:** The live business runs on a weekly rhythm with retros feeding failure cards; "approved for sale" is treated as the handoff into operations, not the end.
+- **Stopping condition:** `check:post-launch` passes — `POST_LAUNCH_OPS.md` carries the weekly rhythm with a review-response SLA + crash route + cohort source, and `LAUNCH_RETRO.md` exists at the +7/30/90 cadence.
 
 ### L48 — Source-freshness maintenance (maintainer)
 - **Trigger:** Maintaining this skill, adding external URLs, refreshing third-party docs/commands, or reviewing weekly source diffs.
@@ -548,7 +593,7 @@ that grounds them. Conventions used in every loop:
   3. Run `npm run check:source-registry` and `npm run refresh:source-freshness`. → AGENTS.md Commands.
 - **Proof:** `npm run check:source-registry` passes; refreshed candidates are reviewed before becoming accepted policy.
 - **Memory:** `source-registry.yaml` + the reference/template/validator updates backing each candidate.
-- **Stopping condition:** New sources are registered and command guidance traces to refreshed docs; weekly candidates aren't accepted as policy without backing updates.
+- **Stopping condition:** `check:source-registry` passes — every external URL is in `source-registry.yaml` with a recorded docs basis; auto-discovered candidates stay flagged until backed by a reference/template/validator update.
 
 ### L49 — LaunchBench / failure-cards / coverage audit
 - **Trigger:** Before any launch-readiness claim, after a repeated agent miss, or when adding a validator/scenario.
@@ -557,7 +602,7 @@ that grounds them. Conventions used in every loop:
   2. Turn known misses into failure cards or LaunchBench scenarios (not oral lore); keep the split honest — `evals:behavioral` is the opt-in live-agent subset, not the same as `launchbench`. → `Start Here` step 26; `When To Load`.
 - **Proof:** `npm run launchbench` + `npm run check:lane-coverage` pass (or active failure cards are explicit); `npm run test:validators` green.
 - **Memory:** `FAILURE_CARDS.md` + `evals/launchbench/` scenarios + `PROJECT_STATE.yaml` active failure cards.
-- **Stopping condition:** No known miss is hidden by prose; readiness is claimed only when LaunchBench/validators are green or remaining failure cards are explicit.
+- **Stopping condition:** `launchbench`, `check:lane-coverage`, and `test:validators` all pass — readiness is claimed only on green, with any remaining miss recorded as an open `FAILURE_CARDS.md` row.
 
 ### L50 — Skill runtime sync & version discipline (maintainer)
 - **Trigger:** After any skill change — bump the version, sync the installed runtime (maintainer machine only), and run the readiness gate.
@@ -566,7 +611,7 @@ that grounds them. Conventions used in every loop:
   2. On the maintainer machine only (where `~/.codex/skills/b2c-mobile-business-launch` exists), mirror the checkout into the installed runtime, run the runtime audit, and verify the Claude/Agents symlinks; in clones/CI/cloud, skip runtime sync and use `npm run audit:ci` as the readiness gate. → CLAUDE.md (maintainer note); AGENTS.md *Runtime Sync*.
 - **Proof:** `npm run check:skill-version` + `npm run check:version-discipline` pass; `npm run audit`/`audit:ci` green; runtime `diff -qr` clean where sync applies.
 - **Memory:** `skill-version.json` manifest + the installed runtime copy (maintainer machine).
-- **Stopping condition:** Version is bumped and disciplined, the readiness gate is green, and the installed runtime matches source (or sync is correctly skipped in a non-maintainer environment).
+- **Stopping condition:** `check:skill-version`, `check:version-discipline`, and `audit:ci` all pass; on the maintainer machine `diff -qr` of source vs installed runtime is empty, else the non-maintainer skip is recorded in the work summary.
 
 ---
 
@@ -597,3 +642,34 @@ Room Contract`, `Autopilot Run Contract`, `Change Cascade`, `When To Load`,
 **Verify/stop met:** 50/50 workflows have exactly one grounded loop; the
 inventory shows full coverage with no gaps or overlaps; each loop's action steps
 trace to named sections of the skill.
+
+## Re-audit Result (stopping conditions)
+
+After ranking the loops by stop subjectivity and rewriting the worst first, all
+50 stops were re-audited mechanically:
+
+- **Judgment terminators:** 0 remaining. A grep of every stop for `looks good`,
+  `feels right`, `matches reality`, `evidence-backed`, `reconciles`, `is/are
+  complete`, `seems`, `polished`, `good enough`, `until it` returns nothing.
+- **Concrete anchor per stop:** 50/50. Every stop names ≥1 of — a `package.json`
+  command + pass state (`check:*`, `probe:*`, `launchbench`, `audit:ci`,
+  `validate:*`, `render:*`), a grep/`diff`/`curl`/exit-code/HTTP-status check of a
+  named artifact, or a discrete `PROJECT_STATE.yaml` lane/gate state. A grep of
+  every stop for those anchors leaves 0 unanchored.
+- **Coverage of the 41 lane validators:** each `check:*`/`probe:*` script is the
+  terminator of the loop that owns it; loops without a dedicated validator (L08,
+  L09, L18, L28, L38, L41, L45, L46) terminate on a grep/`diff`-checkable artifact
+  property plus a `PROJECT_STATE.yaml` gate, never on an adjective.
+
+Reproduce the audit:
+
+```bash
+# (1) must print nothing
+grep '^- \*\*Stopping condition:\*\*' docs/skill-workflow-loops.md \
+  | grep -iE 'looks good|feels right|matches reality|evidence-backed|reconciles|is complete|are complete|seems|polished|good enough|until it'
+# (2) must print nothing (every stop carries a concrete anchor)
+grep '^- \*\*Stopping condition:\*\*' docs/skill-workflow-loops.md \
+  | grep -vE 'check:|probe:|launchbench|audit:ci|validate:|render:|grep|diff|curl|exit 0|HTTP 200|PROJECT_STATE|lanes\.|\.md|\.yaml|asc |baseline/'
+```
+
+No loop stops on judgment.
