@@ -52,7 +52,8 @@ const storeDone = storeStatus === "done";
 
 if (!androidInScope || storeSkipped) {
   reportAndExit("Google Play readiness check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // ── Check 0: packet exists ──────────────────────────────────────────────────

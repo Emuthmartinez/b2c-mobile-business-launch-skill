@@ -48,7 +48,8 @@ const storeSkipped = ["not_needed", "deferred"].includes(storeStatus ?? "");
 
 if (storeSkipped) {
   reportAndExit("ASO metadata packet check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // ── File discovery ────────────────────────────────────────────────────────

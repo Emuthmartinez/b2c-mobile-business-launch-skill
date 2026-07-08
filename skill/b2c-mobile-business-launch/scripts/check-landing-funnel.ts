@@ -43,7 +43,8 @@ const inScope = !explicitlyOut && (Boolean(landingStatus) || hasLandingArtifacts
 
 if (!inScope) {
   reportAndExit("Landing funnel check (skipped — no landing/funnel lane or artifacts in scope)", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // Collect the candidate docs where gate evidence should be recorded

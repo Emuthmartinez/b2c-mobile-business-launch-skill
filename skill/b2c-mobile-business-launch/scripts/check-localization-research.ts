@@ -64,7 +64,8 @@ const storeSkipped = ["not_needed", "deferred"].includes(storeStatus ?? "");
 if (storeSkipped || !hasStorePlatform) {
   // Localization research is only required when a store launch is in scope.
   reportAndExit("Localization market research check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // ── File discovery ──────────────────────────────────────────────────────────

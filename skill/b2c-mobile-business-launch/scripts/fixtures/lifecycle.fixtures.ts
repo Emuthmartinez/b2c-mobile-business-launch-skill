@@ -8,7 +8,7 @@ import { type Harness, type MutableRecord, expectRecord, getLane, readState, wri
  * the launch-tier state field.
  */
 export function register(h: Harness): void {
-  const { makeFixture, runFixture } = h;
+  const { makeFixture, makeEmptyFixture, runFixture } = h;
 
   // ── Post-launch operations ────────────────────────────────────────────────
 
@@ -271,4 +271,21 @@ export function register(h: Harness): void {
     writeState(invalidTier, state);
   }
   runFixture("invalid launch tier fails", invalidTier, "validate-project-state.ts", 1, "project.launch_tier.invalid");
+
+  // ── Scope-skip exit regression ────────────────────────────────────────────
+  // The skip paths used process.exit(0), which discarded the
+  // project_state.missing error reportAndExit had already emitted (exit 0 with
+  // "1 error(s)" printed). The skip path must still fail on a missing state.
+
+  const postLaunchNoState = makeEmptyFixture("post-launch-missing-state");
+  runFixture("post-launch ops fails loudly when project state is missing", postLaunchNoState, "check-post-launch-ops.ts", 1, "project_state.missing");
+
+  const googlePlayNoState = makeEmptyFixture("google-play-missing-state");
+  runFixture(
+    "google play readiness fails loudly when project state is missing",
+    googlePlayNoState,
+    "check-google-play-readiness.ts",
+    1,
+    "project_state.missing",
+  );
 }

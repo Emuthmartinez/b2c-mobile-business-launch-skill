@@ -49,7 +49,8 @@ if (!laneClaimed && !postLaunchPhase) {
   // Pre-launch work: the lane sits not_started/deferred under normal
   // lane-coverage rules until the app is live.
   reportAndExit("Post-launch operations check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // ── Check 0: runbook exists ─────────────────────────────────────────────────
