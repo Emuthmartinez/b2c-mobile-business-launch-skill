@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -12,6 +12,7 @@
     "check:apple-requirements": "tsx skill/b2c-mobile-business-launch/scripts/check-apple-app-store-requirements.ts",
     "check:store-console": "tsx skill/b2c-mobile-business-launch/scripts/check-store-console-packet.ts",
     "check:store-screenshots": "tsx skill/b2c-mobile-business-launch/scripts/check-store-screenshots.ts",
+    "check:native-ios": "tsx skill/b2c-mobile-business-launch/scripts/check-native-ios-proof.ts",
     "check:aso-metadata": "tsx skill/b2c-mobile-business-launch/scripts/check-aso-metadata.ts",
     "check:localization-research": "tsx skill/b2c-mobile-business-launch/scripts/check-localization-research.ts",
     "check:ux-patterns": "tsx skill/b2c-mobile-business-launch/scripts/check-ux-patterns.ts",

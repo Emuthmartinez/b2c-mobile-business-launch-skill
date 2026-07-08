@@ -66,6 +66,7 @@ const knownValidators = new Set([
   "run-agent-evals",
   "check-token-promotion",
   "render-launch-cockpit",
+  "render-business-control-plane-workspace",
 ]);
 
 // Flagship scenarios that must stay in the live behavioral subset

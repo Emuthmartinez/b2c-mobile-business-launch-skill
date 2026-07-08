@@ -54,6 +54,18 @@ export function register(h: Harness): void {
   writeFileSync(path.join(oversizedRef, "references", "huge-lane.md"), `# Huge\n${"x".repeat(70 * 1024)}\n`, "utf8");
   runScriptArgs("oversized reference fails the context budget", "check-reference-size.ts", ["--skill-root", oversizedRef], 1, "reference_size.over_budget");
 
+  const oversizedEntrypoint = makeEmptyFixture("entrypoint-size-over-budget");
+  mkdirSync(path.join(oversizedEntrypoint, "references"), { recursive: true });
+  writeFileSync(path.join(oversizedEntrypoint, "references", "small.md"), "# Small\nWithin budget.\n", "utf8");
+  writeFileSync(path.join(oversizedEntrypoint, "SKILL.md"), `---\nname: fixture\n---\n${"x".repeat(70 * 1024)}\n`, "utf8");
+  runScriptArgs(
+    "oversized SKILL.md fails the entrypoint budget",
+    "check-reference-size.ts",
+    ["--skill-root", oversizedEntrypoint],
+    1,
+    "reference_size.entrypoint_over_budget",
+  );
+
   const untestedRls = makeArchetypeSkillRoot("archetype-starter-untested-rls");
   rmSync(path.join(untestedRls, "templates", "app-archetypes", "social-network", "starter", "supabase", "tests"), { recursive: true });
   runScriptArgs(
