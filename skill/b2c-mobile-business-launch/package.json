@@ -1,6 +1,6 @@
 {
   "name": "b2c-mobile-business-launch-skill-runtime",
-  "version": "0.13.2",
+  "version": "0.14.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -61,6 +61,10 @@
     "check:localization-research": "tsx scripts/check-localization-research.ts",
     "check:emotional-design": "tsx scripts/check-emotional-design.ts",
     "check:lane-coverage": "tsx scripts/check-lane-coverage.ts",
+    "check:research": "tsx scripts/check-research-evidence.ts",
+    "check:product-spec": "tsx scripts/check-product-spec.ts",
+    "check:launch-trace": "tsx scripts/check-launch-trace.ts",
+    "check:privacy-terms": "tsx scripts/check-privacy-terms.ts",
     "check:revenue": "tsx scripts/check-revenue.ts",
     "check:email": "tsx scripts/check-email.ts",
     "check:analytics-catalog": "tsx scripts/check-analytics-catalog.ts",
