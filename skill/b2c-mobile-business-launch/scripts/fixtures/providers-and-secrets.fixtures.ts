@@ -87,4 +87,14 @@ export function register(h: Harness): void {
     "utf8",
   );
   runFixture("security packet with unresolved platform gate fails", unresolvedSecurity, "check-security-release.ts", 1, "security.placeholder_or_unknown");
+
+  // --- check-revenue ---
+  const revenueBaseline = makeFixture("revenue-baseline");
+  runFixture("shipped revenue template passes before the lane is claimed", revenueBaseline, "check-revenue.ts", 0);
+
+  const revenueDoneNoProof = makeFixture("revenue-done-no-proof");
+  const revenueDoneNoProofState = readState(revenueDoneNoProof);
+  getLane(revenueDoneNoProofState, "revenue")["status"] = "done";
+  writeState(revenueDoneNoProof, revenueDoneNoProofState);
+  runFixture("done revenue lane without a live probe artifact fails", revenueDoneNoProof, "check-revenue.ts", 1, "revenue.proof_json.missing");
 }

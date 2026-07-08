@@ -1,9 +1,10 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.12.1",
-  "updatedAt": "2026-06-13",
+  "version": "0.12.2",
+  "updatedAt": "2026-07-07",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
+    "Fixture coverage for the eight previously-unfixtured gates (8 -> 0 zero-fixture validators; test:validators grows from 172 to 180 cases). check-agent-entrypoints, check-autopilot-contract, check-workflow-adherence, check-package-parity, and check-template-safety get pass+fail cases in the new scripts/fixtures/repo-gates.fixtures.ts (the package-parity pair is synthesized from lib/audit-plan.ts itself so plan drift keeps the fixture honest); check-launch-narrative (missing narrative, hashtag in fenced launch copy), check-revenue (done lane without the live revenuecat-proof.json probe artifact), and check-lane-coverage (required lane deleted from PROJECT_STATE.yaml) get pass+fail cases in their domain fixture modules. Until now the audit pipeline only ever exercised these gates' PASS paths, so a regression that made any of them always-pass was invisible; every gate now has at least one failing input proving it can fail.",
     "Carries the two v0.11.1 validator fixes forward onto v0.12.0 (the #22 PR branched from the pre-0.11.1 base and shipped without them); rebased onto v0.12.0 and re-cut as 0.12.1 with version parity across skill-version.json, both package.json files, and both lockfiles.",
     "Fixes check-store-screenshots PNG IHDR parsing under the tsx ESM runtime: parsePngIhdr used require(\"node:fs\") inside an ESM context, so every IHDR parse failed with \"require is not defined\" and emitted false png_ihdr_unreadable findings; node:fs functions are now imported at module top.",
     "Corrects check-aso-metadata screenshot folder/dimension cross-flag against current ASC reality: APP_IPHONE_67 and APP_IPHONE_69 accept identical dimension lists (verified live 2026-06-10 via asc screenshots sizes — both wells take 1260x2736, 1290x2796, and 1320x2868), so a 6.9-inch asset in an iphone-67 well is legitimate. The error is now a warning (aso_metadata.screenshot_folder_dimension_mixed) and is skipped when the doc records the authoritative live read (asc screenshots list), which surfaced as 13 false errors against the live, Apple-approved Clueless listing.",
