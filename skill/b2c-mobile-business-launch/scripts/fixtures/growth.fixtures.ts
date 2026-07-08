@@ -251,6 +251,11 @@ export function register(h: Harness): void {
   }
   runFixture("paid UA without virality scoring gate fails", paidUaNoVirality, "check-paid-user-acquisition.ts", 1, "paid_ua.virality_gate.missing");
 
+  const paidUaStubReport = makeFixture("paid-ua-stub-report");
+  writeCompletePaidUserAcquisition(paidUaStubReport);
+  writeFileSync(path.join(paidUaStubReport, "growth", "paid-ua-report.csv"), "done\n", "utf8");
+  runFixture("done paid UA with a stub report file fails", paidUaStubReport, "check-paid-user-acquisition.ts", 1, "paid_ua.report_content_thin");
+
   // --- check-launch-narrative ---
   const narrativeBaseline = makeFixture("launch-narrative-baseline");
   runFixture("shipped launch narrative template passes", narrativeBaseline, "check-launch-narrative.ts", 0);

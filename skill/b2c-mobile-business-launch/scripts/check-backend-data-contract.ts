@@ -13,13 +13,18 @@
  *      Migrations And Environments.
  *   3. engineering done additionally requires: a named backend route
  *      (supabase/firebase/custom), and a named authorization enforcement
- *      (RLS, security rules, or middleware authz).
+ *      (RLS, security rules, or middleware authz) that is grounded — the
+ *      Authorization Model must state the rules are tested and point at at
+ *      least one artifact that exists on disk (test file, migration, or
+ *      proof doc). A bare "RLS" in prose cannot mark engineering done.
  *
  * See references/backend-data-contract.md.
  *
  * Run:
  *   npm run check:backend-contract -- --root <app-repo-root>
  */
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
@@ -110,6 +115,34 @@ if (engineeringDone) {
         specPath,
       ),
     );
+  } else {
+    // Ground the claim: naming an enforcement mechanism is words; done needs
+    // work. The Authorization Model must state the rules are tested and name
+    // at least one artifact that exists on disk.
+    const authSection = spec.split(/^#{2,3}\s+/m).find((section) => /^authorization model/i.test(section)) ?? spec;
+    if (!/\btest(ed|s|ing)?\b/i.test(authSection)) {
+      issues.push(
+        issue(
+          "error",
+          "backend_contract.authorization_untested",
+          `${specPath} Authorization Model never states the rules are tested (authenticated vs anonymous vs other-user access). ` +
+            "Untested authorization cannot back a done engineering lane.",
+          specPath,
+        ),
+      );
+    }
+    const authPaths = authSection.match(/[A-Za-z0-9_@-]+(?:\/[A-Za-z0-9_.@-]+)*\.[A-Za-z0-9]+/g) ?? [];
+    if (!authPaths.some((relative) => existsSync(path.join(args.root, relative)))) {
+      issues.push(
+        issue(
+          "error",
+          "backend_contract.authorization_proof_missing",
+          `${specPath} Authorization Model names no on-disk artifact (RLS test file, migration, or proof doc such as PRODUCTION_READINESS.md). ` +
+            `Point the tested-authorization claim at a file that exists${authPaths.length > 0 ? ` (checked: ${authPaths.join(", ")})` : ""}.`,
+          specPath,
+        ),
+      );
+    }
   }
 }
 

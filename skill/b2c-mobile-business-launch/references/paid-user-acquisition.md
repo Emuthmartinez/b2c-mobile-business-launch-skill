@@ -112,7 +112,7 @@ For iOS, document that ad-platform attribution can under-report or over-report. 
 
 ## Blended Report
 
-Create a weekly report that lets the founder decide whether to continue, pause, or scale.
+Create a weekly report that lets the founder decide whether to continue, pause, or scale. When the paid UA lane is done, `check:paid-ua` requires the report file to actually look like one — a header naming spend plus downstream economics (CPA/LTV/revenue/ROAS/payback) and at least one data row; an empty or stub file fails the gate.
 
 Minimum columns:
 - date

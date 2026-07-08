@@ -276,6 +276,56 @@ export function register(h: Harness): void {
     "provider_proof.ready_claim_with_blocker",
   );
 
+  // Ledger grounding: once a mapped lane is done, the provider row's evidence
+  // path must exist on disk and its status must read as captured evidence.
+  const providerProofGrounded = makeFixture("provider-proof-grounded");
+  {
+    const state = readState(providerProofGrounded);
+    const analytics = getLane(state, "analytics_attribution");
+    analytics["status"] = "done";
+    analytics["evidence"] = ["ANALYTICS.md", "analytics/posthog-proof.md"];
+    writeState(providerProofGrounded, state);
+    writeCompleteProviderProof(providerProofGrounded);
+    mkdirSync(path.join(providerProofGrounded, "analytics"), { recursive: true });
+    writeFileSync(path.join(providerProofGrounded, "analytics", "posthog-proof.md"), "Captured live event and person property on 2026-07-07.\n", "utf8");
+  }
+  runFixture("provider proof with on-disk evidence for done lane passes", providerProofGrounded, "check-live-provider-proof.ts", 0);
+
+  const providerProofUngrounded = makeFixture("provider-proof-ungrounded");
+  {
+    const state = readState(providerProofUngrounded);
+    const analytics = getLane(state, "analytics_attribution");
+    analytics["status"] = "done";
+    analytics["evidence"] = ["ANALYTICS.md"];
+    writeState(providerProofUngrounded, state);
+    writeCompleteProviderProof(providerProofUngrounded);
+  }
+  runFixture(
+    "provider proof whose evidence path does not exist fails",
+    providerProofUngrounded,
+    "check-live-provider-proof.ts",
+    1,
+    "provider_proof.posthog.evidence_path_missing",
+  );
+
+  const providerProofStaleStatus = makeFixture("provider-proof-stale-status");
+  {
+    const state = readState(providerProofStaleStatus);
+    const analytics = getLane(state, "analytics_attribution");
+    analytics["status"] = "done";
+    analytics["evidence"] = ["ANALYTICS.md"];
+    writeState(providerProofStaleStatus, state);
+    // Keep the shipped template ledger: its PostHog status still reads "needs
+    // live event and person-property evidence", which cannot back a done lane.
+  }
+  runFixture(
+    "provider proof with still-planned ledger status fails",
+    providerProofStaleStatus,
+    "check-live-provider-proof.ts",
+    1,
+    "provider_proof.posthog.status_unproven",
+  );
+
   const artifactTemplateGap = makeFixture("artifact-template-gap");
   {
     const state = readState(artifactTemplateGap);
