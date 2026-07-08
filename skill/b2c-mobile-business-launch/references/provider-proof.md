@@ -34,4 +34,4 @@ Use `templates/PROVIDER_PROOF.md` as the starter. Each row needs:
 - evidence path
 - founder-only gate, if any
 
-Once a provider-backed lane is marked done, `check:provider-proof` grounds its ledger row in reality: the row must exist, its current status must read as captured evidence (not still-planned "needs ..." work), and at least one file named in the evidence-path cell must exist on disk. Writing the right words into the ledger without running the capture fails the gate.
+Once a provider-backed lane is marked done, `check:provider-proof` grounds its ledger row in reality: the row must exist, its current status must read as captured evidence (not still-planned "needs ..." work), and at least one file named anywhere in the row must exist on disk. Writing the right words into the ledger without running the capture fails the gate. Backtick-quote evidence paths that contain spaces; literal pipes in the proof-command cell are fine (the whole row is scanned, not a column position).

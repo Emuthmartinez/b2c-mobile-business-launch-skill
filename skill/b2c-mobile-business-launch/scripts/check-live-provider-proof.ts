@@ -28,18 +28,42 @@ function laneStatus(lane: string): string | undefined {
   return loaded.state && isRecord(loaded.state) ? asString(getPath(loaded.state, `lanes.${lane}.status`)) : undefined;
 }
 
-/** Markdown table body rows as trimmed cell arrays (header and separator rows excluded). */
-const ledgerRows: string[][] = proofText
+/**
+ * Markdown table body rows (header and separator rows excluded). Cells split
+ * on raw "|" can shift when a cell contains a literal pipe (shell pipelines in
+ * the proof-command column are common), so each row keeps its raw text and
+ * path extraction scans the whole row instead of trusting a column index.
+ */
+const ledgerRows: Array<{ cells: string[]; raw: string }> = proofText
   .split("\n")
   .filter((line) => line.trim().startsWith("|"))
-  .map((line) =>
-    line
+  .map((line) => ({
+    raw: line,
+    cells: line
       .split("|")
       .slice(1, -1)
       .map((cell) => cell.trim()),
-  )
-  .filter((cells) => cells.length >= 4 && !/^-+$/.test(cells[0] ?? "") && !/provider/i.test(cells[0] ?? ""));
+  }))
+  .filter(({ cells }) => cells.length >= 4 && !/^-+$/.test(cells[0] ?? "") && !/provider/i.test(cells[0] ?? ""));
 
+/** Path-like tokens: backtick-quoted spans (which may contain spaces) plus bare tokens with an extension. */
+function pathTokens(text: string): string[] {
+  const tokens: string[] = [];
+  for (const match of text.matchAll(/`([^`\n]+)`/g)) {
+    const inner = (match[1] ?? "").trim();
+    if (/[/.]/.test(inner)) {
+      tokens.push(inner);
+    }
+  }
+  tokens.push(...(text.match(/[A-Za-z0-9_@-]+(?:\/[A-Za-z0-9_.@-]+)*\.[A-Za-z0-9]+/g) ?? []));
+  return tokens;
+}
+
+// A done proof-required lane is the hard trigger. Readiness prose in
+// PRODUCTION_READINESS.md is only a soft signal: the shipped template's own
+// cautionary boilerplate ("Do not mark this app launch-ready until ...")
+// matches any naive readiness regex, so text alone must not hard-fail a repo
+// where nothing is done yet.
 let requiresProof = false;
 if (loaded.state && isRecord(loaded.state)) {
   for (const lane of proofRequiredLanes) {
@@ -48,11 +72,8 @@ if (loaded.state && isRecord(loaded.state)) {
     }
   }
 }
-
 const readinessText = readOptional("PRODUCTION_READINESS.md");
-if (readinessText && /\b(ready|done|verified|launch[- ]ready|production[- ]ready)\b/i.test(readinessText)) {
-  requiresProof = true;
-}
+const readinessProse = Boolean(readinessText && /\b(ready|done|verified|launch[- ]ready|production[- ]ready)\b/i.test(readinessText));
 
 if (!proofText.trim()) {
   if (requiresProof) {
@@ -61,6 +82,15 @@ if (!proofText.trim()) {
         "error",
         "provider_proof.file_missing",
         "Provider-backed readiness requires PROVIDER_PROOF.md with live evidence or explicit founder-only blockers.",
+        "PROVIDER_PROOF.md",
+      ),
+    );
+  } else if (readinessProse) {
+    issues.push(
+      issue(
+        "warning",
+        "provider_proof.file_missing",
+        "PRODUCTION_READINESS.md carries readiness language but PROVIDER_PROOF.md does not exist yet. Seed it from templates/PROVIDER_PROOF.md before any provider-backed lane is marked done.",
         "PROVIDER_PROOF.md",
       ),
     );
@@ -106,7 +136,7 @@ if (!proofText.trim()) {
     if (doneLanes.length === 0) {
       continue;
     }
-    const row = ledgerRows.find((cells) => cells[0]?.toLowerCase().includes(mapping.provider.toLowerCase()));
+    const row = ledgerRows.find(({ cells }) => cells[0]?.toLowerCase().includes(mapping.provider.toLowerCase()));
     if (!row) {
       issues.push(
         issue(
@@ -118,7 +148,7 @@ if (!proofText.trim()) {
       );
       continue;
     }
-    const statusCell = row[1] ?? "";
+    const statusCell = row.cells[1] ?? "";
     if (/\b(needs|pending|todo|tbd|unknown|placeholder|planned)\b/i.test(statusCell)) {
       issues.push(
         issue(
@@ -129,14 +159,16 @@ if (!proofText.trim()) {
         ),
       );
     }
-    const evidenceCell = row[3] ?? "";
-    const evidencePaths = evidenceCell.match(/[A-Za-z0-9_@-]+(?:\/[A-Za-z0-9_.@-]+)*\.[A-Za-z0-9]+/g) ?? [];
+    // Scan the whole raw row: a literal pipe in an earlier cell (shell
+    // pipeline in the proof command) shifts positional cells, and the goal is
+    // only that some named artifact from this row exists on disk.
+    const evidencePaths = pathTokens(row.raw);
     if (evidencePaths.length === 0) {
       issues.push(
         issue(
           "error",
           `provider_proof.${slug(mapping.provider)}.evidence_path_unrecorded`,
-          `lanes.${doneLanes[0]} is done but the ${mapping.provider} evidence-path cell names no file path. Record the captured artifact's path.`,
+          `lanes.${doneLanes[0]} is done but the ${mapping.provider} ledger row names no file path. Record the captured artifact's path (backtick-quote paths that contain spaces).`,
           "PROVIDER_PROOF.md",
         ),
       );

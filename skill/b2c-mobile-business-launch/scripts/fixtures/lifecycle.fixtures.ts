@@ -198,6 +198,34 @@ export function register(h: Harness): void {
     "backend_contract.authorization_proof_missing",
   );
 
+  // Regression (verification pass): numbered headings must not defeat the
+  // Authorization Model section extraction and silently widen the scan.
+  const backendNumberedHeading = makeFixture("backend-contract-numbered-heading");
+  setEngineeringDone(backendNumberedHeading);
+  writeFileSync(
+    path.join(backendNumberedHeading, "TECH_SPEC.md"),
+    [
+      "# Tech Spec",
+      "## Data Contract",
+      "### 1. Backend Selection",
+      "supabase — chosen for the archetype starter default.",
+      "### 2. Data Model",
+      "profiles and entities per the starter schema. Integration tested elsewhere.",
+      "### 3. Authorization Model",
+      "Enforcement: Postgres RLS policies. Deny-by-default.",
+      "### 4. Migrations And Environments",
+      "Migrations run through the supabase CLI; dev/staging/prod separated.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "numbered authorization heading still gates untested prose-only RLS",
+    backendNumberedHeading,
+    "check-backend-data-contract.ts",
+    1,
+    "backend_contract.authorization_untested",
+  );
+
   // ── Standalone Engineering Loop (CE unavailable) ──────────────────────────
 
   function setCeUnavailable(root: string): void {

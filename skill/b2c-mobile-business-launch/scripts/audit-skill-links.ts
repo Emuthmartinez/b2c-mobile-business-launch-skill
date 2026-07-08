@@ -77,6 +77,28 @@ for (const file of collectAllFiles(skillRoot)) {
 
 // ── Gate 2: orphaned references/ and templates/ files ────────────────────────
 
+/**
+ * Boundary-aware containment: "lane.md" inside "sub-lane.md" is NOT a mention
+ * of lane.md. A preceding path separator ("skill/templates/lane.md") still
+ * counts — a longer path ending in the needle references the same file.
+ */
+function mentionsNeedle(text: string, needle: string): boolean {
+  const wordish = /[A-Za-z0-9_-]/;
+  let from = 0;
+  while (true) {
+    const at = text.indexOf(needle, from);
+    if (at === -1) {
+      return false;
+    }
+    const before = at > 0 ? (text[at - 1] ?? "") : "";
+    const after = at + needle.length < text.length ? (text[at + needle.length] ?? "") : "";
+    if (!wordish.test(before) && !wordish.test(after)) {
+      return true;
+    }
+    from = at + 1;
+  }
+}
+
 function isReachable(candidate: string): boolean {
   const relative = path.relative(skillRoot, candidate).split(path.sep).join("/");
   const needles = new Set<string>([relative, path.basename(candidate)]);
@@ -94,7 +116,7 @@ function isReachable(candidate: string): boolean {
       continue;
     }
     for (const needle of needles) {
-      if (text.includes(needle)) {
+      if (text.includes(needle) && mentionsNeedle(text, needle)) {
         return true;
       }
     }

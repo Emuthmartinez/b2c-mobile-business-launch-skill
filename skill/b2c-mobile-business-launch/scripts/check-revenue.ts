@@ -117,8 +117,12 @@ function extractRevenueCatEvidencePath(text: string): string | undefined {
       continue;
     }
 
+    // A literal pipe in an earlier cell (shell pipeline in the proof command)
+    // shifts positional cells, so only accept the positional candidate when it
+    // actually looks like a file path; otherwise fall through to scanning the
+    // row for an extension-bearing cell.
     const candidate = evidenceCell ?? "";
-    if (candidate && !isPlaceholderPath(candidate)) {
+    if (candidate && !isPlaceholderPath(candidate) && /\.[A-Za-z0-9]+$/.test(candidate)) {
       return candidate;
     }
 
