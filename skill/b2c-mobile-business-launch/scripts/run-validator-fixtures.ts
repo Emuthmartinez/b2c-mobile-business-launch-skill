@@ -20,6 +20,7 @@ import { register as registerLifecycle } from "./fixtures/lifecycle.fixtures.js"
 import { register as registerProbesAndGrading } from "./fixtures/probes-and-grading.fixtures.js";
 import { register as registerHooks } from "./fixtures/hooks.fixtures.js";
 import { register as registerRepoGates } from "./fixtures/repo-gates.fixtures.js";
+import { register as registerCoreArtifacts } from "./fixtures/core-artifacts.fixtures.js";
 import { register as registerArchetype } from "./fixtures/archetype.fixtures.js";
 import { register as registerBehavioral } from "./fixtures/behavioral.fixtures.js";
 
@@ -37,6 +38,7 @@ try {
   registerProbesAndGrading(harness);
   registerHooks(harness);
   registerRepoGates(harness);
+  registerCoreArtifacts(harness);
   registerArchetype(harness);
   registerBehavioral(harness);
 } finally {

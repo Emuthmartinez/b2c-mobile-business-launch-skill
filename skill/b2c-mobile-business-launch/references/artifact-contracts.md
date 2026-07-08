@@ -338,6 +338,8 @@ Acceptance:
 
 ## `LAUNCH_TRACE.md`
 
+Validator: `npm run check:launch-trace -- --root . --state PROJECT_STATE.yaml` enforces the structural floor (Decision Trace with TRACE-<n> IDs, Rejected Decisions, Founder-Only Decisions, Blockers, Verification, RESEARCH.md/SPEC.md links; no placeholders when the traceability lane is done).
+
 Use for any multi-artifact launch so the chain from research to implementation does not drift.
 
 Must include:
@@ -499,6 +501,8 @@ Acceptance:
 
 ## `SPEC.md`
 
+Validator: `npm run check:product-spec -- --root . --state PROJECT_STATE.yaml` enforces the structural floor (Promise, 11-Star Experience, Category And Competitors, Core Product Loop, V1 Scalable Slice, Monetization Posture, Metrics, Acceptance Contract, Risks And Open Questions; no placeholders when the product lane is done).
+
 Must include:
 - one-line promise
 - `11-Star Experience` section or pointer to `11_STAR_EXPERIENCE.md` and `11-star-experience.html`
@@ -524,6 +528,8 @@ Acceptance:
 - The moat is stated as a bundle of advantages, not one vague differentiator.
 
 ## `RESEARCH.md`
+
+Validator: `npm run check:research -- --root . --state PROJECT_STATE.yaml` enforces the structural floor (Source Ledger, Decision Inputs, Decision Log, Rejected Claims, trace pointers; dated evidence and no placeholders when the research lane is done).
 
 Use when research spans app stores, social platforms, competitor websites, reviews, creators, keywords, pricing, or paid acquisition signals.
 
@@ -1040,6 +1046,8 @@ Acceptance:
 - Fastlane performance is connected to product metrics, not treated as vanity-only social analytics.
 
 ## `PRIVACY.md`
+
+Validator: `npm run check:privacy-terms -- --root . --state PROJECT_STATE.yaml` enforces the structural floor for PRIVACY.md and TERMS.md (effective dates, contacts, Data Inventory, Retention And Deletion, App Store Disclosure Mapping, subscriptions/refunds, disclaimers, governing law; no placeholders when privacy_legal is done). Founder/legal approval remains the final gate.
 
 Use as the source draft for privacy policy, privacy choices, account deletion, and app-store privacy disclosures. Also generate publishable pages from it when the launch has a public site.
 
