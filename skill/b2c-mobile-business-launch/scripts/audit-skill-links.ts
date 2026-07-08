@@ -1,7 +1,22 @@
 #!/usr/bin/env node
-import { existsSync, readFileSync } from "node:fs";
+/**
+ * audit-skill-links.ts — link-graph integrity for the shipped skill.
+ *
+ * Three gates:
+ *   1. Broken local markdown links ([text](path) targets that do not exist).
+ *   2. Orphaned files under references/ and templates/: a shipped file that no
+ *      other file mentions by relative path, basename, or ancestor directory
+ *      is dead weight no agent can ever route to. Basename and ancestor-dir
+ *      matching keep validator-constructed paths (path.join(root, "tokens.json"))
+ *      and copy-the-directory scaffolds (archetype starter/) from false-failing.
+ *   3. Byte-identical duplicate files under templates/ (outside the archetype
+ *      starters, which intentionally share scaffold files): duplicates drift
+ *      apart silently, and basename reachability cannot catch them.
+ */
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
-import { collectFiles, issue, reportAndExit } from "./lib/launch-state.js";
+import { collectAllFiles, collectFiles, issue, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 let skillRoot = process.cwd();
 const argv = process.argv.slice(2);
@@ -15,7 +30,13 @@ for (let index = 0; index < argv.length; index += 1) {
   }
 }
 
-const issues = [];
+/** Files allowed to be unmentioned, each with a concrete reason. */
+const ORPHAN_EXCLUSIONS: Record<string, string> = {};
+
+const issues: Issue[] = [];
+
+// ── Gate 1: broken local markdown links ─────────────────────────────────────
+
 const markdownFiles = collectFiles(skillRoot, new Set([".md"]), 2000);
 const linkPattern = /\[[^\]]*]\(([^)]+)\)/g;
 
@@ -36,6 +57,103 @@ for (const file of markdownFiles) {
     const target = path.resolve(path.dirname(file), href);
     if (!existsSync(target)) {
       issues.push(issue("error", "skill_links.broken_local_link", `Broken local markdown link: ${rawHref}`, path.relative(skillRoot, file)));
+    }
+  }
+}
+
+// ── Corpus for reachability: every text file that can mention a path ────────
+
+const corpusExtensions = new Set([".md", ".ts", ".tsx", ".yaml", ".yml", ".json", ".html", ".css", ".swift", ".txt"]);
+const corpus = new Map<string, string>();
+for (const file of collectAllFiles(skillRoot)) {
+  if (file.split(path.sep).includes("node_modules") || path.basename(file) === "package-lock.json") {
+    continue;
+  }
+  if (!corpusExtensions.has(path.extname(file))) {
+    continue;
+  }
+  corpus.set(file, readFileSync(file, "utf8"));
+}
+
+// ── Gate 2: orphaned references/ and templates/ files ────────────────────────
+
+function isReachable(candidate: string): boolean {
+  const relative = path.relative(skillRoot, candidate).split(path.sep).join("/");
+  const needles = new Set<string>([relative, path.basename(candidate)]);
+  // Ancestor directories (copy-the-directory reachability), e.g.
+  // "templates/app-archetypes/social-network/starter" covers every file below
+  // it. Stop above the bare subtree name ("templates"/"references"), which
+  // appears in prose everywhere and would mark everything reachable.
+  let ancestor = path.dirname(relative);
+  while (ancestor.includes("/")) {
+    needles.add(ancestor);
+    ancestor = path.dirname(ancestor);
+  }
+  for (const [file, text] of corpus) {
+    if (file === candidate) {
+      continue;
+    }
+    for (const needle of needles) {
+      if (text.includes(needle)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+for (const subtree of ["references", "templates"]) {
+  const subtreeRoot = path.join(skillRoot, subtree);
+  if (!existsSync(subtreeRoot)) {
+    continue;
+  }
+  for (const candidate of collectAllFiles(subtreeRoot)) {
+    if (candidate.split(path.sep).includes("node_modules")) {
+      continue;
+    }
+    const relative = path.relative(skillRoot, candidate).split(path.sep).join("/");
+    if (Object.prototype.hasOwnProperty.call(ORPHAN_EXCLUSIONS, relative)) {
+      continue;
+    }
+    if (!isReachable(candidate)) {
+      issues.push(
+        issue(
+          "error",
+          "skill_links.orphan_file",
+          `${relative} is never mentioned by path, basename, or parent directory in any other shipped file — no agent can route to it. Wire it into SKILL.md/references/scripts or delete it (add a reasoned ORPHAN_EXCLUSIONS entry only for deliberate exceptions).`,
+          relative,
+        ),
+      );
+    }
+  }
+}
+
+// ── Gate 3: byte-identical duplicates under templates/ ───────────────────────
+
+const duplicateGroups = new Map<string, string[]>();
+const templatesRoot = path.join(skillRoot, "templates");
+if (existsSync(templatesRoot)) {
+  for (const file of collectAllFiles(templatesRoot)) {
+    const relative = path.relative(skillRoot, file).split(path.sep).join("/");
+    if (file.split(path.sep).includes("node_modules") || relative.startsWith("templates/app-archetypes/")) {
+      continue;
+    }
+    if (statSync(file).size < 100) {
+      continue;
+    }
+    const hash = createHash("sha256").update(readFileSync(file)).digest("hex");
+    duplicateGroups.set(hash, [...(duplicateGroups.get(hash) ?? []), relative]);
+  }
+  for (const paths of duplicateGroups.values()) {
+    if (paths.length > 1) {
+      issues.push(
+        issue(
+          "error",
+          "skill_links.duplicate_template",
+          `Byte-identical template files: ${paths.join(", ")}. Keep one canonical copy — duplicates drift apart silently.`,
+          paths[0],
+        ),
+      );
     }
   }
 }

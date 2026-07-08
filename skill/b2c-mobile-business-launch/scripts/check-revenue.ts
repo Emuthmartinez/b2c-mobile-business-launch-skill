@@ -41,6 +41,7 @@
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue } from "./lib/launch-state.js";
 
 const args = parseCliArgs(process.argv.slice(2));
@@ -168,9 +169,16 @@ function checkTier1Floor(proofContent: string): boolean {
     failed = true;
   }
 
-  // Byte-identity check against the example file.
-  const exampleContent = rawContent(proofJsonExampleRelPath);
-  if (exampleContent !== undefined) {
+  // Byte-identity check against the example file. Compare against the app
+  // repo's copy AND the copy shipped inside this skill: an app repo that never
+  // seeded the example used to silently skip this floor, so pasting the
+  // shipped example's content as "proof" evaded detection.
+  const shippedExamplePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "templates", proofJsonExampleRelPath);
+  const exampleContents = [rawContent(proofJsonExampleRelPath), existsSync(shippedExamplePath) ? readFileSync(shippedExamplePath, "utf8") : undefined];
+  for (const exampleContent of exampleContents) {
+    if (exampleContent === undefined) {
+      continue;
+    }
     const proofNormalized = proofContent.trim();
     const exampleNormalized = exampleContent.trim();
     if (proofNormalized === exampleNormalized) {
@@ -183,6 +191,7 @@ function checkTier1Floor(proofContent: string): boolean {
         ),
       );
       failed = true;
+      break;
     }
   }
 
