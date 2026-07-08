@@ -139,6 +139,19 @@ export function register(h: Harness): void {
   writeFileSync(path.join(linksOrphan, "references", "unrouted.md"), "No other file mentions this reference, so no agent can load it.\n", "utf8");
   runScriptArgs("link audit fails on an orphaned reference file", "audit-skill-links.ts", ["--skill-root", linksOrphan], 1, "skill_links.orphan_file");
 
+  // Regression (verification pass): a basename that is a substring of another
+  // mentioned file's basename ("lane.md" inside "sub-lane.md") is not a mention.
+  const linksSubstringOrphan = makeEmptyFixture("skill-links-substring-orphan");
+  wireLinkRoot(linksSubstringOrphan);
+  writeFileSync(path.join(linksSubstringOrphan, "references", "lane.md"), "Nothing references this file by its own name.\n", "utf8");
+  writeFileSync(
+    path.join(linksSubstringOrphan, "references", "guide.md"),
+    "See [the template](../templates/artifact.md); also read sub-lane.md notes.\n",
+    "utf8",
+  );
+  writeFileSync(path.join(linksSubstringOrphan, "references", "sub-lane.md"), "Routed from references/guide.md.\n", "utf8");
+  runScriptArgs("link audit flags a basename-substring orphan", "audit-skill-links.ts", ["--skill-root", linksSubstringOrphan], 1, "skill_links.orphan_file");
+
   const linksDuplicate = makeEmptyFixture("skill-links-duplicate");
   wireLinkRoot(linksDuplicate);
   const duplicateBody =

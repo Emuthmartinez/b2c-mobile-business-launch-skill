@@ -119,7 +119,9 @@ if (engineeringDone) {
     // Ground the claim: naming an enforcement mechanism is words; done needs
     // work. The Authorization Model must state the rules are tested and name
     // at least one artifact that exists on disk.
-    const authSection = spec.split(/^#{2,3}\s+/m).find((section) => /^authorization model/i.test(section)) ?? spec;
+    // Tolerate numbered/decorated headings ("### 3. Authorization Model") so
+    // the extraction does not silently fall back to scanning the whole spec.
+    const authSection = spec.split(/^#{2,4}\s+/m).find((section) => /^[\d.):\s-]*authorization model\b/i.test(section)) ?? spec;
     if (!/\btest(ed|s|ing)?\b/i.test(authSection)) {
       issues.push(
         issue(

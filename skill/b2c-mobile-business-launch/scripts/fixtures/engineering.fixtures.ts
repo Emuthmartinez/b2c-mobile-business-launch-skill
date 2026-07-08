@@ -308,6 +308,34 @@ export function register(h: Harness): void {
     "provider_proof.posthog.evidence_path_missing",
   );
 
+  // Regression (verification pass): a literal pipe in the proof-command cell
+  // shifts naive positional column parsing; the whole row is scanned instead.
+  const providerProofPipedCommand = makeFixture("provider-proof-piped-command");
+  {
+    const state = readState(providerProofPipedCommand);
+    const analytics = getLane(state, "analytics_attribution");
+    analytics["status"] = "done";
+    analytics["evidence"] = ["ANALYTICS.md", "analytics/posthog-proof.md"];
+    writeState(providerProofPipedCommand, state);
+    writeCompleteProviderProof(providerProofPipedCommand);
+    const proofPath = path.join(providerProofPipedCommand, "PROVIDER_PROOF.md");
+    const withPipedCommand = readFileSync(proofPath, "utf8").replace(
+      "| PostHog | event and person property captured | inspect dashboard/API | analytics/posthog-proof.md |",
+      "| PostHog | event and person property captured | curl api.posthog.com \\| jq .results | analytics/posthog-proof.md |",
+    );
+    writeFileSync(proofPath, withPipedCommand, "utf8");
+    mkdirSync(path.join(providerProofPipedCommand, "analytics"), { recursive: true });
+    writeFileSync(path.join(providerProofPipedCommand, "analytics", "posthog-proof.md"), "Captured live event on 2026-07-07.\n", "utf8");
+  }
+  runFixture("provider proof row with a piped proof command still grounds", providerProofPipedCommand, "check-live-provider-proof.ts", 0);
+
+  // Regression (verification pass): the shipped PRODUCTION_READINESS.md
+  // template's cautionary boilerplate ("Do not mark this app launch-ready
+  // until ...") must not hard-fail a repo where no lane is done yet.
+  const providerProofEarlyRepo = makeFixture("provider-proof-early-repo");
+  rmSync(path.join(providerProofEarlyRepo, "PROVIDER_PROOF.md"), { force: true });
+  runFixture("readiness boilerplate without done lanes does not hard-fail provider proof", providerProofEarlyRepo, "check-live-provider-proof.ts", 0);
+
   const providerProofStaleStatus = makeFixture("provider-proof-stale-status");
   {
     const state = readState(providerProofStaleStatus);
