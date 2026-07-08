@@ -2,12 +2,15 @@
 
 /**
  * Bento stat grid — in-view stagger reveal, hover lift.
- * Cards are real text server-side; the stagger is whileInView decoration
- * that collapses under reduced motion.
+ *
+ * Contract: the reveal uses the js-gated .lm-reveal/.lm-in CSS mechanism from
+ * motion.css — never motion's `initial` prop, which bakes opacity:0 into SSR
+ * HTML and would hide real text from crawlers and no-JS readers. Stagger
+ * timing comes from --motion-stagger via --lm-stagger-index.
  */
-import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
-import { readMotionTokens } from "../lib/motion-tokens";
+import { motion, useInView, useReducedMotion } from "motion/react";
+import { useRef, type ReactNode } from "react";
+import { useHydratedMotionGate } from "../lib/motion-tokens";
 
 export interface BentoCard {
   title: string;
@@ -22,21 +25,20 @@ export interface BentoProps {
 }
 
 export function Bento({ heading, cards }: BentoProps) {
+  useHydratedMotionGate();
   const reduced = useReducedMotion();
-  const tokens = readMotionTokens();
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(gridRef, { once: true, amount: 0.2 });
 
   return (
     <section className="lm-bento">
       <h2 className="lm-section-heading">{heading}</h2>
-      <div className="lm-bento-grid">
+      <div ref={gridRef} className="lm-bento-grid">
         {cards.map((card, index) => (
           <motion.article
             key={card.title}
-            className={`lm-bento-card${card.variant ? ` lm-bento-${card.variant}` : ""}`}
-            initial={reduced ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: tokens.reveal, ease: tokens.easeEmphasis, delay: index * tokens.stagger }}
+            className={`lm-bento-card lm-reveal${inView ? " lm-in" : ""}${card.variant ? ` lm-bento-${card.variant}` : ""}`}
+            style={{ ["--lm-stagger-index" as string]: index }}
             whileHover={reduced ? undefined : { y: -6 }}
           >
             <h3>{card.title}</h3>

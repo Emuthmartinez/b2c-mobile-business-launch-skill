@@ -8,7 +8,7 @@
  */
 import { motion, useReducedMotion } from "motion/react";
 import { useState } from "react";
-import { readMotionTokens } from "../lib/motion-tokens";
+import { useHydratedMotionGate, useMotionTokens } from "../lib/motion-tokens";
 
 export interface PricingTier {
   name: string;
@@ -27,8 +27,11 @@ export interface PricingProps {
 }
 
 export function Pricing({ heading, tiers, disclaimer }: PricingProps) {
+  // Prices are visible in SSR HTML: the re-price entrance only applies after
+  // hydration (never a server-baked opacity:0 on real copy).
+  const hydrated = useHydratedMotionGate();
   const reduced = useReducedMotion();
-  const tokens = readMotionTokens();
+  const tokens = useMotionTokens();
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 
   return (
@@ -48,7 +51,7 @@ export function Pricing({ heading, tiers, disclaimer }: PricingProps) {
             <motion.p
               key={billing}
               className="lm-price"
-              initial={reduced ? false : { opacity: 0, y: 8 }}
+              initial={hydrated && !reduced ? { opacity: 0, y: 8 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: tokens.base, ease: tokens.easeSpring }}
             >

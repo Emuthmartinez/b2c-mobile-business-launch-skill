@@ -21,7 +21,7 @@ Host: a Next.js App Router project (the archetype starters are the expected host
 
 ## The progressive-enhancement contract (enforceable)
 
-Cinematic and GEO/perf-safe is not a tradeoff; these four rules are what `check:landing-funnel` enforces on landing sources when motion is present:
+Cinematic and GEO/perf-safe is not a tradeoff. Rules 1, 2, and 4 are mechanically enforced by `check:landing-funnel` when landing sources animate; rule 3 is architectural guidance verified through the deploy gates and live checks rather than a static scan:
 
 1. **Real text, always.** Above-the-fold copy exists in static HTML and is never animation-gated. Reveal states apply only under `html.js` (set on hydration); with JavaScript off the page is a calm, legible document. Hero word-spans are created only after hydration so crawlers see the intact headline.
 2. **Reduced motion collapses everything.** Landing sources that animate must carry a `prefers-reduced-motion` block (and component-level `useReducedMotion()` checks) that zeroes durations and removes transforms — the calm final state, immediately.

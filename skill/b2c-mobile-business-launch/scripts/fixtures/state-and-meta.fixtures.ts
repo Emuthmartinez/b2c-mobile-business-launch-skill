@@ -397,6 +397,39 @@ export function register(h: Harness): void {
     "landing_funnel.motion.untokenized_duration",
   );
 
+  // Regression (verification pass): prose mentioning "transition:" in an .mdx
+  // file is not animation and must not demand reduced-motion handling.
+  const motionProseOnly = makeEmptyFixture("landing-motion-prose-only");
+  withLandingSite(motionProseOnly, "<h1>Static launch page</h1>\n<p>No animation here.</p>\n");
+  writeFileSync(path.join(motionProseOnly, "landing", "notes.mdx"), "The onboarding transition: from waitlist to full access happens at launch.\n", "utf8");
+  runFixture("landing prose mentioning transition is not treated as animation", motionProseOnly, "check-landing-funnel.ts", 0);
+
+  // Regression (verification pass): reduced-motion handling may live outside
+  // the landing tree (styles/globals.css) and still satisfies the gate.
+  const motionReducedElsewhere = makeEmptyFixture("landing-motion-reduced-elsewhere");
+  withLandingSite(motionReducedElsewhere, animatedIndexHtml({ reducedMotion: false, tokenized: true, staticHero: true }));
+  mkdirSync(path.join(motionReducedElsewhere, "styles"), { recursive: true });
+  writeFileSync(
+    path.join(motionReducedElsewhere, "styles", "globals.css"),
+    "@media (prefers-reduced-motion: reduce) { * { animation: none; transition: none; } }\n",
+    "utf8",
+  );
+  runFixture("reduced-motion handling outside landing/ satisfies the gate", motionReducedElsewhere, "check-landing-funnel.ts", 0);
+
+  // Regression (verification pass): JS-only animation (camelCase style keys)
+  // is still detected as motion.
+  const motionJsOnly = makeEmptyFixture("landing-motion-js-only");
+  withLandingSite(motionJsOnly, "<h1>Static launch page</h1>\n");
+  mkdirSync(path.join(motionJsOnly, "landing", "sections"), { recursive: true });
+  writeFileSync(path.join(motionJsOnly, "landing", "sections", "Reveal.tsx"), 'export const style = { opacity: 0, transitionDuration: "600ms" };\n', "utf8");
+  runFixture(
+    "JS-only animation without reduced-motion handling fails",
+    motionJsOnly,
+    "check-landing-funnel.ts",
+    1,
+    "landing_funnel.motion.reduced_motion_missing",
+  );
+
   // --- check-version-discipline (fail branches) ---
   const versionManifestMissing = makeEmptyFixture("version-discipline-manifest-missing");
   runScriptArgs(

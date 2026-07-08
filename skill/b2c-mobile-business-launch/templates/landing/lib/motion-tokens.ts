@@ -4,7 +4,12 @@
  * on. Sections must take their timing from here (or from the CSS variables
  * directly) — never from magic numbers — so one re-promotion of
  * state/theme.tokens.json retimes every surface.
+ *
+ * Hidden states are NEVER server-rendered: motion's `initial` prop bakes into
+ * SSR inline styles, so sections must not pass a hiding `initial` until
+ * useHydratedMotionGate() returns true (and CSS reveals key on html.js).
  */
+import { useEffect, useMemo, useState } from "react";
 
 export interface LandingMotionTokens {
   /** Seconds — micro-interactions (hover lift, toggle). */
@@ -72,4 +77,27 @@ export function enableJsMotionGate(): void {
   if (typeof document !== "undefined") {
     document.documentElement.classList.add("js");
   }
+}
+
+/**
+ * True only after hydration, and sets the html.js gate as a side effect.
+ * Server render and the client's first (hydration) render both return false,
+ * so branching visible/structural output on this value never causes a
+ * hydration mismatch — and no hiding `initial` ever reaches SSR HTML.
+ * (useReducedMotion() alone is not enough: it is null on the server but
+ * resolves synchronously on the client's first render, so branching on it
+ * pre-mount mismatches for reduced-motion users.)
+ */
+export function useHydratedMotionGate(): boolean {
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => {
+    enableJsMotionGate();
+    setHydrated(true);
+  }, []);
+  return hydrated;
+}
+
+/** readMotionTokens(), memoized so re-renders never re-trigger getComputedStyle reflows. */
+export function useMotionTokens(): LandingMotionTokens {
+  return useMemo(() => readMotionTokens(), []);
 }

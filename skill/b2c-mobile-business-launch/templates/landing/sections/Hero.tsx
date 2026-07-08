@@ -9,8 +9,8 @@
  * see the intact copy. All timing reads --motion-* tokens.
  */
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { enableJsMotionGate } from "../lib/motion-tokens";
+import { useRef, type ReactNode } from "react";
+import { useHydratedMotionGate } from "../lib/motion-tokens";
 
 export interface HeroProps {
   headline: string;
@@ -22,11 +22,7 @@ export interface HeroProps {
 }
 
 function StaggeredHeadline({ text }: { text: string }) {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    enableJsMotionGate();
-    setHydrated(true);
-  }, []);
+  const hydrated = useHydratedMotionGate();
 
   if (!hydrated) {
     // Server and no-JS render: the intact headline, always legible.

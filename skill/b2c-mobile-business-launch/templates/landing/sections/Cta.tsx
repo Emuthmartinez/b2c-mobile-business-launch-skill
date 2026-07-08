@@ -7,6 +7,7 @@
  */
 import { motion, useMotionValue, useMotionTemplate, useReducedMotion } from "motion/react";
 import type { ReactNode } from "react";
+import { useHydratedMotionGate } from "../lib/motion-tokens";
 
 export interface CtaProps {
   heading: string;
@@ -15,6 +16,7 @@ export interface CtaProps {
 }
 
 export function Cta({ heading, body, action }: CtaProps) {
+  const hydrated = useHydratedMotionGate();
   const reduced = useReducedMotion();
   const pointerX = useMotionValue(50);
   const pointerY = useMotionValue(50);
@@ -32,8 +34,10 @@ export function Cta({ heading, body, action }: CtaProps) {
         pointerY.set(((event.clientY - bounds.top) / bounds.height) * 100);
       }}
     >
-      <div className={`lm-cta-backdrop${reduced ? "" : " lm-gradient-morph"}`} aria-hidden="true" />
-      {!reduced && <motion.div className="lm-spotlight" style={{ backgroundImage: spotlight }} aria-hidden="true" />}
+      {/* The morph class ships in SSR; motion.css's reduced-motion media query
+          stops it, so no JS branch (and no hydration mismatch) is needed. */}
+      <div className="lm-cta-backdrop lm-gradient-morph" aria-hidden="true" />
+      {hydrated && !reduced && <motion.div className="lm-spotlight" style={{ backgroundImage: spotlight }} aria-hidden="true" />}
       <div className="lm-cta-panel">
         <h2>{heading}</h2>
         <p>{body}</p>

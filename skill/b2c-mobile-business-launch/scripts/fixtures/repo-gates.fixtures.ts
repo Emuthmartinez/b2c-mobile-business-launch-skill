@@ -198,6 +198,23 @@ export function register(h: Harness): void {
   );
   runFixture("template safety allows motion/react inside the landing web pack", templateSafetyLanding, "check-template-safety.ts", 0);
 
+  // Regression (verification pass): the exception is anchored to the TOP-LEVEL
+  // landing/ pack; a nested directory named landing stays covered by the gate.
+  const templateSafetyNestedLanding = makeEmptyFixture("template-safety-nested-landing");
+  mkdirSync(path.join(templateSafetyNestedLanding, "mobile", "landing"), { recursive: true });
+  writeFileSync(
+    path.join(templateSafetyNestedLanding, "mobile", "landing", "Screen.tsx"),
+    'import { motion } from "framer-motion";\nexport const Screen = motion.div;\n',
+    "utf8",
+  );
+  runFixture(
+    "template safety still fails motion imports in nested landing dirs",
+    templateSafetyNestedLanding,
+    "check-template-safety.ts",
+    1,
+    "template_safety.framer_motion_in_template",
+  );
+
   // --- render-business-control-plane-workspace (--check mode) ---
   runScriptArgs(
     "workspace render check passes against the committed output",

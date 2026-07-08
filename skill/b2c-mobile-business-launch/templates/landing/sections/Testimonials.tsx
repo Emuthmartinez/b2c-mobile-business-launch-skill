@@ -2,12 +2,15 @@
 
 /**
  * Testimonials — stagger reveal + cursor spotlight.
- * Quotes are real text server-side; the spotlight is a pointer-driven
- * radial-gradient overlay that never affects legibility and is disabled
- * under reduced motion.
+ *
+ * Contract: quotes reveal via the js-gated .lm-reveal/.lm-in CSS mechanism
+ * (never a hiding `initial`, which would bake opacity:0 into SSR HTML). The
+ * spotlight overlay mounts only after hydration AND when motion is not
+ * reduced, so server and first-client render always agree.
  */
-import { motion, useMotionValue, useMotionTemplate, useReducedMotion } from "motion/react";
-import { readMotionTokens } from "../lib/motion-tokens";
+import { motion, useInView, useMotionValue, useMotionTemplate, useReducedMotion } from "motion/react";
+import { useRef } from "react";
+import { useHydratedMotionGate } from "../lib/motion-tokens";
 
 export interface Testimonial {
   quote: string;
@@ -21,8 +24,10 @@ export interface TestimonialsProps {
 }
 
 export function Testimonials({ heading, testimonials }: TestimonialsProps) {
+  const hydrated = useHydratedMotionGate();
   const reduced = useReducedMotion();
-  const tokens = readMotionTokens();
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(gridRef, { once: true, amount: 0.25 });
   const pointerX = useMotionValue(50);
   const pointerY = useMotionValue(50);
   const spotlight = useMotionTemplate`radial-gradient(240px at ${pointerX}% ${pointerY}%, var(--color-surface-elevated), transparent 70%)`;
@@ -39,23 +44,16 @@ export function Testimonials({ heading, testimonials }: TestimonialsProps) {
         pointerY.set(((event.clientY - bounds.top) / bounds.height) * 100);
       }}
     >
-      {!reduced && <motion.div className="lm-spotlight" style={{ backgroundImage: spotlight }} aria-hidden="true" />}
+      {hydrated && !reduced && <motion.div className="lm-spotlight" style={{ backgroundImage: spotlight }} aria-hidden="true" />}
       <h2 className="lm-section-heading">{heading}</h2>
-      <div className="lm-testimonial-grid">
+      <div ref={gridRef} className="lm-testimonial-grid">
         {testimonials.map((testimonial, index) => (
-          <motion.figure
-            key={testimonial.name}
-            className="lm-testimonial"
-            initial={reduced ? false : { opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: tokens.reveal, ease: tokens.easeEmphasis, delay: index * tokens.stagger }}
-          >
+          <figure key={testimonial.name} className={`lm-testimonial lm-reveal${inView ? " lm-in" : ""}`} style={{ ["--lm-stagger-index" as string]: index }}>
             <blockquote>{testimonial.quote}</blockquote>
             <figcaption>
               <strong>{testimonial.name}</strong> · {testimonial.role}
             </figcaption>
-          </motion.figure>
+          </figure>
         ))}
       </div>
     </section>

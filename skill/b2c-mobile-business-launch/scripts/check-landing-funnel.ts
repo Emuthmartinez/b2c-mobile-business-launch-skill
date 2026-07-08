@@ -41,6 +41,9 @@ const landingStatus = laneStatus("landing") ?? laneStatus("funnel");
 // funnel yet), which must not trigger the deploy gates.
 const hasLandingArtifacts =
   existsSync(path.join(args.root, "landing", "index.html")) ||
+  existsSync(path.join(args.root, "landing", "package.json")) ||
+  existsSync(path.join(args.root, "landing", "app")) ||
+  existsSync(path.join(args.root, "landing", "pages")) ||
   existsSync(path.join(args.root, "public")) ||
   existsSync(path.join(args.root, "wrangler.toml")) ||
   existsSync(path.join(args.root, "landing", "wrangler.toml"));
@@ -334,25 +337,47 @@ for (const filePath of landingSourceFiles) {
 // Cinematic and GEO/perf-safe is not a tradeoff; when landing sources animate,
 // the progressive-enhancement contract is enforceable:
 
-const motionSourceExtensions = new Set([".html", ".astro", ".jsx", ".tsx", ".mdx", ".svelte", ".vue", ".css"]);
-const motionSourceFiles = collectFiles(args.root, motionSourceExtensions).filter((file) => {
-  const relativePath = path.relative(args.root, file);
-  return /^(landing|public|app|src|components|pages)\b/.test(relativePath);
-});
-const motionMarker = /@keyframes|animation:|transition:|IntersectionObserver|motion\/react|framer-motion|whileInView|useScroll/;
-const motionTexts: Array<{ relativePath: string; text: string }> = [];
-for (const filePath of motionSourceFiles) {
+const motionSourceExtensions = new Set([".html", ".astro", ".jsx", ".tsx", ".mdx", ".svelte", ".vue", ".css", ".ts"]);
+const allMotionTexts: Array<{ relativePath: string; text: string }> = [];
+for (const filePath of collectFiles(args.root, motionSourceExtensions)) {
   try {
-    motionTexts.push({ relativePath: path.relative(args.root, filePath), text: readFileSync(filePath, "utf8") });
+    allMotionTexts.push({ relativePath: path.relative(args.root, filePath), text: readFileSync(filePath, "utf8") });
   } catch {
     continue;
   }
 }
-const animatedSources = motionTexts.filter(({ text }) => motionMarker.test(text));
+// Animated-source detection is scoped to the landing-shaped tree so an app's
+// in-product animation elsewhere in the repo doesn't drag the landing gates in.
+const motionTexts = allMotionTexts.filter(({ relativePath }) => /^(landing|public|app|src|components|pages|styles)\b/.test(relativePath));
+
+/**
+ * Animation detection avoids prose false-positives ("the transition: from X to
+ * Y" in a doc) and catches JS-only animation: CSS-shaped declarations count
+ * only in stylesheet-bearing files, everything else needs a library/JS marker.
+ * `transition: none` is disabling motion, not animating.
+ */
+const cssAnimationMarker = /@keyframes|(?:^|[{;])\s*(?:animation|transition)(?:-[a-z-]+)?\s*:/m;
+const jsAnimationMarker =
+  /motion\/react|framer-motion|whileInView|useScroll|IntersectionObserver|\bgsap\b|\.animate\(|(?:transitionDuration|animationDuration|animationDelay)\s*:/;
+const stylesheetExtensions = new Set([".css", ".html", ".astro", ".svelte", ".vue"]);
+function isAnimated(relativePath: string, text: string): boolean {
+  if (jsAnimationMarker.test(text)) {
+    return true;
+  }
+  if (!stylesheetExtensions.has(path.extname(relativePath))) {
+    return false;
+  }
+  const withoutDisables = text.replace(/(?:animation|transition)\s*:\s*none\b[^;{}]*/g, "");
+  return cssAnimationMarker.test(withoutDisables);
+}
+
+const animatedSources = motionTexts.filter(({ relativePath, text }) => isAnimated(relativePath, text));
 
 if (animatedSources.length > 0) {
-  // 1. Reduced motion must collapse everything to the calm final state.
-  const hasReducedMotion = motionTexts.some(({ text }) => /prefers-reduced-motion|useReducedMotion/.test(text));
+  // 1. Reduced motion must collapse everything to the calm final state. The
+  //    handling may live anywhere in the repo (styles/globals.css, a shared
+  //    hook), so this presence scan is repo-wide, not landing-scoped.
+  const hasReducedMotion = allMotionTexts.some(({ text }) => /prefers-reduced-motion|useReducedMotion/.test(text));
   if (!hasReducedMotion) {
     issues.push(
       issue(
@@ -383,7 +408,9 @@ if (animatedSources.length > 0) {
 
   // 3. Tokens, not magic numbers: animation/transition durations should read
   //    the promoted --motion-* scale so one re-promotion retimes the brand.
-  const rawDurationPattern = /(?:animation|transition)(?:-duration)?:[^;{}]*\b\d+(?:\.\d+)?m?s\b/;
+  //    Both CSS declarations and camelCase style-object keys count.
+  const rawDurationPattern =
+    /(?:^|[{;])\s*(?:animation|transition)(?:-[a-z-]+)?\s*:[^;{}]*\b\d+(?:\.\d+)?m?s\b|(?:transitionDuration|animationDuration|animationDelay)\s*:\s*["']?\d+(?:\.\d+)?m?s\b/m;
   const untokenized = animatedSources.filter(({ text }) => rawDurationPattern.test(text) && !text.includes("var(--motion"));
   if (untokenized.length > 0) {
     issues.push(
