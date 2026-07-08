@@ -186,6 +186,18 @@ export function register(h: Harness): void {
     "template_safety.framer_motion_in_template",
   );
 
+  // The landing section library is a web-only surface where motion/react is
+  // mandated (references/landing-motion-craft.md); the same import outside
+  // landing/ still fails above.
+  const templateSafetyLanding = makeEmptyFixture("template-safety-landing-pack");
+  mkdirSync(path.join(templateSafetyLanding, "landing", "sections"), { recursive: true });
+  writeFileSync(
+    path.join(templateSafetyLanding, "landing", "sections", "Hero.tsx"),
+    'import { motion } from "motion/react";\nexport const Hero = motion.section;\n',
+    "utf8",
+  );
+  runFixture("template safety allows motion/react inside the landing web pack", templateSafetyLanding, "check-template-safety.ts", 0);
+
   // --- render-business-control-plane-workspace (--check mode) ---
   runScriptArgs(
     "workspace render check passes against the committed output",

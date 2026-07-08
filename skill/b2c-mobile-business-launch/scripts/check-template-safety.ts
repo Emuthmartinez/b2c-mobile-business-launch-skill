@@ -8,6 +8,11 @@
  * native animation from DesignTokens.Motion, so these imports must never ship in
  * templates copied into business repos. Markdown/HTML docs are excluded so that
  * documentation examples remain allowed.
+ *
+ * Deliberate exception: templates/landing/ is the landing-page section library
+ * — a web-only surface where `motion/react` is the mandated animation library
+ * (references/landing-motion-craft.md). Those files are copied into a web
+ * project, never into the mobile binary, so the import is correct there.
  */
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -31,6 +36,11 @@ const forbidden = /(?:import[^;\n]*?from\s*|require\(\s*)['"](?:framer-motion|mo
 
 for (const file of collectAllFiles(root)) {
   if (file.split(path.sep).includes("node_modules")) {
+    continue;
+  }
+  // Web-only landing surface (templates/landing/ section library): motion/react
+  // is the mandated animation library there and never ships into the binary.
+  if (path.relative(root, file).split(path.sep).includes("landing")) {
     continue;
   }
   if (!codeExtensions.has(path.extname(file))) {

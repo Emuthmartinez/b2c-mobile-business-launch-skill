@@ -321,11 +321,81 @@ export function register(h: Harness): void {
   const landingInScopeFail = makeEmptyFixture("landing-funnel-in-scope-missing-gates");
   writeFileSync(path.join(landingInScopeFail, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
   mkdirSync(path.join(landingInScopeFail, "landing"), { recursive: true });
+  writeFileSync(path.join(landingInScopeFail, "landing", "index.html"), "<h1>Launch page</h1>\n", "utf8");
   writeFileSync(path.join(landingInScopeFail, "landing", "README.md"), "# Landing\nDeployed.\n", "utf8");
   runFixture("landing funnel in scope without gate evidence fails", landingInScopeFail, "check-landing-funnel.ts", 1, "landing_funnel.git_clean_gate.missing");
 
+  // A copied-in section library (no index.html/public/wrangler.toml) is not a
+  // deployed site and must not trigger the deploy gates.
+  const landingPackOnly = makeEmptyFixture("landing-funnel-pack-only");
+  writeFileSync(path.join(landingPackOnly, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
+  mkdirSync(path.join(landingPackOnly, "landing", "sections"), { recursive: true });
+  writeFileSync(path.join(landingPackOnly, "landing", "README.md"), "# Landing section library (not a deployed site yet).\n", "utf8");
+  writeFileSync(path.join(landingPackOnly, "landing", "sections", "Hero.tsx"), '"use client";\nexport function Hero() {\n  return null;\n}\n', "utf8");
+  runFixture("landing section pack without a site stays out of scope", landingPackOnly, "check-landing-funnel.ts", 0);
+
   const landingNoState = makeEmptyFixture("landing-funnel-missing-state");
   runFixture("landing funnel fails loudly when project state is missing", landingNoState, "check-landing-funnel.ts", 1, "project_state.missing");
+
+  // --- landing motion craft (references/landing-motion-craft.md) ---
+  const animatedIndexHtml = (options: { reducedMotion: boolean; tokenized: boolean; staticHero: boolean }): string =>
+    [
+      "<!doctype html>",
+      "<style>",
+      "@keyframes rise { to { transform: none; opacity: 1; } }",
+      options.tokenized
+        ? ".hero { animation: rise var(--motion-duration-reveal) var(--motion-easing-emphasis) forwards; }"
+        : ".hero { animation: rise 600ms ease-out forwards; }",
+      options.reducedMotion ? "@media (prefers-reduced-motion: reduce) { .hero { animation: none; opacity: 1; } }" : "",
+      "</style>",
+      options.staticHero ? '<h1 class="hero">Ship your launch page</h1>' : '<h1 class="hero"></h1>',
+      "<p>Copy stays legible without JavaScript.</p>",
+    ].join("\n");
+
+  const withLandingSite = (root: string, html: string): void => {
+    writeFileSync(path.join(root, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
+    mkdirSync(path.join(root, "landing"), { recursive: true });
+    writeFileSync(path.join(root, "landing", "index.html"), html, "utf8");
+    writeFileSync(path.join(root, "landing", "README.md"), landingGateEvidence, "utf8");
+    mkdirSync(path.join(root, "public"), { recursive: true });
+    for (const staticFile of ["robots.txt", "llms.txt", "sitemap.xml"]) {
+      writeFileSync(path.join(root, "public", staticFile), "seeded by fixture\n", "utf8");
+    }
+  };
+
+  const motionCompliant = makeEmptyFixture("landing-motion-compliant");
+  withLandingSite(motionCompliant, animatedIndexHtml({ reducedMotion: true, tokenized: true, staticHero: true }));
+  runFixture("animated landing with reduced-motion, tokens, and static hero passes", motionCompliant, "check-landing-funnel.ts", 0);
+
+  const motionNoReduced = makeEmptyFixture("landing-motion-no-reduced");
+  withLandingSite(motionNoReduced, animatedIndexHtml({ reducedMotion: false, tokenized: true, staticHero: true }));
+  runFixture(
+    "animated landing without reduced-motion handling fails",
+    motionNoReduced,
+    "check-landing-funnel.ts",
+    1,
+    "landing_funnel.motion.reduced_motion_missing",
+  );
+
+  const motionJsGatedHero = makeEmptyFixture("landing-motion-js-gated-hero");
+  withLandingSite(motionJsGatedHero, animatedIndexHtml({ reducedMotion: true, tokenized: true, staticHero: false }));
+  runFixture(
+    "animated landing whose hero text is not static fails",
+    motionJsGatedHero,
+    "check-landing-funnel.ts",
+    1,
+    "landing_funnel.motion.hero_text_not_static",
+  );
+
+  const motionUntokenized = makeEmptyFixture("landing-motion-untokenized");
+  withLandingSite(motionUntokenized, animatedIndexHtml({ reducedMotion: true, tokenized: false, staticHero: true }));
+  runFixture(
+    "animated landing with raw duration literals warns toward the token scale",
+    motionUntokenized,
+    "check-landing-funnel.ts",
+    0,
+    "landing_funnel.motion.untokenized_duration",
+  );
 
   // --- check-version-discipline (fail branches) ---
   const versionManifestMissing = makeEmptyFixture("version-discipline-manifest-missing");

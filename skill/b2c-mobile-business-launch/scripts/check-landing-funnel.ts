@@ -36,8 +36,14 @@ const landingStatus = laneStatus("landing") ?? laneStatus("funnel");
 // Only enforce when a landing site is actually in scope: either a lane explicitly
 // marks it in progress/done, or landing artifacts exist on disk. Skip cleanly
 // otherwise so the validator never false-positives on a non-landing repo.
+// Scope needs SITE-shaped signals: a bare landing/ directory can be just the
+// copied-in templates/landing section library (components, no deployable
+// funnel yet), which must not trigger the deploy gates.
 const hasLandingArtifacts =
-  existsSync(path.join(args.root, "landing")) || existsSync(path.join(args.root, "public")) || existsSync(path.join(args.root, "landing", "README.md"));
+  existsSync(path.join(args.root, "landing", "index.html")) ||
+  existsSync(path.join(args.root, "public")) ||
+  existsSync(path.join(args.root, "wrangler.toml")) ||
+  existsSync(path.join(args.root, "landing", "wrangler.toml"));
 const explicitlyOut = landingStatus === "not_needed" || landingStatus === "deferred";
 const inScope = !explicitlyOut && (Boolean(landingStatus) || hasLandingArtifacts);
 
@@ -321,6 +327,74 @@ for (const filePath of landingSourceFiles) {
       issues.push(issue("error", code, `${message} [found in ${relativePath}]`, relativePath));
       alreadyFlaggedCodes.add(code); // one issue per pattern across the whole repo is enough signal
     }
+  }
+}
+
+// ── Landing motion craft (references/landing-motion-craft.md) ────────────────
+// Cinematic and GEO/perf-safe is not a tradeoff; when landing sources animate,
+// the progressive-enhancement contract is enforceable:
+
+const motionSourceExtensions = new Set([".html", ".astro", ".jsx", ".tsx", ".mdx", ".svelte", ".vue", ".css"]);
+const motionSourceFiles = collectFiles(args.root, motionSourceExtensions).filter((file) => {
+  const relativePath = path.relative(args.root, file);
+  return /^(landing|public|app|src|components|pages)\b/.test(relativePath);
+});
+const motionMarker = /@keyframes|animation:|transition:|IntersectionObserver|motion\/react|framer-motion|whileInView|useScroll/;
+const motionTexts: Array<{ relativePath: string; text: string }> = [];
+for (const filePath of motionSourceFiles) {
+  try {
+    motionTexts.push({ relativePath: path.relative(args.root, filePath), text: readFileSync(filePath, "utf8") });
+  } catch {
+    continue;
+  }
+}
+const animatedSources = motionTexts.filter(({ text }) => motionMarker.test(text));
+
+if (animatedSources.length > 0) {
+  // 1. Reduced motion must collapse everything to the calm final state.
+  const hasReducedMotion = motionTexts.some(({ text }) => /prefers-reduced-motion|useReducedMotion/.test(text));
+  if (!hasReducedMotion) {
+    issues.push(
+      issue(
+        "error",
+        "landing_funnel.motion.reduced_motion_missing",
+        `Landing sources animate (${animatedSources[0]?.relativePath ?? "landing"}) but nothing handles prefers-reduced-motion/useReducedMotion. ` +
+          "Every landing animation must collapse to its calm final state. See references/landing-motion-craft.md.",
+        animatedSources[0]?.relativePath,
+      ),
+    );
+  }
+
+  // 2. Real text, always: a static landing page that animates must still carry
+  //    crawlable hero copy (an <h1> with visible text) in the HTML itself.
+  const animatedHtml = animatedSources.filter(({ relativePath }) => relativePath.endsWith(".html"));
+  const staticHeroPresent = animatedHtml.some(({ text }) => /<h1[^>]*>\s*[^<\s]/.test(text));
+  if (animatedHtml.length > 0 && !staticHeroPresent) {
+    issues.push(
+      issue(
+        "error",
+        "landing_funnel.motion.hero_text_not_static",
+        "Animated landing HTML has no <h1> with static text content — above-the-fold copy must exist in the HTML, never gated behind an animation " +
+          "or injected by JavaScript. See references/landing-motion-craft.md.",
+        animatedHtml[0]?.relativePath,
+      ),
+    );
+  }
+
+  // 3. Tokens, not magic numbers: animation/transition durations should read
+  //    the promoted --motion-* scale so one re-promotion retimes the brand.
+  const rawDurationPattern = /(?:animation|transition)(?:-duration)?:[^;{}]*\b\d+(?:\.\d+)?m?s\b/;
+  const untokenized = animatedSources.filter(({ text }) => rawDurationPattern.test(text) && !text.includes("var(--motion"));
+  if (untokenized.length > 0) {
+    issues.push(
+      issue(
+        landingStatus === "done" ? "error" : "warning",
+        "landing_funnel.motion.untokenized_duration",
+        `Landing motion uses raw duration literals without the tokenized --motion-* scale (${untokenized[0]?.relativePath ?? "landing"}). ` +
+          "Read durations/easings from design-system/tokens.css so the brand retimes in one place. See references/landing-motion-craft.md.",
+        untokenized[0]?.relativePath,
+      ),
+    );
   }
 }
 

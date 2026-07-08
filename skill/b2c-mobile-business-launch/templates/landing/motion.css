@@ -1,0 +1,101 @@
+/*
+ * Landing motion utilities — js-gated, token-driven, reduced-motion-safe.
+ *
+ * Load AFTER design-system/tokens.css (the promoted brand tokens). Every
+ * duration/easing here reads a --motion-* token; rebrand by re-promoting
+ * tokens, never by editing this file.
+ *
+ * The progressive-enhancement contract:
+ *   1. Reveal states only apply under html.js — with JavaScript off, nothing
+ *      is hidden and the page reads as a plain document.
+ *   2. prefers-reduced-motion collapses every animation to its final, calm
+ *      state: durations zero out and transforms are removed.
+ */
+
+/* ── Reveal (in-view entrance) ─────────────────────────────────────────── */
+
+.js .lm-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--motion-duration-reveal) var(--motion-easing-emphasis),
+    transform var(--motion-duration-reveal) var(--motion-easing-emphasis);
+  transition-delay: calc(var(--lm-stagger-index, 0) * var(--motion-stagger));
+}
+
+.js .lm-reveal.lm-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Word-by-word hero stagger: spans are created only after html.js is set, so
+ * crawlers and no-JS readers always see the intact headline text. */
+.js .lm-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.6em);
+  animation: lm-word-in var(--motion-duration-reveal) var(--motion-easing-emphasis) forwards;
+  animation-delay: calc(var(--lm-stagger-index, 0) * var(--motion-stagger));
+}
+
+@keyframes lm-word-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Marquee (seamless loop, pause on hover) ───────────────────────────── */
+
+.lm-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.lm-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: lm-marquee var(--motion-duration-cinematic) linear infinite;
+  /* The track duplicates its content once; 50% translate = one seamless loop.
+   * Slow the loop per-launch with --lm-marquee-multiplier, not raw ms. */
+  animation-duration: calc(var(--motion-duration-cinematic) * var(--lm-marquee-multiplier, 16));
+}
+
+.lm-marquee:hover .lm-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes lm-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Gradient morph (CTA / hero mesh) ──────────────────────────────────── */
+
+.lm-gradient-morph {
+  animation: lm-hue var(--motion-duration-cinematic) var(--motion-easing) infinite alternate;
+}
+
+@keyframes lm-hue {
+  to {
+    filter: hue-rotate(18deg);
+  }
+}
+
+/* ── Reduced-motion collapse: the calm final state, immediately ────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .js .lm-reveal,
+  .js .lm-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  .lm-marquee-track,
+  .lm-gradient-morph {
+    animation: none;
+  }
+}
