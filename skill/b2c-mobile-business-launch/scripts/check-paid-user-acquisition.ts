@@ -173,4 +173,24 @@ if (status === "done" && !reportPath) {
   );
 }
 
+// Existence alone is not proof: a one-line stub at the report path used to
+// satisfy the done gate. The blended report must at least carry a spend column
+// and a downstream economics column, plus one row of data.
+if (status === "done" && reportPath) {
+  const reportText = readText(args.root, reportPath) ?? "";
+  const reportLines = reportText.split("\n").filter((line) => line.trim().length > 0);
+  const mentionsSpend = /\bspend\b/i.test(reportText);
+  const mentionsEconomics = /\b(cpa|ltv|revenue|roas|payback)\b/i.test(reportText);
+  if (reportLines.length < 2 || !mentionsSpend || !mentionsEconomics) {
+    issues.push(
+      issue(
+        "error",
+        "paid_ua.report_content_thin",
+        `${reportPath} exists but does not look like a blended report: it needs a header naming spend plus downstream economics (CPA/LTV/revenue/ROAS/payback) and at least one data row. A stub file cannot mark the paid UA lane done.`,
+        reportPath,
+      ),
+    );
+  }
+}
+
 reportAndExit("Paid user acquisition check", issues);

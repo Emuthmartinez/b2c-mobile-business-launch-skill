@@ -145,6 +145,59 @@ export function register(h: Harness): void {
   rmSync(path.join(backendNoSpec, "TECH_SPEC.md"));
   runFixture("engineering done without tech spec fails", backendNoSpec, "check-backend-data-contract.ts", 1, "backend_contract.tech_spec_missing");
 
+  // Words-vs-work grounding: naming RLS in prose is not tested authorization.
+  const backendUntestedAuth = makeFixture("backend-contract-untested-auth");
+  setEngineeringDone(backendUntestedAuth);
+  writeFileSync(
+    path.join(backendUntestedAuth, "TECH_SPEC.md"),
+    [
+      "# Tech Spec",
+      "## Data Contract",
+      "### Backend Selection",
+      "supabase — chosen for the archetype starter default.",
+      "### Data Model",
+      "profiles and entities per the starter schema.",
+      "### Authorization Model",
+      "Enforcement: Postgres RLS policies. Deny-by-default.",
+      "### Migrations And Environments",
+      "Migrations run through the supabase CLI; dev/staging/prod separated.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "engineering done with untested prose-only RLS claim fails",
+    backendUntestedAuth,
+    "check-backend-data-contract.ts",
+    1,
+    "backend_contract.authorization_untested",
+  );
+
+  const backendUngroundedAuth = makeFixture("backend-contract-ungrounded-auth");
+  setEngineeringDone(backendUngroundedAuth);
+  writeFileSync(
+    path.join(backendUngroundedAuth, "TECH_SPEC.md"),
+    [
+      "# Tech Spec",
+      "## Data Contract",
+      "### Backend Selection",
+      "supabase — chosen for the archetype starter default.",
+      "### Data Model",
+      "profiles and entities per the starter schema.",
+      "### Authorization Model",
+      "Enforcement: Postgres RLS policies. Deny-by-default. Rules are tested via supabase/tests/rls.test.sql (owner, anonymous, cross-user).",
+      "### Migrations And Environments",
+      "Migrations run through the supabase CLI; dev/staging/prod separated.",
+    ].join("\n"),
+    "utf8",
+  );
+  runFixture(
+    "engineering done with tested-authz claim but no artifact on disk fails",
+    backendUngroundedAuth,
+    "check-backend-data-contract.ts",
+    1,
+    "backend_contract.authorization_proof_missing",
+  );
+
   // ── Standalone Engineering Loop (CE unavailable) ──────────────────────────
 
   function setCeUnavailable(root: string): void {

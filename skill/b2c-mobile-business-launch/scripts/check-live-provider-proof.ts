@@ -11,10 +11,39 @@ const proofText = existsSync(proofPath) ? readFileSync(proofPath, "utf8") : "";
 
 const proofRequiredLanes = ["analytics_attribution", "revenue", "email", "store_console", "apple_signing", "security", "engineering"];
 
+/**
+ * Providers whose Proof Ledger row must be grounded on disk once a mapped lane
+ * is done. MobAI/Doppler rows are not mapped: engineering and secrets proof
+ * have their own validators and legitimately route through non-MobAI tooling.
+ */
+const providerLaneMap: Array<{ provider: string; lanes: string[] }> = [
+  { provider: "PostHog", lanes: ["analytics_attribution"] },
+  { provider: "RevenueCat", lanes: ["revenue"] },
+  { provider: "Resend", lanes: ["email"] },
+  { provider: "App Store Connect", lanes: ["store_console", "apple_signing"] },
+  { provider: "Sentry", lanes: ["security"] },
+];
+
+function laneStatus(lane: string): string | undefined {
+  return loaded.state && isRecord(loaded.state) ? asString(getPath(loaded.state, `lanes.${lane}.status`)) : undefined;
+}
+
+/** Markdown table body rows as trimmed cell arrays (header and separator rows excluded). */
+const ledgerRows: string[][] = proofText
+  .split("\n")
+  .filter((line) => line.trim().startsWith("|"))
+  .map((line) =>
+    line
+      .split("|")
+      .slice(1, -1)
+      .map((cell) => cell.trim()),
+  )
+  .filter((cells) => cells.length >= 4 && !/^-+$/.test(cells[0] ?? "") && !/provider/i.test(cells[0] ?? ""));
+
 let requiresProof = false;
 if (loaded.state && isRecord(loaded.state)) {
   for (const lane of proofRequiredLanes) {
-    if (asString(getPath(loaded.state, `lanes.${lane}.status`)) === "done") {
+    if (laneStatus(lane) === "done") {
       requiresProof = true;
     }
   }
@@ -66,6 +95,61 @@ if (!proofText.trim()) {
         "PROVIDER_PROOF.md",
       ),
     );
+  }
+
+  // Ground the ledger in reality once a lane claims done: the provider's row
+  // must exist, its status must read as captured evidence (not still-planned
+  // work), and at least one path in its evidence-path cell must exist on disk.
+  // Keyword presence alone cannot mark a provider-backed lane done.
+  for (const mapping of providerLaneMap) {
+    const doneLanes = mapping.lanes.filter((lane) => laneStatus(lane) === "done");
+    if (doneLanes.length === 0) {
+      continue;
+    }
+    const row = ledgerRows.find((cells) => cells[0]?.toLowerCase().includes(mapping.provider.toLowerCase()));
+    if (!row) {
+      issues.push(
+        issue(
+          "error",
+          `provider_proof.${slug(mapping.provider)}.row_missing`,
+          `lanes.${doneLanes[0]} is done but PROVIDER_PROOF.md has no ledger row for ${mapping.provider}.`,
+          "PROVIDER_PROOF.md",
+        ),
+      );
+      continue;
+    }
+    const statusCell = row[1] ?? "";
+    if (/\b(needs|pending|todo|tbd|unknown|placeholder|planned)\b/i.test(statusCell)) {
+      issues.push(
+        issue(
+          "error",
+          `provider_proof.${slug(mapping.provider)}.status_unproven`,
+          `lanes.${doneLanes[0]} is done but the ${mapping.provider} ledger status still reads as planned work ("${statusCell.trim()}"). Capture the live evidence or keep the lane partial/blocked.`,
+          "PROVIDER_PROOF.md",
+        ),
+      );
+    }
+    const evidenceCell = row[3] ?? "";
+    const evidencePaths = evidenceCell.match(/[A-Za-z0-9_@-]+(?:\/[A-Za-z0-9_.@-]+)*\.[A-Za-z0-9]+/g) ?? [];
+    if (evidencePaths.length === 0) {
+      issues.push(
+        issue(
+          "error",
+          `provider_proof.${slug(mapping.provider)}.evidence_path_unrecorded`,
+          `lanes.${doneLanes[0]} is done but the ${mapping.provider} evidence-path cell names no file path. Record the captured artifact's path.`,
+          "PROVIDER_PROOF.md",
+        ),
+      );
+    } else if (!evidencePaths.some((relative) => existsSync(path.join(args.root, relative)))) {
+      issues.push(
+        issue(
+          "error",
+          `provider_proof.${slug(mapping.provider)}.evidence_path_missing`,
+          `lanes.${doneLanes[0]} is done but none of the ${mapping.provider} evidence paths exist on disk (${evidencePaths.join(", ")}). Run the live probe/capture so the artifact exists before marking the lane done.`,
+          evidencePaths[0],
+        ),
+      );
+    }
   }
 }
 

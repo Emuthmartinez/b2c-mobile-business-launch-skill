@@ -156,6 +156,7 @@ For done-status engineering, additionally:
 
 - "Backend Selection" names one route (Supabase, Firebase, or custom) with a recorded reason.
 - "Authorization Model" names its enforcement mechanism: RLS, security rules, or middleware authz.
+- The Authorization Model states the rules are tested and points at at least one artifact that exists on disk (RLS/security-rules test file, migration, or the proof doc recording the test run). A bare "RLS" in prose fails the done gate.
 
 Validator: `npm run check:backend-contract -- --root . --state PROJECT_STATE.yaml`. Run it before claiming the engineering lane done; a failing run leaves the lane partial with a named blocker (`artifact-contracts.md`).
 

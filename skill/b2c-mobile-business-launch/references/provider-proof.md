@@ -33,3 +33,5 @@ Use `templates/PROVIDER_PROOF.md` as the starter. Each row needs:
 - proof command or inspection route
 - evidence path
 - founder-only gate, if any
+
+Once a provider-backed lane is marked done, `check:provider-proof` grounds its ledger row in reality: the row must exist, its current status must read as captured evidence (not still-planned "needs ..." work), and at least one file named in the evidence-path cell must exist on disk. Writing the right words into the ledger without running the capture fails the gate.
