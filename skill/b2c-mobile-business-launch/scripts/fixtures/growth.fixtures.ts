@@ -250,4 +250,20 @@ export function register(h: Harness): void {
     writeFileSync(paidUaPath, withoutVirality, "utf8");
   }
   runFixture("paid UA without virality scoring gate fails", paidUaNoVirality, "check-paid-user-acquisition.ts", 1, "paid_ua.virality_gate.missing");
+
+  // --- check-launch-narrative ---
+  const narrativeBaseline = makeFixture("launch-narrative-baseline");
+  runFixture("shipped launch narrative template passes", narrativeBaseline, "check-launch-narrative.ts", 0);
+
+  const narrativeMissing = makeFixture("launch-narrative-missing");
+  rmSync(path.join(narrativeMissing, "growth", "LAUNCH_NARRATIVE.md"), { force: true });
+  runFixture("active growth lane without a launch narrative fails", narrativeMissing, "check-launch-narrative.ts", 1, "launch_narrative.markdown_missing");
+
+  const narrativeHashtag = makeFixture("launch-narrative-hashtag-copy");
+  {
+    const narrativePath = path.join(narrativeHashtag, "growth", "LAUNCH_NARRATIVE.md");
+    const withHashtagCopy = `${readFileSync(narrativePath, "utf8")}\n\n\`\`\`text\nWe are live today. #LaunchDay\n\`\`\`\n`;
+    writeFileSync(narrativePath, withHashtagCopy, "utf8");
+  }
+  runFixture("launch post copy with a hashtag fails the 2026 guardrails", narrativeHashtag, "check-launch-narrative.ts", 1, "launch_narrative.copy_hashtag");
 }

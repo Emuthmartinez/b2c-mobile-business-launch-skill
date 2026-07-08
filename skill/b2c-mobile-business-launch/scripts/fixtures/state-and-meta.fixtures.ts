@@ -297,4 +297,14 @@ export function register(h: Harness): void {
   attributionNotNeededLane["blockers"] = ["No onboarding, signup, or user identity surface exists in this app."];
   writeState(attributionNotNeeded, attributionNotNeededState);
   runFixture("attribution not_needed with reason passes attribution check", attributionNotNeeded, "check-attribution-contract.ts", 0);
+
+  // --- check-lane-coverage ---
+  const laneCoverageBaseline = makeFixture("lane-coverage-baseline");
+  runFixture("shipped template lane set passes coverage", laneCoverageBaseline, "check-lane-coverage.ts", 0);
+
+  const laneCoverageMissingLane = makeFixture("lane-coverage-missing-lane");
+  const laneCoverageState = readState(laneCoverageMissingLane);
+  delete expectRecord(laneCoverageState.lanes, "PROJECT_STATE.yaml lanes")["revenue"];
+  writeState(laneCoverageMissingLane, laneCoverageState);
+  runFixture("state missing a required lane fails coverage", laneCoverageMissingLane, "check-lane-coverage.ts", 1, "lane_coverage.revenue.missing");
 }
