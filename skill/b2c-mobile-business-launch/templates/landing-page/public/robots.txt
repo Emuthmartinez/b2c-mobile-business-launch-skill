@@ -1,0 +1,15 @@
+# Replace example.com with your domain before deploy. See references/geo-seo.md.
+User-agent: *
+Allow: /
+
+# AI answer engines — keep allowed unless you have a specific reason not to.
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml

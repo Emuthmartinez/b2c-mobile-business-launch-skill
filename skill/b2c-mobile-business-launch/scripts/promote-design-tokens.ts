@@ -61,6 +61,14 @@ function renderCss(tokens: unknown, tokenHash: string): string {
     ["motion-duration-slow", "motion.durationSlow"],
     ["motion-duration-reduced", "motion.reducedMotionDuration"],
     ["motion-easing", "motion.easing"],
+    // Landing-surface motion scale (web only). Cinematic entrances/scroll pacing
+    // for motion/react landing sections; consumed alongside Remotion timing so a
+    // baked ad and its landing page share one system. See references/landing-motion-craft.md.
+    ["motion-duration-reveal", "motion.durationReveal"],
+    ["motion-duration-cinematic", "motion.durationCinematic"],
+    ["motion-easing-emphasis", "motion.easingEmphasis"],
+    ["motion-easing-spring", "motion.easingSpring"],
+    ["motion-stagger", "motion.stagger"],
   ];
 
   return [
@@ -104,6 +112,11 @@ function renderSwift(tokens: unknown, tokenHash: string): string {
     `    static let durationSlow: Double = ${msToSeconds(getToken(tokens, "motion.durationSlow"))}`,
     `    static let reducedMotionDuration: Double = ${msToSeconds(getToken(tokens, "motion.reducedMotionDuration"))}`,
     `    static let easing = "${String(getToken(tokens, "motion.easing") ?? "")}"`,
+    `    static let durationReveal: Double = ${msToSeconds(getToken(tokens, "motion.durationReveal"))}`,
+    `    static let durationCinematic: Double = ${msToSeconds(getToken(tokens, "motion.durationCinematic"))}`,
+    `    static let stagger: Double = ${msToSeconds(getToken(tokens, "motion.stagger"))}`,
+    `    static let easingEmphasis = "${String(getToken(tokens, "motion.easingEmphasis") ?? "")}"`,
+    `    static let easingSpring = "${String(getToken(tokens, "motion.easingSpring") ?? "")}"`,
     "  }",
     "}",
     "",

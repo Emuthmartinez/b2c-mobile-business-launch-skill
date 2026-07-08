@@ -59,6 +59,8 @@ Landing pages and funnels are web surfaces, so framer-motion / the `motion` libr
 - Server-render or statically render the content; hydrate motion after. Entrance animations must not delay LCP/INP, hide text from crawlers, or gate first paint — motion is progressive enhancement.
 - Respect `prefers-reduced-motion` and keep above-the-fold content readable without JavaScript.
 
+For the full craft layer — the two-lane model (Remotion-baked hero/section video plus `motion/react` live choreography reading one `--motion-*` scale), the section catalog, and the progressive-enhancement contract that `check:landing-funnel` enforces — load [`landing-motion-craft.md`](landing-motion-craft.md) and seed the section library from `templates/landing-page/`.
+
 ## 4. Copy Compliance Pre-Edit Scan
 
 Run this scan before writing or accepting any landing copy, not only before deploy. These are trust-breaking patterns that have required founder corrections after deployment.

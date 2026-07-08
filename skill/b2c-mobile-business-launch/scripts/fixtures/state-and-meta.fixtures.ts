@@ -327,6 +327,80 @@ export function register(h: Harness): void {
   const landingNoState = makeEmptyFixture("landing-funnel-missing-state");
   runFixture("landing funnel fails loudly when project state is missing", landingNoState, "check-landing-funnel.ts", 1, "project_state.missing");
 
+  // --- check-landing-funnel motion-craft gates ---
+  // Each fixture ships the full deploy-gate evidence + GEO static files so only the
+  // motion gate under test differs, then adds a landing/index.html exercising it.
+  const seedLandingMotionFixture = (name: string, indexHtml: string): string => {
+    const root = makeEmptyFixture(name);
+    writeFileSync(path.join(root, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
+    mkdirSync(path.join(root, "landing"), { recursive: true });
+    writeFileSync(path.join(root, "landing", "README.md"), landingGateEvidence, "utf8");
+    writeFileSync(path.join(root, "landing", "index.html"), indexHtml, "utf8");
+    mkdirSync(path.join(root, "public"), { recursive: true });
+    for (const staticFile of ["robots.txt", "llms.txt", "sitemap.xml"]) {
+      writeFileSync(path.join(root, "public", staticFile), "seeded by fixture\n", "utf8");
+    }
+    return root;
+  };
+
+  const motionPass = seedLandingMotionFixture(
+    "landing-funnel-motion-pass",
+    [
+      "<!doctype html><html><head><style>",
+      ":root { --motion-duration-reveal: 620ms; }",
+      ".hero { transition: opacity var(--motion-duration-reveal); }",
+      "@media (prefers-reduced-motion: reduce) { .hero { transition: none; } }",
+      "</style></head><body><h1>Give people their first win in two minutes</h1><a href='#get'>Get started</a></body></html>",
+    ].join("\n"),
+  );
+  runFixture("landing funnel motion with reduced-motion + tokens passes", motionPass, "check-landing-funnel.ts", 0);
+
+  const motionNoReduced = seedLandingMotionFixture(
+    "landing-funnel-motion-no-reduced-motion",
+    [
+      "<!doctype html><html><head><style>",
+      ":root { --motion-duration-reveal: 620ms; }",
+      ".hero { transition: opacity var(--motion-duration-reveal); }",
+      "</style></head><body><h1>Give people their first win in two minutes</h1></body></html>",
+    ].join("\n"),
+  );
+  runFixture(
+    "landing funnel motion without reduced-motion fallback fails",
+    motionNoReduced,
+    "check-landing-funnel.ts",
+    1,
+    "landing_funnel.motion.reduced_motion_missing",
+  );
+
+  const motionSpaShell = seedLandingMotionFixture(
+    "landing-funnel-motion-spa-shell",
+    [
+      "<!doctype html><html><head><style>",
+      ":root { --motion-duration-reveal: 620ms; }",
+      ".app { transition: opacity var(--motion-duration-reveal); }",
+      "@media (prefers-reduced-motion: reduce) { .app { transition: none; } }",
+      "</style></head><body><div id='root'></div><script>/* client hydrate */</script></body></html>",
+    ].join("\n"),
+  );
+  runFixture("landing funnel client-only hero shell fails", motionSpaShell, "check-landing-funnel.ts", 1, "landing_funnel.motion.hero_text_not_static");
+
+  const motionHardcoded = seedLandingMotionFixture(
+    "landing-funnel-motion-hardcoded-timing",
+    [
+      "<!doctype html><html><head><style>",
+      ".hero { transition: opacity 620ms ease; }",
+      "@media (prefers-reduced-motion: reduce) { .hero { transition: none; } }",
+      "</style></head><body><h1>Give people their first win in two minutes</h1></body></html>",
+    ].join("\n"),
+  );
+  runFixture(
+    "landing funnel hard-coded motion timing warns but still exits 0",
+    motionHardcoded,
+    "check-landing-funnel.ts",
+    0,
+    "landing_funnel.motion.hardcoded_timing",
+  );
+
   // --- check-version-discipline (fail branches) ---
   const versionManifestMissing = makeEmptyFixture("version-discipline-manifest-missing");
   runScriptArgs(

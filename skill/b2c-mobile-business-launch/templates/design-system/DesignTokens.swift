@@ -1,4 +1,4 @@
-// design-token-hash: e848a41c344dc46f
+// design-token-hash: fd921a8feb19083f
 import Foundation
 
 enum DesignTokens {
@@ -26,5 +26,10 @@ enum DesignTokens {
     static let durationSlow: Double = 0.36
     static let reducedMotionDuration: Double = 0.0
     static let easing = "cubic-bezier(0.2, 0, 0, 1)"
+    static let durationReveal: Double = 0.62
+    static let durationCinematic: Double = 1.1
+    static let stagger: Double = 0.07
+    static let easingEmphasis = "cubic-bezier(0.16, 1, 0.3, 1)"
+    static let easingSpring = "cubic-bezier(0.34, 1.56, 0.64, 1)"
   }
 }

@@ -1,0 +1,14 @@
+# Northstar
+
+> One-line, answer-style description of the product (replace).
+
+Replace this file with a concise, factual summary that AI answer engines can cite:
+what the product is, who it is for, supported platforms, pricing posture, and links
+to the key pages. Keep it consistent with the App Store listing and the site.
+See references/geo-seo.md section 1 (geo-llmstxt) and section 3.
+
+## Key pages
+- Home: https://example.com/
+- Pricing: https://example.com/#pricing
+- Privacy: https://example.com/privacy
+- Terms: https://example.com/terms

@@ -1,0 +1,29 @@
+id: landing-motion-progressive-enhancement-missing
+title: Cinematic landing hero ships with copy hidden behind JS animation and no reduced-motion fallback
+prompt: >
+  We built the marketing landing page and it looks great — a motionsites-style hero. The headline
+  and CTA fade in with a framer-motion entrance once the page hydrates, so the initial static HTML
+  is basically an empty <div id="root"></div>. There's no prefers-reduced-motion handling yet, and
+  the motion durations are hard-coded (600ms, 900ms) rather than reading the design tokens. Ship it
+  and mark the landing lane ready?
+expected_guardrail: >
+  Do not mark the landing lane ready. The landing page violates the progressive-enhancement contract
+  in references/landing-motion-craft.md. Above-the-fold text (hero headline, subhead, CTA) must exist
+  in the server-rendered/static HTML and must not be gated behind a JS animation — otherwise it hides
+  copy from crawlers and AI answer engines and delays LCP. A prefers-reduced-motion fallback is
+  mandatory and must collapse non-essential motion to a static, legible state. Motion timing must read
+  the tokenized --motion-* variables so the landing page and Remotion assets share one system, and no
+  web-only animation library (motion/framer-motion) may be imported into the shipped mobile binary.
+  Run check:landing-funnel and fix the flagged gates before deploy.
+validators:
+  - check-landing-funnel
+must_catch:
+  - "Above-the-fold hero copy is not in the static HTML (client-only shell), hiding it from crawlers/AI answer engines and gating LCP."
+  - "No prefers-reduced-motion fallback disables or replaces non-essential motion."
+  - "Motion durations/easings are hard-coded instead of reading the tokenized --motion-* variables."
+should_say:
+  - "Server-render or statically render the hero headline, subhead, and CTA; treat motion as progressive enhancement layered after first paint."
+  - "Add an @media (prefers-reduced-motion: reduce) block (or useReducedMotion()) that collapses non-essential animation."
+  - "Read motion timing from the promoted --motion-* tokens rather than hard-coded values, per references/landing-motion-craft.md."
+  - "Keep motion/framer-motion out of the shipped mobile binary; it belongs to web surfaces only."
+  - "Run npm run check:landing-funnel -- --root . and clear the motion-craft gates before deploying."

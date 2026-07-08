@@ -354,4 +354,88 @@ if (hasWaitlistSurface) {
   }
 }
 
+// ── Landing motion craft ──────────────────────────────────────────────────────
+// When a landing surface carries motion, enforce the progressive-enhancement
+// contract from references/landing-motion-craft.md: a prefers-reduced-motion
+// fallback, above-the-fold text that is real static HTML (not a client-only
+// shell), and tokenized (--motion-*) timing rather than hard-coded magic numbers.
+const motionExtensions = new Set([".html", ".astro", ".jsx", ".tsx", ".mdx", ".svelte", ".vue", ".css"]);
+const motionFiles = collectFiles(args.root, motionExtensions);
+const motionFileTexts: Array<{ path: string; text: string }> = [];
+let motionCombined = "";
+for (const filePath of motionFiles) {
+  let text: string;
+  try {
+    text = readFileSync(filePath, "utf8");
+  } catch {
+    continue;
+  }
+  motionFileTexts.push({ path: path.relative(args.root, filePath), text });
+  motionCombined += `\n${text}`;
+}
+
+const hasMotion =
+  /@keyframes|animation\s*:|animation-name|transition\s*:|transition-property|framer-motion|motion\/react|whileinview|usescroll|usetransform|requestanimationframe|\.animate\(/i.test(
+    motionCombined,
+  );
+
+if (hasMotion) {
+  // Gate: a reduced-motion fallback must exist once the surface carries motion.
+  if (!/prefers-reduced-motion|usereducedmotion/i.test(motionCombined)) {
+    issues.push(
+      issue(
+        "error",
+        "landing_funnel.motion.reduced_motion_missing",
+        "Landing surfaces carry motion (animation/transition/motion library) but no reduced-motion fallback was found. " +
+          "Add an `@media (prefers-reduced-motion: reduce)` block (or `useReducedMotion()`) that collapses non-essential motion to a static, legible state. " +
+          "See references/landing-motion-craft.md.",
+        primaryDoc,
+      ),
+    );
+  }
+
+  // Gate (warning): motion timing should read the tokenized --motion-* scale.
+  if (!/--motion-/i.test(motionCombined)) {
+    issues.push(
+      issue(
+        "warning",
+        "landing_funnel.motion.hardcoded_timing",
+        "Landing motion timing does not reference the tokenized `--motion-*` variables. Read durations/easings from design-system/tokens.css so the landing page and Remotion assets share one timing system. " +
+          "See references/landing-motion-craft.md.",
+        primaryDoc,
+      ),
+    );
+  }
+}
+
+// Gate: above-the-fold hero text must exist in the static HTML of a landing
+// entry page (not a JS-injected SPA shell), so crawlers, AI answer engines, and
+// no-JS users see it and LCP is not gated behind an animation.
+for (const { path: relFile, text } of motionFileTexts) {
+  if (!/(^|\/)index\.(html|astro)$/i.test(relFile)) {
+    continue;
+  }
+  const bodyMatch = /<body[^>]*>([\s\S]*?)<\/body>/i.exec(text);
+  const body = bodyMatch?.[1] ?? text;
+  const looksLikeSpaShell = /<(?:div|main)[^>]+id=["'](?:root|app|__next)["']/i.test(body);
+  const staticText = body
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (looksLikeSpaShell && staticText.length < 40) {
+    issues.push(
+      issue(
+        "error",
+        "landing_funnel.motion.hero_text_not_static",
+        `${relFile} renders as a client-only shell with no above-the-fold text in the static HTML. ` +
+          "Server-render or statically render the hero headline, subhead, and CTA so crawlers and no-JS users see them and motion stays progressive enhancement. " +
+          "See references/landing-motion-craft.md.",
+        relFile,
+      ),
+    );
+  }
+}
+
 reportAndExit("Landing funnel check", issues);
