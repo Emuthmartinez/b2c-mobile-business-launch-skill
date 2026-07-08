@@ -63,6 +63,7 @@ For iOS store submission or marketing prep, produce:
 - `STORE_CONSOLE.md` and `store-console.html`: manual console packet across App Store Connect and Play Console when relevant.
 - `REVENUE_OPS.md`: product, entitlement, offering, price, trial, intro offer, RevenueCat/Stripe/web funnel mapping, and sandbox proof.
 - `SCREENSHOTS.md`: slot-by-slot screenshot/app-preview plan, ParthJadhav/app-store-screenshots export route when used, iPhone/iPad device-well matrix, and ASC CLI upload proof.
+- `SCREENSHOT_RUBRIC.md`: the grading rubric and separate-pass grader protocol behind `grade-screenshots.ts` and `check:store-screenshots`. Seed it from [`templates/app-store-listing/SCREENSHOT_RUBRIC.md`](../templates/app-store-listing/SCREENSHOT_RUBRIC.md) next to `SCREENSHOTS.md` so the grader agent scores against the same dimensions the validator enforces.
 
 Small projects may merge the listing packet into `STORE_CONSOLE.md`, but keep the App Privacy questionnaire and HTML copy-paste surface when privacy, subscriptions, localization, screenshots, or custom product pages are in scope.
 

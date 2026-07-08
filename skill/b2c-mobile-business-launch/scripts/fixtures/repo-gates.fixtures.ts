@@ -117,6 +117,47 @@ export function register(h: Harness): void {
     "must match skill-version.json",
   );
 
+  // --- audit-skill-links ---
+  const wireLinkRoot = (root: string): void => {
+    mkdirSync(path.join(root, "references"), { recursive: true });
+    mkdirSync(path.join(root, "templates"), { recursive: true });
+    writeFileSync(path.join(root, "references", "guide.md"), "See [the template](../templates/artifact.md) for the artifact contract.\n", "utf8");
+    writeFileSync(path.join(root, "templates", "artifact.md"), "# Artifact\nRouted from references/guide.md — keep both sides linked.\n", "utf8");
+  };
+
+  const linksClean = makeEmptyFixture("skill-links-clean");
+  wireLinkRoot(linksClean);
+  runScriptArgs("link audit passes on a wired reference/template pair", "audit-skill-links.ts", ["--skill-root", linksClean], 0);
+
+  const linksBroken = makeEmptyFixture("skill-links-broken");
+  wireLinkRoot(linksBroken);
+  writeFileSync(path.join(linksBroken, "references", "guide.md"), "See [the template](../templates/missing.md); artifact.md still routes.\n", "utf8");
+  runScriptArgs("link audit fails on a broken local link", "audit-skill-links.ts", ["--skill-root", linksBroken], 1, "skill_links.broken_local_link");
+
+  const linksOrphan = makeEmptyFixture("skill-links-orphan");
+  wireLinkRoot(linksOrphan);
+  writeFileSync(path.join(linksOrphan, "references", "unrouted.md"), "No other file mentions this reference, so no agent can load it.\n", "utf8");
+  runScriptArgs("link audit fails on an orphaned reference file", "audit-skill-links.ts", ["--skill-root", linksOrphan], 1, "skill_links.orphan_file");
+
+  const linksDuplicate = makeEmptyFixture("skill-links-duplicate");
+  wireLinkRoot(linksDuplicate);
+  const duplicateBody =
+    "# Duplicate body\nThis exact content is shipped twice under templates/, which will drift apart silently over time once one copy is edited and the other is forgotten.\n";
+  writeFileSync(path.join(linksDuplicate, "templates", "copy-one.md"), duplicateBody, "utf8");
+  writeFileSync(path.join(linksDuplicate, "templates", "copy-two.md"), duplicateBody, "utf8");
+  writeFileSync(
+    path.join(linksDuplicate, "references", "guide.md"),
+    "See [the template](../templates/artifact.md), plus copy-one.md and copy-two.md.\n",
+    "utf8",
+  );
+  runScriptArgs(
+    "link audit fails on byte-identical template duplicates",
+    "audit-skill-links.ts",
+    ["--skill-root", linksDuplicate],
+    1,
+    "skill_links.duplicate_template",
+  );
+
   // --- check-template-safety ---
   const templateSafetyClean = makeEmptyFixture("template-safety-clean");
   writeFileSync(path.join(templateSafetyClean, "component.tsx"), 'import { View } from "react-native";\nexport const Ok = View;\n', "utf8");

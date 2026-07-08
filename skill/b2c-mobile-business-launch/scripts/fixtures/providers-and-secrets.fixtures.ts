@@ -97,4 +97,22 @@ export function register(h: Harness): void {
   getLane(revenueDoneNoProofState, "revenue")["status"] = "done";
   writeState(revenueDoneNoProof, revenueDoneNoProofState);
   runFixture("done revenue lane without a live probe artifact fails", revenueDoneNoProof, "check-revenue.ts", 1, "revenue.proof_json.missing");
+
+  // Example-copy evasion: pasting the shipped example's content as "proof"
+  // must fail even when the app repo never seeded the example file (the old
+  // comparison only looked at the app repo's copy).
+  const revenueExampleCopy = makeFixture("revenue-example-copy-unseeded");
+  const revenueExampleCopyState = readState(revenueExampleCopy);
+  getLane(revenueExampleCopyState, "revenue")["status"] = "done";
+  writeState(revenueExampleCopy, revenueExampleCopyState);
+  const shippedExample = readFileSync(path.join(skillRoot, "templates", "revenue", "revenuecat-proof.example.json"), "utf8");
+  writeFileSync(path.join(revenueExampleCopy, "revenue", "revenuecat-proof.json"), shippedExample, "utf8");
+  rmSync(path.join(revenueExampleCopy, "revenue", "revenuecat-proof.example.json"), { force: true });
+  runFixture(
+    "done revenue lane with pasted example proof fails even when the example was never seeded",
+    revenueExampleCopy,
+    "check-revenue.ts",
+    1,
+    "revenue.proof_json.tier1_example_copy",
+  );
 }
