@@ -110,6 +110,7 @@ export function buildAuditPlan(layout: AuditLayout): AuditStep[] {
     { id: "check:apple-requirements", kind: "script", args: stateArgs },
     { id: "check:store-console", kind: "script", args: stateArgs },
     { id: "check:store-screenshots", kind: "script", args: stateArgs },
+    { id: "check:native-ios", kind: "script", args: stateArgs },
     { id: "check:orchestration", kind: "script", args: stateArgs },
     { id: "check:emotional-design", kind: "script", args: stateArgs },
     { id: "check:attribution", kind: "script", args: stateArgs },

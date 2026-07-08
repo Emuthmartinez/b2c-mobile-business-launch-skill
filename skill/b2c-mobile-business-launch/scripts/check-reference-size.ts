@@ -28,6 +28,16 @@ const defaultSkillRoot = path.resolve(scriptDir, "..");
 const DEFAULT_BUDGET_BYTES = 64 * 1024;
 
 /**
+ * SKILL.md is the one file loaded on every trigger, so it gets its own budget
+ * — previously it was the only shipped context file with no size gate at all.
+ * The maintainer decision for the entrypoint is freeze-and-subtract: this
+ * ceiling sits just above the current size so any addition must be paid for
+ * by subtraction elsewhere in SKILL.md. Ratchet it DOWN as SKILL.md shrinks;
+ * raising it is a reviewed decision, not a workaround.
+ */
+const ENTRYPOINT_BUDGET_BYTES = 68 * 1024;
+
+/**
  * Files allowed over budget, each with a concrete reason. Adding an entry is a
  * reviewed decision, not a workaround — prefer splitting into an index plus
  * per-topic files (see references/experience-cards.md).
@@ -74,6 +84,23 @@ if (!existsSync(referencesDir)) {
         ),
       );
     }
+  }
+}
+
+const entrypointPath = path.join(args.skillRoot, "SKILL.md");
+if (!existsSync(entrypointPath)) {
+  issues.push(issue("error", "reference_size.entrypoint_missing", `SKILL.md is missing at ${entrypointPath}.`, "SKILL.md"));
+} else {
+  const entrypointSize = statSync(entrypointPath).size;
+  if (entrypointSize > ENTRYPOINT_BUDGET_BYTES) {
+    issues.push(
+      issue(
+        "error",
+        "reference_size.entrypoint_over_budget",
+        `SKILL.md is ${entrypointSize} bytes (> ${ENTRYPOINT_BUDGET_BYTES} byte entrypoint budget). SKILL.md loads on every trigger; pay for the addition by subtracting or moving detail into a routed reference (freeze-and-subtract).`,
+        "SKILL.md",
+      ),
+    );
   }
 }
 

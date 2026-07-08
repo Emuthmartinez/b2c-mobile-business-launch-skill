@@ -172,4 +172,23 @@ export function register(h: Harness): void {
     1,
     "template_safety.framer_motion_in_template",
   );
+
+  // --- render-business-control-plane-workspace (--check mode) ---
+  runScriptArgs(
+    "workspace render check passes against the committed output",
+    "render-business-control-plane-workspace.ts",
+    ["--root", path.join(skillRoot, "templates"), "--out", path.join(skillRoot, "state", "workspace.generated.json"), "--check"],
+    0,
+  );
+
+  const workspaceDrift = makeEmptyFixture("workspace-check-drift");
+  const staleWorkspacePath = path.join(workspaceDrift, "workspace.generated.json");
+  writeFileSync(staleWorkspacePath, '{"stale": true}\n', "utf8");
+  runScriptArgs(
+    "workspace render check fails on stale committed output",
+    "render-business-control-plane-workspace.ts",
+    ["--root", path.join(skillRoot, "templates"), "--out", staleWorkspacePath, "--check"],
+    1,
+    "business_workspace.output.drift",
+  );
 }
