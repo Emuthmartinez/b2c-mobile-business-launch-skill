@@ -56,7 +56,16 @@ if (loaded.tokens) {
         issues.push(issue("error", "token_promotion.css_var_missing", `tokens.css must include ${varName}.`, "design-system/tokens.css"));
       }
     }
-    for (const motionVar of ["--motion-duration-fast", "--motion-duration-base", "--motion-easing"]) {
+    for (const motionVar of [
+      "--motion-duration-fast",
+      "--motion-duration-base",
+      "--motion-easing",
+      "--motion-duration-reveal",
+      "--motion-duration-cinematic",
+      "--motion-easing-emphasis",
+      "--motion-easing-spring",
+      "--motion-stagger",
+    ]) {
       if (!css.includes(motionVar)) {
         issues.push(
           issue(

@@ -23,7 +23,7 @@ Treat these repositories as live source material when the work depends on their 
 - Refero MCP and Refero Styles: `https://doc.refero.design/llms.txt`, `https://api.refero.design/mcp`, `https://styles.refero.design/`
 - Higgsfield local skills: `higgsfield-generate`, `higgsfield-product-photoshoot`, `higgsfield-soul-id`, `higgsfield-marketplace-cards`
 - ui-ux-pro-max skill (senior-grade UI generation: 67 styles, 161 palettes, 57 font pairings, 99 UX guidelines, framer-motion/Magic UI motion patterns, and anti-pattern/pre-delivery checklists; MIT-licensed, reference-only — invoke it or adapt its guidance, do not copy its CSV data into this repo or business repos): `https://github.com/nextlevelbuilder/ui-ux-pro-max-skill`
-- Motion (framer-motion's successor package, `motion/react`) for web-surface animation driven by the tokenized motion scale: `https://motion.dev/docs/react`
+- Motion (framer-motion's successor package, `motion/react`) for web-surface animation driven by the tokenized motion scale: `https://motion.dev/docs/react`. For landing/funnel sections, load [`landing-motion-craft.md`](landing-motion-craft.md) and start from the `templates/landing/` section library instead of improvising choreography.
 
 If matching local skills are installed, load and use them. If Refero or Higgsfield is unavailable, load `paid-tool-routing.md` and ask before replacing it with local HTML/CSS/SVG/canvas, founder-owned assets, public-domain assets, public UX pattern libraries, bundled pattern templates, or real app screenshots. If the design-system source skills are not installed, apply the source workflow directly and cite the repository URL in the design notes.
 

@@ -1685,6 +1685,16 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
     notes: MIT-licensed UI/UX design-intelligence skill (styles, palettes, font pairings, UX guidelines, framer-motion/Magic UI motion patterns, anti-pattern checklists). Reference-only for web-surface UI and design-system reasoning; do not vendor its CSV data into templates or business repos.
+  - id: motionsites-ai
+    name: motionsites.ai
+    source_type: inspiration_benchmark
+    url: https://motionsites.ai/
+    refresh_cadence_days: 90
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/landing-motion-craft.md
+      - docs/brainstorms/landing-motion-craft.md
+    notes: Visual quality benchmark for the landing motion craft lane (animated landing-page section gallery). Inspiration reference only, never a command-syntax source.
   - id: motion-dev-docs-react
     name: motion.dev
     source_type: docs
@@ -1693,6 +1703,7 @@ sources:
     owner: source-freshness
     locations:
       - skill/b2c-mobile-business-launch/references/design-visual-system.md
+      - skill/b2c-mobile-business-launch/references/landing-motion-craft.md
     notes: Motion (framer-motion's successor, import from motion/react) React animation docs. Web-surface library used by the Design Room render app and launch web surfaces (landing, funnel); never used in the shipped mobile binary. Refresh before changing motion API/setup guidance.
   - id: shownmedia-com
     name: Shown Media

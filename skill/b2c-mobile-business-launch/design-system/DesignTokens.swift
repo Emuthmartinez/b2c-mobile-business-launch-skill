@@ -1,4 +1,4 @@
-// design-token-hash: e848a41c344dc46f
+// design-token-hash: f6005646081f20e6
 import Foundation
 
 enum DesignTokens {
@@ -26,5 +26,13 @@ enum DesignTokens {
     static let durationSlow: Double = 0.36
     static let reducedMotionDuration: Double = 0.0
     static let easing = "cubic-bezier(0.2, 0, 0, 1)"
+    // Landing/web cinematic lane tokens. The mobile binary keeps to the
+    // 120-360ms micro-motion band above; these ship so cross-surface tools
+    // read one timing contract (see references/landing-motion-craft.md).
+    static let durationReveal: Double = 0.6
+    static let durationCinematic: Double = 1.2
+    static let stagger: Double = 0.06
+    static let easingEmphasis = "cubic-bezier(0.16, 1, 0.3, 1)"
+    static let easingSpring = "cubic-bezier(0.34, 1.56, 0.64, 1)"
   }
 }

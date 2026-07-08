@@ -40,7 +40,8 @@ export interface AuditStep {
  * when a "check:" or "validate:" script is neither a step nor listed here.
  */
 export const auditExcludedScripts: Record<string, string> = {
-  "check:landing-funnel": "requires a generated business repo with a deployed landing funnel; the shipped templates contain no landing fixture to validate",
+  "check:landing-funnel":
+    "requires a generated business repo with a deployed landing funnel; the shipped templates contain no deployable funnel (templates/landing/ is a section component library, deliberately not site-shaped, and the validator's scope check ignores it)",
   "check:source-freshness": "alias of check:source-registry (same script and registry); running both would duplicate the step",
   "test:validators": "executed by the launchbench step, which lints scenario definitions and then runs the validator fixture suite",
 };

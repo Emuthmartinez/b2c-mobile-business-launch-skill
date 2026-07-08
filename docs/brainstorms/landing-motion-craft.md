@@ -1,7 +1,7 @@
 # Brainstorm: motionsites-grade landing motion as a skill lane
 
 Date: 2026-06-13
-Status: **exploration + proposal** (practice proof built; skill abstraction NOT yet implemented — gated on founder go-ahead)
+Status: **implemented** (founder greenlit the full change-set 2026-07-07; shipped as v0.15.0 — `references/landing-motion-craft.md`, `templates/landing/`, the landing motion-token promotion, the `check:landing-funnel` motion-craft gates, and the `landing-motion-progressive-enhancement-missing` LaunchBench scenario)
 Compound Engineering note: CE tooling (`ce-brainstorm`/`ce-plan`/`ce-work`) is unavailable in this cloud session; per `references/engineering-orchestration.md` §1b this design pass is the Standalone Engineering Loop equivalent (plan → bounded slice → adversarial review via the existing validators → proof via `npm run audit:ci`). The proof artifact is committed; the validator/eval/template work below is scoped but deliberately not yet written, because the founder asked to "practice making some here and **see if we can match the level of quality** to abstract it into a skill" — i.e. evaluate first, then abstract.
 
 ## The ask
