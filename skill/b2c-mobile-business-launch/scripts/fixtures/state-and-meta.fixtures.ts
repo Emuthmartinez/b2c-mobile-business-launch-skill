@@ -298,6 +298,63 @@ export function register(h: Harness): void {
   writeState(attributionNotNeeded, attributionNotNeededState);
   runFixture("attribution not_needed with reason passes attribution check", attributionNotNeeded, "check-attribution-contract.ts", 0);
 
+  // --- check-landing-funnel (in-scope paths + scope-skip exit regression) ---
+  const landingGateEvidence = [
+    "# Landing Deploy Log",
+    "git status --porcelain was clean before deploy (no uncommitted changes).",
+    "wrangler version 4 checked and current before deploy.",
+    "wrangler whoami confirmed the Cloudflare token carries Pages:Edit scope.",
+    "Opened the live URL in a real browser, filled the form, submitted the form, and the success state rendered.",
+    "Waitlist duplicate email submits are idempotent (HTTP 200 for repeated submits).",
+  ].join("\n");
+
+  const landingInScopePass = makeEmptyFixture("landing-funnel-in-scope-pass");
+  writeFileSync(path.join(landingInScopePass, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
+  mkdirSync(path.join(landingInScopePass, "landing"), { recursive: true });
+  writeFileSync(path.join(landingInScopePass, "landing", "README.md"), landingGateEvidence, "utf8");
+  mkdirSync(path.join(landingInScopePass, "public"), { recursive: true });
+  for (const staticFile of ["robots.txt", "llms.txt", "sitemap.xml"]) {
+    writeFileSync(path.join(landingInScopePass, "public", staticFile), "seeded by fixture\n", "utf8");
+  }
+  runFixture("landing funnel in scope with full gate evidence passes", landingInScopePass, "check-landing-funnel.ts", 0);
+
+  const landingInScopeFail = makeEmptyFixture("landing-funnel-in-scope-missing-gates");
+  writeFileSync(path.join(landingInScopeFail, "PROJECT_STATE.yaml"), readFileSync(path.join(skillRoot, "templates", "PROJECT_STATE.yaml"), "utf8"), "utf8");
+  mkdirSync(path.join(landingInScopeFail, "landing"), { recursive: true });
+  writeFileSync(path.join(landingInScopeFail, "landing", "README.md"), "# Landing\nDeployed.\n", "utf8");
+  runFixture("landing funnel in scope without gate evidence fails", landingInScopeFail, "check-landing-funnel.ts", 1, "landing_funnel.git_clean_gate.missing");
+
+  const landingNoState = makeEmptyFixture("landing-funnel-missing-state");
+  runFixture("landing funnel fails loudly when project state is missing", landingNoState, "check-landing-funnel.ts", 1, "project_state.missing");
+
+  // --- check-version-discipline (fail branches) ---
+  const versionManifestMissing = makeEmptyFixture("version-discipline-manifest-missing");
+  runScriptArgs(
+    "version discipline fails when skill-version.json is missing",
+    "check-version-discipline.ts",
+    ["--skill-root", versionManifestMissing],
+    1,
+    "version_discipline.manifest_missing",
+  );
+
+  const versionManifestMalformed = makeEmptyFixture("version-discipline-manifest-malformed");
+  writeFileSync(
+    path.join(versionManifestMalformed, "skill-version.json"),
+    JSON.stringify({ version: "not-semver", updatedAt: "13-06-2026", releaseNotes: [] }, null, 2),
+    "utf8",
+  );
+  runScriptArgs(
+    "version discipline fails on a malformed manifest",
+    "check-version-discipline.ts",
+    ["--skill-root", versionManifestMalformed],
+    1,
+    "version_discipline.semver_invalid",
+  );
+
+  // --- validate-state (fail branch) ---
+  const designStateMissing = makeEmptyFixture("design-state-missing");
+  runFixture("design state validation fails when state files are missing", designStateMissing, "validate-state.ts", 1, "design_state.file_missing");
+
   // --- check-lane-coverage ---
   const laneCoverageBaseline = makeFixture("lane-coverage-baseline");
   runFixture("shipped template lane set passes coverage", laneCoverageBaseline, "check-lane-coverage.ts", 0);

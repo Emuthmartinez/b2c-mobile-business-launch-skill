@@ -44,7 +44,8 @@ const emailSkipped = emailStatus === "not_needed" || emailStatus === "deferred";
 
 if (emailSkipped) {
   reportAndExit("Email lane check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 // Use "error" when done, "warning" when partial/unknown.

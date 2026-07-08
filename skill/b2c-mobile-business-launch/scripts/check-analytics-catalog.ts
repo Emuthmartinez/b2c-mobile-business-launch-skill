@@ -32,7 +32,8 @@ const laneSkipped = laneStatus === "not_needed" || laneStatus === "deferred";
 
 if (laneSkipped) {
   reportAndExit("Analytics event-catalog completeness check", issues);
-  process.exit(0);
+  // No argument: honor the exit code reportAndExit set (errors still fail on the skip path).
+  process.exit();
 }
 
 const severity: "error" | "warning" = laneDone ? "error" : "warning";
