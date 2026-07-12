@@ -13,13 +13,17 @@ Use this before mutating repos, provider state, store records, DNS, social sched
 | `mutate` | run approved provider/API/CLI mutations inside the named scope | widen scope, accept fallback names, rotate secrets, submit stores, post publicly |
 | `ship` | perform approved release/submission/posting steps and record proof | skip final founder approval, bypass legal/platform gates, hide blockers |
 
+## Approval Envelopes
+
+Before external operations, load `frontier-agent-operations.md` and record an exact, expiring envelope in `operations/agent-operations.json`. It names provider, account/team, project/app, environment, allowed action classes and operation/resource patterns, fixed payload digest when applicable, exclusions, one-shot consumption or standing mode, approval basis, expiry, and any spend/voice constraint. Bind the action to the matching available capability and immutable occurrence time. Existing login access permits discovery and requested reads, not unrelated mutation or publication.
+
 ## Founder-Only Gates
 
 Always ask before:
 
 - spending money or signing up for paid tools
 - handling passwords, 2FA, API private keys, OAuth refresh tokens, or secret values
-- creating or mutating App Store/Google Play app records, bundle IDs, products, pricing, subscriptions, domains, DNS, email routing, or social account connections
+- sticky identity/security/legal changes: app records, bundle/package IDs, products, pricing/subscriptions, domains/DNS, email routing, credential roles, privacy publishing, and social account connections
 - accepting fallback app names, package names, SKUs, bundle IDs, or public brand names
 - publishing pages, scheduling content, submitting builds, launching campaigns, or changing pricing
 - destructive git, database, provider, storage, or account operations
@@ -35,7 +39,7 @@ Always ask before:
 
 ## Acceptance
 
-- `PROJECT_STATE.yaml` records the current mode and latest founder approval.
+- `PROJECT_STATE.yaml` records the current mode and `agent_operations`; the structured ledger records scoped approval envelopes.
 - Provider and store commands cite the approval scope before they run.
 - Agents do not turn missing runtime access into unapproved fallbacks.
 - App-record, signing, product, pricing, and public-posting decisions stop for founder approval.

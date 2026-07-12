@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>App Name Launch Cockpit</title>
+  <style>
+    :root {
+      --bg: #f7f3ec;
+      --ink: #161512;
+      --muted: #686159;
+      --line: #d8d0c3;
+      --panel: #fffdfa;
+      --accent: #0c7c59;
+      --warn: #a05a00;
+      --bad: #b3261e;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 ui-sans-serif, system-ui, sans-serif; }
+    header { padding: 32px; border-bottom: 1px solid var(--line); background: linear-gradient(120deg, #fffdfa, #e5f1ea); }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 5vw, 56px); line-height: 0.95; letter-spacing: 0; }
+    h2 { margin: 0 0 14px; font-size: 20px; }
+    h3 { margin: 0 0 8px; }
+    main { padding: 24px; display: grid; gap: 18px; }
+    section { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; overflow: auto; }
+    .meta { display: flex; gap: 10px; flex-wrap: wrap; color: var(--muted); }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 6px 10px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; min-width: 760px; }
+    th, td { text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); padding: 10px; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+    ul { margin: 0; padding-left: 18px; }
+    .muted { color: var(--muted); }
+    .status { display: inline-block; border-radius: 999px; padding: 3px 8px; background: #eee5d9; }
+    .done { background: #d8eee2; color: #06472f; }
+    .blocked { background: #f8d7d4; color: var(--bad); }
+    .partial { background: #f7ead5; color: var(--warn); }
+    .deferred, .not_needed { background: #e8e5df; color: #514b45; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .card, .proof { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; background: #fff; }
+    @media (max-width: 720px) { header, main { padding: 18px; } table { min-width: 640px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>App Name</h1>
+    <div class="meta">
+      <span class="pill">Phase: phase_0_orient</span>
+      <span class="pill">Mode: prepare</span>
+      <span class="pill">Updated: 2026-07-12</span>
+    </div>
+  </header>
+  <main>
+    <section>
+      <h2>Lane Status</h2>
+      <table><thead><tr><th>Lane</th><th>Status</th><th>Evidence</th><th>Blockers</th></tr></thead><tbody><tr><td>paid_tool_routing</td><td><span class="status not_started">not_started</span></td><td><ul><li>TOOL_DECISIONS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>secrets</td><td><span class="status not_started">not_started</span></td><td><ul><li>secrets/SECRETS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>security</td><td><span class="status not_started">not_started</span></td><td><ul><li>SECURITY.md</li><li>security-review.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>research</td><td><span class="status not_started">not_started</span></td><td><ul><li>RESEARCH.md</li><li>localization-market-research/LOCALIZATION_MARKET_RESEARCH.md</li><li>localization-market-research/localization-market-research.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>traceability</td><td><span class="status not_started">not_started</span></td><td><ul><li>LAUNCH_TRACE.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>experience</td><td><span class="status not_started">not_started</span></td><td><ul><li>11-star-experience/11_STAR_EXPERIENCE.md</li><li>11-star-experience/11-star-experience.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>emotional_design</td><td><span class="status not_started">not_started</span></td><td><ul><li>emotional-design/EMOTIONAL_DESIGN.md</li><li>emotional-design/emotional-design.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>product</td><td><span class="status not_started">not_started</span></td><td><ul><li>SPEC.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>design</td><td><span class="status not_started">not_started</span></td><td><ul><li>BRAND.md</li><li>DESIGN.md</li><li>screen-design/design.md</li><li>ux-patterns/UX_PATTERNS.md</li><li>design.html</li><li>ux-patterns/ux-patterns.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>content_assets</td><td><span class="status not_started">not_started</span></td><td><ul><li>content-assets/CONTENT_ASSETS.md</li><li>content-assets/content-assets.html</li><li>content-assets/manifest.json</li><li>DEMO_VIDEO.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>analytics_attribution</td><td><span class="status not_started">not_started</span></td><td><ul><li>ANALYTICS.md</li><li>analytics-plan.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>paid_user_acquisition</td><td><span class="status not_started">not_started</span></td><td><ul><li>growth/PAID_UA.md</li><li>growth/paid-ua-report.csv</li></ul></td><td><ul><li>Founder approval is required before ad account connection, paid spend, budget changes, or live campaign launch.</li></ul></td></tr><tr><td>onboarding</td><td><span class="status not_started">not_started</span></td><td><ul><li>ONBOARDING.md</li><li>onboarding.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>revenue</td><td><span class="status not_started">not_started</span></td><td><ul><li>REVENUE_OPS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>store_console</td><td><span class="status not_started">not_started</span></td><td><ul><li>STORE_CONSOLE.md</li><li>store-console.html</li><li>app-store-listing/APP_STORE_LISTING.md</li><li>app-store-listing/app-store-listing.html</li><li>app-store-listing/app-privacy-questionnaire.html</li><li>APPLE_APP_STORE_REQUIREMENTS.md</li><li>app-store-listing/SCREENSHOTS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>apple_signing</td><td><span class="status not_started">not_started</span></td><td><ul><li>APPLE_SIGNING.md</li><li>APPLE_APP_STORE_REQUIREMENTS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>privacy_legal</td><td><span class="status not_started">not_started</span></td><td><ul><li>PRIVACY.md</li><li>TERMS.md</li><li>APPLE_APP_STORE_REQUIREMENTS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>email</td><td><span class="status not_started">not_started</span></td><td><ul><li>EMAIL_OPS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>orchestration</td><td><span class="status not_started">not_started</span></td><td><ul><li>ORCHESTRATION.md</li><li>orchestration.html</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>engineering</td><td><span class="status not_started">not_started</span></td><td><ul><li>TECH_SPEC.md</li><li>ENGINEERING_PLAN.md</li><li>PRODUCTION_READINESS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>growth</td><td><span class="status not_started">not_started</span></td><td><ul><li>growth/VIRAL_GROWTH.md</li><li>growth/LAUNCH_NARRATIVE.md</li><li>growth/format-lab.csv</li><li>UGC_PLAYBOOK.md</li><li>FASTLANE_OPS.md</li></ul></td><td><span class="muted">None recorded</span></td></tr><tr><td>post_launch_ops</td><td><span class="status not_started">not_started</span></td><td><ul><li>POST_LAUNCH_OPS.md</li><li>LAUNCH_RETRO.md</li></ul></td><td><span class="muted">None recorded</span></td></tr></tbody></table>
+    </section>
+    <section>
+      <h2>Orchestration</h2>
+      <div class="grid">
+    <article class="card"><h3>Strategy</h3><p>not_evaluated</p><p class="muted">No orchestration preflight has been evaluated yet.</p></article>
+    <article class="card"><h3>Owner</h3><p>orchestrator</p><p class="muted">Manager pattern: true</p></article>
+    <article class="card"><h3>Safety</h3><p>File overlap checked: false</p><p>Actual collision check: false</p></article>
+    <article class="card"><h3>Integration</h3><p>Outputs reviewed: false</p><p>State reconciled: false</p></article>
+  </div>
+    </section>
+    <section>
+      <h2>Agent Operations</h2>
+      <div class="grid">
+    <article class="card"><h3>Status</h3><p><span class="status not_started">not_started</span></p><p class="muted">Capability checked: </p></article>
+    <article class="card"><h3>Artifacts</h3><p>AGENT_OPERATIONS.md</p><p>operations/agent-operations.json</p></article>
+    <article class="card"><h3>Approvals</h3><span class="muted">None recorded</span></article>
+    <article class="card"><h3>Reconciliation</h3><p>Last action: </p><p>State reconciled: false</p></article>
+  </div>
+    </section>
+    <section>
+      <h2>Provider State</h2>
+      <table><thead><tr><th>Provider</th><th>Route</th><th>Docs Checked</th><th>Secret Names</th><th>Preflight</th><th>Validation</th></tr></thead><tbody><tr><td>doppler</td><td>intended_paid_or_account_tool</td><td></td><td><ul><li>DOPPLER_TOKEN</li></ul></td><td>Confirm project/config naming before creating service tokens.</td><td>doppler run -- printenv APP_ENV</td></tr><tr><td>posthog</td><td>intended_account_tool</td><td></td><td><ul><li>POSTHOG_PROJECT_API_KEY</li><li>POSTHOG_PERSONAL_API_KEY</li></ul></td><td>Confirm product analytics region, replay/survey posture, and privacy disclosures.</td><td>Verify event plus person property in PostHog.</td></tr><tr><td>refero</td><td>optional_paid_or_account_tool</td><td></td><td><ul><li>REFERO_API_TOKEN</li></ul></td><td>Confirm Refero Pro access, OAuth or bearer-token route, query budget, and whether fallback UX pattern pack is founder-approved.</td><td>UX_PATTERNS.md records selected styles/screens/flows or approved fallback; ux-patterns.html renders pattern inventory and state matrix.</td></tr><tr><td>revenuecat</td><td>intended_account_tool</td><td></td><td><ul><li>REVENUECAT_PUBLIC_IOS_KEY</li><li>REVENUECAT_SECRET_API_KEY</li><li>REVENUECAT_WEBHOOK_SECRET</li></ul></td><td>Confirm entitlement, offering, store products, and sandbox account.</td><td>Sandbox purchase grants entitlement in app and backend/profile.</td></tr><tr><td>paid_ad_channels</td><td>optional_paid_or_account_tool</td><td></td><td><span class="muted">None recorded</span></td><td>Use paid-user-acquisition.md before spend. Confirm one-channel choice, target event, baseline, creative cadence, tracking stack, RevenueCat LTV/CPA source, store destination, privacy/ATT implications, and founder-approved budget.</td><td>PAID_UA.md, growth/paid-ua-report.csv, ANALYTICS.md, REVENUE_OPS.md, CONTENT_ASSETS.md, and LAUNCH_TRACE.md show channel decision, blended report, RevenueCat economics, creative proof, and stop/scale rules.</td></tr><tr><td>stripe</td><td>optional_account_tool</td><td></td><td><ul><li>STRIPE_SECRET_KEY</li><li>STRIPE_WEBHOOK_SECRET</li></ul></td><td>Confirm whether web checkout or web funnels are in scope.</td><td>Checkout or webhook event projects entitlement correctly.</td></tr><tr><td>resend</td><td>intended_account_tool</td><td></td><td><ul><li>RESEND_API_KEY</li><li>RESEND_WEBHOOK_SECRET</li></ul></td><td>Confirm sender domain, reply-to, unsubscribe, and support aliases.</td><td>Send test email and verify webhook or provider log.</td></tr><tr><td>sentry</td><td>optional_account_tool</td><td></td><td><ul><li>SENTRY_DSN</li><li>SENTRY_AUTH_TOKEN</li></ul></td><td>Confirm crash/performance scope and PII scrubbing.</td><td>Known non-production test event reaches Sentry.</td></tr><tr><td>security_review</td><td>optional_paid_or_account_tool</td><td></td><td><span class="muted">None recorded</span></td><td>Confirm whether Claude Security, Codex Security, GitHub Advanced Security, Snyk/Semgrep/Socket, MobSF Cloud, or a free local route is approved before running scans.</td><td>SECURITY.md, security-review.html, LaunchBench, and security validator evidence show threat model, platform hardening, supply-chain checks, and release proof.</td></tr><tr><td>app_store_connect</td><td>intended_account_tool</td><td></td><td><ul><li>ASC_KEY_ID</li><li>ASC_ISSUER_ID</li><li>ASC_PRIVATE_KEY_PATH</li></ul></td><td>Use app-store-connect-cli.md first (ASC Auth Setup And Recovery). Check for an existing keychain profile (asc --profile &lt;Name&gt;) before claiming no ASC access; one account-level API key reaches every app on the team. Confirm Apple Developer membership, Team ID, bundle ID, app name, SKU, locale, ASC CLI/skill-pack auth, and founder approval before app-record mutation.</td><td>ASC CLI/skill route records app creation/app record state, IDs, metadata, screenshots, TestFlight, review status, RevenueCat catalog reconciliation, and archive/export/upload path.</td></tr><tr><td>aso_skills</td><td>optional_local_skill_pack</td><td></td><td><span class="muted">None recorded</span></td><td>Refresh the Eronred ASO skill pack or installed local equivalents before ASO, icon, screenshot, CPP, event, paid UA, or post-launch metric guidance.</td><td>APP_STORE_LISTING.md, SCREENSHOTS.md, and STORE_CONSOLE.md record which ASO specialist lanes were used or intentionally not needed.</td></tr><tr><td>app_store_screenshots</td><td>optional_local_skill_pack</td><td></td><td><span class="muted">None recorded</span></td><td>Refresh ParthJadhav/app-store-screenshots, confirm real UI captures, app icon, design tokens, 11-star slice, locales/themes, iPhone/iPad support, and whether Higgsfield/Remotion supporting assets need approval.</td><td>SCREENSHOTS.md records exact iPhone/iPad wells, required/scaled decisions, screenshot count, dimensions, alpha/sRGB proof, asc-shots-pipeline dry-run, and upload status.</td></tr><tr><td>higgsfield</td><td>optional_paid_or_account_tool</td><td></td><td><span class="muted">None recorded</span></td><td>Confirm DESIGN.md tokens, asset family, prompt brief, source rights, and whether the output is screenshot support, App Icon, CPP/event art, preview thumbnail, or UGC/ad creative.</td><td>CONTENT_ASSETS.md and SCREENSHOTS.md record route, prompt summary, source inputs, output paths, visual QA, and founder approval gates.</td></tr><tr><td>mobai</td><td>intended_paid_or_account_tool</td><td></td><td><span class="muted">None recorded</span></td><td>Confirm device/app access, bundle/package ID, locale, seeded demo state, and screenshot-critical flows before capture.</td><td>SCREENSHOTS.md records raw capture paths, device/locale, source screen, version localization ID, and final composition linkage.</td></tr><tr><td>codex_native_ios</td><td>codex_desktop_native_tooling_when_exposed</td><td></td><td><span class="muted">None recorded</span></td><td>When Codex Desktop exposes native Apple/XcodeBuildMCP tools, load xcodebuildmcp-testing.md, call session_show_defaults before the first build/run/test, and confirm project/workspace, scheme, simulator/device, OS/runtime, and configuration.</td><td>PRODUCTION_READINESS.md records exposed MCP tool names such as build_run_sim/test_sim/screenshot/log capture, output paths, simulator/device details, provider-proof pairing, and the distribution-readiness limitation.</td></tr><tr><td>snapshot_previews</td><td>optional_open_source_cli_preview_proof</td><td></td><td><span class="muted">None recorded</span></td><td>Refresh getsentry/SnapshotPreviews, confirm SwiftUI/UIKit/AppKit previews exist, link SnapshottingTests, and decide SnapshotTest vs PreviewLayoutTest.</td><td>PRODUCTION_READINESS.md records package URL/version/commit, TEST_RUNNER_SNAPSHOTS_EXPORT_DIR, exported PNG/JSON paths, deterministic fixtures, and preview-only limitation.</td></tr><tr><td>serve_sim</td><td>optional_open_source_cli_simulator_stream</td><td></td><td><span class="muted">None recorded</span></td><td>Refresh EvanBacon/serve-sim, confirm macOS + Xcode command line tools + Node 18+, boot the intended iOS Simulator, and choose URL/port.</td><td>PRODUCTION_READINESS.md or SCREENSHOTS.md records npx serve-sim resolution, booted simulator/device, localhost preview URL/port, actions, logs, stream proof, and provider/signing limitations.</td></tr><tr><td>google_play</td><td>intended_account_tool</td><td></td><td><ul><li>GOOGLE_PLAY_SERVICE_ACCOUNT_JSON</li></ul></td><td>Confirm developer account, package name, app content declarations, data safety, and tester track.</td><td>Internal testing release or blocked reason recorded.</td></tr><tr><td>cloudflare</td><td>optional_account_tool</td><td></td><td><ul><li>CLOUDFLARE_API_TOKEN</li></ul></td><td>Confirm domain, DNS, email routing, Pages/Workers, and secrets.</td><td>HTTPS, DNS, headers, routes, and email aliases verified.</td></tr><tr><td>remotion</td><td>optional_local_render_tool</td><td></td><td><span class="muted">None recorded</span></td><td>Confirm Higgsfield fallback approval if applicable, source asset rights, real app UI inputs, target surfaces, and whether a launch-local content-assets/remotion project is needed.</td><td>CONTENT_ASSETS.md, content-assets.html, manifest.json, render command proof, source inputs, and output paths are recorded; representative still or render is checked before public use.</td></tr></tbody></table>
+    </section>
+    <section>
+      <h2>Founder Gates</h2>
+      <ul><li>paid tool signups or spend</li><li>credentials, secrets, and account access</li><li>App Store or Google Play submission</li><li>public posting or scheduling</li></ul>
+    </section>
+    <section>
+      <h2>Active Failure Cards</h2>
+      <div class="grid"><article class="card"><h3>doppler-docs-stale</h3><p><strong>medium</strong> | orchestrator | open</p><p>Refresh official docs and local CLI help before writing setup commands.</p></article></div>
+    </section>
+    <section>
+      <h2>Proof</h2>
+      <div class="grid"><article class="proof"><strong></strong><p>Expected: </p><p>Actual: </p><p>Evidence: </p></article></div>
+    </section>
+  </main>
+</body>
+</html>

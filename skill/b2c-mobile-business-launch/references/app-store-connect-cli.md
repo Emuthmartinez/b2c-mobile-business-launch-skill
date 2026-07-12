@@ -91,7 +91,9 @@ Use JSON output for agent automation:
 asc auth status --validate
 asc auth doctor
 asc apps list --output json --pretty
-asc apps info view --app "123456789" --output json --pretty
+asc apps get --id "123456789" --output json --pretty
+asc account status --app "123456789" --output table
+asc status --app "123456789" --output table
 asc versions list --app "123456789" --output json
 asc localizations list --app "123456789" --type app-info --output json
 ```
@@ -100,12 +102,12 @@ Common workflows from the current README:
 
 ```bash
 asc validate --app "123456789" --version "1.2.3"
-asc review status --app "123456789"
-asc review doctor --app "123456789"
+asc review submissions-list --app "123456789" --output table
 asc metadata pull --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
 asc metadata validate --dir "./metadata" --output table
 asc metadata push --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata" --dry-run --output table
-asc metadata keywords diff --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
+# Resolve the numeric version ID, then compare local .strings metadata without mutation.
+asc diff localizations --app "123456789" --path "./metadata/localizations" --version "VERSION_ID" --output table
 asc screenshots sizes --all --output table
 # For each approved SCREENSHOTS.md row, validate the exact final dir, locale, and current ASC device_type.
 asc screenshots validate --path "./screenshots/final/en-US/<device-well>" --device-type "<ASC_DEVICE_TYPE>" --output table
@@ -138,7 +140,7 @@ These notes exist because agents repeatedly burned live-store cycles guessing fl
 
 - **Pre-use `--help` rule.** Before the first use of any `asc` subcommand not shown in this file, run `asc <subcommand> --help` and record the confirmed flags. If a command errors on a flag, run `asc <cmd> --help` before retrying — never retry a mutating command with a guessed alternate flag. (Failure card: `asc-flag-drift`.)
 - **`--confirm` is a CLI-required gate, not just a founder gate.** Destructive/mutating commands (`asc review cancel`, `asc review submit`, `asc subscriptions review submit`, release actions) error and do nothing unless `--confirm` is passed. So they need *both* the CLI `--confirm` flag *and* explicit founder approval before you run them. Omitting `--confirm` does not "safely no-op into a dry run" — it just errors; check `--help` for the required flags before the first live call.
-- **`validate` form.** Validation runs against an app + version, e.g. `asc validate --app <APP_ID> --version <VERSION_STRING>` (confirm `--version` vs a numeric `--version-id` with `asc validate --help`). There is no `asc validate app-store-version` subcommand — that guess errors. Resolve the numeric version id first with `asc versions list --app <APP_ID> --output json` when a command needs `--version-id`.
+- **`validate` form.** In `asc 0.38.1`, validation accepts either `--version <VERSION_STRING>` or `--version-id <VERSION_ID>` with `--app`; there is no `asc validate app-store-version` subcommand. Always confirm current local help before use.
 - **Auth env vars.** The `asc` CLI reads `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_PRIVATE_KEY_PATH` (the **path** to the `.p8`, confirmed from the CLI's own auth hint — not the key contents). Keep these names consistent with `PROJECT_STATE.yaml`. See "ASC Auth Setup And Recovery" above for the full auth ladder (keychain profiles, account-level keys, `asc auth init/login`). Do not `source` a `.env`/`clueless.env` that contains comments or unquoted values — that throws `command not found` on every invocation; extract single values with the awk pattern in [`secrets-management.md`](secrets-management.md) ("Env file extraction — never `source`").
 - **Internal TestFlight groups auto-distribute.** Internal groups deliver to all internal testers automatically; do not pass a skip flag unless you intend to block internal delivery. External distribution always needs founder approval.
 - **Test notes are idempotent updates.** Updating a build's test notes is an update, not a create — do not create a second build record when one already exists.
@@ -208,6 +210,10 @@ Safe without new approval when credentials are already configured and the user a
 - export metadata or screenshots for review
 - run dry-runs
 - produce diffs and plans
+
+Use `frontier-agent-operations.md` for the shared action contract. Reads, ID resolution, exports, diffs, validation, dry-runs, reviews/performance/insights, and account/status discovery are `observe`. Reversible draft changes may run only inside the exact `mutate` scope recorded in an approval envelope with before/after read-back proof. Sticky identity/security/legal fields, pricing, privacy publishing, public review responses, external testers, submission, release, cancellation, and destructive actions keep their explicit founder gate.
+
+When `asc account status` or another API read reports that agreements, tax, banking, role, or a console-only field is unavailable through the public API, use the authenticated-browser route from `frontier-agent-operations.md` rather than declaring the workflow impossible. Capture redacted state text, never credential or financial screenshots.
 
 Founder approval required:
 - authentication or credential creation
@@ -279,7 +285,7 @@ Record in `STORE_CONSOLE.md`:
 
 Record in `PRODUCTION_READINESS.md` when release work is in scope:
 - build upload or processing status
-- validation/review doctor result
+- validation, release `status`, and review-submission result
 - TestFlight status
 - screenshot upload status
 - metadata apply status

@@ -17,7 +17,25 @@ Use this section for iOS/iPadOS implementation proof when native Apple tooling i
 | SnapshotPreviews | package URL/version/commit; `SnapshotTest` or `PreviewLayoutTest`; `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`; exported `.png` and `.json` under `snapshot-images`; deterministic preview fixtures | `snapshot-images/` pending | preview-only coverage; not runtime E2E and not real app E2E/provider proof | Pending |
 | serve-sim | package/version or `npx serve-sim` resolution; booted simulator/device; preview URL/port such as `http://localhost:3200`; actions from `serve-sim gesture`/`button`/`type`; stream/log evidence | browser capture/log path pending | simulator stream only; does not replace backend/provider proof or App Store signing readiness | Pending |
 
-Run `npm run check:native-ios-proof -- --root .` and attach the result before marking iOS engineering, screenshot, app-preview, or production-readiness lanes done.
+Run `npm run check:native-ios -- --root .` and attach the result before marking iOS engineering, screenshot, app-preview, or production-readiness lanes done.
+
+### Native iOS Launch-Critical Test Matrix
+
+Name the prerelease `.xctestplan`, its unit/integration/UI/performance targets, release configuration, and the real evidence path for every applicable row. A done engineering lane needs existing `.xcresult`, screenshot/video, log, metrics JSON, or provider-correlation artifacts rather than prose-only claims.
+
+| Risk / journey | Required variants | Runtime route | Evidence path | Provider correlation | Result |
+| --- | --- | --- | --- | --- | --- |
+| cold launch and core value journey | smallest/largest supported device, supported OS matrix | XcodeBuildMCP or MobAI runtime E2E | pending | backend/PostHog pending | Pending |
+| account lifecycle | create/login/logout plus account deletion | UI + integration tests | pending | auth/backend pending | Pending |
+| purchase lifecycle | StoreKit local purchase, sandbox/TestFlight entitlement, restore, refund/cancel state | StoreKit + real provider read-back | pending | RevenueCat/store pending | Pending |
+| permissions | allowed and denied paths with alternate UX | UI tests on device/simulator | pending | analytics pending | Pending |
+| resilience | offline, timeout, server error, retry, background/foreground, notification/deep link, interruption | integration + UI tests | pending | backend/Sentry pending | Pending |
+| accessibility and presentation | `XCUIApplication.performAccessibilityAudit` or equivalent accessibility audit, VoiceOver task, Dynamic Type, light/dark appearance | accessibility tree + screenshots | pending | n-a | Pending |
+| localization | supported locale/region matrix, truncation, RTL where applicable | `.xctestplan` configurations | pending | n-a | Pending |
+| performance | cold-start, memory, FPS/jank, network, battery, crash/log budget | XCTest performance + MobAI metrics | pending | Sentry/performance pending | Pending |
+| release device | Release configuration on a physical device, or explicit blocked/not-applicable reason | signed device build | pending | APPLE_SIGNING.md/TestFlight pending | Pending |
+
+Record device/OS/locale/appearance/account-fixture coverage, skipped conditions, and the limitation of each route. SnapshotPreviews remains preview-only; simulator proof does not replace provider, signing, TestFlight, or physical-device release behavior.
 
 ## Experience Cards (Bright-Line Evidence)
 

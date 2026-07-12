@@ -5,7 +5,7 @@
 ## Source Docs
 
 - Product: `SPEC.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `EMOTIONAL_DESIGN.md`, `EMOTIONAL_AUDIT.md`, `LAUNCH_TRACE.md`, `RESEARCH.md`
-- State: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
+- State and external actions: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `LAUNCHBENCH.md`, `FAILURE_CARDS.md`
 - Design: `BRAND.md`, `DESIGN.md`, `design.md`, `design.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `DEMO_VIDEO.md`
 - Onboarding and analytics: `ONBOARDING.md`, `onboarding.html`, `ANALYTICS.md`, `analytics-plan.html`
 - Revenue, email, legal, store, secrets, security: `REVENUE_OPS.md`, `EMAIL_OPS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `PRIVACY.md`, `TERMS.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `STORE_CONSOLE.md`
@@ -23,8 +23,8 @@
 
 ## Operating Rules
 
-- Session Continuity: before role work after a new session, resume, status check, or handoff, the orchestrator reconstructs current state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`. Do not rely on chat memory; role prompts inherit this source set.
-- The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, active failure cards, sequencing, file-overlap checks, actual file collision checks, integration, git/release coordination, and `PRODUCTION_READINESS.md`.
+- Session Continuity: before role work after a new session, resume, status check, or handoff, the orchestrator reconstructs current state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`. Do not rely on chat memory; role prompts inherit this source set.
+- The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, active failure cards, sequencing, file-overlap checks, actual file collision checks, integration, git/release coordination, and `PRODUCTION_READINESS.md`.
 - Specialists review and propose by default. They implement only when assigned an isolated unit with paths and verification.
 - No role may stage, commit, release, submit app-store builds, publish social posts, spend money, change pricing, or connect accounts without founder approval and orchestrator assignment.
 - No role may print, paste, commit, screenshot, or log raw secret values. New secrets must be routed through `SECRETS.md` and Doppler or the approved provider before work is called complete.
@@ -42,5 +42,6 @@
 - Security: `SECURITY.md`, `security-review.html`, threat model, paid/free security-tool route, platform hardening, app integrity, Apple privacy manifest/purpose-string/ATT checks, revenue/webhook abuse controls, supply-chain checks, Sentry/release health, public reporting route, and accepted risks are current.
 - Customer success: support, privacy, terms, delete, refund, restore, lifecycle, and review-response paths are ready.
 - Attribution: stable source key, `other` free text, `attribution_source_selected`, PostHog `self_reported_source`, backend/profile persistence, and anonymous-to-identified reconciliation are proven when onboarding/signup/waitlist exists.
+- Agent operations: capability inventory, exact approval scope, authenticated-browser/native action proof, research provenance, and cross-artifact reconciliation pass `check:agent-operations`.
 - State: `PROJECT_STATE.yaml` matches current artifacts, `launch-cockpit.html` is rendered, and active failure cards are assigned or resolved with proof.
 - Orchestration: `ORCHESTRATION.md` records strategy, candidate units, serialized resources, subagent forbidden actions, output review, collision checks, integration, and validators.

@@ -34,7 +34,7 @@ if (!skip && !text) {
 }
 
 if (text) {
-  for (const phrase of ["Source Ledger", "Decision Inputs", "Decision Log", "Rejected Claims"]) {
+  for (const phrase of ["Source Ledger", "Evidence Capture Protocol", "Untrusted Content", "Decision Inputs", "Decision Log", "Rejected Claims"]) {
     if (!text.toLowerCase().includes(phrase.toLowerCase())) {
       issues.push(
         issue(
@@ -59,6 +59,18 @@ if (text) {
   }
 
   if (done) {
+    for (const column of ["URL / source ID", "Observed at", "Tool / backend / query", "Transcript / visual", "Observation", "Inference", "Artifact / trace"]) {
+      if (!text.toLowerCase().includes(column.toLowerCase())) {
+        issues.push(
+          issue(
+            "error",
+            `research.source_ledger_${column.toLowerCase().replace(/[^a-z0-9]+/g, "_")}.missing`,
+            `Done research needs the ${column} provenance column so browser/social/video evidence is reproducible.`,
+            "RESEARCH.md",
+          ),
+        );
+      }
+    }
     if (/\bYYYY-MM-DD\b|\breplace with\b|\b(TODO|TBD|placeholder)\b/i.test(text)) {
       issues.push(
         issue(
@@ -79,7 +91,56 @@ if (text) {
         ),
       );
     }
+    const rows = sourceLedgerRows(text);
+    const completeRows = rows.filter((row) => {
+      if (row.length < 10) return false;
+      const [source, , identity, observedAt, backendQuery, transcriptVisual, observation, inference, confidence, artifactTrace] = row;
+      return Boolean(
+        source?.trim() &&
+        identity?.trim() &&
+        isDateTime(observedAt) &&
+        backendQuery?.trim() &&
+        transcriptVisual?.trim() &&
+        observation?.trim() &&
+        inference?.trim() &&
+        /^(low|medium|high)$/i.test(confidence?.trim() ?? "") &&
+        artifactTrace?.trim() &&
+        !/\b(pending|todo|tbd|n\/a without reason)\b/i.test(row.join(" ")),
+      );
+    });
+    if (completeRows.length === 0) {
+      issues.push(
+        issue(
+          "error",
+          "research.source_ledger_row_missing",
+          "Done research needs at least one complete Source Ledger evidence row; headers and an unrelated date are not proof.",
+          "RESEARCH.md",
+        ),
+      );
+    }
   }
 }
 
 reportAndExit("Research evidence check", issues);
+
+function sourceLedgerRows(value: string): string[][] {
+  const lines = value.split(/\r?\n/);
+  const header = lines.findIndex((line) => line.includes("URL / source ID") && line.includes("Artifact / trace"));
+  if (header < 0) return [];
+  const rows: string[][] = [];
+  for (const line of lines.slice(header + 1)) {
+    if (!line.trim().startsWith("|")) break;
+    if (/^\|\s*:?-+/.test(line)) continue;
+    rows.push(
+      line
+        .split("|")
+        .slice(1, -1)
+        .map((cell) => cell.trim()),
+    );
+  }
+  return rows;
+}
+
+function isDateTime(value: string | undefined): boolean {
+  return Boolean(value && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value) && !Number.isNaN(new Date(value).getTime()));
+}

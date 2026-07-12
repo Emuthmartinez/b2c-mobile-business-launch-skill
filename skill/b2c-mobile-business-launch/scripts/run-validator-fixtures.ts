@@ -23,6 +23,7 @@ import { register as registerRepoGates } from "./fixtures/repo-gates.fixtures.js
 import { register as registerCoreArtifacts } from "./fixtures/core-artifacts.fixtures.js";
 import { register as registerArchetype } from "./fixtures/archetype.fixtures.js";
 import { register as registerBehavioral } from "./fixtures/behavioral.fixtures.js";
+import { register as registerAgentOperations } from "./fixtures/agent-operations.fixtures.js";
 
 const keepTemp = process.argv.includes("--keep-temp");
 const harness = createHarness();
@@ -41,6 +42,7 @@ try {
   registerCoreArtifacts(harness);
   registerArchetype(harness);
   registerBehavioral(harness);
+  registerAgentOperations(harness);
 } finally {
   if (keepTemp) {
     console.log(`Keeping temp fixture root: ${harness.tempRoot}`);

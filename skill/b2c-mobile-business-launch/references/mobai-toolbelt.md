@@ -46,10 +46,10 @@ Record in `TOOL_DECISIONS.md`, `SCREENSHOTS.md`, `FASTLANE_OPS.md`, `PRODUCTION_
 
 Run these steps at the start of every MobAI session before issuing any device automation commands. Skipping them is the leading cause of "device not found" and "API unreachable" failures.
 
-1. **Verify bridge is running.** Call `mcp__mobai__list_devices` (or `mobai list-devices` via CLI). If the call returns an HTTP 404 or connection-refused error, the bridge is not running.
-2. **Start bridge if needed.** Call `mcp__mobai__start_bridge` and wait for a stable response before continuing. Do not chain commands immediately after bridge start — give it a moment to register devices.
-3. **Confirm device ID.** Note the exact device UUID returned by `list_devices`. Use that UUID verbatim in all subsequent calls. Do not infer or reuse a UUID from a prior session.
-4. **Verify simulator state.** If the target simulator was stopped, call `list_devices` again after the bridge starts to confirm the simulator appears in the registry before issuing any DSL or screenshot commands.
+1. **Refresh the live surface.** Read the exposed MobAI MCP schemas/resources when present; otherwise run `mobai version`, `mobai --help`, and the needed subcommand help. Do not mix MCP tool names with CLI commands.
+2. **Verify device discovery.** Use the current MCP device-list tool or `mobai devices list --json`. HTTP 404/connection-refused or CLI exit 10 means the desktop app/API is unavailable; exit 11 means no device or multiple devices.
+3. **Start the bridge if needed.** Use the exposed MCP bridge tool or `mobai bridge start -d <device-id>`, then wait for a stable response.
+4. **Pin the target.** Record the returned device ID and export `MOBAI_DEVICE=<id>` or pass `-d <id>`. Re-list after simulator/device restarts instead of reusing prior-session identity.
 
 ## Common Mistakes
 
@@ -57,12 +57,14 @@ These mistakes were observed in production sessions and burned multiple extra to
 
 | Mistake | Correct form | Notes |
 | --- | --- | --- |
-| Bare string selector: `"Continue"` | `"label:Continue"` or `"text:Continue"` | MobAI selectors require `key:value` syntax. Bare strings are rejected at parse time. |
+| Bare string selector: `"Continue"` | `"id:continue"` or `"text-contains:Continue,type:button"` | Prefer accessibility IDs, then resilient text predicates; exact text, indexes, and coordinates are fallback routes. |
 | `--timeout 10` | `--timeout 10s` | The `--timeout` flag accepts Go duration strings. A bare integer without a unit fails with "missing unit in duration". Valid units: `s`, `ms`, `m`. |
-| `mobai observe -d <uuid> --screenshot <path>` | `mobai screenshot -d <uuid> -o <path>` | The `observe` subcommand does not have a `--screenshot` flag. Screenshots use the separate `screenshot` subcommand (or `mcp__mobai__get_screenshot` / `mcp__mobai__save_screenshot` via MCP). |
-| Chaining 8+ taps without screen checks | Verify current screen after each navigation step | Stale coordinates from animation races pile up silently. See Keyboard-Timing Pattern and Onboarding-Flow Navigation Pattern below. |
+| `mobai observe -d <uuid> --screenshot <path>` | `mobai screenshot -d <uuid> --path <dir> --name <name> --full` | In MobAI 1.9.3 screenshots have a separate command; use UI-tree observation to choose actions and full PNG only for visual proof. |
+| Blind tap chains on an unfamiliar flow | observe UI tree -> act -> `mobai wait --stable`/assert -> verify | Batch predictable, already-proved actions through the current MCP DSL; keep discovery and unstable transitions observable. |
 
 When in doubt, run `mobai --help` and `mobai <subcommand> --help` from the current CLI version rather than relying on this reference. Flag syntax is the most volatile part of the CLI.
+
+Current high-value CLI surfaces in MobAI 1.9.3 include `observe --include ui_tree,ocr`, semantic tap/type/swipe/scroll/wait/assert commands, `web` for iOS WebInspector/Android Chrome contexts, `metrics start|stop` for CPU/memory/FPS/network/battery/process evidence, and `record start|stop` for transition-anomaly capture. Use the MCP DSL for known multi-step flows and secret-safe actions when its current schema exposes them; do not invent a CLI command from an MCP action name.
 
 ## Device Lost / Bridge Recovery
 
@@ -90,10 +92,10 @@ iOS keyboard-dismiss animations take ~300 ms. Tapping a Continue/Next button bef
 **Pattern: observe-before-tap.**
 
 ```
-1. Type into the field using the type DSL action or mcp__mobai__execute_dsl.
-2. Call get_screenshot (or observe without --screenshot) to get the current frame.
-3. Confirm the keyboard has dismissed AND the target button is at the expected position in the screenshot.
-4. Only then tap Continue/Next.
+1. Type through the current MCP DSL or `mobai type <text> --into "id:<field>" --clear`; use the MCP secret-safe action when exposed for credentials.
+2. Use `mobai wait --stable` and `mobai observe --include ui_tree` (add OCR on thin iOS trees).
+3. Confirm focus/keyboard state and the target element from semantic output.
+4. Tap by stable selector, then assert or observe the destination.
 ```
 
 If the screen state after typing is ambiguous (field still focused, keyboard still visible), add a small explicit wait in the DSL (`wait: 500`) before the tap rather than retrying at the same coordinate.
@@ -106,13 +108,13 @@ Long onboarding sequences (6+ steps) that chain all taps in a single DSL script 
 
 ```
 For each onboarding step N:
-  1. get_screenshot or observe to see current screen.
+  1. observe the UI tree (OCR fallback) to identify the current screen.
   2. Confirm the expected question / screen label is visible.
   3. Execute only the actions for step N (select answer, tap Next).
   4. Repeat from 1 for step N+1.
 ```
 
-Do not attempt to pre-choreograph all steps into one DSL block unless a dry-run has already proved the full flow stable on the target build. When using `mobile-recorder-skill`, the explore phase should walk each step individually before the final `.mob` script is written.
+Do not pre-choreograph an unobserved flow. After an exploratory pass proves selectors and transitions, batch predictable steps through the current MCP DSL or a current validated `.mob` flow; retain waits/assertions around screen changes. When using `mobile-recorder-skill`, explore before the final choreography is written.
 
 ## Toolbelt Catalog
 

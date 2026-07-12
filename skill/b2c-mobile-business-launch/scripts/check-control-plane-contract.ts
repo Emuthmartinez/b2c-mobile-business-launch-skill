@@ -8,6 +8,7 @@ const issues: Issue[] = [...loaded.issues];
 
 const requiredPanels = new Map([
   ["design-room", "active"],
+  ["agent-ops", "planned"],
   ["analytics", "planned"],
   ["monetization", "planned"],
   ["store-ops", "planned"],

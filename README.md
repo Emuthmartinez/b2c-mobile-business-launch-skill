@@ -2,7 +2,7 @@
 
 A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript, early repo, or half-built product into a launch-ready business package.
 
-This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, implementation handoff, device testing, and production-readiness proof.
+This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, authenticated agent operations, device testing, and production-readiness proof.
 
 > **Status:** Public, actively maintained. Licensed under [MIT](LICENSE).
 
@@ -44,6 +44,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Lane | Output |
 | --- | --- |
 | State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, `skill-version.json`, runtime freshness checks, autonomy mode, lane statuses, provider state, proof, and failure cards |
+| Agent Operations | `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, capability discovery, account/environment targeting, scoped approval envelopes, authenticated-browser/API/CLI/native routing, prompt-injection quarantine, before/after proof, and state reconciliation |
 | Design Room | `state/business.json`, `state/theme.tokens.json`, `design-room.html`, React/Vite `dist/design-room/`, git-backed versions, baselines, diffs, restores, and wipe-slate operations |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
 | Experience | `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, 1/2/5/6/7/10/11-star ladder, line of feasibility, V1 scalable slice, and surface translation |
@@ -67,6 +68,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 ## Non-Negotiables
 
 - `PROJECT_STATE.yaml` is the compact state contract for phase, autonomy, lane status, provider setup, proof, blockers, and failure cards.
+- Authenticated operations require capability discovery and `AGENT_OPERATIONS.md` plus its structured ledger; account access is never blanket authorization, and completed mutations need exact-target preflight, scoped approval, read-back proof, redaction, and state reconciliation.
 - `launch-cockpit.html` is the founder-visible dashboard over that state.
 - Research must flow into product, brand, design, implementation, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
 - Every real product needs an 11-star experience contract before build handoff: the visual ladder, line of feasibility, V1 scalable slice, and surface translation must shape `SPEC.md`, `DESIGN.md`, `ONBOARDING.md`, `TECH_SPEC.md`, ads, screenshots, and content.
@@ -95,6 +97,8 @@ npm run check:secrets -- --root /path/to/app
 npm run check:security -- --root /path/to/app
 npm run check:content-assets -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
+npm run check:agent-operations -- --root /path/to/app
+npm run check:asc-command-contract -- --skill-root skill/b2c-mobile-business-launch
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app
 npm run check:apple-requirements -- --root /path/to/app
@@ -154,6 +158,8 @@ The scripts are intentionally simple:
 - `check-paid-user-acquisition.ts` checks `PAID_UA.md`, one-channel paid acquisition focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, weekly schedule, stop/scale rules, and founder-only spend gates.
 - `check-store-screenshots.ts` checks `SCREENSHOTS.md`, raw-vs-composed screenshot separation, ParthJadhav/app-store-screenshots or equivalent export routing, iPhone/iPad/Play wells, App Icon/App Preview routing, copy overlays, validation, and visual QA proof.
 - `check-native-ios-proof.ts` checks iOS readiness claims for Codex Desktop native iOS/XcodeBuildMCP routing, SnapshotPreviews preview exports, serve-sim simulator streams, evidence paths, provider-proof pairing, and simulator/preview/signing limitations.
+- `check-agent-operations.ts` validates the structured capability inventory, approval envelopes, exact account/project/environment targeting, authenticated-browser research provenance, prompt-injection policy, grounded before/after evidence, redaction, and canonical state reconciliation.
+- `check-asc-command-contract.ts` rejects known-invalid stored ASC command forms and, when `asc` is installed, checks the documented contract against live local help.
 - `check-parallel-orchestration.ts` checks `ORCHESTRATION.md`, top-level orchestration state, strategy, candidate units, overlapping files, spawned-agent forbidden actions, output review, collision checks, and state reconciliation.
 - `check-apple-signing-packet.ts` checks Apple Developer, Team ID, bundle ID/App ID, app record, signing, archive/export/upload, TestFlight, and founder gates.
 - `check-apple-app-store-requirements.ts` checks `APPLE_APP_STORE_REQUIREMENTS.md`, privacy manifests, required reason APIs, third-party SDK manifests/signatures, Xcode privacy report reconciliation, App Privacy URLs/labels, protected-resource purpose strings, ATT, account deletion, review notes, and archive/upload gates before ASC readiness.

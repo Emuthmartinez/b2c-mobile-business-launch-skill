@@ -6,6 +6,7 @@ Use this when starting, continuing, auditing, or handing off a launch. The goal 
 
 - `PROJECT_STATE.yaml`: compact source of truth for phase, autonomy mode, orchestration strategy, lane statuses, paid-tool routing, secrets, provider setup, proof, open questions, and active failure cards.
 - `launch-cockpit.html`: founder-visible rendered view of the same state.
+- `AGENT_OPERATIONS.md` plus `operations/agent-operations.json`: human and machine state for current capabilities, exact account/environment scope, approval envelopes, authenticated actions, research/media provenance, and reconciliation.
 - `state/business.json`, `state/theme.tokens.json`, and `design-room.html`: separate Design Room state/render artifacts for cross-surface design. Update these through `design-room.md` when design changes affect launch surfaces.
 - `LAUNCHBENCH.md` or `proof.launchbench` in `PROJECT_STATE.yaml`: eval/check history for known failure modes.
 
@@ -34,6 +35,7 @@ Update `PROJECT_STATE.yaml`:
 - before crossing research -> 11-star experience, experience -> design, design -> build, build -> proof, or proof -> submission
 - after any build is archived, exported, or uploaded to App Store Connect or Google Play — update the `apple_signing` lane evidence, build number, upload status, and `updated_at` before committing
 - after any store-ops event (custom product page created, in-app event attempted or submitted, iPad/new-platform target enabled, TestFlight group added, app record mutated) — update the affected lane status/evidence before committing
+- before and after any authenticated browser/account/provider/social/native-device action — refresh `agent_operations`, the structured ledger, affected canonical docs, provider proof, and cockpit
 - after validation or LaunchBench runs
 - after any Design Room mutation that changes launch surfaces, App Store creative, onboarding, paywalls, landing pages, or marketing assets
 - before final handoff or commit
@@ -46,6 +48,7 @@ If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write
 - `project.launch_tier` scopes the artifact burden: `full` (default) runs every lane; `lite` defers the named breadth lanes with dated reasons through normal deferral mechanics (see `launch-phases.md` "Launch Tiers"). Only `full`/`lite` are valid; the tier never silently disables a validator.
 - top-level `orchestration` records preflight, strategy, candidate units, parallel-safe units, serialized units, spawned agents, collision checks, output review, state reconciliation, and validators.
 - top-level `compound_engineering` records whether Compound Engineering skills were available, used, blocked, or replaced with an equivalent fallback.
+- top-level `agent_operations` points to the human log and structured ledger, records capability freshness and active approvals, and confirms state reconciliation; use `frontier-agent-operations.md` rather than treating account access as blanket permission.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
@@ -74,6 +77,7 @@ npm run check:apple-signing -- --root /path/to/app
 npm run check:apple-requirements -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
+npm run check:agent-operations -- --root /path/to/app
 npm run render:launch-cockpit -- --root /path/to/app
 ```
 

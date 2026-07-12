@@ -1,5 +1,5 @@
 schema_version: "1"
-updated_at: "2026-05-27"
+updated_at: "2026-07-12"
 project:
   name: "App Name"
   slug: "app-name"
@@ -31,12 +31,22 @@ autonomy:
     - "credentials, secrets, and account access"
     - "App Store or Google Play submission"
     - "public posting or scheduling"
+agent_operations:
+  status: "not_started"
+  human_log: "AGENT_OPERATIONS.md"
+  structured_ledger: "operations/agent-operations.json"
+  capability_checked_at: ""
+  active_approval_ids: []
+  last_action_id: ""
+  state_reconciled: false
 continuity:
   last_state_review: "not_reviewed"
   source_files:
     - "AGENTS.md"
     - "PROJECT_STATE.yaml"
     - "launch-cockpit.html"
+    - "AGENT_OPERATIONS.md"
+    - "operations/agent-operations.json"
     - "ORCHESTRATION.md"
     - "PRODUCTION_READINESS.md"
     - "FAILURE_CARDS.md"
@@ -60,6 +70,7 @@ orchestration:
     - "launch-cockpit.html rendering"
     - "git staging, commits, merges, pushes, and releases"
     - "provider/account mutations"
+    - "authenticated browser profiles, public responses, and externally visible actions"
     - "MobAI, Codex Desktop native iOS, XcodeBuildMCP, serve-sim, or simulator/device control"
   spawned_agents: []
   focused_validators_run: []

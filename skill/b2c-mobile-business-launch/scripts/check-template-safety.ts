@@ -38,6 +38,17 @@ for (const file of collectAllFiles(root)) {
   if (file.split(path.sep).includes("node_modules")) {
     continue;
   }
+  const text = readFileSync(file, "utf8");
+  if (/mcp__mobai__[A-Za-z0-9_]+/.test(text)) {
+    issues.push(
+      issue(
+        "error",
+        "template_safety.stale_mobai_mcp_name",
+        `Hardcoded MobAI MCP identifier found in ${path.relative(root, file)}. Generated guidance must discover current exposed tools and use verified CLI alternatives.`,
+        path.relative(root, file),
+      ),
+    );
+  }
   // Web-only landing surface (the top-level landing/ section library):
   // motion/react is the mandated animation library there and never ships into
   // the binary. Anchored to the first segment so unrelated nested directories
@@ -48,7 +59,7 @@ for (const file of collectAllFiles(root)) {
   if (!codeExtensions.has(path.extname(file))) {
     continue;
   }
-  if (forbidden.test(readFileSync(file, "utf8"))) {
+  if (forbidden.test(text)) {
     issues.push(
       issue(
         "error",

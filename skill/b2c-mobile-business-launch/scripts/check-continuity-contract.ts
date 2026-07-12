@@ -199,7 +199,16 @@ function validateProjectState(text: string | undefined, issues: Issue[]): Record
   }
 
   const sourceFileSet = new Set(sourceFiles.filter((value): value is string => typeof value === "string"));
-  for (const required of ["AGENTS.md", "PROJECT_STATE.yaml", "launch-cockpit.html", "ORCHESTRATION.md", "PRODUCTION_READINESS.md", "FAILURE_CARDS.md"]) {
+  for (const required of [
+    "AGENTS.md",
+    "PROJECT_STATE.yaml",
+    "launch-cockpit.html",
+    "AGENT_OPERATIONS.md",
+    "operations/agent-operations.json",
+    "ORCHESTRATION.md",
+    "PRODUCTION_READINESS.md",
+    "FAILURE_CARDS.md",
+  ]) {
     if (!sourceFileSet.has(required)) {
       issues.push({
         code: "continuity.project_state_source_missing",
@@ -219,7 +228,16 @@ function validateBusinessRoot(root: string | undefined, continuity: Record<strin
   const sourceFiles = continuity.source_files;
   const required = Array.isArray(sourceFiles)
     ? sourceFiles.filter((value): value is string => typeof value === "string")
-    : ["AGENTS.md", "PROJECT_STATE.yaml", "launch-cockpit.html", "ORCHESTRATION.md", "PRODUCTION_READINESS.md", "FAILURE_CARDS.md"];
+    : [
+        "AGENTS.md",
+        "PROJECT_STATE.yaml",
+        "launch-cockpit.html",
+        "AGENT_OPERATIONS.md",
+        "operations/agent-operations.json",
+        "ORCHESTRATION.md",
+        "PRODUCTION_READINESS.md",
+        "FAILURE_CARDS.md",
+      ];
 
   for (const relativePath of required) {
     const absolutePath = path.join(root, relativePath);
@@ -230,6 +248,15 @@ function validateBusinessRoot(root: string | undefined, continuity: Record<strin
       });
     }
   }
+}
+
+function markdownSection(text: string | undefined, heading: string): string | undefined {
+  if (!text) return undefined;
+  const match = new RegExp(`^##\\s+${heading.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}\\s*$`, "im").exec(text);
+  if (!match || match.index === undefined) return undefined;
+  const rest = text.slice(match.index + match[0].length);
+  const next = /^##\s+/m.exec(rest);
+  return next?.index === undefined ? rest : rest.slice(0, next.index);
 }
 
 function main(): void {
@@ -257,6 +284,8 @@ function main(): void {
       "AGENTS.md",
       "PROJECT_STATE.yaml",
       "launch-cockpit.html",
+      "AGENT_OPERATIONS.md",
+      "operations/agent-operations.json",
       "ORCHESTRATION.md",
       "PRODUCTION_READINESS.md",
       "FAILURE_CARDS.md",
@@ -268,20 +297,48 @@ function main(): void {
   );
 
   requireTerms(
+    "AGENTS.md Session Continuity section",
+    markdownSection(agents, "Session Continuity"),
+    ["AGENT_OPERATIONS.md", "operations/agent-operations.json"],
+    issues,
+  );
+
+  requireTerms(
     "CLAUDE.md",
     claude,
-    ["Session Continuity", "Do not rely on prior chat context", "PROJECT_STATE.yaml", "launch-cockpit.html", "ORCHESTRATION.md"],
+    [
+      "Session Continuity",
+      "Do not rely on prior chat context",
+      "PROJECT_STATE.yaml",
+      "launch-cockpit.html",
+      "AGENT_OPERATIONS.md",
+      "operations/agent-operations.json",
+      "ORCHESTRATION.md",
+    ],
     issues,
   );
 
   requireTerms(
     "APP_AGENTS.md",
     appAgents,
-    ["Session Continuity", "Do not rely on chat memory", "role prompts", "PROJECT_STATE.yaml", "ORCHESTRATION.md"],
+    [
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "role prompts",
+      "PROJECT_STATE.yaml",
+      "AGENT_OPERATIONS.md",
+      "operations/agent-operations.json",
+      "ORCHESTRATION.md",
+    ],
     issues,
   );
 
-  requireTerms("orchestrator role prompt", orchestrator, ["Session Continuity", "git status --short", "Do not rely on chat memory", "state updates"], issues);
+  requireTerms(
+    "orchestrator role prompt",
+    orchestrator,
+    ["Session Continuity", "git status --short", "Do not rely on chat memory", "state updates", "AGENT_OPERATIONS.md", "operations/agent-operations.json"],
+    issues,
+  );
 
   for (const specialist of specialistPrompts) {
     requireTerms(specialist.label, specialist.text, ["Session Continuity", "Do not rely on chat memory", "drift risks", "failure cards"], issues);

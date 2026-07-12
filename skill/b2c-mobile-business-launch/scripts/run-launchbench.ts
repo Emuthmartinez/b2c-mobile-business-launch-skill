@@ -23,6 +23,8 @@ const knownValidators = new Set([
   "check-store-console-packet",
   "check-store-screenshots",
   "check-native-ios-proof",
+  "check-agent-operations",
+  "check-asc-command-contract",
   "check-secret-routing",
   "check-security-release",
   "check-content-assets",
@@ -81,6 +83,7 @@ const requiredBehavioral = new Set([
   "post-launch-ops-runbook-missing",
   "launch-tier-overproduction",
   "monetization-cozy-default-stack-unexamined",
+  "browser-capability-skipped",
 ]);
 
 if (!existsSync(scenarioDir)) {

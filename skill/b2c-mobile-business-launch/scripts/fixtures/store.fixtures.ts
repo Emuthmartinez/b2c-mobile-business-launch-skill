@@ -63,6 +63,53 @@ export function register(h: Harness): void {
     "native_ios_proof.codex_desktop_session_defaults_missing",
   );
 
+  const nativeIosUngrounded = makeFixture("native-ios-proof-ungrounded");
+  const nativeIosUngroundedState = readState(nativeIosUngrounded);
+  getLane(nativeIosUngroundedState, "engineering")["status"] = "done";
+  writeState(nativeIosUngrounded, nativeIosUngroundedState);
+  runFixture(
+    "done native iOS proof without an existing evidence artifact fails",
+    nativeIosUngrounded,
+    "check-native-ios-proof.ts",
+    1,
+    "native_ios_proof.grounded_evidence_missing",
+  );
+
+  const nativeIosGrounded = makeFixture("native-ios-proof-grounded");
+  const nativeIosGroundedState = readState(nativeIosGrounded);
+  getLane(nativeIosGroundedState, "engineering")["status"] = "done";
+  writeState(nativeIosGrounded, nativeIosGroundedState);
+  const groundedReadinessPath = path.join(nativeIosGrounded, "PRODUCTION_READINESS.md");
+  mkdirSync(path.join(nativeIosGrounded, "mobile", "proof"), { recursive: true });
+  const matrixProofs: Array<[string, string]> = [
+    ["cold launch and core value journey", "cold-launch.log"],
+    ["account lifecycle", "account.log"],
+    ["purchase lifecycle", "purchase.log"],
+    ["permissions", "permissions.log"],
+    ["resilience", "resilience.log"],
+    ["accessibility and presentation", "accessibility.log"],
+    ["localization", "localization.log"],
+    ["performance", "performance.log"],
+    ["release device", "release-device.log"],
+  ];
+  let readinessText = readFileSync(groundedReadinessPath, "utf8");
+  for (const [journey, filename] of matrixProofs) {
+    writeFileSync(path.join(nativeIosGrounded, "mobile", "proof", filename), `${journey} fixture proof\n`, "utf8");
+    readinessText = readinessText
+      .split("\n")
+      .map((line) => {
+        if (!line.startsWith(`| ${journey} |`)) return line;
+        const cells = line.split("|");
+        cells[4] = ` \`mobile/proof/${filename}\` `;
+        cells[5] = ` ${(cells[5] ?? "").replace(/pending/gi, "verified")} `;
+        cells[6] = " Passed ";
+        return cells.join("|");
+      })
+      .join("\n");
+  }
+  writeFileSync(groundedReadinessPath, readinessText, "utf8");
+  runFixture("done native iOS proof with row-specific grounded evidence passes", nativeIosGrounded, "check-native-ios-proof.ts", 0);
+
   const snapshotOnlyScreenshots = makeFixture("snapshot-only-screenshots");
   writeFileSync(
     path.join(snapshotOnlyScreenshots, "SCREENSHOTS.md"),

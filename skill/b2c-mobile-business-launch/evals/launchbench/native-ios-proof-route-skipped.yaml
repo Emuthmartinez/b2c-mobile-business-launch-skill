@@ -13,7 +13,9 @@ must_catch:
   - SnapshotPreviews needs TEST_RUNNER_SNAPSHOTS_EXPORT_DIR PNG/JSON proof and preview-only limitation
   - serve-sim needs a booted simulator plus preview URL/port and limitation
   - simulator/preview proof does not prove provider behavior or App Store distribution readiness
+  - native readiness needs a launch-critical .xctestplan matrix for core journey, account, purchase/restore/refund, permissions, offline/retry, accessibility, locale/appearance, performance, and Release-device coverage
+  - a done engineering lane needs existing xcresult, screenshot/video, log, JSON, or provider-correlation evidence paths
 should_say:
   - Open native-ios-proof-route-skipped.
-  - Run check:native-ios-proof and check:apple-signing before iOS readiness claims.
+  - Run check:native-ios and check:apple-signing before iOS readiness claims.
   - Update PRODUCTION_READINESS.md, SCREENSHOTS.md, PROVIDER_PROOF.md, and APPLE_SIGNING.md with the separated proof.

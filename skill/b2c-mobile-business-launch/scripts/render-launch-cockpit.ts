@@ -31,6 +31,7 @@ if (!loaded.state) {
   const lanes = isRecord(getPath(state, "lanes")) ? (getPath(state, "lanes") as Record<string, unknown>) : {};
   const tools = isRecord(getPath(state, "tools")) ? (getPath(state, "tools") as Record<string, unknown>) : {};
   const orchestration = isRecord(getPath(state, "orchestration")) ? (getPath(state, "orchestration") as Record<string, unknown>) : {};
+  const agentOperations = isRecord(getPath(state, "agent_operations")) ? (getPath(state, "agent_operations") as Record<string, unknown>) : {};
   const cards = asArray(getPath(state, "failure_cards.active"));
   const gates = asArray(getPath(state, "autonomy.founder_only_gates"));
   const proofCommands = asArray(getPath(state, "proof.commands"));
@@ -70,6 +71,13 @@ if (!loaded.state) {
     <article class="card"><h3>Owner</h3><p>${escapeHtml(orchestration.integration_owner ?? "not recorded")}</p><p class="muted">Manager pattern: ${escapeHtml(orchestration.manager_pattern ?? "unknown")}</p></article>
     <article class="card"><h3>Safety</h3><p>File overlap checked: ${escapeHtml(orchestration.file_overlap_checked ?? "unknown")}</p><p>Actual collision check: ${escapeHtml(orchestration.actual_file_collision_check ?? "unknown")}</p></article>
     <article class="card"><h3>Integration</h3><p>Outputs reviewed: ${escapeHtml(orchestration.agent_outputs_reviewed ?? "unknown")}</p><p>State reconciled: ${escapeHtml(orchestration.state_reconciled ?? "unknown")}</p></article>
+  </div>`;
+
+  const agentOperationsMarkup = `<div class="grid">
+    <article class="card"><h3>Status</h3><p><span class="status ${escapeHtml(agentOperations.status ?? "not_started")}">${escapeHtml(agentOperations.status ?? "not_started")}</span></p><p class="muted">Capability checked: ${escapeHtml(agentOperations.capability_checked_at ?? "not recorded")}</p></article>
+    <article class="card"><h3>Artifacts</h3><p>${escapeHtml(agentOperations.human_log ?? "AGENT_OPERATIONS.md")}</p><p>${escapeHtml(agentOperations.structured_ledger ?? "operations/agent-operations.json")}</p></article>
+    <article class="card"><h3>Approvals</h3>${list(asArray(agentOperations.active_approval_ids))}</article>
+    <article class="card"><h3>Reconciliation</h3><p>Last action: ${escapeHtml(agentOperations.last_action_id ?? "none")}</p><p>State reconciled: ${escapeHtml(agentOperations.state_reconciled ?? false)}</p></article>
   </div>`;
 
   const html = `<!doctype html>
@@ -132,6 +140,10 @@ if (!loaded.state) {
     <section>
       <h2>Orchestration</h2>
       ${orchestrationMarkup}
+    </section>
+    <section>
+      <h2>Agent Operations</h2>
+      ${agentOperationsMarkup}
     </section>
     <section>
       <h2>Provider State</h2>

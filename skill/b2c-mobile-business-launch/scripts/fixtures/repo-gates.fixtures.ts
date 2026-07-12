@@ -176,6 +176,16 @@ export function register(h: Harness): void {
   writeFileSync(path.join(templateSafetyClean, "component.tsx"), 'import { View } from "react-native";\nexport const Ok = View;\n', "utf8");
   runFixture("template safety passes on native-animation-only code", templateSafetyClean, "check-template-safety.ts", 0);
 
+  const templateSafetyStaleMobai = makeEmptyFixture("template-safety-stale-mobai");
+  writeFileSync(path.join(templateSafetyStaleMobai, "TESTING.md"), "Call mcp__mobai__get_screenshot directly.\n", "utf8");
+  runFixture(
+    "template safety rejects hardcoded MobAI MCP identifiers",
+    templateSafetyStaleMobai,
+    "check-template-safety.ts",
+    1,
+    "template_safety.stale_mobai_mcp_name",
+  );
+
   const templateSafetyBad = makeEmptyFixture("template-safety-framer-motion");
   writeFileSync(path.join(templateSafetyBad, "component.tsx"), 'import { motion } from "framer-motion";\nexport const Bad = motion.div;\n', "utf8");
   runFixture(

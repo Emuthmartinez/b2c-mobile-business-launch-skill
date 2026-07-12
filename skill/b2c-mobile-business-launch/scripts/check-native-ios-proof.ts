@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { asArray, asString, getPath, issue, loadProjectState, parseCliArgs, readText, reportAndExit, type Issue } from "./lib/launch-state.js";
 
@@ -33,6 +33,10 @@ if (hasIos && engineeringStatus === "done" && !readiness) {
 
 if (hasIos && readiness && shouldValidateReadiness(readiness.text, engineeringStatus)) {
   validateReadiness(readiness.text, readiness.relativePath);
+  if (engineeringStatus === "done") {
+    validateCriticalMatrix(readiness.text, readiness.relativePath);
+    validateGroundedEvidence(readiness.text, readiness.relativePath);
+  }
 }
 
 if (hasIos && screenshots && hasReadyClaim(screenshots.text)) {
@@ -47,6 +51,55 @@ function validateReadiness(text: string, file: string): void {
     ["Native iOS Proof", "native iOS proof", "iOS proof", "Apple simulator/device proof"],
     "native_ios_proof.section_missing",
     "PRODUCTION_READINESS.md must include a native iOS proof section before iOS readiness claims.",
+    file,
+  );
+  requireAny(
+    text,
+    ["Native iOS Launch-Critical Test Matrix", "Launch-Critical Test Matrix"],
+    "native_ios_proof.test_matrix_missing",
+    "Native iOS readiness needs a launch-critical journey and risk matrix, not tool-route proof alone.",
+    file,
+  );
+  requireAll(
+    text,
+    [".xctestplan", "unit", "integration", "UI", "performance"],
+    "native_ios_proof.test_plan_coverage_missing",
+    "Native iOS proof must name a prerelease .xctestplan and unit, integration, UI, and performance coverage.",
+    file,
+  );
+  requireAll(
+    text,
+    ["device", "OS", "locale", "Dynamic Type", "light", "dark"],
+    "native_ios_proof.device_locale_presentation_matrix_missing",
+    "Native iOS proof must cover device/OS/locale plus Dynamic Type and light/dark appearance variants.",
+    file,
+  );
+  requireAll(
+    text,
+    ["permission", "denied", "offline", "retry", "background", "foreground", "deep link", "notification", "interruption"],
+    "native_ios_proof.resilience_matrix_missing",
+    "Native iOS proof must cover denied permissions, offline/retry, lifecycle transitions, deep links, notifications, and interruptions.",
+    file,
+  );
+  requireAny(
+    text,
+    ["performAccessibilityAudit", "accessibility audit"],
+    "native_ios_proof.accessibility_audit_missing",
+    "Native iOS proof must include an accessibility audit route and evidence.",
+    file,
+  );
+  requireAll(
+    text,
+    ["StoreKit", "entitlement", "restore", "refund"],
+    "native_ios_proof.purchase_matrix_missing",
+    "Native iOS proof must cover StoreKit purchase, entitlement, restore, and refund/cancel state where monetization is in scope.",
+    file,
+  );
+  requireAll(
+    text,
+    ["Release configuration", "physical device"],
+    "native_ios_proof.release_device_missing",
+    "Native iOS proof must record Release-configuration physical-device coverage or an explicit blocker/not-applicable reason.",
     file,
   );
   requireAny(
@@ -161,6 +214,101 @@ function validateReadiness(text: string, file: string): void {
   }
 }
 
+function validateGroundedEvidence(text: string, file: string): void {
+  const candidates = Array.from(text.matchAll(/`([^`]+\.(?:xcresult|png|jpe?g|mp4|mov|log|json))`/gi))
+    .map((match) => match[1])
+    .filter((candidate): candidate is string => Boolean(candidate));
+  const existing = candidates.filter((candidate) => isGroundedEvidence(candidate));
+  if (candidates.length === 0 || existing.length === 0) {
+    issues.push(
+      issue(
+        "error",
+        "native_ios_proof.grounded_evidence_missing",
+        "Done iOS engineering needs at least one repo-relative backtick-quoted .xcresult, screenshot/video, log, or JSON evidence path that exists on disk.",
+        file,
+      ),
+    );
+  }
+}
+
+function validateCriticalMatrix(text: string, file: string): void {
+  const headingIndex = text.toLowerCase().indexOf("native ios launch-critical test matrix");
+  if (headingIndex < 0) return;
+  const lines = text.slice(headingIndex).split(/\r?\n/);
+  const tableStart = lines.findIndex((line) => line.trim().startsWith("| Risk / journey"));
+  const rows: string[][] = [];
+  if (tableStart >= 0) {
+    for (const line of lines.slice(tableStart + 2)) {
+      if (!line.trim().startsWith("|")) break;
+      rows.push(
+        line
+          .split("|")
+          .slice(1, -1)
+          .map((cell) => cell.trim()),
+      );
+    }
+  }
+  const expected = [
+    "cold launch",
+    "account lifecycle",
+    "purchase lifecycle",
+    "permissions",
+    "resilience",
+    "accessibility",
+    "localization",
+    "performance",
+    "release device",
+  ];
+  const seenEvidence = new Set<string>();
+  for (const journey of expected) {
+    const row = rows.find((cells) => cells[0]?.toLowerCase().includes(journey));
+    if (!row) {
+      issues.push(issue("error", "native_ios_proof.matrix_row_missing", `Done iOS engineering needs the ${journey} matrix row.`, file));
+      continue;
+    }
+    const evidence = row[3] ?? "";
+    const provider = row[4] ?? "";
+    const result = row[5] ?? "";
+    if (!result || /pending/i.test(result)) {
+      issues.push(issue("error", "native_ios_proof.matrix_row_pending", `${journey} cannot remain Pending when iOS engineering is done.`, file));
+      continue;
+    }
+    if (/^(blocked|not applicable|n-a)/i.test(result)) {
+      if (!/20\d{2}-\d{2}-\d{2}/.test(result) || !/[:;-]\s*\S+/.test(result)) {
+        issues.push(issue("error", "native_ios_proof.matrix_deferral_unexplained", `${journey} needs a dated blocked/not-applicable reason.`, file));
+      }
+      continue;
+    }
+    if (!/pass(?:ed)?/i.test(result)) {
+      issues.push(issue("error", "native_ios_proof.matrix_result_invalid", `${journey} result must be Passed or a dated blocked/not-applicable reason.`, file));
+      continue;
+    }
+    const evidencePath = Array.from(evidence.matchAll(/`([^`]+\.(?:xcresult|png|jpe?g|mp4|mov|log|json))`/gi))[0]?.[1];
+    if (!evidencePath || !isGroundedEvidence(evidencePath)) {
+      issues.push(issue("error", "native_ios_proof.matrix_evidence_missing", `${journey} needs its own existing repo-relative evidence artifact.`, file));
+    } else if (seenEvidence.has(evidencePath)) {
+      issues.push(issue("error", "native_ios_proof.matrix_evidence_reused", `${journey} reuses another row's evidence; attach row-specific proof.`, file));
+    } else {
+      seenEvidence.add(evidencePath);
+    }
+    if (!provider || /pending/i.test(provider)) {
+      issues.push(
+        issue("error", "native_ios_proof.matrix_provider_correlation_missing", `${journey} needs provider correlation or an explicit n-a reason.`, file),
+      );
+    }
+  }
+}
+
+function isGroundedEvidence(candidate: string): boolean {
+  if (path.isAbsolute(candidate) || candidate.split(/[\\/]/).includes("..")) return false;
+  const fullPath = path.join(args.root, candidate);
+  if (!existsSync(fullPath)) return false;
+  if (/\.xcresult$/i.test(candidate)) {
+    return statSync(fullPath).isDirectory();
+  }
+  return statSync(fullPath).isFile();
+}
+
 function validateScreenshotCaptureRoute(text: string, file: string): void {
   requireAny(
     text,
@@ -206,6 +354,13 @@ function firstExistingText(candidates: string[]): { relativePath: string; text: 
 
 function requireAny(text: string, terms: string[], code: string, message: string, file: string): void {
   if (!includesAny(text, terms)) {
+    issues.push(issue("error", code, message, file));
+  }
+}
+
+function requireAll(text: string, terms: string[], code: string, message: string, file: string): void {
+  const lower = text.toLowerCase();
+  if (terms.some((term) => !lower.includes(term.toLowerCase()))) {
     issues.push(issue("error", code, message, file));
   }
 }

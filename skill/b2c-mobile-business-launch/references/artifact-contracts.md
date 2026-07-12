@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -23,6 +23,9 @@ CLAUDE.md                 # optional tool-specific addendum that points back to 
 APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
 PROJECT_STATE.yaml        # compact machine-readable phase, autonomy, lane, provider, proof, blocker, and failure-card state
 launch-cockpit.html       # rendered founder-visible dashboard over PROJECT_STATE.yaml
+AGENT_OPERATIONS.md       # human-readable capability, approval, authenticated-action, and research/media operations log
+operations/agent-operations.json # structured capability inventory, approval envelopes, action proof, and reconciliation state
+operations/agent-operations.schema.json # portable machine contract for the structured operations ledger
 state/business.json       # Design Room source of truth for business identity, surfaces, version log, and control-plane panels
 state/theme.tokens.json   # semantic design tokens consumed by Design Room render and downstream surfaces
 design-room.html          # static rendered Design Room with design-state-hash
@@ -88,6 +91,8 @@ assets/                   # visual references, screenshot mockups, production as
 AUDIT_PROMPT.md           # independent audit brief for public funnel or app
 agents/                   # simple role prompts/configs: orchestrator, marketing, engineering, security, product, design, customer success
 ```
+
+`AGENT_OPERATIONS.md` and its JSON ledger are required before browser, account/provider, social, or native-device operations are claimed ready. Use `frontier-agent-operations.md`; access is not authorization, and completed external mutations need exact-target preflight, a scoped approval envelope, sanitized before/after read-back proof, rollback/recovery, and canonical state reconciliation. Gate with `check:agent-operations`.
 
 When handing to Rork or another generated-app builder, duplicate the needed subset into:
 
@@ -490,7 +495,7 @@ Must include:
 - Sentry/crash/release-health status or a documented no-Sentry reason
 - security release proof: `SECURITY.md`, `security-review.html`, `check:security` output, scanner/security-review evidence or founder-approved blocked route, app-integrity decision, accepted risks, and incident-response route
 - release-build or staging-build proof that mocks are disabled and secrets are not bundled
-- `check:native-ios-proof` result when iOS engineering, screenshots, app-preview, or production-readiness lanes are in scope
+- `check:native-ios` result when iOS engineering, screenshots, app-preview, or production-readiness lanes are in scope
 - secret-management proof: `SECRETS.md` coverage, Doppler/provider setup, `doppler run --` or approved command wrapper, CI/deploy injection, secret scan, and public-bundle check
 - remaining blockers and founder-only gates
 

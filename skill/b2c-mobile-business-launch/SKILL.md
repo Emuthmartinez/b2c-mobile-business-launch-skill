@@ -36,7 +36,7 @@ When this skill activates from a broad launch, business-prep, app-submission, or
 
 Do not stop with instructions like "now use the ASO skill", "next ask an agent to use RevenueCat", or "you should run the store-console workflow." Route to those references and tools directly. If another specialist skill is available and relevant, use it as part of the same task; if it is unavailable, record the blocked or founder-approved fallback route.
 
-Only pause for founder-only gates: credentials, secrets, account access, paid signups or spend, legal approval, pricing approval, domain purchases, public posting/scheduling, destructive actions, or final submission/release decisions. When paused, leave the lane state, blocker, proof, and exact next action in `PROJECT_STATE.yaml` and `launch-cockpit.html`.
+Only pause for founder-only gates: credentials, secrets, account access, spend, legal/pricing approval, domains, public posting, destructive actions, or final submission/release decisions. Before browser, account/provider, social, or device operations, load [`references/frontier-agent-operations.md`](references/frontier-agent-operations.md); inventory capabilities, scope approval, and reconcile `AGENT_OPERATIONS.md`, its JSON ledger, state, and cockpit.
 
 Provider-backed readiness must include live proof or explicit founder-only gates in `PROVIDER_PROOF.md`; setup prose alone cannot mark analytics, revenue, email, store, security, or engineering lanes done. Load [`references/provider-proof.md`](references/provider-proof.md) when any provider-backed lane approaches readiness.
 

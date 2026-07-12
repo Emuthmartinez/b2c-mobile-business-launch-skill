@@ -39,7 +39,7 @@ Load before this audit:
 
 Do this BEFORE scoring — the ten rows below are a floor, not the scope. "Test every feature/user journey" means every reachable surface, not just the default flows.
 
-1. `mcp__mobai__list_devices` → note the device UUID → `start_bridge` if no bridge is active → `mcp__mobai__list_apps`.
+1. Read the current MobAI MCP schema/resource (or run `mobai devices list --json`) → note the device ID → start the bridge through the exposed tool or `mobai bridge start` if needed → list installed apps through the current route.
 2. Cold-start the app and walk it breadth-first: open every tab, every settings row, every empty state, every locked/upsell surface, every failure path you can trigger (airplane mode, bad input, forced logout).
 3. Group the reachable screens into journeys by user intent (e.g. referral redemption, in-app event, social share, widget tap, account recovery, AI-delegation flow). Add a row per app-specific journey to the table below.
 4. Confirm every journey has at least one row before you begin per-journey scoring. A journey left at "Pending" with no walk is an incomplete audit, not a pass.
@@ -556,16 +556,16 @@ Use this protocol to walk each journey on a real device and collect per-screen e
 
 ### Pre-Walk Setup
 
-1. Confirm MobAI bridge is active: `mcp__mobai__list_devices` → identify target device UUID.
+1. Confirm the MobAI bridge is active through the current MCP schema or `mobai devices list --json`; identify and pin the target device ID.
 2. Confirm app is installed and at a clean state (fresh install or cleared app data for onboarding journeys).
-3. Start bridge if absent: `mcp__mobai__start_bridge`.
+3. Start the bridge with the current exposed MobAI bridge tool, or the verified `mobai bridge start` CLI route when no connector is exposed.
 4. For onboarding journeys: uninstall and reinstall to guarantee a cold-start state.
 
 ### Per-Screen Evidence Protocol
 
 For each screen transition during a journey walk:
 
-1. Take a screenshot: `mcp__mobai__get_screenshot` → attach to the relevant step row.
+1. Take a screenshot with the current exposed MobAI screenshot tool, or verified `mobai screenshot DEVICE --path DIR --name FILE` CLI route, then attach it to the relevant step row.
 2. Record the screen label and current state.
 3. Assign emotional valence (−5 to +5) based on what a first-time user would likely feel at this moment.
 4. Narrate the step from the user's perspective (Lens 1 test): write one sentence starting with "I am..."

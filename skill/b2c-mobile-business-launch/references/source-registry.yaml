@@ -1885,3 +1885,48 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/google-play-release.md
     notes: The yearly-ratcheting target API level requirement for new apps and updates; check at release time, never from memory.
+  - id: developer-apple-com-documentation-xcode-testing
+    name: Apple Xcode testing overview
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/testing
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Official Apple overview for unit, integration, UI, performance, and device testing strategy.
+  - id: developer-apple-com-documentation-xcode-organizing-tests
+    name: Apple test plan guidance
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/organizing-tests-to-improve-feedback
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Official Apple guidance for test plans, device configurations, languages, and staged feedback.
+  - id: developer-apple-com-documentation-accessibility-audits
+    name: Apple app accessibility audits
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/accessibility/performing-accessibility-audits-for-your-app
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Official Apple accessibility audit guidance used by the native launch-critical matrix.
+  - id: developer-apple-com-documentation-xcode-testing-localizations
+    name: Apple localization testing
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/testing-localizations-when-running-your-app
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Official Apple guidance for running locale and language variants during app testing.
+  - id: developer-apple-com-documentation-xcode-performance-tests
+    name: Apple performance testing
+    source_type: official_docs
+    url: https://developer.apple.com/documentation/xcode/writing-and-running-performance-tests
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
+    notes: Official Apple guidance for performance tests and baselines in the native release matrix.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "updatedAt": "2026-05-30",
+  "updatedAt": "2026-07-12",
   "business": {
     "name": "App Name",
     "slug": "app-name",
@@ -80,6 +80,19 @@
         ],
         "renderedArtifacts": [
           "design-room.html"
+        ]
+      },
+      {
+        "id": "agent-ops",
+        "name": "Agent Operations",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "AGENT_OPERATIONS.md",
+          "operations/agent-operations.json"
+        ],
+        "renderedArtifacts": [
+          "launch-cockpit.html"
         ]
       },
       {

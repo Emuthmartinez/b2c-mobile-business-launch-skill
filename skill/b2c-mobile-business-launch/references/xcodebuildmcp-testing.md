@@ -39,6 +39,11 @@ Refresh these before implementation because XcodeBuildMCP versions, tool names, 
 - Local skill when installed: `xcodebuildmcp-cli`
 - SnapshotPreviews: `https://github.com/getsentry/SnapshotPreviews`
 - serve-sim: `https://github.com/EvanBacon/serve-sim`
+- Apple testing overview: `https://developer.apple.com/documentation/xcode/testing`
+- Apple test plans: `https://developer.apple.com/documentation/xcode/organizing-tests-to-improve-feedback`
+- Apple accessibility audits: `https://developer.apple.com/documentation/accessibility/performing-accessibility-audits-for-your-app`
+- Apple localization testing: `https://developer.apple.com/documentation/xcode/testing-localizations-when-running-your-app`
+- Apple performance tests: `https://developer.apple.com/documentation/xcode/writing-and-running-performance-tests`
 
 ## Live Documentation Gate
 
@@ -258,6 +263,8 @@ For production-readiness proof:
 3. Build and run the app on the target simulator/device.
 4. Run unit and UI tests where available.
 5. Use UI automation snapshots before gestures.
+
+Before calling native engineering done, complete the launch-critical matrix in `PRODUCTION_READINESS.md`: a named prerelease `.xctestplan`; unit/integration/UI/performance targets; device/OS/locale and light/dark/Dynamic Type variants; accessibility audit; permission allowed/denied; offline/error/retry; deep-link/notification/background/foreground/interruption paths; StoreKit local plus sandbox/TestFlight entitlement/restore/refund state; performance budgets; and Release-configuration physical-device coverage or a named blocker. Record existing `.xcresult`, screenshot/video, log, metrics JSON, and provider-correlation paths. A tool invocation or simulator compile is not journey proof.
 6. Capture screenshots/video only after the target state is reached.
 7. Use SnapshotPreviews for preview coverage when previews exist, and record that it is preview-only coverage.
 8. Use serve-sim when a browser-visible simulator/control surface is useful for CLI agents or remote Mac workflows.
