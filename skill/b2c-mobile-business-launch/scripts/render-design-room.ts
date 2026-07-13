@@ -55,7 +55,7 @@ if (!args.staticOnly) {
 reportAndExit("Design Room render", loaded.issues);
 
 function resolveViteBin(): string | undefined {
-  const candidates = [path.join(skillRoot, "node_modules/.bin/vite"), path.resolve(skillRoot, "../../..", "node_modules/.bin/vite")];
+  const candidates = [path.join(skillRoot, "node_modules/.bin/vite"), path.resolve(skillRoot, "../..", "node_modules/.bin/vite")];
   return candidates.find((candidate) => existsSync(candidate));
 }
 

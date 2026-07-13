@@ -11,7 +11,7 @@ const skillRoot = path.resolve(scriptDir, "..");
 const scenarioDir = path.resolve(scriptDir, "../evals/launchbench");
 const issues: Issue[] = [];
 function resolveTsxBin(): string {
-  const candidates = [path.join(skillRoot, "node_modules/.bin/tsx"), path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx")];
+  const candidates = [path.join(skillRoot, "node_modules/.bin/tsx"), path.resolve(skillRoot, "../..", "node_modules/.bin/tsx")];
   return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
 }
 
@@ -86,6 +86,7 @@ const requiredBehavioral = new Set([
   "monetization-cozy-default-stack-unexamined",
   "browser-capability-skipped",
   "founder-zero-operator-skipped",
+  "founder-gate-jargon-without-choice",
 ]);
 
 if (!existsSync(scenarioDir)) {

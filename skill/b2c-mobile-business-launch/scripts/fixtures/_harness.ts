@@ -17,7 +17,7 @@ const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 export const skillRoot = path.resolve(scriptDir, "../..");
 
 function resolveTsxBin(): string {
-  const candidates = [path.join(skillRoot, "node_modules/.bin/tsx"), path.resolve(skillRoot, "../../..", "node_modules/.bin/tsx")];
+  const candidates = [path.join(skillRoot, "node_modules/.bin/tsx"), path.resolve(skillRoot, "../..", "node_modules/.bin/tsx")];
   return candidates.find((candidate) => existsSync(candidate)) ?? "tsx";
 }
 

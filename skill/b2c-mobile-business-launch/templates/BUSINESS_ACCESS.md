@@ -10,9 +10,19 @@ The agent runs setup and ongoing operations. The founder keeps ownership, accoun
 
 ## One Next Action
 
+- Phase: Set the foundation (`phase_0_orient`)
+- Outcome: A clear working identity and the next safe setup step.
+- Decision type: Working-scope choice; the launch workflow requests it, but it is not a legal or platform rule.
 - What this is: Establish the founder-owned business identity that every account will use.
 - Why now: It prevents scattered personal logins and makes later operator access revocable.
+- Definitions: None needed for this decision.
 - Founder action: Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time.
+- Question mode: AskUserQuestion when available; otherwise present the same choices in plain text and wait for an explicit selection.
+- Recommended choice: Choose a name - The name remains provisional until collision and storefront checks are complete. Agent next: Inspect current repo and public identity state, then guide the first secure business account step. Evidence: The business identity gate can move forward with a clearly provisional name.
+- Defer choice: Decide later - Account creation and public naming remain blocked, but reversible product inspection continues. Agent next: Continue repo and product-state inspection without creating identity-bound accounts or public assets. Evidence: The identity lane remains partial and cannot be used as launch-ready proof.
+- Skip/bypass policy: Safe fallback available through `decide_later`; A working name can be deferred because private, reversible discovery does not depend on it. Continue private product and repo discovery without creating identity-bound accounts.
+- Revisit before: Before creating public accounts, buying a domain, or locking store metadata.
+- Safe work while waiting: Continue read-only repo and product-state inspection; do not infer consent or create public identity assets.
 - Agent action next: Inspect current repo and public identity state, then guide the first secure business account step.
 - Success proof: Business identity and the next account are recorded in BUSINESS_ACCESS.md and this ledger.
 - Next business operation: After the identity gate clears, continue into secure account setup, research, social profiles, content, support, analytics, store work, and launch operations in priority order.

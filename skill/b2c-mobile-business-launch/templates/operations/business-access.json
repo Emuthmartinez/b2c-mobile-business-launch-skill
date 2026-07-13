@@ -1,25 +1,79 @@
 {
   "$schema": "./business-access.schema.json",
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "updatedAt": "",
   "status": "not_started",
   "founderModel": {
     "assumedExperience": "beginner",
     "agentRole": "business_operator",
     "interactionMode": "plain_language_one_step_at_a_time",
+    "questionMode": "ask_user_question_when_available",
     "founderOwnsBusiness": true,
     "agentDrivesExecution": true,
     "neverDumpChecklist": true,
+    "currentPhase": {
+      "id": "phase_0_orient",
+      "label": "Set the foundation",
+      "outcome": "A clear working identity and the next safe setup step."
+    },
     "activeFounderGate": {
       "id": "confirm-working-name",
       "actionType": "confirmation",
       "target": "working business or app name",
+      "gateClass": "scope",
+      "origin": "skill_requirement",
+      "phase": {
+        "id": "phase_0_orient",
+        "label": "Set the foundation",
+        "outcome": "A clear working identity and the next safe setup step."
+      },
       "whatThisIs": "Establish the founder-owned business identity that every account will use.",
       "whyNow": "It prevents scattered personal logins and makes later operator access revocable.",
+      "definitions": [],
       "founderAction": "Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time.",
+      "question": {
+        "header": "Working name",
+        "prompt": "Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time.",
+        "options": [
+          {
+            "id": "choose_working_name",
+            "label": "Choose a name",
+            "route": "proceed",
+            "description": "Use a working name now so account and product research can stay organized.",
+            "consequence": "The name remains provisional until collision and storefront checks are complete.",
+            "agentActionNext": "Inspect current repo and public identity state, then guide the first secure business account step.",
+            "evidenceEffect": "The business identity gate can move forward with a clearly provisional name.",
+            "recommended": true
+          },
+          {
+            "id": "decide_later",
+            "label": "Decide later",
+            "route": "defer",
+            "description": "Keep the name open while the agent continues work that does not depend on public identity.",
+            "consequence": "Account creation and public naming remain blocked, but reversible product inspection continues.",
+            "agentActionNext": "Continue repo and product-state inspection without creating identity-bound accounts or public assets.",
+            "evidenceEffect": "The identity lane remains partial and cannot be used as launch-ready proof.",
+            "recommended": false
+          }
+        ]
+      },
+      "bypassPolicy": {
+        "mode": "fallback_allowed",
+        "optionId": "decide_later",
+        "reason": "A working name can be deferred because private, reversible discovery does not depend on it.",
+        "fallbackAction": "Continue private product and repo discovery without creating identity-bound accounts.",
+        "revisitTrigger": "Before creating public accounts, buying a domain, or locking store metadata."
+      },
+      "safeWorkWhileWaiting": "Continue read-only repo and product-state inspection; do not infer consent or create public identity assets.",
       "agentActionNext": "Inspect current repo and public identity state, then guide the first secure business account step.",
-      "successProof": "Business identity and the next account are recorded in BUSINESS_ACCESS.md and this ledger."
+      "successProof": "Business identity and the next account are recorded in BUSINESS_ACCESS.md and this ledger.",
+      "lifecycle": {
+        "status": "pending",
+        "presentedAt": "",
+        "supersedesGateId": ""
+      }
     },
+    "gateHistory": [],
     "nextFounderAction": "Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time.",
     "nextAgentAction": "Inspect current repo and public identity state, then guide the first secure business account step.",
     "nextBusinessOperation": "After the identity gate clears, continue into secure account setup, research, social profiles, content, support, analytics, store work, and launch operations in priority order."

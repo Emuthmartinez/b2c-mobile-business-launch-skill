@@ -31,6 +31,7 @@ if (!human) {
   for (const phrase of [
     "Founder-Zero Promise",
     "One Next Action",
+    "Definitions",
     "Business Identity",
     "Doppler Setup",
     "Account And Social Access",
@@ -115,6 +116,7 @@ function validateSemantics(value: Record<string, unknown>): void {
     youtube: "social",
   };
   const ids = accounts.map((entry) => asString(entry.id) ?? "");
+  const gateContractV2 = value.schemaVersion === "2.0.0";
 
   if (new Set(ids).size !== ids.length) {
     issues.push(issue("error", "founder_operator.account_id_duplicate", "Business access account IDs must be unique.", ledgerRelative));
@@ -134,6 +136,7 @@ function validateSemantics(value: Record<string, unknown>): void {
     founder.assumedExperience !== "beginner" ||
     founder.agentRole !== "business_operator" ||
     founder.interactionMode !== "plain_language_one_step_at_a_time" ||
+    (gateContractV2 && founder.questionMode !== "ask_user_question_when_available") ||
     founder.founderOwnsBusiness !== true ||
     founder.agentDrivesExecution !== true ||
     founder.neverDumpChecklist !== true
@@ -148,22 +151,72 @@ function validateSemantics(value: Record<string, unknown>): void {
     );
   }
 
-  const activeGate = isRecord(founder.activeFounderGate) ? founder.activeFounderGate : {};
-  const gateFields = ["id", "actionType", "target", "whatThisIs", "whyNow", "founderAction", "agentActionNext", "successProof"];
-  if (gateFields.some((key) => !asString(activeGate[key])?.trim())) {
+  const currentPhase = isRecord(founder.currentPhase) ? founder.currentPhase : {};
+  if (gateContractV2 && !["id", "label", "outcome"].every((key) => asString(currentPhase[key])?.trim())) {
     issues.push(
       issue(
         "error",
-        "founder_operator.active_gate_incomplete",
-        "The single active founder gate needs what this is, why now, one founder action, the agent's next action, and success proof.",
+        "founder_operator.current_phase_missing",
+        "The founder model must state the current phase, plain-language label, and outcome even when no founder decision is pending.",
         ledgerRelative,
       ),
     );
   }
-  if (activeGate.founderAction !== founder.nextFounderAction || activeGate.agentActionNext !== founder.nextAgentAction) {
-    issues.push(issue("error", "founder_operator.active_gate_drift", "Active founder gate actions must match the canonical next actions.", ledgerRelative));
+  const projectPhase = loaded.state ? asString(getPath(loaded.state, "project.phase")) : undefined;
+  if (gateContractV2 && projectPhase && currentPhase.id !== projectPhase) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.current_phase_drift",
+        "founderModel.currentPhase.id must match PROJECT_STATE project.phase so the cockpit cannot show two different phases.",
+        ledgerRelative,
+      ),
+    );
   }
-  validateSingleFounderAction(asString(founder.nextFounderAction));
+
+  const activeFounderGate = founder.activeFounderGate;
+  const hasActiveGate = isRecord(activeFounderGate);
+  const activeGate: Record<string, unknown> = hasActiveGate ? activeFounderGate : {};
+  if (!gateContractV2) {
+    issues.push(
+      issue(
+        "warning",
+        "founder_operator.gate_contract_legacy",
+        "Business access schema 1.x remains readable, but run migrate:founder-gates before changing the active gate so phase, choices, defer behavior, and lifecycle are explicit.",
+        ledgerRelative,
+      ),
+    );
+  }
+  if (hasActiveGate) {
+    const gateFields = ["id", "actionType", "target", "whatThisIs", "whyNow", "founderAction", "agentActionNext", "successProof"];
+    if (gateFields.some((key) => !asString(activeGate[key])?.trim())) {
+      issues.push(
+        issue(
+          "error",
+          "founder_operator.active_gate_incomplete",
+          "The active founder gate needs what this is, why now, one founder action, the agent's next action, and success proof.",
+          ledgerRelative,
+        ),
+      );
+    }
+    if (activeGate.founderAction !== founder.nextFounderAction || activeGate.agentActionNext !== founder.nextAgentAction) {
+      issues.push(issue("error", "founder_operator.active_gate_drift", "Active founder gate actions must match the canonical next actions.", ledgerRelative));
+    }
+    if (gateContractV2) validateFounderGateUx(founder, activeGate, currentPhase);
+    validateSingleFounderAction(asString(founder.nextFounderAction));
+  } else if (gateContractV2) {
+    if (founder.activeFounderGate !== null || founder.nextFounderAction !== "") {
+      issues.push(
+        issue(
+          "error",
+          "founder_operator.no_active_gate_invalid",
+          "When no founder decision is needed, activeFounderGate must be null and nextFounderAction must be empty while the agent continues its recorded work.",
+          ledgerRelative,
+        ),
+      );
+    }
+  }
+  if (gateContractV2) validateGateHistory(founder);
   const nextAgentAction = asString(founder.nextAgentAction) ?? "";
   const nextBusinessOperation = asString(founder.nextBusinessOperation) ?? "";
   if (
@@ -188,6 +241,212 @@ function validateSemantics(value: Record<string, unknown>): void {
   validateDoppler(doppler);
   for (const [index, account] of accounts.entries()) validateAccount(account, index);
   validateState(value, founder, doppler, accounts);
+}
+
+function validateGateHistory(founder: Record<string, unknown>): void {
+  for (const entry of asArray(founder.gateHistory).filter(isRecord)) {
+    if (entry.authority !== "agent_migration") continue;
+    const context = isRecord(entry.context) ? entry.context : {};
+    if (["actionType", "target", "whatThisIs", "whyNow", "founderAction", "agentActionNext", "successProof"].some((key) => !asString(context[key])?.trim())) {
+      issues.push(
+        issue(
+          "error",
+          "founder_operator.migration_context_missing",
+          "Migrated gates must preserve the legacy decision context in gateHistory so the agent can re-present it without inventing details.",
+          ledgerRelative,
+        ),
+      );
+    }
+  }
+}
+
+function validateFounderGateUx(founder: Record<string, unknown>, activeGate: Record<string, unknown>, currentPhase: Record<string, unknown>): void {
+  const phase = isRecord(activeGate.phase) ? activeGate.phase : {};
+  if (!["id", "label", "outcome"].every((key) => asString(phase[key])?.trim())) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_phase_missing",
+        "The active founder gate must name the current phase, its plain-language label, and the outcome this decision unlocks.",
+        ledgerRelative,
+      ),
+    );
+  }
+  if (["id", "label", "outcome"].some((key) => phase[key] !== currentPhase[key])) {
+    issues.push(issue("error", "founder_operator.active_gate_phase_drift", "The active gate phase must match founderModel.currentPhase.", ledgerRelative));
+  }
+
+  const question = isRecord(activeGate.question) ? activeGate.question : {};
+  const options = asArray(question.options).filter(isRecord);
+  const optionIds = options.map((option) => asString(option.id) ?? "");
+  if (options.length < 2 || options.length > 3 || optionIds.some((id) => !id) || new Set(optionIds).size !== optionIds.length) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_options_invalid",
+        "AskUserQuestion gates need two or three mutually exclusive choices with unique IDs.",
+        ledgerRelative,
+      ),
+    );
+  }
+  if (options.filter((option) => option.recommended === true).length !== 1 || options[0]?.recommended !== true) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_recommendation_invalid",
+        "Exactly one founder choice must be recommended, and it must be first.",
+        ledgerRelative,
+      ),
+    );
+  }
+  const optionFields = ["id", "label", "route", "description", "consequence", "agentActionNext", "evidenceEffect"];
+  if (options.some((option) => optionFields.some((key) => !asString(option[key])?.trim()) || typeof option.recommended !== "boolean")) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_option_incomplete",
+        "Every founder choice must explain the route, tradeoff, consequence, agent action, and evidence effect.",
+        ledgerRelative,
+      ),
+    );
+  }
+
+  const recommended = options.find((option) => option.recommended === true);
+  if (
+    asString(question.prompt) !== asString(founder.nextFounderAction) ||
+    (recommended && asString(recommended.agentActionNext) !== asString(activeGate.agentActionNext))
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_question_drift",
+        "The rendered question and recommended route must match the canonical founder and agent next actions.",
+        ledgerRelative,
+      ),
+    );
+  }
+
+  const definitions = asArray(activeGate.definitions).filter(isRecord);
+  const definedTerms = new Set(definitions.map((entry) => (asString(entry.term) ?? "").toLowerCase()));
+  const founderFacing = [
+    asString(activeGate.whatThisIs),
+    asString(activeGate.whyNow),
+    asString(question.prompt),
+    asString(activeGate.agentActionNext),
+    asString(activeGate.safeWorkWhileWaiting),
+    ...options.flatMap((option) => [
+      asString(option.label),
+      asString(option.description),
+      asString(option.consequence),
+      asString(option.agentActionNext),
+      asString(option.evidenceEffect),
+    ]),
+  ]
+    .filter((value): value is string => Boolean(value))
+    .join(" ")
+    .toLowerCase();
+  const bypassForTerms = isRecord(activeGate.bypassPolicy) ? activeGate.bypassPolicy : {};
+  const bypassFacing = [asString(bypassForTerms.reason), asString(bypassForTerms.fallbackAction), asString(bypassForTerms.revisitTrigger)]
+    .filter((value): value is string => Boolean(value))
+    .join(" ")
+    .toLowerCase();
+  const specialistTerms = [
+    "compensation",
+    "recruitment",
+    "moderator",
+    "retention",
+    "qualified reviewer",
+    "incident response",
+    "data operator",
+    "privacy operator",
+    "data/privacy operator",
+  ];
+  const undefinedTerms = specialistTerms.filter((term) => (founderFacing.includes(term) || bypassFacing.includes(term)) && !definedTerms.has(term));
+  if (undefinedTerms.length > 0) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_terms_undefined",
+        `Define founder-facing specialist terms before asking: ${undefinedTerms.join(", ")}.`,
+        ledgerRelative,
+      ),
+    );
+  }
+
+  const bypass = isRecord(activeGate.bypassPolicy) ? activeGate.bypassPolicy : {};
+  const bypassOption = options.find((option) => option.id === bypass.optionId);
+  if (!bypassOption || !["fallback_allowed", "defer_only"].includes(asString(bypass.mode) ?? "")) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_bypass_invalid",
+        "The gate must point to a real fallback or defer choice and explain when the decision returns.",
+        ledgerRelative,
+      ),
+    );
+  }
+  if (
+    bypassOption &&
+    ((bypass.mode === "fallback_allowed" && !["fallback", "defer"].includes(asString(bypassOption.route) ?? "")) ||
+      (bypass.mode === "defer_only" && !["defer", "stop"].includes(asString(bypassOption.route) ?? "")))
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_bypass_invalid",
+        "The bypassPolicy option must be a fallback/defer route, never the recommended proceed route.",
+        ledgerRelative,
+      ),
+    );
+  }
+  const protectedClasses = new Set(["access", "spend", "legal", "pricing", "public_action", "release", "destructive"]);
+  if (
+    protectedClasses.has(asString(activeGate.gateClass) ?? "") &&
+    (bypass.mode !== "defer_only" || (bypassOption && !["defer", "stop"].includes(asString(bypassOption.route) ?? "")))
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_unsafe_bypass",
+        "Access, money, legal, pricing, public, release, and destructive gates may be deferred, but never bypassed or treated as approved.",
+        ledgerRelative,
+      ),
+    );
+  }
+  for (const key of ["reason", "fallbackAction", "revisitTrigger"]) {
+    if (!asString(bypass[key])?.trim()) {
+      issues.push(
+        issue(
+          "error",
+          "founder_operator.active_gate_bypass_invalid",
+          "Fallback and defer routes must explain why they are safe, what the agent does next, and when the choice returns.",
+          ledgerRelative,
+        ),
+      );
+      break;
+    }
+  }
+  if (!/do not infer consent|no consent is inferred/i.test(asString(activeGate.safeWorkWhileWaiting) ?? "")) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_silence_policy_missing",
+        "Safe work while waiting must state that silence does not grant consent.",
+        ledgerRelative,
+      ),
+    );
+  }
+  const lifecycle = isRecord(activeGate.lifecycle) ? activeGate.lifecycle : {};
+  if (lifecycle.status !== "pending") {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.active_gate_not_pending",
+        "Only a pending gate belongs in activeFounderGate; resolved, stale, or superseded gates move to gateHistory.",
+        ledgerRelative,
+      ),
+    );
+  }
 }
 
 function validateDoppler(doppler: Record<string, unknown>): void {
@@ -348,6 +607,23 @@ function validateState(
     next_agent_action: founder.nextAgentAction,
     next_business_operation: founder.nextBusinessOperation,
   };
+  if (value.schemaVersion === "2.0.0") {
+    const activeGate = isRecord(founder.activeFounderGate) ? founder.activeFounderGate : undefined;
+    const phase = isRecord(founder.currentPhase) ? founder.currentPhase : {};
+    const bypass = isRecord(activeGate?.bypassPolicy) ? activeGate.bypassPolicy : {};
+    const lifecycle = isRecord(activeGate?.lifecycle) ? activeGate.lifecycle : {};
+    Object.assign(expected, {
+      current_phase: phase.id,
+      current_phase_label: phase.label,
+      current_phase_outcome: phase.outcome,
+      active_gate_id: activeGate?.id ?? "",
+      active_gate_class: activeGate?.gateClass ?? "none",
+      active_gate_origin: activeGate?.origin ?? "none",
+      active_gate_status: lifecycle.status ?? "none",
+      active_gate_bypass_mode: bypass.mode ?? "none",
+      question_mode: founder.questionMode,
+    });
+  }
   for (const [key, expectedValue] of Object.entries(expected)) {
     if (stateOperator[key] !== expectedValue) {
       issues.push(
@@ -365,15 +641,49 @@ function validateState(
   const agentAction = asString(founder.nextAgentAction) ?? "";
   const nextBusinessOperation = asString(founder.nextBusinessOperation) ?? "";
   const activeGate = isRecord(founder.activeFounderGate) ? founder.activeFounderGate : {};
-  const humanGateValues = [
-    founderAction,
-    agentAction,
-    nextBusinessOperation,
-    ...["whatThisIs", "whyNow", "successProof"].map((key) => asString(activeGate[key]) ?? ""),
-  ];
+  const hasActiveGate = isRecord(founder.activeFounderGate);
+  const phase = isRecord(founder.currentPhase) ? founder.currentPhase : {};
+  const question = isRecord(activeGate.question) ? activeGate.question : {};
+  const options = asArray(question.options).filter(isRecord);
+  const bypass = isRecord(activeGate.bypassPolicy) ? activeGate.bypassPolicy : {};
+  const definitions = asArray(activeGate.definitions).filter(isRecord);
+  const humanGateValues = [agentAction, nextBusinessOperation];
+  if (value.schemaVersion === "2.0.0") humanGateValues.push(asString(phase.label) ?? "", asString(phase.outcome) ?? "");
+  if (hasActiveGate) humanGateValues.push(founderAction, ...["whatThisIs", "whyNow", "successProof"].map((key) => asString(activeGate[key]) ?? ""));
+  if (value.schemaVersion === "2.0.0") {
+    if (hasActiveGate) {
+      humanGateValues.push(
+        ...definitions.flatMap((entry) => [asString(entry.term) ?? "", asString(entry.meaning) ?? ""]),
+        ...options.flatMap((option) => [
+          asString(option.label) ?? "",
+          asString(option.consequence) ?? "",
+          asString(option.agentActionNext) ?? "",
+          asString(option.evidenceEffect) ?? "",
+        ]),
+        asString(bypass.reason) ?? "",
+        asString(bypass.revisitTrigger) ?? "",
+        asString(activeGate.safeWorkWhileWaiting) ?? "",
+      );
+    }
+  }
   if (!human || humanGateValues.some((value) => !value || !human.includes(value))) {
     issues.push(
       issue("error", "founder_operator.human_next_action_stale", "BUSINESS_ACCESS.md must mirror the current founder and agent next actions.", humanPath),
+    );
+  }
+  const humanOneNextAction = human?.split("## One Next Action")[1]?.split("\n## ")[0] ?? "";
+  if (
+    value.schemaVersion === "2.0.0" &&
+    !hasActiveGate &&
+    (!humanOneNextAction.includes("No founder decision is pending") || /Recommended choice:|Question mode:/.test(humanOneNextAction))
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.human_stale_gate_visible",
+        "BUSINESS_ACCESS.md must remove stale choices when no founder decision is pending.",
+        humanPath,
+      ),
     );
   }
   const cockpitSection = cockpit?.split("<h2>Business Operator Bootstrap</h2>")[1]?.split("</section>")[0] ?? "";
@@ -381,12 +691,44 @@ function validateState(
     !cockpitSection.includes(`>${asString(value.status) ?? ""}</span>`) ||
     !cockpitSection.includes(`Doppler: ${asString(doppler.status) ?? ""}`) ||
     !cockpitSection.includes(`Social access: ${socialStatus}`) ||
-    !cockpitSection.includes(escapeHtml(founderAction)) ||
+    (hasActiveGate && !cockpitSection.includes(escapeHtml(founderAction))) ||
     !cockpitSection.includes(escapeHtml(agentAction)) ||
-    !cockpitSection.includes(escapeHtml(nextBusinessOperation))
+    !cockpitSection.includes(escapeHtml(nextBusinessOperation)) ||
+    (value.schemaVersion === "2.0.0" &&
+      hasActiveGate &&
+      [
+        asString(phase.label) ?? "",
+        asString(phase.outcome) ?? "",
+        ...definitions.flatMap((entry) => [asString(entry.term) ?? "", asString(entry.meaning) ?? ""]),
+        ...options.flatMap((option) => [
+          asString(option.label) ?? "",
+          asString(option.consequence) ?? "",
+          asString(option.agentActionNext) ?? "",
+          asString(option.evidenceEffect) ?? "",
+        ]),
+        asString(bypass.reason) ?? "",
+        asString(bypass.revisitTrigger) ?? "",
+      ].some((entry) => !entry || !cockpitSection.includes(escapeHtml(entry))))
   ) {
     issues.push(
       issue("error", "founder_operator.cockpit_stale", "launch-cockpit.html must mirror founder-zero bootstrap state and next actions.", "launch-cockpit.html"),
+    );
+  }
+  if (
+    value.schemaVersion === "2.0.0" &&
+    !hasActiveGate &&
+    (!cockpitSection.includes("No founder decision is pending") ||
+      cockpitSection.includes("(Recommended)") ||
+      cockpitSection.includes("AskUserQuestion when available") ||
+      cockpitSection.includes("<h3>Skip Or Defer</h3>"))
+  ) {
+    issues.push(
+      issue(
+        "error",
+        "founder_operator.cockpit_stale_gate_visible",
+        "The cockpit must remove stale choices when no founder decision is pending.",
+        "launch-cockpit.html",
+      ),
     );
   }
 

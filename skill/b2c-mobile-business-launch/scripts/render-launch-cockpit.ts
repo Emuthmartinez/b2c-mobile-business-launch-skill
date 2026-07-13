@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { asArray, asString, getPath, isRecord, loadProjectState, parseCliArgs, reportAndExit, writeText } from "./lib/launch-state.js";
+import { asArray, asString, getPath, isRecord, loadProjectState, parseCliArgs, readText, reportAndExit, writeText } from "./lib/launch-state.js";
+import { renderFounderGateMarkup } from "./lib/founder-gate-presentation.js";
 
 const args = parseCliArgs(process.argv.slice(2));
 const loaded = loadProjectState(args);
@@ -32,6 +33,10 @@ if (!loaded.state) {
   const tools = isRecord(getPath(state, "tools")) ? (getPath(state, "tools") as Record<string, unknown>) : {};
   const orchestration = isRecord(getPath(state, "orchestration")) ? (getPath(state, "orchestration") as Record<string, unknown>) : {};
   const businessOperator = isRecord(getPath(state, "business_operator")) ? (getPath(state, "business_operator") as Record<string, unknown>) : {};
+  const accessLedgerSource = readText(args.root, "operations/business-access.json");
+  if (!accessLedgerSource) throw new Error("operations/business-access.json is required before the cockpit can render.");
+  const accessLedger = parseJsonRecord(accessLedgerSource);
+  const founderModel = isRecord(accessLedger?.founderModel) ? accessLedger.founderModel : {};
   const agentOperations = isRecord(getPath(state, "agent_operations")) ? (getPath(state, "agent_operations") as Record<string, unknown>) : {};
   const cards = asArray(getPath(state, "failure_cards.active"));
   const gates = asArray(getPath(state, "autonomy.founder_only_gates"));
@@ -81,12 +86,7 @@ if (!loaded.state) {
     <article class="card"><h3>Reconciliation</h3><p>Last action: ${escapeHtml(agentOperations.last_action_id ?? "none")}</p><p>State reconciled: ${escapeHtml(agentOperations.state_reconciled ?? false)}</p></article>
   </div>`;
 
-  const businessOperatorMarkup = `<div class="grid">
-    <article class="card"><h3>Status</h3><p><span class="status ${escapeHtml(businessOperator.status ?? "not_started")}">${escapeHtml(businessOperator.status ?? "not_started")}</span></p><p class="muted">Founder model: ${escapeHtml(businessOperator.founder_experience ?? "beginner_assumed")}</p><p>Agent role: ${escapeHtml(businessOperator.agent_role ?? "business_operator")}</p></article>
-    <article class="card"><h3>Access</h3><p>Doppler: ${escapeHtml(businessOperator.doppler_status ?? "not_started")}</p><p>Social access: ${escapeHtml(businessOperator.social_access_status ?? "not_started")}</p><p>Ready accounts: ${escapeHtml(businessOperator.access_ready_count ?? 0)}</p></article>
-    <article class="card"><h3>Founder: One Next Action</h3><p>${escapeHtml(businessOperator.next_founder_action ?? "Not recorded")}</p></article>
-    <article class="card"><h3>Agent: Immediate Next Action</h3><p>${escapeHtml(businessOperator.next_agent_action ?? "Not recorded")}</p><p><strong>Then operate:</strong> ${escapeHtml(businessOperator.next_business_operation ?? "Not recorded")}</p><p class="muted">${escapeHtml(businessOperator.human_log ?? "BUSINESS_ACCESS.md")} | ${escapeHtml(businessOperator.structured_ledger ?? "operations/business-access.json")}</p></article>
-  </div>`;
+  const businessOperatorMarkup = renderFounderGateMarkup(founderModel, businessOperator);
 
   const html = `<!doctype html>
 <html lang="en">
@@ -182,4 +182,10 @@ if (!loaded.state) {
   writeText(output, html);
   console.log(`Launch cockpit written to ${output}`);
   reportAndExit("Launch cockpit render", issues);
+}
+
+function parseJsonRecord(source: string): Record<string, unknown> {
+  const parsed: unknown = JSON.parse(source);
+  if (!isRecord(parsed)) throw new Error("operations/business-access.json must parse to a JSON object.");
+  return parsed;
 }

@@ -28,19 +28,22 @@ The default opening should be equivalent to:
 
 ## Conversation Protocol
 
-For each founder gate, use this five-part handoff:
+For each founder gate, use this question contract:
 
-1. **What this is:** one sentence without jargon.
-2. **Why now:** the business outcome it unlocks.
-3. **Your one action:** a single decision, login, confirmation, or secure value-entry step.
-4. **What I do next:** the work the agent will execute after the gate clears.
-5. **How we know:** the provider read-back or artifact that proves success.
+1. **Phase and outcome:** say which launch phase is active, what the agent is doing, and what this decision unlocks.
+2. **What and why:** explain the gate in one sentence each; define any unfamiliar role, research, provider, or business term before using it.
+3. **One selectable question:** use AskUserQuestion when available, or the same plain-text prompt otherwise. Offer two or three mutually exclusive choices, put the recommended choice first, and do not require free-text reconstruction when a selection works.
+4. **Consequences:** for every choice state what happens, what the agent does next, and how readiness/evidence changes.
+5. **Skip, fallback, or defer:** make the safe route explicit and say when the gate returns. Access, money, legal, pricing, public voice, release, and destructive gates can be deferred while safe preparation continues, but never bypassed.
+6. **Lifecycle:** no answer means `pending`, never consent. Move resolved, stale, or superseded gates to `gateHistory`. If a new direct founder instruction changes the task, archive the old gate and re-evaluate it instead of defending an agent-created blocker.
 
 Do not ask the founder to choose between two ordinary implementation approaches. Resolve bounded choices internally. Ask only when ownership, money, credentials, legal identity, public voice, platform policy, or irreversible consequences require the founder.
 
+A direct request authorizes the reversible preparation it names. Draft the guide, comparison, copy, or plan first; use choices afterward to explain rigor, evidence treatment, or optional next routes. Do not convert already-requested preparation into a new permission gate.
+
 ## Business Bootstrap Sequence
 
-Create `BUSINESS_ACCESS.md` and `operations/business-access.json` during orient, before provider setup sprawls. Keep exactly one structured `activeFounderGate` with what this is, why now, one founder action, the agent's next action, and success proof. Also record the next business operation so access setup cannot become a dead end. Run the sequence continuously:
+Create `BUSINESS_ACCESS.md` and `operations/business-access.json` during orient, before provider setup sprawls. Keep `currentPhase` visible and at most one structured `activeFounderGate` with phase, origin, class, definitions, choices, bypass/defer policy, lifecycle, next actions, and proof. Set the active gate to `null` while no founder decision is needed; the agent keeps working from `nextAgentAction`. Also record the next business operation so access setup cannot become a dead end. Run the sequence continuously:
 
 1. **Business identity:** confirm the working business/app name, founder-owned contact email, region, and whether a legal entity already exists. Do not force incorporation before it is needed.
 2. **Ownership spine:** establish a founder-controlled business email, recovery email/phone, password-manager or passkey posture, and 2FA ownership. The founder remains the owner of record.
@@ -50,6 +53,17 @@ Create `BUSINESS_ACCESS.md` and `operations/business-access.json` during orient,
 6. **Delegate:** grant the narrowest revocable operator role or OAuth scope. Avoid shared personal logins.
 7. **Verify:** read back the exact account, business asset, role, permissions, environment, recovery owner, and 2FA owner. Capture sanitized proof.
 8. **Operate:** move into research, content, customer response, store, analytics, and launch work. Access setup is an unlock, not the deliverable.
+
+### Plain-Language Research Example
+
+Do not turn "prepare an interview for my friend" into an unexplained formal-research blocker. Define terms first: **compensation** means whether the person receives payment or a gift card; **recruitment** means how participants are found; a **moderator** is the person asking the questions. Then present one decision:
+
+- **Phase:** Research-backed spec. **Outcome:** learn whether the problem and proposed product make sense to a real person.
+- **Quick friend chat (Recommended):** prepare a 10-15 minute conversation guide now. Consequence: useful directional feedback, but not formal market proof; the agent drafts the guide and marks the evidence accordingly.
+- **Formal interview:** add a clear purpose, voluntary participation, recording choice, note handling, participant criteria, and a structured script. Add compensation or recruitment only when people will actually be paid or sourced. Consequence: stronger research evidence, but more setup before the conversation.
+- **Skip interviews for now:** synthesize existing sources and product evidence. Consequence: research remains partial and the choice returns before spec freeze.
+
+The founder's request to prepare the friend conversation is authorization to prepare the reversible guide, not to spend money, recruit strangers, or claim formal validation. An unpaid informal chat that stores no sensitive data is not automatically a protected legal/privacy gate; apply stricter review only when the actual topic, population, claims, recording, or data handling requires it.
 
 ## Doppler And Login Model
 
@@ -137,6 +151,7 @@ After every setup action, update the exact account status and business asset, na
 Flag and repair these immediately:
 
 - founder receives a jargon-heavy checklist or is asked "what do you want to do next?" while the agent has enough state to choose
+- founder receives an invented blocker or a seven-field free-text questionnaire where a phase-labeled choice with a safe defer route would work
 - agent stops after instructions instead of opening the setup surface and continuing
 - password, 2FA, recovery code, cookie, raw token, or secret value is requested in chat
 - Doppler is described as browser password storage or a raw personal token is requested

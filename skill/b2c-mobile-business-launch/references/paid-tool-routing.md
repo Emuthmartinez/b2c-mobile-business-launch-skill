@@ -33,13 +33,18 @@ Do not present a fallback artifact as equivalent to the paid-tool artifact. Labe
 
 ## Confirmation Prompt
 
-Use a short direct prompt:
+Use the Founder Question Contract, not a free-text access blocker. Name the phase/outcome and define the tool's job. If this is only a provider-route decision, offer these three shapes through AskUserQuestion when available:
 
 ```text
-This lane is designed to use <paid tool> for <job>. I do not currently have usable access in this runtime. Do you want me to use/provision <paid tool>, wait for access/export, or continue with the free fallback <fallback>? I will not spend time on the fallback unless you confirm.
+Phase: <plain-language phase>. Outcome: <what this unlocks>.
+I use <paid tool> for <plain-language job>, but usable access is not available right now.
+
+1. Use or provision <paid tool> (Recommended when its evidence is launch-critical) - the founder handles only the minimum access/spend gate; the agent continues the intended route.
+2. Use an export or approved <fallback> - the agent continues now and labels the lower confidence and limitations.
+3. Defer this lane - the agent continues unrelated safe work; revisit before <specific milestone>.
 ```
 
-If the founder says they have the tool, ask only for the minimum access/export needed. If the founder says to use the free path, proceed and record the limitation.
+If credits, a trial, subscription, or other spend is involved, separate that into a protected `spend` gate with an exact amount/ceiling and a defer choice; the fallback is a separate explicit route, never inferred authorization. If the founder says they have the tool, ask only for the minimum access/export needed. If the founder selects the free path, proceed and record the limitation.
 
 ## Tool Map
 
@@ -90,44 +95,18 @@ Always ask before:
 
 If the founder approves a fallback, do not keep re-asking for the same lane unless the fallback limitations change.
 
-## Per-Tool Confirmation Prompts
+## Per-Tool Question Inputs
 
-Use these when the MCP check in step 2 does not find callable tools and no founder-supplied export satisfies the lane:
+Use this table to fill the three-choice Confirmation Prompt; do not send it as an open-ended question. Every fallback choice states its evidence limit, and every defer choice states its revisit point.
 
-**AppKittie (ASO research, keyword difficulty, competitor economics):**
-```text
-This lane needs AppKittie for keyword difficulty and competitor revenue/download data. I did not find mcp__appkittie__* tools callable in this runtime. Do you want to provision AppKittie, provide an export (CSV/screenshots), or approve the free fallback (public App Store search, manual spreadsheet)? I will not spend time on the fallback unless you confirm.
-```
+| Tool | Plain-language job | Access/export choice | Explicit fallback choice | Evidence limit and revisit |
+| --- | --- | --- | --- | --- |
+| AppKittie | keyword difficulty and competitor download/revenue estimates | provision access or provide CSV/screenshots | public store search plus a manual sheet | lower-confidence public estimates; revisit before final ASO positioning |
+| XPOZ | language and creator research across social platforms | provision access or provide an export | platform-native browser search plus public web sources | smaller/non-equivalent sample; revisit before content strategy freezes |
+| Higgsfield | generated visuals, icons, mascots, ads, and demo clips | provision access or provide existing assets | founder-owned assets or approved Remotion output after a license check | no equivalent generative exploration; revisit before final creative production |
+| Refero | UX screen and flow references | provision Refero Pro or provide exported screens | bundled baseline pattern pack | no live Refero corpus; revisit before the design direction freezes |
 
-**XPOZ (social-language research on Reddit, TikTok, X/Twitter, Instagram):**
-```text
-This lane needs XPOZ for social-language and creator research. I did not find mcp__claude_ai_XPOZ__* tools callable in this runtime. Do you want to provision XPOZ, provide exported data, or approve the free fallback (platform-native browser search, public web search)? I will not spend time on the fallback unless you confirm.
-```
-
-**Higgsfield (generated visuals, icons, mascots, ad creative, demo clips; also reframe, personal_clipper, brand-kits fetch):**
-
-Before presenting the prompt, call `mcp__claude_ai_Higgsfield__balance` and surface the result inline.
-
-```text
-This lane needs Higgsfield for <visual job>. I see Higgsfield MCP tools present but want to confirm use before generating paid credits.
-
-Current balance: X credits. This run will use approximately Y credits for Z assets. Proceed?
-
-Option: I can run a cheap-first pass (z_image draft tier) on this batch to confirm direction before committing to full-quality generation — this costs roughly A credits instead of B. Let me know if you want that as the first step. (Draft-tier runs are presented as a spend-reduction option; they are never applied silently.)
-
-Shall I proceed with Higgsfield, or would you prefer a different route? (Higgsfield is authenticated — this is a spend confirmation, not an access question.)
-```
-If Higgsfield tools are absent from the runtime:
-```text
-This lane needs Higgsfield for <visual job>. I did not find mcp__claude_ai_Higgsfield__* tools callable in this runtime. Do you want to provision Higgsfield, provide existing assets, or approve the free fallback (Remotion code-rendered stills, founder-owned assets)? I will not spend time on the fallback unless you confirm.
-```
-
-Note: `reframe` and `personal_clipper` have no CLI equivalent — they are MCP-only (`mcp__claude_ai_Higgsfield__reframe`, `mcp__claude_ai_Higgsfield__personal_clipper_create`). Apply the same spend-confirmation prompt above before invoking them. See the **Master → All Platforms (reframe + personal_clipper)** recipe in `tool-recipes.md` for the full workflow.
-
-**Refero (UX pattern research, screen and flow references):**
-```text
-This lane needs Refero for UX pattern research. I did not find Refero MCP tools callable in this runtime. Do you want to provision Refero (Refero Pro required), provide exported screens/flows, or approve the bundled free baseline pattern pack? I will not spend time on the fallback unless you confirm.
-```
+Higgsfield credit use is a separate protected spend gate. Call `mcp__claude_ai_Higgsfield__balance`, show the current balance and estimated credits, then use AskUserQuestion: **full-quality exact batch** (recommended only when the evidence warrants the quoted spend), **cheap-first draft batch** with its lower credit estimate, or **defer generation** while non-spend preparation continues. No selection means no credits are used. `reframe` and `personal_clipper` are MCP-only and use the same spend gate; see `tool-recipes.md`.
 
 ## Common Failure Modes
 

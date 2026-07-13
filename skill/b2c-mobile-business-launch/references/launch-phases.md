@@ -2,6 +2,8 @@
 
 Use these phases as a reusable playbook. Skip phases that are already complete, but verify their artifacts before building on them.
 
+At each founder decision, translate the internal phase into a plain-language label and outcome. Use the Founder Question Contract in `founder-zero-operator.md`: AskUserQuestion when available, two or three choices with one recommendation, explicit consequences, a safe skip/fallback/defer route, and a revisit trigger. Do not expose lane names, staffing roles, proof jargon, or internal checklists without definitions.
+
 ## Contents
 
 - Launch Tiers
@@ -51,7 +53,7 @@ Do:
 - Create or refresh `PROJECT_STATE.yaml` from `templates/PROJECT_STATE.yaml`, set the current autonomy mode, and record lane status honestly.
 - Confirm the launch tier with the founder (see Launch Tiers above) and record `project.launch_tier`; defer lite-tier breadth lanes with dated reasons.
 - Render `launch-cockpit.html` once the first state pass exists.
-- Create `BUSINESS_ACCESS.md` and `operations/business-access.json`; present one plain-language founder action and record the agent action that follows it.
+- Create `BUSINESS_ACCESS.md` and `operations/business-access.json`; present one phase-labeled founder question with selectable choices, consequences, a safe defer route, and the agent action that follows it.
 - Create tasks/checkpoints for the engagement; block later phases on the right prior outputs.
 - Decide whether to create one canonical repo bundle, a separate landing repo, or a product-build handoff bundle.
 

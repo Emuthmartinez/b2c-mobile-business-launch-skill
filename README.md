@@ -44,7 +44,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Lane | Output |
 | --- | --- |
 | State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, `skill-version.json`, runtime freshness checks, autonomy mode, lane statuses, provider state, proof, and failure cards |
-| Founder-Zero Operator | `BUSINESS_ACCESS.md`, `operations/business-access.json`, business identity, Doppler, social/store account inventory, delegated access, recovery/2FA ownership, and one founder action plus one agent action |
+| Founder-Zero Operator | `BUSINESS_ACCESS.md`, `operations/business-access.json`, phase-labeled AskUserQuestion choices, plain-language definitions, skip/fallback/defer behavior, gate lifecycle, business identity, Doppler, account access, and founder/agent next actions |
 | Agent Operations | `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, capability discovery, account/environment targeting, scoped approval envelopes, authenticated-browser/API/CLI/native routing, prompt-injection quarantine, before/after proof, and state reconciliation |
 | Design Room | `state/business.json`, `state/theme.tokens.json`, `design-room.html`, React/Vite `dist/design-room/`, git-backed versions, baselines, diffs, restores, and wipe-slate operations |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |

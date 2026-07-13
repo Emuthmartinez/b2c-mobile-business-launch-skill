@@ -1,12 +1,154 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { renderFounderGateMarkup } from "../lib/founder-gate-presentation.js";
 import { type Harness, readState, writeState } from "./_harness.js";
 
 export function register(h: Harness): void {
-  const { makeFixture, runFixture } = h;
+  const { makeFixture, runFixture: runFixtureBase, runScriptArgs } = h;
+  const keepTemp = process.argv.includes("--keep-temp");
+  const runFixture: Harness["runFixture"] = (...args) => {
+    try {
+      runFixtureBase(...args);
+    } finally {
+      if (!keepTemp) rmSync(args[1], { recursive: true, force: true });
+    }
+  };
 
   const baseline = makeFixture("founder-operator-baseline");
   runFixture("shipped founder-zero operator bootstrap passes", baseline, "check-founder-operator-bootstrap.ts", 0);
+
+  const legacyMigration = makeFixture("founder-operator-legacy-migration");
+  const legacyValue = readLedger(legacyMigration);
+  legacyValue.schemaVersion = "1.0.0";
+  const legacyFounder = legacyValue.founderModel as Record<string, unknown>;
+  delete legacyFounder.currentPhase;
+  delete legacyFounder.questionMode;
+  delete legacyFounder.gateHistory;
+  const legacyGate = legacyFounder.activeFounderGate as Record<string, unknown>;
+  for (const key of ["gateClass", "origin", "phase", "definitions", "question", "bypassPolicy", "safeWorkWhileWaiting", "lifecycle"]) delete legacyGate[key];
+  writeLedger(legacyMigration, legacyValue);
+  runScriptArgs(
+    "legacy founder gates migrate without inventing approval",
+    "migrate-founder-gates.ts",
+    ["--root", legacyMigration],
+    0,
+    "without carrying approval forward",
+  );
+  runFixture("migrated founder gate passes the current contract", legacyMigration, "check-founder-operator-bootstrap.ts", 0);
+
+  const legacyReadable = makeFixture("founder-operator-legacy-readable");
+  const legacyReadableValue = readLedger(legacyReadable);
+  legacyReadableValue.schemaVersion = "1.0.0";
+  const legacyReadableFounder = legacyReadableValue.founderModel as Record<string, unknown>;
+  delete legacyReadableFounder.currentPhase;
+  delete legacyReadableFounder.questionMode;
+  delete legacyReadableFounder.gateHistory;
+  const legacyReadableGate = legacyReadableFounder.activeFounderGate as Record<string, unknown>;
+  for (const key of ["gateClass", "origin", "phase", "definitions", "question", "bypassPolicy", "safeWorkWhileWaiting", "lifecycle"])
+    delete legacyReadableGate[key];
+  writeLedger(legacyReadable, legacyReadableValue);
+  writeFileSync(
+    path.join(legacyReadable, "operations", "business-access.schema.json"),
+    `${JSON.stringify({ $schema: "https://json-schema.org/draft/2020-12/schema", type: "object", properties: { schemaVersion: { const: "1.0.0" } } }, null, 2)}\n`,
+    "utf8",
+  );
+  runFixture(
+    "legacy 1.x ledgers remain readable with a migration warning",
+    legacyReadable,
+    "check-founder-operator-bootstrap.ts",
+    0,
+    "founder_operator.gate_contract_legacy",
+  );
+
+  const unsupportedMigration = makeFixture("founder-operator-unsupported-migration");
+  const unsupportedMigrationValue = readLedger(unsupportedMigration);
+  unsupportedMigrationValue.schemaVersion = "3.0.0";
+  writeLedger(unsupportedMigration, unsupportedMigrationValue);
+  runScriptArgs(
+    "future founder gate schemas are not silently downgraded",
+    "migrate-founder-gates.ts",
+    ["--root", unsupportedMigration],
+    1,
+    "Only 1.x can migrate",
+  );
+
+  const missingMigrationContext = makeFixture("founder-operator-migration-context-missing");
+  const missingMigrationContextValue = readLedger(missingMigrationContext);
+  missingMigrationContextValue.schemaVersion = "1.0.0";
+  const missingContextFounder = missingMigrationContextValue.founderModel as Record<string, unknown>;
+  delete missingContextFounder.currentPhase;
+  delete missingContextFounder.questionMode;
+  delete missingContextFounder.gateHistory;
+  const missingContextGate = missingContextFounder.activeFounderGate as Record<string, unknown>;
+  for (const key of ["gateClass", "origin", "phase", "definitions", "question", "bypassPolicy", "safeWorkWhileWaiting", "lifecycle"])
+    delete missingContextGate[key];
+  writeLedger(missingMigrationContext, missingMigrationContextValue);
+  runScriptArgs("legacy migration preserves decision context", "migrate-founder-gates.ts", ["--root", missingMigrationContext], 0);
+  const migratedWithoutContext = readLedger(missingMigrationContext);
+  delete (((migratedWithoutContext.founderModel as Record<string, unknown>).gateHistory as Array<Record<string, unknown>>)[0] as Record<string, unknown>)
+    .context;
+  writeLedger(missingMigrationContext, migratedWithoutContext);
+  runFixture(
+    "migration history cannot discard the original decision context",
+    missingMigrationContext,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.migration_context_missing",
+  );
+
+  const noActiveGate = makeFixture("founder-operator-no-active-gate");
+  const noActiveGateValue = readLedger(noActiveGate);
+  const noActiveFounder = noActiveGateValue.founderModel as Record<string, unknown>;
+  noActiveFounder.activeFounderGate = null;
+  noActiveFounder.nextFounderAction = "";
+  noActiveFounder.nextAgentAction = "Continue product and evidence review while no founder decision is required.";
+  writeLedger(noActiveGate, noActiveGateValue);
+  reconcileFixture(noActiveGate, noActiveGateValue);
+  runFixture("agent work may continue with no invented founder gate", noActiveGate, "check-founder-operator-bootstrap.ts", 0);
+
+  const staleHumanGate = makeFixture("founder-operator-no-active-gate-stale-human");
+  const staleHumanValue = readLedger(staleHumanGate);
+  const staleHumanFounder = staleHumanValue.founderModel as Record<string, unknown>;
+  staleHumanFounder.activeFounderGate = null;
+  staleHumanFounder.nextFounderAction = "";
+  staleHumanFounder.nextAgentAction = "Continue product and evidence review while no founder decision is required.";
+  writeLedger(staleHumanGate, staleHumanValue);
+  reconcileFixture(staleHumanGate, staleHumanValue);
+  const staleHumanPath = path.join(staleHumanGate, "BUSINESS_ACCESS.md");
+  writeFileSync(
+    staleHumanPath,
+    readFileSync(staleHumanPath, "utf8").replace("- Agent action next:", "- Recommended choice: Approve the stale decision.\n- Agent action next:"),
+    "utf8",
+  );
+  runFixture(
+    "no-gate human handoff removes stale choices",
+    staleHumanGate,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.human_stale_gate_visible",
+  );
+
+  const staleCockpitGate = makeFixture("founder-operator-no-active-gate-stale-cockpit");
+  const staleCockpitValue = readLedger(staleCockpitGate);
+  const staleCockpitFounder = staleCockpitValue.founderModel as Record<string, unknown>;
+  staleCockpitFounder.activeFounderGate = null;
+  staleCockpitFounder.nextFounderAction = "";
+  staleCockpitFounder.nextAgentAction = "Continue product and evidence review while no founder decision is required.";
+  writeLedger(staleCockpitGate, staleCockpitValue);
+  reconcileFixture(staleCockpitGate, staleCockpitValue);
+  const staleCockpitPath = path.join(staleCockpitGate, "launch-cockpit.html");
+  writeFileSync(
+    staleCockpitPath,
+    readFileSync(staleCockpitPath, "utf8").replace("No founder decision is pending.", "No founder decision is pending. (Recommended)"),
+    "utf8",
+  );
+  runFixture(
+    "no-gate cockpit removes stale choices",
+    staleCockpitGate,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.cockpit_stale_gate_visible",
+  );
 
   const missingLedger = makeFixture("founder-operator-missing-ledger");
   rmSync(path.join(missingLedger, "operations", "business-access.json"), { force: true });
@@ -17,6 +159,10 @@ export function register(h: Harness): void {
     1,
     "founder_operator.ledger_missing",
   );
+
+  const invalidCockpitLedger = makeFixture("founder-operator-invalid-cockpit-ledger");
+  writeFileSync(path.join(invalidCockpitLedger, "operations", "business-access.json"), "{invalid json\n", "utf8");
+  runFixture("launch cockpit refuses malformed founder gate JSON", invalidCockpitLedger, "render-launch-cockpit.ts", 1, "SyntaxError");
 
   const expertAssumption = makeFixture("founder-operator-expert-assumption");
   const expertValue = readLedger(expertAssumption);
@@ -96,6 +242,181 @@ export function register(h: Harness): void {
     "check-founder-operator-bootstrap.ts",
     1,
     "founder_operator.multiple_founder_actions",
+  );
+
+  const missingPhase = makeFixture("founder-operator-gate-missing-phase");
+  const missingPhaseValue = readLedger(missingPhase);
+  applyFounderGateUxContract(missingPhaseValue);
+  delete ((missingPhaseValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).phase;
+  writeLedger(missingPhase, missingPhaseValue);
+  runFixture(
+    "founder gate names the current phase and outcome",
+    missingPhase,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_phase_missing",
+  );
+
+  const unexplainedTerms = makeFixture("founder-operator-gate-unexplained-terms");
+  const unexplainedTermsValue = readLedger(unexplainedTerms);
+  applyFounderGateUxContract(unexplainedTermsValue);
+  const unexplainedGate = (unexplainedTermsValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>;
+  unexplainedGate.whatThisIs = "Choose the compensation and recruitment route for the first research interview.";
+  (unexplainedGate.question as Record<string, unknown>).prompt = "Which compensation and recruitment route should I use?";
+  unexplainedGate.definitions = [];
+  writeLedger(unexplainedTerms, unexplainedTermsValue);
+  runFixture(
+    "founder gate defines specialist terms before asking",
+    unexplainedTerms,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_terms_undefined",
+  );
+
+  const tooFewOptions = makeFixture("founder-operator-gate-too-few-options");
+  const tooFewOptionsValue = readLedger(tooFewOptions);
+  applyFounderGateUxContract(tooFewOptionsValue);
+  const tooFewQuestion = (((tooFewOptionsValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).question ?? {}) as Record<
+    string,
+    unknown
+  >;
+  tooFewQuestion.options = (tooFewQuestion.options as unknown[]).slice(0, 1);
+  writeLedger(tooFewOptions, tooFewOptionsValue);
+  runFixture(
+    "founder gate presents two or three mutually exclusive choices",
+    tooFewOptions,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_options_invalid",
+  );
+
+  const multipleRecommendations = makeFixture("founder-operator-gate-multiple-recommendations");
+  const multipleRecommendationsValue = readLedger(multipleRecommendations);
+  applyFounderGateUxContract(multipleRecommendationsValue);
+  const recommendationOptions = (
+    ((multipleRecommendationsValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).question as Record<string, unknown>
+  ).options as Array<Record<string, unknown>>;
+  recommendationOptions[1]!.recommended = true;
+  writeLedger(multipleRecommendations, multipleRecommendationsValue);
+  runFixture(
+    "founder gate has exactly one recommended option",
+    multipleRecommendations,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_recommendation_invalid",
+  );
+
+  const recommendationNotFirst = makeFixture("founder-operator-gate-recommendation-not-first");
+  const recommendationNotFirstValue = readLedger(recommendationNotFirst);
+  const recommendationNotFirstOptions = (
+    ((recommendationNotFirstValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).question as Record<string, unknown>
+  ).options as Array<Record<string, unknown>>;
+  recommendationNotFirstOptions.reverse();
+  writeLedger(recommendationNotFirst, recommendationNotFirstValue);
+  runFixture(
+    "recommended founder choice must be first",
+    recommendationNotFirst,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_recommendation_invalid",
+  );
+
+  const missingConsequence = makeFixture("founder-operator-gate-missing-consequence");
+  const missingConsequenceValue = readLedger(missingConsequence);
+  applyFounderGateUxContract(missingConsequenceValue);
+  const consequenceOptions = (
+    ((missingConsequenceValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).question as Record<string, unknown>
+  ).options as Array<Record<string, unknown>>;
+  consequenceOptions[1]!.consequence = "";
+  writeLedger(missingConsequence, missingConsequenceValue);
+  runFixture(
+    "every founder choice explains its consequence",
+    missingConsequence,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_option_incomplete",
+  );
+
+  const unsafeBypass = makeFixture("founder-operator-gate-unsafe-bypass");
+  const unsafeBypassValue = readLedger(unsafeBypass);
+  applyFounderGateUxContract(unsafeBypassValue);
+  const unsafeGate = (unsafeBypassValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>;
+  unsafeGate.gateClass = "spend";
+  unsafeGate.bypassPolicy = {
+    mode: "fallback_allowed",
+    optionId: "decide_later",
+    reason: "Use a different route without waiting for explicit budget approval.",
+    fallbackAction: "Continue the paid action through an alternate account.",
+    revisitTrigger: "After the paid action finishes.",
+  };
+  const unsafeOptions = (unsafeGate.question as Record<string, unknown>).options as Array<Record<string, unknown>>;
+  unsafeOptions[1]!.route = "fallback";
+  writeLedger(unsafeBypass, unsafeBypassValue);
+  runFixture(
+    "protected founder gates cannot expose an authorization bypass",
+    unsafeBypass,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_unsafe_bypass",
+  );
+
+  const proceedAsFallback = makeFixture("founder-operator-gate-proceed-as-fallback");
+  const proceedAsFallbackValue = readLedger(proceedAsFallback);
+  const proceedAsFallbackGate = (proceedAsFallbackValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>;
+  (proceedAsFallbackGate.bypassPolicy as Record<string, unknown>).optionId = "choose_working_name";
+  writeLedger(proceedAsFallback, proceedAsFallbackValue);
+  runFixture(
+    "fallback policy cannot point at the proceed choice",
+    proceedAsFallback,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_bypass_invalid",
+  );
+
+  const jargonInEvidence = makeFixture("founder-operator-gate-jargon-in-evidence");
+  const jargonInEvidenceValue = readLedger(jargonInEvidence);
+  const jargonOptions = (
+    ((jargonInEvidenceValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).question as Record<string, unknown>
+  ).options as Array<Record<string, unknown>>;
+  jargonOptions[1]!.evidenceEffect = "Retention and data/privacy operator review remain incomplete until this choice returns.";
+  writeLedger(jargonInEvidence, jargonInEvidenceValue);
+  runFixture(
+    "all founder-visible option fields define specialist terms",
+    jargonInEvidence,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_terms_undefined",
+  );
+
+  const protectedDefer = makeFixture("founder-operator-gate-protected-defer");
+  const protectedDeferValue = readLedger(protectedDefer);
+  applyFounderGateUxContract(protectedDeferValue);
+  const protectedGate = (protectedDeferValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>;
+  protectedGate.gateClass = "spend";
+  protectedGate.bypassPolicy = {
+    mode: "defer_only",
+    optionId: "decide_later",
+    reason: "Spending requires the founder's explicit budget approval and cannot be bypassed.",
+    fallbackAction: "Keep the paid lane blocked and continue reversible preparation that does not spend money.",
+    revisitTrigger: "Before the first paid credit, subscription, or campaign is started.",
+  };
+  writeLedger(protectedDefer, protectedDeferValue);
+  reconcileFixture(protectedDefer, protectedDeferValue);
+  runFixture("protected gates may defer while safe work continues", protectedDefer, "check-founder-operator-bootstrap.ts", 0);
+
+  const resolvedActiveGate = makeFixture("founder-operator-resolved-active-gate");
+  const resolvedActiveGateValue = readLedger(resolvedActiveGate);
+  applyFounderGateUxContract(resolvedActiveGateValue);
+  (
+    ((resolvedActiveGateValue.founderModel as Record<string, unknown>).activeFounderGate as Record<string, unknown>).lifecycle as Record<string, unknown>
+  ).status = "resolved";
+  writeLedger(resolvedActiveGate, resolvedActiveGateValue);
+  runFixture(
+    "resolved or superseded gates move out of the active slot",
+    resolvedActiveGate,
+    "check-founder-operator-bootstrap.ts",
+    1,
+    "founder_operator.active_gate_not_pending",
   );
 
   const agentDeadEnd = makeFixture("founder-operator-agent-dead-end");
@@ -270,7 +591,7 @@ export function register(h: Harness): void {
   prematureReadyValue.status = "ready";
   writeLedger(prematureReady, prematureReadyValue);
   reconcileFixture(prematureReady, prematureReadyValue);
-  runFixture(
+  runFixtureBase(
     "operator bootstrap cannot be ready before the ownership spine and account inventory are resolved",
     prematureReady,
     "check-founder-operator-bootstrap.ts",
@@ -303,6 +624,7 @@ export function register(h: Harness): void {
   const escapedGate = escapedFounder.activeFounderGate as Record<string, unknown>;
   escapedGate.target = "X & Instagram profile choice";
   escapedGate.founderAction = "Confirm X & Instagram as the first social profile target.";
+  (escapedGate.question as Record<string, unknown>).prompt = escapedGate.founderAction;
   escapedFounder.nextFounderAction = escapedGate.founderAction;
   writeLedger(escapedAction, escapedValue);
   reconcileFixture(escapedAction, escapedValue);
@@ -311,6 +633,68 @@ export function register(h: Harness): void {
 
 function readLedger(root: string): Record<string, unknown> {
   return JSON.parse(readFileSync(path.join(root, "operations", "business-access.json"), "utf8")) as Record<string, unknown>;
+}
+
+function applyFounderGateUxContract(value: Record<string, unknown>): void {
+  value.schemaVersion = "2.0.0";
+  const founder = value.founderModel as Record<string, unknown>;
+  founder.questionMode = "ask_user_question_when_available";
+  founder.gateHistory = [];
+  founder.currentPhase = {
+    id: "phase_0_orient",
+    label: "Set the foundation",
+    outcome: "A clear working identity and the next safe setup step.",
+  };
+  const gate = founder.activeFounderGate as Record<string, unknown>;
+  Object.assign(gate, {
+    gateClass: "scope",
+    origin: "skill_requirement",
+    phase: {
+      id: "phase_0_orient",
+      label: "Set the foundation",
+      outcome: "A clear working identity and the next safe setup step.",
+    },
+    definitions: [],
+    question: {
+      header: "Working name",
+      prompt: founder.nextFounderAction,
+      options: [
+        {
+          id: "choose_working_name",
+          label: "Choose a name",
+          route: "proceed",
+          description: "Use a working name now so account and product research can stay organized.",
+          consequence: "The name remains provisional until collision and storefront checks are complete.",
+          agentActionNext: founder.nextAgentAction,
+          evidenceEffect: "The business identity gate can move forward with a clearly provisional name.",
+          recommended: true,
+        },
+        {
+          id: "decide_later",
+          label: "Decide later",
+          route: "defer",
+          description: "Keep the name open while I continue work that does not depend on public identity.",
+          consequence: "Account creation and public naming remain blocked, but reversible product inspection continues.",
+          agentActionNext: "Continue repo and product-state inspection without creating identity-bound accounts or public assets.",
+          evidenceEffect: "The identity lane remains partial and cannot be used as launch-ready proof.",
+          recommended: false,
+        },
+      ],
+    },
+    bypassPolicy: {
+      mode: "fallback_allowed",
+      optionId: "decide_later",
+      reason: "A working name can be deferred because private, reversible discovery does not depend on it.",
+      fallbackAction: "Continue private product and repo discovery without creating identity-bound accounts.",
+      revisitTrigger: "Before creating public accounts, buying a domain, or locking store metadata.",
+    },
+    safeWorkWhileWaiting: "Continue read-only repo and product-state inspection; do not infer consent or create public identity assets.",
+    lifecycle: {
+      status: "pending",
+      presentedAt: "",
+      supersedesGateId: "",
+    },
+  });
 }
 
 function writeLedger(root: string, value: Record<string, unknown>): void {
@@ -383,12 +767,55 @@ function readyValue(root: string): Record<string, unknown> {
     id: "approve-first-social-draft",
     actionType: "approval",
     target: "first social content draft",
+    gateClass: "public_action",
+    origin: "skill_requirement",
+    phase: {
+      id: "phase_6",
+      label: "Prepare the first public action",
+      outcome: "An approved social draft with a scoped publish envelope and no inferred permission.",
+    },
     whatThisIs: "Review the first social content draft before any public publishing is authorized.",
     whyNow: "It lets the agent begin the operating rhythm while the founder retains final public voice control.",
     founderAction: "Approve or revise the first social content draft; nothing will be published until you approve it.",
+    definitions: [],
+    question: {
+      header: "Social draft",
+      prompt: "Approve or revise the first social content draft; nothing will be published until you approve it.",
+      options: [
+        {
+          id: "approve_draft",
+          label: "Approve draft",
+          route: "proceed",
+          description: "Approve this exact draft for the separately scoped publishing action.",
+          consequence: "The agent may prepare the exact publish envelope, but approval does not widen its account, content, or time scope.",
+          agentActionNext: "Finalize the approved draft, verify the exact account and approval envelope, then prepare the scheduled publishing action.",
+          evidenceEffect: "The approved content digest can be attached to the one-shot Agent Operations envelope.",
+          recommended: true,
+        },
+        {
+          id: "decide_later",
+          label: "Decide later",
+          route: "defer",
+          description: "Keep public publishing blocked while the agent continues private preparation and research.",
+          consequence: "Nothing is published, and the public-action lane remains blocked until an explicit approval is recorded.",
+          agentActionNext: "Continue private content preparation and account verification without posting or scheduling anything.",
+          evidenceEffect: "Draft evidence remains preparation-only and cannot count as public launch proof.",
+          recommended: false,
+        },
+      ],
+    },
+    bypassPolicy: {
+      mode: "defer_only",
+      optionId: "decide_later",
+      reason: "Public publishing requires explicit founder approval and cannot be bypassed.",
+      fallbackAction: "Keep publishing blocked and continue private content preparation and account verification.",
+      revisitTrigger: "Before scheduling or publishing this or any replacement social draft.",
+    },
+    safeWorkWhileWaiting: "Continue private preparation and verification; do not infer consent or publish, schedule, or reply publicly.",
     agentActionNext: "Finalize the approved draft, verify the exact account and approval envelope, then prepare the scheduled publishing action.",
     successProof: "The approved content digest and scoped publish envelope are recorded in Agent Operations before execution.",
   });
+  founder.currentPhase = activeGate.phase;
   founder.nextFounderAction = activeGate.founderAction;
   founder.nextAgentAction = activeGate.agentActionNext;
   founder.nextBusinessOperation = "Continue the weekly social, support, analytics, store, and launch operating rhythm with proof after each action.";
@@ -430,58 +857,75 @@ function readyValue(root: string): Record<string, unknown> {
 function reconcileFixture(root: string, value: Record<string, unknown>): void {
   const accounts = value.accounts as Array<Record<string, unknown>>;
   const founder = value.founderModel as Record<string, unknown>;
-  const gate = founder.activeFounderGate as Record<string, unknown>;
+  const activeFounderGate = founder.activeFounderGate;
+  const hasActiveGate = isRecordValue(activeFounderGate);
+  const gate: Record<string, unknown> = hasActiveGate ? activeFounderGate : {};
   const state = readState(root);
   const operator = state.business_operator as Record<string, unknown>;
   operator.status = value.status;
   operator.doppler_status = (value.doppler as Record<string, unknown>).status;
   operator.social_access_status = deriveSocialStatus(accounts);
   operator.access_ready_count = accounts.filter((entry) => entry.status === "access_ready").length;
+  const phase = founder.currentPhase as Record<string, unknown>;
+  const question = (gate.question ?? {}) as Record<string, unknown>;
+  const options = (question.options ?? []) as Array<Record<string, unknown>>;
+  const definitions = (gate.definitions ?? []) as Array<Record<string, unknown>>;
+  const bypass = (gate.bypassPolicy ?? {}) as Record<string, unknown>;
+  const lifecycle = (gate.lifecycle ?? {}) as Record<string, unknown>;
+  if (value.schemaVersion === "2.0.0") {
+    (state.project as Record<string, unknown>).phase = phase.id;
+    Object.assign(operator, {
+      current_phase: phase.id,
+      current_phase_label: phase.label,
+      current_phase_outcome: phase.outcome,
+      active_gate_id: gate.id ?? "",
+      active_gate_class: gate.gateClass ?? "none",
+      active_gate_origin: gate.origin ?? "none",
+      active_gate_status: lifecycle.status ?? "none",
+      active_gate_bypass_mode: bypass.mode ?? "none",
+      question_mode: founder.questionMode,
+    });
+  }
   operator.next_founder_action = founder.nextFounderAction;
   operator.next_agent_action = founder.nextAgentAction;
   operator.next_business_operation = founder.nextBusinessOperation;
   writeState(root, state);
 
   const humanPath = path.join(root, "BUSINESS_ACCESS.md");
-  const human = readFileSync(humanPath, "utf8")
-    .replace(/^- What this is:.*$/m, `- What this is: ${String(gate.whatThisIs)}`)
-    .replace(/^- Why now:.*$/m, `- Why now: ${String(gate.whyNow)}`)
-    .replace(/^- Founder action:.*$/m, `- Founder action: ${String(founder.nextFounderAction)}`)
-    .replace(/^- Agent action next:.*$/m, `- Agent action next: ${String(founder.nextAgentAction)}`)
-    .replace(/^- Success proof:.*$/m, `- Success proof: ${String(gate.successProof)}`)
-    .replace(/^- Next business operation:.*$/m, `- Next business operation: ${String(founder.nextBusinessOperation)}`);
-  writeFileSync(humanPath, human, "utf8");
-
-  const cockpitPath = path.join(root, "launch-cockpit.html");
-  const source = readFileSync(cockpitPath, "utf8");
-  const marker = "<h2>Business Operator Bootstrap</h2>";
-  const markerIndex = source.indexOf(marker);
-  const head = source.slice(0, markerIndex + marker.length);
-  const tail = source
-    .slice(markerIndex + marker.length)
-    .replace(/<span class="status [^"]+">[^<]+<\/span>/, `<span class="status ${String(value.status)}">${String(value.status)}</span>`)
-    .replace("Doppler: not_started", `Doppler: ${String((value.doppler as Record<string, unknown>).status)}`)
-    .replace("Social access: not_started", `Social access: ${deriveSocialStatus(accounts)}`)
-    .replace("Ready accounts: 0", `Ready accounts: ${accounts.filter((entry) => entry.status === "access_ready").length}`)
-    .replace(
-      escapeHtml("Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time."),
-      escapeHtml(String(founder.nextFounderAction)),
+  const currentHuman = readFileSync(humanPath, "utf8");
+  const definitionText = definitions.map((entry) => `${String(entry.term)}: ${String(entry.meaning)}`).join("; ") || "None needed for this decision.";
+  const optionLines = options
+    .map(
+      (option, index) =>
+        `- ${index === 0 ? "Recommended" : "Alternative"} choice: ${String(option.label)} - ${String(option.consequence)} Agent next: ${String(option.agentActionNext)} Evidence: ${String(option.evidenceEffect)}`,
     )
-    .replace(
-      escapeHtml("Inspect current repo and public identity state, then guide the first secure business account step."),
-      escapeHtml(String(founder.nextAgentAction)),
-    )
-    .replace(
-      escapeHtml(
-        "After the identity gate clears, continue into secure account setup, research, social profiles, content, support, analytics, store work, and launch operations in priority order.",
-      ),
-      escapeHtml(String(founder.nextBusinessOperation)),
-    );
-  writeFileSync(cockpitPath, `${head}${tail}`, "utf8");
-}
+    .join("\n");
+  const gateLines = hasActiveGate
+    ? `- Decision type: ${gateClassLabel(gate.gateClass)}; requested by ${gateOriginLabel(gate.origin)}.
+- What this is: ${String(gate.whatThisIs)}
+- Why now: ${String(gate.whyNow)}
+- Definitions: ${definitionText}
+- Founder action: ${String(founder.nextFounderAction)}
+- Question mode: AskUserQuestion when available; otherwise present the same choices in plain text and wait for an explicit selection.
+${optionLines}
+- Skip/bypass policy: ${bypassModeLabel(bypass.mode)} through \`${String(bypass.optionId)}\`; ${String(bypass.reason)} ${String(bypass.fallbackAction)}
+- Revisit before: ${String(bypass.revisitTrigger)}
+- Safe work while waiting: ${String(gate.safeWorkWhileWaiting)}
+- Agent action next: ${String(founder.nextAgentAction)}
+- Success proof: ${String(gate.successProof)}`
+    : `- Definitions: No founder decision is pending.
+- Founder action: None. The agent continues the recorded next action.
+- Agent action next: ${String(founder.nextAgentAction)}`;
+  const section = `## One Next Action
 
-function escapeHtml(value: string): string {
-  return value.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+- Phase: ${String(phase.label)} (\`${String(phase.id)}\`)
+- Outcome: ${String(phase.outcome)}
+${gateLines}
+- Next business operation: ${String(founder.nextBusinessOperation)}`;
+  writeFileSync(humanPath, currentHuman.replace(/## One Next Action[\s\S]*?(?=\n## )/, section), "utf8");
+
+  const cockpit = `<!doctype html><html><body><section><h2>Business Operator Bootstrap</h2>${renderFounderGateMarkup(founder, operator)}</section></body></html>\n`;
+  writeFileSync(path.join(root, "launch-cockpit.html"), cockpit, "utf8");
 }
 
 function deriveSocialStatus(accounts: Array<Record<string, unknown>>): string {
@@ -490,4 +934,20 @@ function deriveSocialStatus(accounts: Array<Record<string, unknown>>): string {
   if (statuses.every((status) => ["access_ready", "not_needed"].includes(status))) return "ready";
   if (statuses.some((status) => status === "blocked")) return "blocked";
   return "partial";
+}
+
+function isRecordValue(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function gateClassLabel(value: unknown): string {
+  return value === "public_action" ? "Public action" : value === "scope" ? "Working-scope choice" : String(value ?? "Founder decision");
+}
+
+function gateOriginLabel(value: unknown): string {
+  return value === "skill_requirement" ? "the launch workflow" : value === "agent_proposal" ? "the agent recommendation" : String(value ?? "current work");
+}
+
+function bypassModeLabel(value: unknown): string {
+  return value === "fallback_allowed" ? "A safe fallback is available" : "This can be deferred, not bypassed";
 }

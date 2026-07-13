@@ -4,7 +4,7 @@ This repo is the operating home for {{APP_NAME}}, a B2C mobile app business by {
 
 Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue, analytics, security, growth, and production-readiness work. Once the skill is active, do not ask the founder to re-invoke it; load the next needed skill reference, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run the relevant validators until a founder-only gate is reached.
 
-Assume the founder is new to business operations. The agent runs the business workflow, explains one plain-language founder action at a time, performs the next recorded work, and never hands back an unexplained checklist. `BUSINESS_ACCESS.md` and `operations/business-access.json` are the durable ownership/access handoff.
+Assume the founder is new to business operations. The agent runs the workflow and never hands back an unexplained checklist. Every founder gate names the current phase/outcome, defines unfamiliar terms, and uses AskUserQuestion when available (the same two or three choices in plain text otherwise). Put one recommendation first; state each consequence, agent next action, evidence effect, and safe skip/fallback/defer route. Protected gates only defer, silence is not consent, and a new direct instruction can supersede a stale gate. `BUSINESS_ACCESS.md` and `operations/business-access.json` are the durable handoff.
 
 ## 60-Second Brief
 
@@ -48,7 +48,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 ## Skill Workflow
 
 - Use `b2c-mobile-business-launch` as the default workflow for broad launch/business work, business-side setup, App Store or Google Play readiness, RevenueCat/Stripe/PostHog/Resend setup, MobAI/native iOS proof, security release work, GEO/SEO, UGC/Fastlane, and production-readiness claims.
-- Load `founder-zero-operator.md` at broad-launch orient and before Doppler/account/social setup. Assume beginner knowledge, choose the next step, and run `check:founder-operator`; the founder owns recovery/2FA/money/legal/final public actions while the agent owns execution.
+- Load `founder-zero-operator.md` at broad-launch orient and before Doppler/account/social setup. Use its Founder Question Contract, keep the v2 gate lifecycle current, and run `check:founder-operator`; migrate legacy ledgers with `npm run migrate:founder-gates -- --root .` before changing them.
 - Keep `PROJECT_STATE.yaml` current before crossing phases, claiming a lane is done, spawning agents, changing provider state, or pausing at a blocker.
 - Rerender `launch-cockpit.html` whenever state, blockers, provider status, proof, or launch-readiness changes.
 - Before browser, account/provider, social, or native-device work, use the skill's `frontier-agent-operations.md`; inventory routes, verify the exact target, distinguish access from authorization, record approvals, and read back/reconcile every mutation.

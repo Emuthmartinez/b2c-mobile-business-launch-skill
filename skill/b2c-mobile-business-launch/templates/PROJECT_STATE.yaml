@@ -29,6 +29,8 @@ autonomy:
   founder_only_gates:
     - "paid tool signups or spend"
     - "credentials, secrets, and account access"
+    - "legal, privacy, or pricing approval"
+    - "destructive or irreversible actions"
     - "App Store or Google Play submission"
     - "public posting or scheduling"
 business_operator:
@@ -40,6 +42,15 @@ business_operator:
   doppler_status: "not_started"
   social_access_status: "not_started"
   access_ready_count: 0
+  current_phase: "phase_0_orient"
+  current_phase_label: "Set the foundation"
+  current_phase_outcome: "A clear working identity and the next safe setup step."
+  active_gate_id: "confirm-working-name"
+  active_gate_class: "scope"
+  active_gate_origin: "skill_requirement"
+  active_gate_status: "pending"
+  active_gate_bypass_mode: "fallback_allowed"
+  question_mode: "ask_user_question_when_available"
   next_founder_action: "Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time."
   next_agent_action: "Inspect current repo and public identity state, then guide the first secure business account step."
   next_business_operation: "After the identity gate clears, continue into secure account setup, research, social profiles, content, support, analytics, store work, and launch operations in priority order."
