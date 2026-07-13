@@ -16,7 +16,7 @@ if (!existsSync(referencePath)) {
   issues.push(issue("error", "asc_command_contract.reference_missing", "app-store-connect-cli.md is missing.", referencePath));
 } else {
   const text = readFileSync(referencePath, "utf8");
-  const forbidden = ["asc apps info view", "asc review status", "asc review doctor", "asc metadata keywords diff", "asc validate app-store-version"];
+  const forbidden = ["asc apps get", "asc validate app-store-version"];
   for (const guidancePath of collectGuidanceFiles()) {
     const guidance = readFileSync(guidancePath, "utf8");
     for (const command of forbidden) {
@@ -34,7 +34,15 @@ if (!existsSync(referencePath)) {
     }
   }
 
-  for (const command of ["asc apps get", "asc status --app", "asc review submissions-list", "asc diff localizations", "--version-id <VERSION_ID>"]) {
+  for (const command of [
+    "asc apps view",
+    "asc status --app",
+    "asc review status",
+    "asc review doctor",
+    "asc review submissions-list",
+    "asc diff localizations",
+    "--version-id <VERSION_ID>",
+  ]) {
     if (!text.includes(command)) {
       issues.push(
         issue(
@@ -50,9 +58,22 @@ if (!existsSync(referencePath)) {
 
 const version = spawnSync("asc", ["--version"], { encoding: "utf8" });
 if (!version.error && version.status === 0) {
+  const installedMajor = parseMajorVersion(`${version.stdout ?? ""}\n${version.stderr ?? ""}`);
   verifyLiveHelp(["validate", "--help"], ["--version", "--version-id"]);
-  verifyLiveHelp(["apps", "--help"], ["get"]);
-  verifyLiveHelp(["review", "--help"], ["submissions-list"]);
+  if (installedMajor !== null && installedMajor < 2) {
+    issues.push(
+      issue(
+        "warning",
+        "asc_command_contract.live_cli_stale",
+        `Installed asc ${installedMajor}.x predates the stored 2.x contract; update the shadowed CLI before using executable guidance.`,
+        "references/app-store-connect-cli.md",
+      ),
+    );
+    verifyLiveHelp(["review", "--help"], ["submissions-list"]);
+  } else {
+    verifyLiveHelp(["apps", "--help"], ["view"]);
+    verifyLiveHelp(["review", "--help"], ["status", "doctor", "submissions-list"]);
+  }
   verifyLiveHelp(["diff", "--help"], ["localizations"]);
 }
 
@@ -107,6 +128,13 @@ function hasHelpToken(output: string, term: string): boolean {
     return new RegExp(`(?:^|[\\s,])${escapeRegex(term)}(?=[\\s,=<]|$)`, "m").test(output);
   }
   return new RegExp(`^\\s{0,12}${escapeRegex(term)}(?:\\s|$)`, "m").test(output);
+}
+
+function parseMajorVersion(output: string): number | null {
+  const match = output.match(/(?:^|\s)v?(\d+)\.\d+\.\d+(?:\s|$)/);
+  if (!match?.[1]) return null;
+  const major = Number.parseInt(match[1], 10);
+  return Number.isFinite(major) ? major : null;
 }
 
 function code(value: string): string {

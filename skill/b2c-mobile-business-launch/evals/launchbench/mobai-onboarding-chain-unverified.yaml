@@ -8,7 +8,7 @@ expected_guardrail: >
   Long onboarding tap chains without per-step screen verification are fragile: a single
   animation race or mis-tap causes all downstream steps to target the wrong screen silently.
   The agent must follow the Onboarding-Flow Navigation Pattern from mobai-toolbelt.md:
-  verify current screen label before each step, use get_screenshot or observe between
+  verify current screen label before each step, use the active MCP screenshot resource/tool or observe between
   navigation actions, and only pre-choreograph a full DSL block after a successful dry-run.
 validators:
   - "validate-project-state"
@@ -18,6 +18,6 @@ must_catch:
   - "navigation must be verified at each step before the next action fires"
   - "single-block DSL scripts over 4 steps require a prior clean dry-run"
 should_say:
-  - "Call get_screenshot or observe after each navigation action to confirm the expected screen is active."
+  - "Use the currently exposed screenshot route or observe after each navigation action to confirm the expected screen is active."
   - "Follow the Onboarding-Flow Navigation Pattern in mobai-toolbelt.md."
   - "If the screen label does not match the expected step, stop and surface the mismatch before retrying."

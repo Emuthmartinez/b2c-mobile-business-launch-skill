@@ -206,7 +206,7 @@ This protocol runs on a real device via MobAI, scores each screen against the Em
 
 1. **Load context.** Read `eleven-star-experience.md`, `emotional-experience-design.md`, `mobai-toolbelt.md`, and `ethics-guardrail.md`. Read the existing `11_STAR_EXPERIENCE.md` and `EMOTIONAL_DESIGN.md` if present.
 
-2. **List screens.** Use MobAI `list_apps`, `get_device`, and `start_bridge` to reach the live app. Navigate each screen in the primary journey (onboarding → first value → paywall → core loop → re-engagement). Use `get_screenshot` to capture each screen state. Do not pre-choreograph multi-step chains without per-step screen verification (see `mobai-onboarding-chain-unverified` failure card).
+2. **List screens.** Read the active MobAI MCP resources or current CLI help, then use the exposed app/device/bridge route to reach the live app. Navigate each screen in the primary journey (onboarding → first value → paywall → core loop → re-engagement). Use the currently exposed screenshot tool or `mobai screenshot` form from live help to capture each state. Do not pre-choreograph multi-step chains without per-step screen verification (see `mobai-onboarding-chain-unverified` failure card).
 
 3. **Score each screen.** Apply the six-lens framework to each captured screen. Record: lens scores, which cards are present / missing / misused, the emotional curve impact of this screen, and any dark-pattern signals.
 

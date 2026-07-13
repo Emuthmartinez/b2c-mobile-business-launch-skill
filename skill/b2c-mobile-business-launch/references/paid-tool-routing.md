@@ -1,6 +1,6 @@
 # Paid Tool Routing And Free Fallbacks
 
-Use this before using, skipping, or replacing any paid third-party tool in the launch workflow.
+Use this before using, skipping, or replacing any paid third-party tool or paid tier of a freemium tool in the launch workflow.
 
 The rule is simple: tool access missing from the current runtime does not mean the founder lacks the tool, refuses to pay for it, or wants a weaker free fallback. Ask before spending tokens on a fallback path.
 
@@ -15,7 +15,7 @@ The rule is simple: tool access missing from the current runtime does not mean t
 
 ## Decision Protocol
 
-1. Identify the preferred paid tool and why it is useful for the lane.
+1. Identify the preferred tool/tier and why it is useful for the lane. If a free tier exists, separate what it covers from the paid capability the lane actually needs.
 2. Check for the MCP path first. Before concluding a paid tool is unavailable, use `ToolSearch` to search for `mcp__<TOOLNAME>__*` tools in the current runtime. For each primary tool, the exact prefix to search is:
    - AppKittie: `mcp__appkittie__`
    - XPOZ: `mcp__claude_ai_XPOZ__`
@@ -43,13 +43,13 @@ If the founder says they have the tool, ask only for the minimum access/export n
 
 ## Tool Map
 
-| Paid or account-gated tool | Preferred use | Free or lower-cost fallback after confirmation |
+| Paid/account-gated tool or freemium paid tier | Preferred use | Free or lower-cost route and confirmation boundary |
 | --- | --- | --- |
 | AppKittie | app-store economics, competitor intelligence, downloads/revenue estimates, keyword difficulty, reviews, ad/creator signals | public App Store/Google Play pages, store search, public reviews, app websites, manual competitor spreadsheet, Apple/Google console data if the app exists |
 | XPOZ | Reddit, TikTok, X/Twitter, Instagram social-language and creator research | public web search, platform-native search in browser, Reddit search, YouTube comments, App Store/Play reviews, founder-provided screenshots/exports |
 | Firecrawl | competitor site crawling, pricing/policy/funnel extraction, SEO/GEO page discovery | browser inspection, web search, `curl`, `sitemap.xml`, `robots.txt`, Playwright/browser snapshots, manual page notes |
 | Higgsfield | generated visuals, app icons, mascots, mockups, animations, ad creative, demo clips; also `brand-kits fetch`, `reframe` (aspect-ratio variants), and `personal_clipper` (long recording → short clips) — all three are paid/credit-consuming MCP operations and require the same spend confirmation as any generate run | Remotion code-rendered videos/stills after license check, real app screenshots, founder-owned assets, hand-authored HTML/CSS/SVG/canvas, local screen recordings, free/public-domain assets with license notes |
-| MobAI | paid mobile device automation, cross-device UI observation, screenshots, recordings, local testing | XcodeBuildMCP for Apple simulator/device build, run, UI automation, screenshots, logs, and video after confirmation; `xcodebuild`/`simctl` only if XcodeBuildMCP is unavailable; Android emulator/ADB for Android-only fallback |
+| MobAI | Free tier: one device, limited daily AI usage, Testing Mode, and limited AI test generation/fixing. Plus/Pro: unlimited daily use; Pro adds unlimited devices, parallel suites, multi-device runs, and offline mode. | Use the MobAI free tier without a spend gate when it satisfies the lane. Ask before upgrade/trial/spend or before substituting XcodeBuildMCP because it narrows coverage to Apple; `xcodebuild`/`simctl` only if that route is approved and XcodeBuildMCP is unavailable. Use Android emulator/ADB or record a blocker for missing Android coverage. |
 | Fastlane AI | post-launch organic content engine, Blitz generation, scheduling, analytics | manual content calendar, spreadsheet/JSON schedule, local prompts, platform-native drafts, no automated posting unless founder approves |
 | Paid ASO/MMP/ad tools | keyword ranks, paid attribution, SKAdNetwork/ad-network reporting, competitor tracking | AppKittie if available, public store search, store-console analytics, manual keyword sheet, Apple Search Ads/Google Ads native reports when accounts exist |
 | Sideshift or creator marketplace | creator sourcing, payouts, view tracking for UGC | manual TikTok sourcing, direct outreach, spreadsheet tracker, Stripe/Wise/Venmo payout records, creator-provided platform analytics screenshots |

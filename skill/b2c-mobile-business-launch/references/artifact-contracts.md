@@ -489,7 +489,7 @@ Use before declaring an app build ready for beta, store submission, or productio
 Must include:
 - build/typecheck/lint/test commands and outcomes for every touched repo
 - frontend/browser E2E evidence when web surfaces exist
-- MobAI mobile E2E evidence when app flows exist, Codex Desktop native iOS/XcodeBuildMCP evidence when Apple simulator/device tools are exposed, or founder-confirmed fallback evidence with limitations when MobAI is unavailable
+- MobAI mobile E2E evidence when app flows exist: independently checked desktop/MCP/CLI versions, selected Free/Plus/Pro tier, an existing `.mob` flow and run artifact for every supported platform, provider correlation, reviewed AI-heal diff plus passing rerun when used, explicit repeat bounds, and host-script endpoint/secret/cleanup/backend-proof attestation; or Codex Desktop native iOS/XcodeBuildMCP evidence with founder-confirmed coverage limitations when MobAI is unavailable
 - SnapshotPreviews preview proof when used: package/version/commit, `SnapshotTest` or `PreviewLayoutTest`, `TEST_RUNNER_SNAPSHOTS_EXPORT_DIR`, exported PNG/JSON paths, and preview-only limitation
 - serve-sim simulator proof when used: booted simulator/device, preview URL/port, actions/logs, stream evidence paths, and provider/signing limitations
 - backend/database proof for frontend actions, including real test records or provider logs
@@ -501,6 +501,7 @@ Must include:
 - security release proof: `SECURITY.md`, `security-review.html`, `check:security` output, scanner/security-review evidence or founder-approved blocked route, app-integrity decision, accepted risks, and incident-response route
 - release-build or staging-build proof that mocks are disabled and secrets are not bundled
 - `check:native-ios` result when iOS engineering, screenshots, app-preview, or production-readiness lanes are in scope
+- `check:mobai-proof` result when MobAI is used or claimed as mobile engineering proof
 - secret-management proof: `SECRETS.md` coverage, Doppler/provider setup, `doppler run --` or approved command wrapper, CI/deploy injection, secret scan, and public-bundle check
 - remaining blockers and founder-only gates
 

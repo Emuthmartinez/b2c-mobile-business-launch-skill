@@ -413,12 +413,16 @@ tools:
       photos_source: ""
       training_manifest_path: ""
   mobai:
-    route: "intended_paid_or_account_tool"
+    route: "intended_free_or_paid_account_tool"
     docs_checked_at: ""
+    selected_tier: "free | plus | pro | blocked | not_needed"
+    desktop_version: ""
+    mcp_version: ""
+    cli_version: ""
     required_secrets: []
-    preflight: "Confirm device/app access, bundle/package ID, locale, seeded demo state, and screenshot-critical flows before capture."
-    validation: "SCREENSHOTS.md records raw capture paths, device/locale, source screen, version localization ID, and final composition linkage."
-    fallback: "XcodeBuildMCP for Apple-only capture or founder-provided captures only after paid-tool fallback approval and limitations are recorded."
+    preflight: "Refresh the desktop release, active MCP resources, npm CLI version/help, and MobAI CI docs independently; confirm tier, device/app access, bundle/package ID, locale, seeded demo state, and critical .mob flows before mutation."
+    validation: "PRODUCTION_READINESS.md records separate desktop/MCP/CLI versions, selected tier, iOS/Android device-flow evidence, AI-heal diff review plus rerun, bounded repeat parameters, host-script allowlist/secret/cleanup proof, provider correlation, and limitations. SCREENSHOTS.md links raw captures to final composition."
+    fallback: "Use MobAI Free without a spend gate when it fits. Ask before Plus/Pro spend or an XcodeBuildMCP Apple-only substitution; record missing Android/cross-platform proof and use Android emulator/ADB or a dated blocker."
   codex_native_ios:
     route: "codex_desktop_native_tooling_when_exposed"
     docs_checked_at: ""

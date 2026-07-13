@@ -10,7 +10,7 @@ Load `paid-user-acquisition.md` before Apple Search Ads, paid campaign custom pr
 
 Load `localization-market-research.md` before any localization work. Localization is a market-selection decision made from search-demand evidence, not a translation task: research keyword popularity, difficulty, and demand per storefront, rank markets into priority tiers, and produce `LOCALIZATION_MARKET_RESEARCH.md` before localizing metadata, keywords, screenshots, paywalls, landing, or email. Localize based on search demand, not language.
 
-Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI, creator-marketplace, or MMP/ad tooling with a free fallback. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
+Load `paid-tool-routing.md` before replacing paid ASO, AppKittie, MobAI Plus/Pro or intended cross-platform coverage, creator-marketplace, or MMP/ad tooling with a free fallback. MobAI Free needs no spend gate when it satisfies the lane. Load `apple-signing-release.md` before Apple Developer account triage, bundle IDs/App IDs, signing, certificates/profiles, archive/export/upload, TestFlight, or distribution-readiness claims. Load `app-store-connect-cli.md` before using the Rork `asc` CLI or App Store Connect CLI skills for metadata, screenshots, TestFlight, release validation, signing, subscriptions, or RevenueCat catalog sync.
 
 ## Contents
 

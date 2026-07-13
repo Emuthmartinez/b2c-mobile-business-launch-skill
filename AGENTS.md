@@ -61,6 +61,7 @@ npm run check:business-control-plane-workspace
 npm run check:provider-proof -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:agent-operations -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:asc-command-contract -- --skill-root skill/b2c-mobile-business-launch
+npm run check:mobai-proof -- --skill-root skill/b2c-mobile-business-launch --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:token-promotion -- --root skill/b2c-mobile-business-launch/templates
 npm run check:template-safety
 npm run check:onboarding -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml

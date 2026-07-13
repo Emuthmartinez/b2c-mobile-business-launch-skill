@@ -2,7 +2,7 @@
 
 Use this before designing onboarding, quizzes, personalization, attribution capture, mascot guidance, demo videos, review prompts, paywall timing, closing offers, trials, or first-session activation.
 
-Load `paid-tool-routing.md` before replacing Higgsfield, MobAI, XcodeBuildMCP-approved fallback, RevenueCat experiments, PostHog experiments/surveys/replay, or any paid/account-gated onboarding tool with a free/manual route. Load `remotion-content-assets.md` before using Remotion for onboarding demo clips, animated explainers, app-preview cuts, social hook clips, or local rendered assets.
+Load `paid-tool-routing.md` before replacing Higgsfield, MobAI Plus/Pro or intended cross-platform coverage, XcodeBuildMCP-approved fallback, RevenueCat experiments, PostHog experiments/surveys/replay, or any paid/account-gated onboarding tool with a free/manual route. MobAI Free needs no spend gate when it covers the lane. Load `remotion-content-assets.md` before using Remotion for onboarding demo clips, animated explainers, app-preview cuts, social hook clips, or local rendered assets.
 
 ## Contents
 

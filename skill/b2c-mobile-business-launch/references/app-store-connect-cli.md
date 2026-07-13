@@ -31,7 +31,7 @@ Refresh these before running or writing commands:
 - Official Apple App Store Connect docs referenced in `store-console-workflow.md`
 - Official Apple signing/account docs referenced in `apple-signing-release.md`
 
-As of the May 2026 GitHub README, the CLI is a scriptable, JSON-first App Store Connect API tool for TestFlight, builds, submissions, signing, analytics, screenshots, subscriptions, and related workflows. The skills repo is a community-maintained, unofficial agent-skill pack and is not affiliated with Apple.
+As of the July 13, 2026 GitHub source and local `asc` 2.8.1 help, the CLI is a scriptable, JSON-first App Store Connect API tool for TestFlight, builds, submissions, signing, analytics, screenshots, subscriptions, and related workflows. The 2.x app-detail read is `asc apps view`; `asc apps get` is a pre-2.x command and must not be copied into executable guidance. The skills repo is a community-maintained, unofficial agent-skill pack and is not affiliated with Apple.
 
 ## When To Use
 
@@ -91,7 +91,7 @@ Use JSON output for agent automation:
 asc auth status --validate
 asc auth doctor
 asc apps list --output json --pretty
-asc apps get --id "123456789" --output json --pretty
+asc apps view --id "123456789" --output json --pretty
 asc account status --app "123456789" --output table
 asc status --app "123456789" --output table
 asc versions list --app "123456789" --output json
@@ -102,6 +102,8 @@ Common workflows from the current README:
 
 ```bash
 asc validate --app "123456789" --version "1.2.3"
+asc review status --app "123456789" --output table
+asc review doctor --app "123456789" --output table
 asc review submissions-list --app "123456789" --output table
 asc metadata pull --app "123456789" --version "1.2.3" --platform IOS --dir "./metadata"
 asc metadata validate --dir "./metadata" --output table
