@@ -6,6 +6,7 @@ Use this when starting, continuing, auditing, or handing off a launch. The goal 
 
 - `PROJECT_STATE.yaml`: compact source of truth for phase, autonomy mode, orchestration strategy, lane statuses, paid-tool routing, secrets, provider setup, proof, open questions, and active failure cards.
 - `launch-cockpit.html`: founder-visible rendered view of the same state.
+- `BUSINESS_ACCESS.md` plus `operations/business-access.json`: founder-zero business identity, Doppler, exact account/social access, recovery/2FA ownership, and the one next founder/agent actions.
 - `AGENT_OPERATIONS.md` plus `operations/agent-operations.json`: human and machine state for current capabilities, exact account/environment scope, approval envelopes, authenticated actions, research/media provenance, and reconciliation.
 - `state/business.json`, `state/theme.tokens.json`, and `design-room.html`: separate Design Room state/render artifacts for cross-surface design. Update these through `design-room.md` when design changes affect launch surfaces.
 - `LAUNCHBENCH.md` or `proof.launchbench` in `PROJECT_STATE.yaml`: eval/check history for known failure modes.
@@ -49,6 +50,7 @@ If `PRODUCTION_READINESS.md` evidence is produced during an audit session, write
 - top-level `orchestration` records preflight, strategy, candidate units, parallel-safe units, serialized units, spawned agents, collision checks, output review, state reconciliation, and validators.
 - top-level `compound_engineering` records whether Compound Engineering skills were available, used, blocked, or replaced with an equivalent fallback.
 - top-level `agent_operations` points to the human log and structured ledger, records capability freshness and active approvals, and confirms state reconciliation; use `frontier-agent-operations.md` rather than treating account access as blanket permission.
+- top-level `business_operator` assumes beginner founder knowledge, makes the agent the operating lead, points to the business-access artifacts, and mirrors Doppler/social readiness plus one next founder and agent actions.
 - `tools.*.docs_checked_at` records current-doc refresh dates for fast-moving CLIs and providers.
 - `tools.*.required_secrets` lists names only. Values belong in Doppler or the approved provider.
 - `lanes.security` tracks `SECURITY.md`, `security-review.html`, security tool routing, accepted risks, and release proof.
@@ -78,6 +80,7 @@ npm run check:apple-requirements -- --root /path/to/app
 npm run check:store-console -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
 npm run check:agent-operations -- --root /path/to/app
+npm run check:founder-operator -- --root /path/to/app
 npm run render:launch-cockpit -- --root /path/to/app
 ```
 

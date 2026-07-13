@@ -44,18 +44,22 @@ Rules:
 Goal: know what business, repo, artifacts, and constraints are real.
 
 Do:
+- Load `founder-zero-operator.md`. Assume the founder is new to business tooling and make the agent responsible for sequencing and execution.
 - Inspect the provided transcript/spec/repo and list existing artifacts.
 - Identify current phase, business name, target platform, monetization model, data/backend assumptions, and launch surface.
 - Load `project-state.md` and `autonomy-modes.md`.
 - Create or refresh `PROJECT_STATE.yaml` from `templates/PROJECT_STATE.yaml`, set the current autonomy mode, and record lane status honestly.
 - Confirm the launch tier with the founder (see Launch Tiers above) and record `project.launch_tier`; defer lite-tier breadth lanes with dated reasons.
 - Render `launch-cockpit.html` once the first state pass exists.
+- Create `BUSINESS_ACCESS.md` and `operations/business-access.json`; present one plain-language founder action and record the agent action that follows it.
 - Create tasks/checkpoints for the engagement; block later phases on the right prior outputs.
 - Decide whether to create one canonical repo bundle, a separate landing repo, or a product-build handoff bundle.
 
 Outputs:
 - `PROJECT_STATE.yaml`
 - `launch-cockpit.html`
+- `BUSINESS_ACCESS.md`
+- `operations/business-access.json`
 - concise phase plan
 - source-of-truth file map
 - open founder decisions list
@@ -64,12 +68,14 @@ Outputs:
 Acceptance:
 - A future agent can identify phase, autonomy mode, evidence, blockers, and founder-only gates without reading the entire repo.
 - The founder has a rendered cockpit for current state before provider/store/revenue/legal work begins.
+- The founder is not asked to manage a checklist or choose the next lane; one clear action unlocks the agent's recorded next work.
 
 ## Phase 0a: Project State And Autonomy
 
 Goal: make the launch inspectable and bounded before the agent starts executing.
 
 Do:
+- Use `BUSINESS_ACCESS.md` as the ownership/account spine and keep Doppler, social, store, email, domain, recovery, and 2FA state current.
 - Load `project-state.md`, `autonomy-modes.md`, `provider-state-recipes.md`, `launchbench-evals.md`, and `failure-cards.md` only as needed.
 - Set `autonomy.mode` to the least-powerful useful mode: usually `scout`, `draft`, `prepare`, or `apply`.
 - Copy `templates/PROJECT_STATE.yaml` if no state file exists.
@@ -85,6 +91,7 @@ Acceptance:
 - State never contains raw secret values.
 - `launch-cockpit.html` can be opened by the founder to see blockers, proof, and approval gates.
 - Provider/store/social mutations remain blocked unless autonomy mode and founder approval allow them.
+- `business_operator` state mirrors the access ledger and one-next-action handoff.
 
 ## Phase 0b: Tool Access And Fallback Decisions
 
@@ -114,6 +121,7 @@ Goal: prevent secret sprawl before service setup, CI, deploys, webhooks, and pro
 
 Do:
 - Load `secrets-management.md`.
+- Continue the founder-zero handoff: explain Doppler simply, ask only for login or secure value entry, and let the agent perform project/config inventory, setup, and proof.
 - Load `provider-state-recipes.md`.
 - Default to Doppler unless the founder selected a different secret manager.
 - If Doppler is selected, check `doppler --version`, current auth status, and whether `doppler.yaml` exists without printing secret values.

@@ -2,6 +2,8 @@
 
 No raw secrets: raw secret values must not be committed, pasted into docs, or included in screenshots/logs. Record names, locations, owners, and verification only.
 
+Founder-zero setup: the agent explains one secure action at a time and performs the project/config/routing work. Doppler stores automation secrets (API/OAuth/service/webhook/store/CI credentials), not browser passwords, passkeys, 2FA, recovery codes, cookies, or sessions; those stay with delegated platform access, the founder's password manager, or a founder-authenticated browser session.
+
 ## Provider
 
 - Selected provider: Doppler

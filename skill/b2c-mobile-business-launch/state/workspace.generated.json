@@ -70,7 +70,7 @@
         },
         {
           "name": "Continuity sentinel",
-          "summary": "Reviews AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, AGENT_OPERATIONS.md before selecting work."
+          "summary": "Reviews AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, BUSINESS_ACCESS.md before selecting work."
         },
         {
           "name": "Design Room scout",
@@ -91,6 +91,12 @@
         {
           "title": "Agent Operations",
           "summary": "Agent Operations is Planned and reads PROJECT_STATE.yaml, AGENT_OPERATIONS.md, operations/agent-operations.json.",
+          "path": "launch-cockpit.html",
+          "status": "Draft"
+        },
+        {
+          "title": "Founder-Zero Operator Bootstrap",
+          "summary": "Founder-Zero Operator Bootstrap is Planned and reads PROJECT_STATE.yaml, BUSINESS_ACCESS.md, operations/business-access.json, SECRETS.md.",
           "path": "launch-cockpit.html",
           "status": "Draft"
         },

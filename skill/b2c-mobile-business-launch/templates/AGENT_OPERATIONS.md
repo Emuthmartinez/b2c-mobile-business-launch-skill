@@ -4,6 +4,8 @@ Status: not started until capability discovery is current and the structured led
 
 Structured source: `operations/agent-operations.json`
 
+Business ownership/access source: `BUSINESS_ACCESS.md` and `operations/business-access.json`. Bootstrap the beginner founder and secure account access there; record each external action and approval here.
+
 ## Capability Summary
 
 Record the current connector, API, CLI, authenticated-browser, and native-device surfaces without secrets. Runtime tool schemas and local `--help` override old examples.

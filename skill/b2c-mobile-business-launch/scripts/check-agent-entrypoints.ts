@@ -84,6 +84,8 @@ if (templateAgents) {
       "do not ask the founder to re-invoke it",
       "PROJECT_STATE.yaml",
       "launch-cockpit.html",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "AGENT_OPERATIONS.md",
       "operations/agent-operations.json",
       "APP_AGENTS.md",
@@ -112,6 +114,9 @@ if (templateAgents) {
       "ASC CLI/skill routes can cover app creation",
       "ParthJadhav/app-store-screenshots",
       "frontier-agent-operations.md",
+      "founder-zero-operator.md",
+      "Assume the founder is new to business operations",
+      "check:founder-operator",
     ],
     "template_agents",
     templateAgentsPath,
@@ -138,9 +143,12 @@ if (templateClaude) {
       "Do not rely on prior chat context",
       "APP_AGENTS.md",
       "ORCHESTRATION.md",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "ASC CLI/skills",
       "AGENT_OPERATIONS.md",
       "frontier-agent-operations.md",
+      "beginner founder knowledge",
     ],
     "template_claude",
     templateClaudePath,
@@ -168,6 +176,9 @@ if (appAgents) {
       "check:emotional-design",
       "BRAND.md",
       "DEMO_VIDEO.md",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
+      "check:founder-operator",
     ],
     "app_agents",
     appAgentsPath,
@@ -207,7 +218,19 @@ if (productLeader) {
 if (marketingGuru) {
   requireTerms(
     marketingGuru,
-    ["Session Continuity", "Do not rely on chat memory", "EMOTIONAL_DESIGN.md", "Experience Cards", "BRAND.md", "DEMO_VIDEO.md"],
+    [
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "EMOTIONAL_DESIGN.md",
+      "Experience Cards",
+      "BRAND.md",
+      "DEMO_VIDEO.md",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
+      "AGENT_OPERATIONS.md",
+      "approval envelope",
+      "revocation path",
+    ],
     "marketing_guru",
     marketingGuruPath,
     issues,
@@ -215,7 +238,21 @@ if (marketingGuru) {
 }
 
 if (customerSuccess) {
-  requireTerms(customerSuccess, ["Session Continuity", "Do not rely on chat memory"], "customer_success", customerSuccessPath, issues);
+  requireTerms(
+    customerSuccess,
+    [
+      "Session Continuity",
+      "Do not rely on chat memory",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
+      "AGENT_OPERATIONS.md",
+      "approval envelope",
+      "revocation path",
+    ],
+    "customer_success",
+    customerSuccessPath,
+    issues,
+  );
 }
 
 if (engineeringLeader) {

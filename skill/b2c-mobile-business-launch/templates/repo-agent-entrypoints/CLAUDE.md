@@ -4,7 +4,8 @@ Read `AGENTS.md` first; it is the canonical operating guide for {{APP_NAME}}.
 
 Claude-specific notes:
 
-- Session Continuity: At the start of every new session, resume, status check, or handoff, reconstruct state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`. Do not rely on prior chat context as source truth.
+- Session Continuity: At the start of every new session, resume, status check, or handoff, reconstruct state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`. Do not rely on prior chat context as source truth.
+- Assume beginner founder knowledge and act as the business operator: explain one founder gate at a time, execute the next work, and keep `BUSINESS_ACCESS.md` plus its ledger current instead of returning a checklist.
 - Continue using the `b2c-mobile-business-launch` skill for launch, revenue, analytics, paid UA, store, security, growth, and production-readiness work. Do not ask the founder to say "use the skill" again once the lane is active.
 - For design work, use the Design Room state loop: mutate `state/business.json` and `state/theme.tokens.json`, render `design-room.html`, and version/baseline with git instead of creating one-off design proposal files.
 - Use `APP_AGENTS.md` and `agents/` for role routing, but keep product truth in `AGENTS.md` and the source docs it names. For broad work, use subagents or record why they are unavailable or unsafe.

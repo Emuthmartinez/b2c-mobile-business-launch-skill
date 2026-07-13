@@ -5,7 +5,7 @@ These are the reusable document shapes from the model launch session. Keep docs 
 ## Contents
 
 - Canonical File Map
-- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
+- Core docs: `PROJECT_STATE.yaml`, `launch-cockpit.html`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `state/business.json`, `state/theme.tokens.json`, `design-room.html`, `AGENTS.md`, `APP_AGENTS.md`, `TOOL_DECISIONS.md`, `SECRETS.md`, `SECURITY.md`, `security-review.html`, `ANALYTICS.md`, `analytics-plan.html`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `11-star-experience.html`, `SPEC.md`, `RESEARCH.md`, `BRAND.md`
 - Design docs: `DESIGN.md`, `DESIGN_SYSTEM.md`, `design.md`, `design.html`
 - Conversion docs: `ONBOARDING.md`, `onboarding.html`
 - Launch ops: `LAUNCH.md`, `APPLE_SIGNING.md`, `APPLE_APP_STORE_REQUIREMENTS.md`, `APP_STORE_LISTING.md`, `app-store-listing.html`, `app-privacy-questionnaire.html`, `STORE_CONSOLE.md`, `store-console.html`, `SCREENSHOTS.md`, `CONTENT_ASSETS.md`, `content-assets.html`, `STORE_OPS.md`, `PAID_UA.md`, `VIRAL_GROWTH.md`, `UGC_PLAYBOOK.md`, `FASTLANE_OPS.md`
@@ -23,6 +23,9 @@ CLAUDE.md                 # optional tool-specific addendum that points back to 
 APP_AGENTS.md             # lightweight app-local role roster for ongoing build, growth, product, design, and support work
 PROJECT_STATE.yaml        # compact machine-readable phase, autonomy, lane, provider, proof, blocker, and failure-card state
 launch-cockpit.html       # rendered founder-visible dashboard over PROJECT_STATE.yaml
+BUSINESS_ACCESS.md        # founder-zero business identity, Doppler, account/social access, and one-next-action handoff
+operations/business-access.json # structured operator bootstrap and exact account access state
+operations/business-access.schema.json # portable machine contract for business access state
 AGENT_OPERATIONS.md       # human-readable capability, approval, authenticated-action, and research/media operations log
 operations/agent-operations.json # structured capability inventory, approval envelopes, action proof, and reconciliation state
 operations/agent-operations.schema.json # portable machine contract for the structured operations ledger
@@ -93,6 +96,8 @@ agents/                   # simple role prompts/configs: orchestrator, marketing
 ```
 
 `AGENT_OPERATIONS.md` and its JSON ledger are required before browser, account/provider, social, or native-device operations are claimed ready. Use `frontier-agent-operations.md`; access is not authorization, and completed external mutations need exact-target preflight, a scoped approval envelope, sanitized before/after read-back proof, rollback/recovery, and canonical state reconciliation. Gate with `check:agent-operations`.
+
+`BUSINESS_ACCESS.md` and `operations/business-access.json` are required at broad-launch orient. Use `founder-zero-operator.md`: assume beginner founder knowledge, let the agent drive the business setup, keep one structured five-part founder gate plus the next business operation, and route Doppler and social/store/business accounts through founder-owned, named, scoped, revocable access with sanitized proof. Gate with `check:founder-operator`.
 
 When handing to Rork or another generated-app builder, duplicate the needed subset into:
 

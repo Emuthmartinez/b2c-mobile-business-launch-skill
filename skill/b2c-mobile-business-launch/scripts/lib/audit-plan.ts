@@ -98,6 +98,7 @@ export function buildAuditPlan(layout: AuditLayout): AuditStep[] {
     { id: "check:business-control-plane-workspace", kind: "script" },
     { id: "check:token-promotion", kind: "script", args: rootArgs },
     { id: "check:template-safety", kind: "script" },
+    { id: "check:founder-operator", kind: "script", args: stateArgs },
     { id: "check:agent-operations", kind: "script", args: stateArgs },
     { id: "check:provider-proof", kind: "script", args: stateArgs },
     { id: "check:compound-engineering", kind: "script", args: stateArgs },

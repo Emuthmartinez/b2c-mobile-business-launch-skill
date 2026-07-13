@@ -49,6 +49,7 @@ npm run launchbench
 npm run test:validators
 npm run check:source-registry
 npm run check:agent-entrypoints
+npm run check:founder-operator -- --root skill/b2c-mobile-business-launch/templates --state PROJECT_STATE.yaml
 npm run check:workflow-adherence
 npm run check:skill-version -- --source skill/b2c-mobile-business-launch --installed skill/b2c-mobile-business-launch
 npm run check:version-discipline -- --repo-root . --skill-root skill/b2c-mobile-business-launch

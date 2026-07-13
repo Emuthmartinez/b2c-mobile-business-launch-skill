@@ -691,6 +691,7 @@ sources:
     owner: source-freshness
     locations:
       - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
       - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
     notes: Auto-discovered from recently added repository content.
   - id: docs-doppler-com-docs-install-cli
@@ -721,6 +722,7 @@ sources:
     owner: source-freshness
     locations:
       - skill/b2c-mobile-business-launch/references/secrets-management.md
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
       - skill/b2c-mobile-business-launch/templates/secrets/SECRETS.md
     notes: Auto-discovered from recently added repository content.
   - id: docs-doppler-com-llms-txt
@@ -1930,3 +1932,39 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/xcodebuildmcp-testing.md
     notes: Official Apple guidance for performance tests and baselines in the native release matrix.
+  - id: help-x-com-x-delegate
+    name: X Delegate access
+    source_type: official_docs
+    url: https://help.x.com/en/managing-your-account/how-to-use-the-delegate-feature
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
+    notes: Official X guidance for revocable admin/contributor access without sharing the owner password.
+  - id: facebook-com-page-access
+    name: Meta Page and business access
+    source_type: official_docs
+    url: https://www.facebook.com/help/289207354498410?locale=en_GB
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
+    notes: Official Meta guidance for Page full, partial, and task access; current UI and Business Portfolio state still win.
+  - id: tiktok-business-center-members
+    name: TikTok Business Center member access
+    source_type: official_docs
+    url: https://ads.tiktok.com/help/article/add-users-tiktok-business-center?lang=en
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
+    notes: Official TikTok guidance for Admin/Standard roles and asset-level permissions.
+  - id: youtube-channel-permissions
+    name: YouTube channel permissions
+    source_type: official_docs
+    url: https://support.google.com/youtube/answer/9481328?co=GENIE.Platform%3DDesktop&hl=en-EN
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/founder-zero-operator.md
+    notes: Official YouTube guidance for managing a channel without sharing the Google Account login.

@@ -96,6 +96,20 @@
         ]
       },
       {
+        "id": "operator-bootstrap",
+        "name": "Founder-Zero Operator Bootstrap",
+        "status": "planned",
+        "stateRefs": [
+          "PROJECT_STATE.yaml",
+          "BUSINESS_ACCESS.md",
+          "operations/business-access.json",
+          "SECRETS.md"
+        ],
+        "renderedArtifacts": [
+          "launch-cockpit.html"
+        ]
+      },
+      {
         "id": "analytics",
         "name": "Analytics",
         "status": "planned",

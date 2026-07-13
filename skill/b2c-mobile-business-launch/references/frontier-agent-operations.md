@@ -2,6 +2,8 @@
 
 Use this before an agent reads or changes authenticated web accounts, provider consoles, social platforms, App Store Connect, Google Play, email/support tools, or mobile devices. It turns available frontier tooling into an auditable operating loop instead of treating a signed-in session as blanket permission.
 
+Load `founder-zero-operator.md` first during broad business bootstrap. That reference owns the beginner-friendly conversation, business identity, Doppler/account setup order, and one-next-action handoff; this reference owns each external action's capability, approval, proof, and reconciliation.
+
 ## Contents
 
 - Operating Model
@@ -134,7 +136,7 @@ Native tool control is another serialized external surface:
 
 ## Secrets And Authentication
 
-Use `secrets-management.md` before any credential flow. Doppler is the default for API keys, tokens, service credentials, and automation secrets; it is not a channel for printing passwords or copying 2FA values into the agent transcript.
+Use `secrets-management.md` before any credential flow. Doppler is the default for API keys, OAuth/refresh tokens, service credentials, and automation secrets; it is not browser password/passkey storage or a channel for copying passwords, recovery codes, or 2FA into the transcript.
 
 Record secret names and storage routes only. Never capture raw secrets in `AGENT_OPERATIONS.md`, JSON state, screenshots, browser exports, console logs, shell history, or proof files. Prefer existing signed-in sessions, keychain/provider profiles, scoped service tokens, OAuth, and secure founder entry.
 

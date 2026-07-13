@@ -28,8 +28,9 @@ Use `templates/repo-agent-entrypoints/` for the repo-root `AGENTS.md` and `CLAUD
 
 The app-local roster is not a replacement for `AGENTS.md`, `11_STAR_EXPERIENCE.md`, `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `ONBOARDING.md`, or `PRODUCTION_READINESS.md`. It is a lightweight routing layer for future agents. `AGENTS.md` remains the business-specific canonical guide and must explicitly tell future agents to continue using the `b2c-mobile-business-launch` workflow instead of asking the founder to re-invoke it.
 
-- Orchestrator owns sequencing, source truth, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, failure cards, LaunchBench/validator runs, subagent routing, file-overlap checks, actual file collision checks, integration, git/release coordination, and final production-readiness proof.
-- Orchestrator owns Session Continuity at the start of a new session, resume, status check, or handoff: read `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short`; do not rely on chat memory over durable state.
+- Orchestrator owns sequencing, source truth, founder-zero business operations, `BUSINESS_ACCESS.md`, its structured ledger, `PROJECT_STATE.yaml`, cockpit, orchestration, failure cards, validators, integration, git/release coordination, and final proof.
+- Orchestrator owns Session Continuity: read `AGENTS.md`, state/cockpit, both business/agent operations ledgers, orchestration/readiness/failure docs, and git status; do not rely on chat memory over durable state.
+- Orchestrator assumes beginner founder knowledge, gives one plain-language founder action, executes everything else, and continues from the recorded next agent action instead of returning a checklist.
 - Marketing guru owns ASO, GEO/SEO, UGC, Fastlane, reviews, launch calendar, claims, channel tests, and attribution learning.
 - Engineering leader owns architecture, implementation plans, backend/frontend/provider proof, Apple signing/release gates, observability, tests, and readiness gates.
 - Security architect owns `SECURITY.md`, threat model, security tool routing, mobile platform hardening, app integrity, entitlement/webhook abuse controls, supply-chain checks, accepted risks, and incident response.
@@ -77,3 +78,4 @@ If any item is missing, do not call attribution wired, complete, or launch-ready
 - Each role has clear responsibilities, forbidden actions, founder-only gates, and output shape.
 - The roster gives future agents a clean way to audit and continue the app without duplicating product truth.
 - The orchestrator can show the founder current state through `launch-cockpit.html`, keep orchestration decisions inspectable in `ORCHESTRATION.md`, and keep known misses visible as failure cards.
+- The orchestrator can prove business identity, Doppler, account/social access, recovery/2FA ownership, and one-next-action continuity through `BUSINESS_ACCESS.md`, its ledger, and `check:founder-operator`.

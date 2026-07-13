@@ -17,6 +17,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 | Lane | Required Evidence | Primary Tools |
 | --- | --- | --- |
 | Project state/cockpit | `PROJECT_STATE.yaml` phase/mode/lanes/providers/proof/failure cards, rendered `launch-cockpit.html`, validator status | `project-state.md`, `autonomy-modes.md`, bundled TS scripts |
+| Founder-zero operator bootstrap | beginner-assumed guidance, business identity spine, Doppler setup, account/social inventory, delegated access, recovery/2FA ownership, one founder action plus one agent action | `founder-zero-operator.md`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `check:founder-operator` |
 | Paid-tool routing | intended paid/account-gated tools, founder confirmation, selected fallback or blocked state, limitations | `TOOL_DECISIONS.md`, `paid-tool-routing.md` |
 | Secrets/config | Doppler or approved provider, `SECRETS.md`, command wrappers, CI/deploy injection, secret scan, public/server-only classification | Doppler CLI, `SECRETS.md`, platform secret stores |
 | Security architecture/release | `SECURITY.md`, `security-review.html`, threat model, OWASP MASVS/ASVS basis, paid-security-tool routing, mobile hardening, entitlement/webhook abuse controls, supply-chain checks, monitoring, incident response, accepted risks | `security-release-hardening.md`, local security skills, Sentry skills, MobSF, platform docs |
@@ -57,6 +58,7 @@ Classify each lane as `done`, `partial`, `blocked`, `not needed`, or `deferred w
 
 Required unless explicitly marked not applicable:
 - `PROJECT_STATE.yaml` and `launch-cockpit.html` for multi-lane launches, handoffs, continuations, or readiness audits; current phase, autonomy mode, lane status, provider state, proof, blockers, and active failure cards must be visible
+- `BUSINESS_ACCESS.md` and its structured ledger at broad-launch orient so the agent assumes a beginner founder, drives setup, secures Doppler and account/social access, and never hands back an unexplained checklist
 - research-backed spec and category choice
 - paid/account-gated tool decisions recorded before free fallbacks are used
 - `SECRETS.md` when any API key, token, OAuth credential, webhook signing secret, store credential, service-account file, CI/deploy env var, or `.env` file is needed; default to Doppler unless the founder approves another provider
@@ -125,6 +127,8 @@ Add when the launch depends on paid acquisition, creators, web checkout, or rapi
 
 Flag these aggressively:
 - `PROJECT_STATE.yaml` is missing, stale, or inconsistent with actual docs/provider state.
+- The agent assumes the founder knows business tooling, dumps a setup checklist, asks the founder to choose the next lane, or stops after access instructions instead of operating the business.
+- A password, passkey, 2FA/recovery code, cookie, or raw Doppler/social token is requested in chat; Doppler is misrepresented as browser-password storage; or shared personal credentials are used when delegation/OAuth exists.
 - `launch-cockpit.html` is missing, so the founder cannot see lane status, blockers, proof, or approval gates in one place.
 - Autonomy mode is not recorded, and the agent mutates provider/store/public state without a named approval scope.
 - A known miss happened again but no LaunchBench scenario, validator, or failure card was added.
