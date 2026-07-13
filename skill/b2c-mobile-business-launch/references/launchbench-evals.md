@@ -10,7 +10,8 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - simulator build passes but Apple distribution signing, Team ID, bundle ID, app record, certificate/profile, archive/export/upload, or TestFlight state is unknown
 - iOS readiness ignores Codex Desktop native iOS/XcodeBuildMCP tools when exposed, or CLI proof names SnapshotPreviews/serve-sim without exported PNG/JSON paths, simulator URL/port, provider-proof pairing, and simulator/preview/distribution limitations
 - App Store Connect app name is taken and the CLI proposes a fallback name without founder approval
-- MobAI is unavailable and the agent silently switches to XcodeBuildMCP
+- MobAI is unavailable and the agent silently switches to XcodeBuildMCP without recording the lost Android/cross-platform coverage; MobAI Free itself does not need spend approval
+- MobAI desktop, MCP, and CLI versions are collapsed into one number, 2.5-era repeat/host-script safety is omitted, or AI-healed flows are accepted without diff review and a passing rerun
 - RevenueCat products exist but entitlement grant, restore, webhook, or backend projection is unproven
 - Resend templates ignore `DESIGN.md`, unsubscribe rules, sender-domain proof, or support reply paths
 - a new API key/env var appears but `SECRETS.md`, Doppler, CI injection, or public/server-only classification is not updated
@@ -26,7 +27,7 @@ Use LaunchBench for failure modes that have happened before or would be expensiv
 - monetization defaults are locked by reflex — soft paywall, ≤4-day trial, monthly-only, low price, English-only, ads before the paywall is proven, day-30 win-back as the retention plan — without surfacing the RevenueCat 2026 anti-pattern trade-offs (`revenue-monetization.md` §10 digest, `onboarding-conversion.md` Conversion Anti-Patterns, `paid-user-acquisition.md` Anti-Patterns) as founder-gated decisions to test
 - paid growth is marked ready from ad-channel ideas without `PAID_UA.md`, one-channel focus, creative cadence, tracking baseline, blended report, RevenueCat LTV/CPA review, stop/scale rules, and founder spend approval
 - social growth is marked ready from UGC ideas, views, or TikTok hooks without `VIRAL_GROWTH.md`, product-loop contract, abuse controls, monetization timing, analytics proof, and stop/scale rules
-- a primary paid tool (AppKittie, XPOZ, Higgsfield, Refero, MobAI) is bypassed or replaced with a free fallback without first using ToolSearch to confirm the MCP path is absent, asking the founder, and recording the decision in TOOL_DECISIONS.md with tool, lane, access status, founder confirmation, selected route, and fallback limitation
+- a primary paid tool or tier (AppKittie, XPOZ, Higgsfield, Refero, MobAI Plus/Pro) is bypassed without first using ToolSearch to confirm the MCP path is absent, asking the founder when spend/coverage changes, and recording tool, tier, lane, access, confirmation, route, and fallback limitation in TOOL_DECISIONS.md
 - a simple reversible founder request becomes a jargon-heavy multi-field blocker with no phase/outcome, selectable question, consequences, safe skip/defer route, or stale-gate supersession
 - XPOZ MCP tools are listed in the system-reminder but the agent declares XPOZ unavailable and runs curl or web search without a ToolSearch verification step
 - AppKittie MCP tools are available in the session but ASO keyword difficulty or competitor data is produced without calling them

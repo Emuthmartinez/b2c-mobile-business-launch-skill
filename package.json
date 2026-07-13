@@ -17,6 +17,7 @@
     "check:founder-operator": "tsx skill/b2c-mobile-business-launch/scripts/check-founder-operator-bootstrap.ts",
     "migrate:founder-gates": "tsx skill/b2c-mobile-business-launch/scripts/migrate-founder-gates.ts",
     "check:asc-command-contract": "tsx skill/b2c-mobile-business-launch/scripts/check-asc-command-contract.ts",
+    "check:mobai-proof": "tsx skill/b2c-mobile-business-launch/scripts/check-mobai-proof.ts",
     "check:aso-metadata": "tsx skill/b2c-mobile-business-launch/scripts/check-aso-metadata.ts",
     "check:localization-research": "tsx skill/b2c-mobile-business-launch/scripts/check-localization-research.ts",
     "check:ux-patterns": "tsx skill/b2c-mobile-business-launch/scripts/check-ux-patterns.ts",

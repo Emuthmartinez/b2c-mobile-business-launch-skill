@@ -16,6 +16,7 @@
     "check:founder-operator": "tsx scripts/check-founder-operator-bootstrap.ts",
     "migrate:founder-gates": "tsx scripts/migrate-founder-gates.ts",
     "check:asc-command-contract": "tsx scripts/check-asc-command-contract.ts",
+    "check:mobai-proof": "tsx scripts/check-mobai-proof.ts",
     "check:ux-patterns": "tsx scripts/check-ux-patterns.ts",
     "check:onboarding": "tsx scripts/check-onboarding-conversion.ts",
     "check:11-star": "tsx scripts/check-eleven-star-experience.ts",

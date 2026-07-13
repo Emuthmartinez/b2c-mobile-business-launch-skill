@@ -6,6 +6,25 @@ Do not mark this app launch-ready until `PROVIDER_PROOF.md`, `PROJECT_STATE.yaml
 
 Compound Engineering readiness: record `ce-code-review`, the applicable CE test route such as `ce-test-browser` or `ce-test-xcode`, MobAI or equivalent E2E proof, and a `ce-proof` proof artifact before the engineering lane is done.
 
+## MobAI Cross-Platform Proof
+
+Keep component versions separate and replace every Pending value with live evidence before using MobAI to close engineering readiness.
+
+- Docs checked: Pending
+- Desktop app: Pending
+- MCP server: Pending
+- CLI package: Pending
+- Selected tier: Pending (`Free`, `Plus`, `Pro`, blocked, or not needed)
+- AI-healed flow: Pending (not used, or reviewed diff + passing rerun + evidence)
+- Host-side script safety: Pending (not used, or endpoint allowlist + no embedded secrets + cleanup + backend proof)
+
+| Platform | Device / OS | `.mob` flow | Evidence path | Provider correlation | Result |
+| --- | --- | --- | --- | --- | --- |
+| iOS | pending | pending | pending | pending | Pending |
+| Android | pending | pending | pending | pending | Pending |
+
+Run `npm run check:mobai-proof -- --root . --state PROJECT_STATE.yaml` and attach the result before MobAI closes a mobile engineering lane. A generated or AI-healed flow is not proof until its diff is reviewed and the edited flow reruns successfully. Predicate/condition loops need an explicit cap; parameterized counted loops need a validated bound. Host scripts must stay on allowlisted test/staging endpoints and keep secrets outside `.mob`/embedded JavaScript.
+
 ## Native iOS Proof
 
 Use this section for iOS/iPadOS implementation proof when native Apple tooling is in scope. Simulator, preview, and browser-stream proof must be paired with `PROVIDER_PROOF.md` when app actions depend on RevenueCat, PostHog, Stripe, Resend, Sentry, databases, or store-console state. A simulator build alone is not distribution readiness and does not prove App Store signing, archive, export, upload, TestFlight, or founder approval; keep those gates in `APPLE_SIGNING.md`.

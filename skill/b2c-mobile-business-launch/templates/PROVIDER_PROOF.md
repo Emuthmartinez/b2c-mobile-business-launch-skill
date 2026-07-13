@@ -11,7 +11,7 @@ Status: partial until live provider evidence is captured. Do not treat planned s
 | Resend | needs domain and test-send evidence | send test email and inspect delivery | email/resend-proof.md | founder-only DNS/domain access |
 | App Store Connect | needs app record and metadata evidence | run ASC validation commands after approval | store/asc-proof.md | founder-only submission and account access |
 | Sentry | needs release event and alert evidence | trigger handled test event | security/sentry-proof.md | founder-only project access |
-| MobAI | needs real mobile path evidence | run target-user onboarding walkthrough | mobile/mobai-proof.md | founder-only device/account access |
+| MobAI | needs grounded iOS/Android flow evidence with component versions and tier | run existing `.mob` flows, review any AI-heal diff, rerun, and correlate provider state | mobile/mobai-proof.md | device/account access; spend approval only for Plus/Pro |
 | Doppler | needs config and runtime injection evidence | doppler run -- printenv APP_ENV | secrets/doppler-proof.md | founder-only secrets access |
 
 ## Rules

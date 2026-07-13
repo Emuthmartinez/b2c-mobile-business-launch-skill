@@ -574,7 +574,7 @@ MobAI recorder route:
 
 ### XcodeBuildMCP Fallback
 
-MobAI is a paid third-party tool. If MobAI is unavailable, do not silently switch. Load `paid-tool-routing.md`, ask the founder to confirm XcodeBuildMCP as the free/open-source Apple-platform fallback, then load `xcodebuildmcp-testing.md`.
+MobAI is a freemium third-party tool. Its free tier needs no spend approval when it satisfies the capture lane; Plus/Pro features still require a founder gate. If MobAI is unavailable, do not silently switch platform coverage. Load `paid-tool-routing.md`, ask the founder to confirm XcodeBuildMCP as the Apple-only fallback, then load `xcodebuildmcp-testing.md`.
 
 Use XcodeBuildMCP for:
 - Apple simulator/device build, run, test, logs, screenshots, UI snapshots, and video

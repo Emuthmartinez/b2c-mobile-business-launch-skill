@@ -25,6 +25,7 @@ import { register as registerArchetype } from "./fixtures/archetype.fixtures.js"
 import { register as registerBehavioral } from "./fixtures/behavioral.fixtures.js";
 import { register as registerAgentOperations } from "./fixtures/agent-operations.fixtures.js";
 import { register as registerFounderOperator } from "./fixtures/founder-operator.fixtures.js";
+import { register as registerMobai } from "./fixtures/mobai.fixtures.js";
 
 const keepTemp = process.argv.includes("--keep-temp");
 const harness = createHarness();
@@ -46,6 +47,7 @@ try {
     registerBehavioral,
     registerAgentOperations,
     registerFounderOperator,
+    registerMobai,
   ]) {
     register(harness);
     harness.cleanupFixtures();

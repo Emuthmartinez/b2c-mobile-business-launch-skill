@@ -873,6 +873,43 @@ sources:
     locations:
       - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-mobai-mcp-2-5-0-capability-commit
+    name: MobAI MCP 2.5.0 capability commit
+    source_type: github
+    url: https://github.com/MobAI-App/mobai-mcp/commit/414f858ae60babeab16a45cb9364addb87498abe
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Reviewed 2026-07-13; authoritative public diff for repeat, run_script, eval_script, loop caps, repeat_index, and the restricted host-side JavaScript VM.
+  - id: github-com-mobai-app-mobai-ci
+    name: github.com
+    source_type: github
+    url: https://github.com/MobAI-App/mobai-ci
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Reviewed 2026-07-13; official MobAI CI runner distribution and workflow documentation.
+  - id: mobai-run-docs
+    name: MobAI docs
+    source_type: docs
+    url: https://mobai.run/docs/
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Reviewed 2026-07-13; current documentation index for installation, testing, debugging, and automation discovery.
+  - id: npmjs-com-mobai-app-cli
+    name: MobAI CLI npm package
+    source_type: docs
+    url: https://www.npmjs.com/package/@mobai-app/cli
+    refresh_cadence_days: 7
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Reviewed 2026-07-13; package registry source for the standalone CLI version track.
   - id: github-com-mobai-app-mobile-harness
     name: github.com
     source_type: github
@@ -893,6 +930,25 @@ sources:
       - skill/b2c-mobile-business-launch/references/store-console-workflow.md
       - skill/b2c-mobile-business-launch/references/tool-recipes.md
     notes: Auto-discovered from recently added repository content.
+  - id: github-com-mobai-app-releases-v2-5-1
+    name: MobAI desktop v2.5.1 release
+    source_type: github
+    url: https://github.com/MobAI-App/releases/releases/tag/v2.5.1
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+      - skill/b2c-mobile-business-launch/references/tool-recipes.md
+    notes: Reviewed 2026-07-13; official desktop tag published 2026-07-12 with platform assets and a tag-only release body, so no undocumented desktop feature claims are inferred.
+  - id: github-com-mobai-app-releases-v2-5-0
+    name: MobAI desktop v2.5.0 comparison baseline
+    source_type: github
+    url: https://github.com/MobAI-App/releases/releases/tag/v2.5.0
+    refresh_cadence_days: 30
+    owner: source-freshness
+    locations:
+      - skill/b2c-mobile-business-launch/references/mobai-toolbelt.md
+    notes: Reviewed 2026-07-13; official baseline artifact source for the documented v2.5.0-to-v2.5.1 Apple-silicon tarball symbol/string comparison. Checksums and artifact names are recorded in mobai-toolbelt.md.
   - id: github-com-pbakaus-impeccable
     name: github.com
     source_type: github
