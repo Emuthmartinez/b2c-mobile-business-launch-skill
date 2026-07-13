@@ -230,7 +230,7 @@ export function writeCompleteOrchestration(root: string): void {
       "Strategy: hybrid manager pattern with one orchestrator.",
       "## Session Continuity",
       "Last state review: 2026-05-31.",
-      "Continuity source set: AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, ORCHESTRATION.md, PRODUCTION_READINESS.md, FAILURE_CARDS.md.",
+      "Continuity source set: AGENTS.md, PROJECT_STATE.yaml, launch-cockpit.html, ORCHESTRATION.md, BUSINESS_ACCESS.md, operations/business-access.json, PRODUCTION_READINESS.md, FAILURE_CARDS.md.",
       "Memory policy: Do not rely on chat memory or prior transcripts as source truth; repo state wins.",
       "Git status reviewed: yes.",
       "Drift risks or stale assumptions: none for this fixture.",

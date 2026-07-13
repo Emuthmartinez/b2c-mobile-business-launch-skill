@@ -59,6 +59,16 @@ should_trigger:
     description_terms:
       - "create a launch package"
       - "early repo"
+  - id: agent-runs-business
+    prompt: "I know nothing about business operations. Run my mobile app business and only pull me in for the decisions I must own."
+    description_terms:
+      - "run a B2C mobile app business"
+      - "run my mobile business"
+  - id: socials-and-doppler-operator
+    prompt: "Set up and manage the app's socials and organize secure operator access through Doppler so you can run the work."
+    description_terms:
+      - "manage my socials"
+      - "Doppler"
 should_not_trigger:
   - id: one-off-code-fix
     prompt: "Fix this one SwiftUI layout bug."

@@ -22,7 +22,7 @@ If broad work is kept inline, record why subagents are unavailable, unsafe, or n
 
 Last state review:
 
-Continuity source set: `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`
+Continuity source set: `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`
 
 Memory policy: Do not rely on chat memory or prior transcripts as source truth; if they conflict with repo state, repo state wins.
 
@@ -73,13 +73,14 @@ Worktree isolation needed:
 
 ## File Ownership
 
-The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, failure cards, git, and release coordination.
+The orchestrator owns `PROJECT_STATE.yaml`, `launch-cockpit.html`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `ENGINEERING_PLAN.md`, `PRODUCTION_READINESS.md`, failure cards, git, and release coordination.
 
 Specialists may edit only the file paths assigned in their prompt. Read-only auditors do not edit files.
 
 ## Serialized Work
 
 - Provider/account mutations
+- Founder gates, business identity, account creation/delegation, recovery, and 2FA
 - Authenticated browser profiles, public replies/posts, and external action ledgers
 - Credentials and secrets
 - MobAI, simulator, or device control on the same target

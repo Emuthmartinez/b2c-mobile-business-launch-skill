@@ -2,7 +2,7 @@
 
 A reusable Codex and Claude skill for turning a B2C mobile app idea, transcript, early repo, or half-built product into a launch-ready business package.
 
-This is a launch operating system for consumer apps: research, positioning, 11-star experience design, design system, secrets, security hardening, analytics, attribution, onboarding, paywalls, store ops, legal pages, revenue infrastructure, email, UGC/Fastlane growth, authenticated agent operations, device testing, and production-readiness proof.
+This is a founder-zero launch operating system for consumer apps: the agent assumes the founder knows none of the business tooling, leads setup one plain-language action at a time, and runs research, identity/access, Doppler, socials, positioning, design, security, analytics, revenue, store ops, growth, authenticated operations, device testing, and production-readiness proof.
 
 > **Status:** Public, actively maintained. Licensed under [MIT](LICENSE).
 
@@ -44,6 +44,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 | Lane | Output |
 | --- | --- |
 | State | `PROJECT_STATE.yaml`, `launch-cockpit.html`, `skill-version.json`, runtime freshness checks, autonomy mode, lane statuses, provider state, proof, and failure cards |
+| Founder-Zero Operator | `BUSINESS_ACCESS.md`, `operations/business-access.json`, business identity, Doppler, social/store account inventory, delegated access, recovery/2FA ownership, and one founder action plus one agent action |
 | Agent Operations | `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, capability discovery, account/environment targeting, scoped approval envelopes, authenticated-browser/API/CLI/native routing, prompt-injection quarantine, before/after proof, and state reconciliation |
 | Design Room | `state/business.json`, `state/theme.tokens.json`, `design-room.html`, React/Vite `dist/design-room/`, git-backed versions, baselines, diffs, restores, and wipe-slate operations |
 | Research | AppKittie, XPOZ, Firecrawl, ASO, GEO/SEO, review mining, competitor positioning, and launch evidence |
@@ -68,6 +69,7 @@ The skill should not require repeated "now use this skill" prompts. Once activat
 ## Non-Negotiables
 
 - `PROJECT_STATE.yaml` is the compact state contract for phase, autonomy, lane status, provider setup, proof, blockers, and failure cards.
+- Broad launches start with a founder-zero operator bootstrap: the agent chooses the next useful step, explains only the founder gate, secures business identity/Doppler/social access, and continues operating instead of returning a checklist.
 - Authenticated operations require capability discovery and `AGENT_OPERATIONS.md` plus its structured ledger; account access is never blanket authorization, and completed mutations need exact-target preflight, scoped approval, read-back proof, redaction, and state reconciliation.
 - `launch-cockpit.html` is the founder-visible dashboard over that state.
 - Research must flow into product, brand, design, implementation, store copy, revenue, privacy, and verification through `LAUNCH_TRACE.md`.
@@ -98,6 +100,7 @@ npm run check:security -- --root /path/to/app
 npm run check:content-assets -- --root /path/to/app
 npm run check:store-screenshots -- --root /path/to/app
 npm run check:agent-operations -- --root /path/to/app
+npm run check:founder-operator -- --root /path/to/app
 npm run check:asc-command-contract -- --skill-root skill/b2c-mobile-business-launch
 npm run check:orchestration -- --root /path/to/app
 npm run check:apple-signing -- --root /path/to/app

@@ -31,6 +31,19 @@ autonomy:
     - "credentials, secrets, and account access"
     - "App Store or Google Play submission"
     - "public posting or scheduling"
+business_operator:
+  status: "not_started"
+  founder_experience: "beginner_assumed"
+  agent_role: "business_operator"
+  human_log: "BUSINESS_ACCESS.md"
+  structured_ledger: "operations/business-access.json"
+  doppler_status: "not_started"
+  social_access_status: "not_started"
+  access_ready_count: 0
+  next_founder_action: "Tell me the working business or app name you want to use; I will explain and handle the rest one step at a time."
+  next_agent_action: "Inspect current repo and public identity state, then guide the first secure business account step."
+  next_business_operation: "After the identity gate clears, continue into secure account setup, research, social profiles, content, support, analytics, store work, and launch operations in priority order."
+  state_reconciled: true
 agent_operations:
   status: "not_started"
   human_log: "AGENT_OPERATIONS.md"
@@ -45,6 +58,8 @@ continuity:
     - "AGENTS.md"
     - "PROJECT_STATE.yaml"
     - "launch-cockpit.html"
+    - "BUSINESS_ACCESS.md"
+    - "operations/business-access.json"
     - "AGENT_OPERATIONS.md"
     - "operations/agent-operations.json"
     - "ORCHESTRATION.md"
@@ -68,6 +83,7 @@ orchestration:
   serialized_units:
     - "PROJECT_STATE.yaml updates"
     - "launch-cockpit.html rendering"
+    - "founder gates, business ownership, account creation, delegation, recovery, and 2FA"
     - "git staging, commits, merges, pushes, and releases"
     - "provider/account mutations"
     - "authenticated browser profiles, public responses, and externally visible actions"

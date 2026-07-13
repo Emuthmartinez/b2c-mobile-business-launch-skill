@@ -203,6 +203,8 @@ function validateProjectState(text: string | undefined, issues: Issue[]): Record
     "AGENTS.md",
     "PROJECT_STATE.yaml",
     "launch-cockpit.html",
+    "BUSINESS_ACCESS.md",
+    "operations/business-access.json",
     "AGENT_OPERATIONS.md",
     "operations/agent-operations.json",
     "ORCHESTRATION.md",
@@ -284,6 +286,8 @@ function main(): void {
       "AGENTS.md",
       "PROJECT_STATE.yaml",
       "launch-cockpit.html",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "AGENT_OPERATIONS.md",
       "operations/agent-operations.json",
       "ORCHESTRATION.md",
@@ -299,7 +303,7 @@ function main(): void {
   requireTerms(
     "AGENTS.md Session Continuity section",
     markdownSection(agents, "Session Continuity"),
-    ["AGENT_OPERATIONS.md", "operations/agent-operations.json"],
+    ["BUSINESS_ACCESS.md", "operations/business-access.json", "AGENT_OPERATIONS.md", "operations/agent-operations.json"],
     issues,
   );
 
@@ -311,6 +315,8 @@ function main(): void {
       "Do not rely on prior chat context",
       "PROJECT_STATE.yaml",
       "launch-cockpit.html",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "AGENT_OPERATIONS.md",
       "operations/agent-operations.json",
       "ORCHESTRATION.md",
@@ -326,6 +332,8 @@ function main(): void {
       "Do not rely on chat memory",
       "role prompts",
       "PROJECT_STATE.yaml",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "AGENT_OPERATIONS.md",
       "operations/agent-operations.json",
       "ORCHESTRATION.md",
@@ -336,7 +344,16 @@ function main(): void {
   requireTerms(
     "orchestrator role prompt",
     orchestrator,
-    ["Session Continuity", "git status --short", "Do not rely on chat memory", "state updates", "AGENT_OPERATIONS.md", "operations/agent-operations.json"],
+    [
+      "Session Continuity",
+      "git status --short",
+      "Do not rely on chat memory",
+      "state updates",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
+      "AGENT_OPERATIONS.md",
+      "operations/agent-operations.json",
+    ],
     issues,
   );
 
@@ -351,6 +368,8 @@ function main(): void {
       "## Session Continuity",
       "Last state review",
       "Continuity source set",
+      "BUSINESS_ACCESS.md",
+      "operations/business-access.json",
       "Memory policy",
       "Do not rely on chat memory",
       "Git status reviewed",

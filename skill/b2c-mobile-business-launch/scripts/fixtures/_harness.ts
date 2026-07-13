@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -46,6 +46,7 @@ export interface Harness {
     env?: Record<string, string>,
   ) => void;
   runScriptArgs: (label: string, script: string, args: string[], expectedCode: number, expectedText?: string, env?: Record<string, string>) => void;
+  cleanupFixtures: () => void;
   cleanup: () => void;
 }
 
@@ -104,7 +105,13 @@ export function createHarness(): Harness {
     rmSync(tempRoot, { recursive: true, force: true });
   };
 
-  return { tempRoot, results, makeFixture, makeEmptyFixture, runFixture, runScriptArgs, cleanup };
+  const cleanupFixtures = (): void => {
+    for (const entry of readdirSync(tempRoot)) {
+      rmSync(path.join(tempRoot, entry), { recursive: true, force: true });
+    }
+  };
+
+  return { tempRoot, results, makeFixture, makeEmptyFixture, runFixture, runScriptArgs, cleanupFixtures, cleanup };
 }
 
 export function reportResults(results: FixtureResult[]): number {

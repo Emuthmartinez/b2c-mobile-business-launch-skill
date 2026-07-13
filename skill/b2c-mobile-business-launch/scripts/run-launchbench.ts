@@ -24,6 +24,7 @@ const knownValidators = new Set([
   "check-store-screenshots",
   "check-native-ios-proof",
   "check-agent-operations",
+  "check-founder-operator-bootstrap",
   "check-asc-command-contract",
   "check-secret-routing",
   "check-security-release",
@@ -84,6 +85,7 @@ const requiredBehavioral = new Set([
   "launch-tier-overproduction",
   "monetization-cozy-default-stack-unexamined",
   "browser-capability-skipped",
+  "founder-zero-operator-skipped",
 ]);
 
 if (!existsSync(scenarioDir)) {

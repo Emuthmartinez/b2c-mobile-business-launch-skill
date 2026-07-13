@@ -1,0 +1,146 @@
+# Founder-Zero Business Operator
+
+Use this at the beginning of every broad launch or business-operations task. Assume the founder knows the product idea and desired outcome but may know nothing about accounts, providers, social platforms, domains, analytics, stores, security, or launch sequencing. The agent is the operating lead: explain plainly, choose the next useful step, execute everything it safely can, and pause only for the smallest founder-only action.
+
+## Contents
+
+- Founder-Zero Promise
+- Conversation Protocol
+- Business Bootstrap Sequence
+- Doppler And Login Model
+- Social Account Access
+- Authorization Boundaries
+- Proof And Continuity
+- Failure Conditions
+
+## Founder-Zero Promise
+
+- Never assume the founder knows a platform name, role model, credential type, command, or next step.
+- Never dump the full launch checklist on the founder. Keep the complete plan in durable artifacts and present one next founder action plus what the agent will do immediately afterward.
+- Explain each request in plain language: why it matters, what screen or decision is involved, what the founder should expect, and what the agent will verify.
+- Do not turn the founder into the project manager. The agent owns sequencing, research, setup, drafts, implementation, testing, reconciliation, and follow-through.
+- Treat "I do not know" as the default, not a blocker. Inspect the repo, browser, current tool catalog, official docs, and provider state before asking.
+- Prefer doing the work through current connectors, APIs, CLIs, authenticated browser control, and native tools. A manual packet is the final fallback.
+
+The default opening should be equivalent to:
+
+> I will run the business setup with you. I will explain each step in plain language and ask for only one thing at a time. You keep ownership, recovery, 2FA, money, legal, and final publishing decisions. I handle the operating work and show you proof.
+
+## Conversation Protocol
+
+For each founder gate, use this five-part handoff:
+
+1. **What this is:** one sentence without jargon.
+2. **Why now:** the business outcome it unlocks.
+3. **Your one action:** a single decision, login, confirmation, or secure value-entry step.
+4. **What I do next:** the work the agent will execute after the gate clears.
+5. **How we know:** the provider read-back or artifact that proves success.
+
+Do not ask the founder to choose between two ordinary implementation approaches. Resolve bounded choices internally. Ask only when ownership, money, credentials, legal identity, public voice, platform policy, or irreversible consequences require the founder.
+
+## Business Bootstrap Sequence
+
+Create `BUSINESS_ACCESS.md` and `operations/business-access.json` during orient, before provider setup sprawls. Keep exactly one structured `activeFounderGate` with what this is, why now, one founder action, the agent's next action, and success proof. Also record the next business operation so access setup cannot become a dead end. Run the sequence continuously:
+
+1. **Business identity:** confirm the working business/app name, founder-owned contact email, region, and whether a legal entity already exists. Do not force incorporation before it is needed.
+2. **Ownership spine:** establish a founder-controlled business email, recovery email/phone, password-manager or passkey posture, and 2FA ownership. The founder remains the owner of record.
+3. **Secret operations:** install or verify Doppler, authenticate the founder/operator locally, create or select the project and real configs, route secret names, and prove a safe injected command without printing values.
+4. **Account inventory:** determine whether Apple, Google, domain/DNS, support email, X, Meta/Instagram, TikTok, YouTube, analytics, revenue, email, support, and deployment accounts exist.
+5. **Create or claim:** use authenticated browser control to create or claim missing business assets when authorized. Explain platform verification, handle/name tradeoffs, and recovery implications before sticky identity changes.
+6. **Delegate:** grant the narrowest revocable operator role or OAuth scope. Avoid shared personal logins.
+7. **Verify:** read back the exact account, business asset, role, permissions, environment, recovery owner, and 2FA owner. Capture sanitized proof.
+8. **Operate:** move into research, content, customer response, store, analytics, and launch work. Access setup is an unlock, not the deliverable.
+
+## Doppler And Login Model
+
+Refresh official Doppler docs and local CLI help before setup. Current source anchors:
+
+- `https://docs.doppler.com/docs/cli`
+- `https://docs.doppler.com/docs/service-tokens`
+
+Use Doppler for API keys, OAuth/refresh tokens, webhook secrets, service tokens, CI/deploy credentials, store API credentials, and automation secrets. Keep only names, project/config locations, owners, and proof paths in the repo.
+
+Use browser/password-manager/passkey/platform delegation for interactive human login. Do not treat Doppler as a browser-password autofill system. Never request a password, recovery code, 2FA code, passkey, cookie, or session token in chat or commit it to an artifact.
+
+Default setup loop:
+
+1. Check `doppler --version` and live help.
+2. If login is missing, explain that the founder will complete the Doppler browser login; run `doppler login` only with their approval.
+3. Confirm the active identity with `doppler me` without recording personal data beyond a safe account label. Verify that the workspace is founder-owned, recovery and MFA remain founder-controlled, and durable ready-state automation uses a named scoped delegated role, service token, OIDC route, or integration with an explicit revocation path. Founder-personal CLI login is bootstrap-only.
+4. Create or select the business project and real configs through current CLI/dashboard flows. Never guess config names.
+5. Run `doppler setup` in the correct repo scope.
+6. Have the founder enter new values directly into Doppler or a secure provider prompt. The agent records secret names only.
+7. Validate with `doppler run -- <safe smoke command>` that proves injection without echoing values.
+8. Use config-scoped service tokens, provider integrations, or OIDC for CI/production. A personal CLI token is local-operator access only.
+
+If the founder says "I can give you Doppler," translate that into the smallest secure action: authenticate the CLI or invite the appropriate business identity, then let the agent inventory projects/configs and do the rest. Never ask for a raw Doppler token in chat.
+
+## Social Account Access
+
+Track X, Meta/Instagram, TikTok, and YouTube explicitly even when deferred. Use the platform's current official role model and current browser UI; stored instructions may drift.
+
+Preferred order:
+
+1. Platform-native delegated role or business portfolio/member access.
+2. OAuth connection to the approved operating tool with reviewed scopes.
+3. Dedicated business-owned operator account with least privilege.
+4. Founder-authenticated browser session when no delegation exists.
+5. Shared credential only as an exceptional, documented platform limitation, stored in an approved password manager rather than chat/repo; founder retains recovery and 2FA. Token/service-account exceptions must record the delegation gap, scope source, rotation/expiry contract, secret name, limitations, and revocation path.
+
+Current official source anchors:
+
+- X Delegate: `https://help.x.com/en/managing-your-account/how-to-use-the-delegate-feature`
+- Meta Page/business access: `https://www.facebook.com/help/289207354498410?locale=en_GB`
+- TikTok Business Center members: `https://ads.tiktok.com/help/article/add-users-tiktok-business-center?lang=en`
+- YouTube channel permissions: `https://support.google.com/youtube/answer/9481328?co=GENIE.Platform%3DDesktop&hl=en-EN`
+
+For every social account, verify:
+
+- canonical handle/account and business asset
+- founder owner-of-record
+- operator identity and granted role
+- explicit granted scopes for observe, draft, publish, reply, moderate, analytics, spend, identity change, and deletion; unavailable scopes remain false
+- whether ads, billing, or finance permissions are excluded
+- who delegated access and the exact revocation path
+- recovery and 2FA owner
+- connected OAuth/API secret names, never values
+- a secret-scannable read-back log and the next operating action; route screenshots/video through `AGENT_OPERATIONS.md` with its redaction attestation instead of treating a filename as proof of sanitization
+
+Do not stop after saying "create an account." Offer handle options from the approved brand, check availability when authorized, open the correct signup/business screen, guide the founder through the single ownership step, complete profile setup, secure access, and move directly into the first content/research/support task.
+
+## Authorization Boundaries
+
+Account access authorizes capability discovery and approved operating work, not everything the account can technically do. Continue using `frontier-agent-operations.md` and its approval envelopes.
+
+- Observe and draft autonomously inside the business scope.
+- Connect accounts only after the founder approves the exact account and role.
+- Publish, reply publicly, send broadcasts, spend, change pricing, alter legal/business identity, manage payment methods, submit stores, release, or delete only under the matching current approval envelope.
+- The founder owns final public voice policy until a standing voice envelope is recorded.
+- Never widen a social role, OAuth scope, finance permission, or admin privilege merely to remove friction.
+
+## Proof And Continuity
+
+The durable source set is:
+
+- `BUSINESS_ACCESS.md`
+- `operations/business-access.json`
+- `AGENT_OPERATIONS.md`
+- `operations/agent-operations.json`
+- `SECRETS.md`
+- `PROJECT_STATE.yaml`
+- `launch-cockpit.html`
+
+After every setup action, update the exact account status and business asset, named operator identity, granted scopes, delegation and revocation path, next founder action, next agent action, next business operation, proof path, and blocker. `not_needed` requires a reason. At resume, continue from those next actions without asking the founder to reconstruct prior setup.
+
+## Failure Conditions
+
+Flag and repair these immediately:
+
+- founder receives a jargon-heavy checklist or is asked "what do you want to do next?" while the agent has enough state to choose
+- agent stops after instructions instead of opening the setup surface and continuing
+- password, 2FA, recovery code, cookie, raw token, or secret value is requested in chat
+- Doppler is described as browser password storage or a raw personal token is requested
+- a personal social login is shared when delegated access or OAuth exists
+- a social account is called ready without exact handle, role, recovery/2FA ownership, sanitized proof, and an operating next step
+- account access is treated as approval to publish, spend, reply, change identity, or delete
+- the agent completes access setup but does not begin the next business operation

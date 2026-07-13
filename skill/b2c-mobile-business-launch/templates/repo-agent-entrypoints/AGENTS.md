@@ -4,6 +4,8 @@ This repo is the operating home for {{APP_NAME}}, a B2C mobile app business by {
 
 Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue, analytics, security, growth, and production-readiness work. Once the skill is active, do not ask the founder to re-invoke it; load the next needed skill reference, update `PROJECT_STATE.yaml`, rerender `launch-cockpit.html`, and run the relevant validators until a founder-only gate is reached.
 
+Assume the founder is new to business operations. The agent runs the business workflow, explains one plain-language founder action at a time, performs the next recorded work, and never hands back an unexplained checklist. `BUSINESS_ACCESS.md` and `operations/business-access.json` are the durable ownership/access handoff.
+
 ## 60-Second Brief
 
 - Product: {{PRODUCT_BRIEF}}
@@ -18,14 +20,14 @@ Continue using the `b2c-mobile-business-launch` skill for launch, store, revenue
 - State and cockpit: `PROJECT_STATE.yaml`, `launch-cockpit.html`
 - Design Room: `state/business.json`, `state/theme.tokens.json`, `design-room.html`
 - Product and trace: `SPEC.md`, `LAUNCH_TRACE.md`, `11_STAR_EXPERIENCE.md`, `EMOTIONAL_DESIGN.md`, `BRAND.md`
-- Build and operations: `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `SECRETS.md`, `SECURITY.md`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`
+- Build and operations: `TECH_SPEC.md`, `DESIGN.md`, `ANALYTICS.md`, `SECRETS.md`, `SECURITY.md`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`
 - Orchestration and readiness: `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `APP_AGENTS.md`
 
 If a listed file does not exist yet, create or update it through the relevant `b2c-mobile-business-launch` reference instead of inventing a one-off replacement.
 
 ## Session Continuity
 
-- At the start of every new session, resume, status check, or handoff, reconstruct state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short` before choosing work.
+- At the start of every new session, resume, status check, or handoff, reconstruct state from `AGENTS.md`, `PROJECT_STATE.yaml`, `launch-cockpit.html`, `BUSINESS_ACCESS.md`, `operations/business-access.json`, `AGENT_OPERATIONS.md`, `operations/agent-operations.json`, `ORCHESTRATION.md`, `PRODUCTION_READINESS.md`, `FAILURE_CARDS.md`, and `git status --short` before choosing work.
 - Do not rely on chat memory or prior transcripts as source truth; if they conflict with repo state, repo state wins.
 - For broad work, route through `APP_AGENTS.md` and role prompts, or record why subagents are unavailable or unsafe in `ORCHESTRATION.md` and `PROJECT_STATE.yaml`.
 - After material changes, update state/readiness/failure cards and rerender `launch-cockpit.html` before pausing.
@@ -46,6 +48,7 @@ This file is a map, not a product spec. Keep durable product truth in the files 
 ## Skill Workflow
 
 - Use `b2c-mobile-business-launch` as the default workflow for broad launch/business work, business-side setup, App Store or Google Play readiness, RevenueCat/Stripe/PostHog/Resend setup, MobAI/native iOS proof, security release work, GEO/SEO, UGC/Fastlane, and production-readiness claims.
+- Load `founder-zero-operator.md` at broad-launch orient and before Doppler/account/social setup. Assume beginner knowledge, choose the next step, and run `check:founder-operator`; the founder owns recovery/2FA/money/legal/final public actions while the agent owns execution.
 - Keep `PROJECT_STATE.yaml` current before crossing phases, claiming a lane is done, spawning agents, changing provider state, or pausing at a blocker.
 - Rerender `launch-cockpit.html` whenever state, blockers, provider status, proof, or launch-readiness changes.
 - Before browser, account/provider, social, or native-device work, use the skill's `frontier-agent-operations.md`; inventory routes, verify the exact target, distinguish access from authorization, record approvals, and read back/reconcile every mutation.
@@ -123,6 +126,7 @@ Run the relevant repo-local commands plus installed-skill validators. From the i
 cd ~/.codex/skills/b2c-mobile-business-launch
 npm run validate:launch-state -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:orchestration -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
+npm run check:founder-operator -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:agent-operations -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:secrets -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml
 npm run check:security -- --root /path/to/{{APP_SLUG}} --state PROJECT_STATE.yaml

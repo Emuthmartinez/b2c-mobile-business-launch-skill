@@ -6,6 +6,8 @@ The goal is to turn the launch package into a repeatable short-form content engi
 
 Use `paid-tool-routing.md` before replacing Fastlane AI, MobAI, Higgsfield, XPOZ, AppKittie, or creator-marketplace tooling with a free/manual fallback. Use `viral-growth-loops.md` before Fastlane content depends on referral/share mechanics, creator codes, social-comment loops, or viral paywall timing. Use `ugc-creator-engine.md` before building creator-led organic growth, creator briefs, scripts, or Day 0 format-discovery loops.
 
+Load `founder-zero-operator.md` and reconcile `BUSINESS_ACCESS.md` before social connections. If accounts do not exist, the agent guides creation and security one step at a time; if they exist, prefer delegated roles/OAuth and verify exact handles, recovery/2FA ownership, and publishing/spend boundaries before Fastlane connection.
+
 ## Contents
 
 - Current Sources To Refresh
