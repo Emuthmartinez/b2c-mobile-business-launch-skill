@@ -181,7 +181,7 @@ Parallel safety check:
 
 Use `ce-worktree` when parallel engineering lanes need isolation. Prefer meaningful branch/worktree names such as `feat/onboarding-analytics` or `fix/revenuecat-entitlement-sync`.
 
-MobAI is serialized: one orchestrator owns the device flow, while other agents may inspect code, prepare fixtures, or analyze logs in parallel. If MobAI is unavailable, use `paid-tool-routing.md` before substituting XcodeBuildMCP or any free device/simulator fallback.
+MobAI is serialized: one orchestrator owns the device flow, while other agents may inspect code, prepare fixtures, or analyze logs in parallel. Its free tier needs no spend approval; Plus/Pro-only capabilities do. If MobAI is unavailable, use `paid-tool-routing.md` before substituting XcodeBuildMCP or another device/simulator route because the replacement changes platform coverage and proof quality.
 
 ## 6. `ENGINEERING_PLAN.md` Requirements
 
@@ -247,7 +247,7 @@ Attribution-specific production-readiness proof is mandatory when onboarding, si
 
 Use MobAI MCP when available for advanced multi-step device automation. Use the local `using-mobai-cli` skill when only CLI access is available or the environment is unfamiliar.
 
-MobAI is a paid third-party tool. If it is unavailable, do not silently switch to a free route. Load `paid-tool-routing.md`, ask the founder, and continue only after they confirm MobAI access, provide exports/screenshots, or approve a fallback.
+MobAI is a freemium third-party tool. Use its free tier without a spend gate when one device and the current quota satisfy the lane. Ask before any Plus/Pro upgrade or before replacing the intended cross-platform route; continue after the founder confirms paid capability, provides exports/screenshots, or approves a fallback with recorded platform limits.
 
 When running in Codex Desktop and native Apple/XcodeBuildMCP tools are exposed, use `xcodebuildmcp-testing.md` before Apple simulator/device proof. The Codex Desktop native iOS route should call `session_show_defaults` before the first build/run/test, use exposed MCP tools such as `build_run_sim` when defaults are set, and record project/workspace, scheme, simulator/device, tool names, screenshots/logs, and limitations in `PRODUCTION_READINESS.md`.
 

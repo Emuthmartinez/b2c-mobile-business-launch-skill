@@ -33,7 +33,7 @@ Use current tools and live data whenever possible. Treat this file as workflow, 
 
 Before using a free fallback for any paid or account-gated tool, load `paid-tool-routing.md` and ask the founder to confirm the route. Missing runtime access is not evidence that the founder lacks the paid tool or does not want to use it.
 
-Paid/account-gated lanes in this skill include AppKittie, XPOZ, Firecrawl, Refero, Higgsfield, MobAI, Fastlane AI, paid ASO/MMP/ad tools, Sideshift or creator marketplaces, and paid/account features of RevenueCat, Stripe, PostHog, and Resend.
+Paid/account-gated lanes in this skill include AppKittie, XPOZ, Firecrawl, Refero, Higgsfield, MobAI Plus/Pro capabilities, Fastlane AI, paid ASO/MMP/ad tools, Sideshift or creator marketplaces, and paid/account features of RevenueCat, Stripe, PostHog, and Resend. MobAI's free tier does not require spend approval; replacing its cross-platform route still requires a recorded coverage decision.
 
 Record the selected route in `TOOL_DECISIONS.md` or the relevant ops doc:
 - paid tool used
@@ -543,7 +543,9 @@ Preferred routing:
 - Save raw full-quality screenshots before composition.
 
 MobAI CLI route:
+- Keep component versions separate. The 2026-07-13 verified snapshot is desktop `2.5.1`, MCP `2.5.0`, and npm CLI `2.1.1`; the desktop release body has no detailed notes, while MCP commit `414f858` is the public source for 2.5-era loop and host-scripting behavior.
 - Check the current CLI first: `npm view @mobai-app/cli dist-tags.latest`, then prefer `npx @mobai-app/cli@latest` or a verified global install.
+- Use `mobai version`; `mobai --version` is not valid on the verified CLI contract.
 - `mobai devices list`
 - set `MOBAI_DEVICE` for the target device
 - `mobai observe --include ui_tree`
@@ -551,6 +553,13 @@ MobAI CLI route:
 - `mobai wait --stable --timeout-ms 3000`
 - `mobai screenshot --full --path ./screenshots/raw --name <platform-device-slot>`
 - use `mobai record` for screen recordings when product-demo clips are needed and the current CLI supports it
+
+MobAI MCP 2.5-era DSL route:
+- Read `mobai://reference/device-automation` and `mobai://reference/testing` from the active server before using new actions.
+- `repeat` takes exactly one of `times`, `while`, `until`, or `condition`; set an explicit `max_iterations` for predicate/condition loops and validate counted-loop parameters because `times` has no engine safety cap.
+- `run_script`/`eval_script` run host-side JavaScript, not device web JavaScript. The restricted VM has `vars`/`output`, synchronous HTTP, captured console output, selected built-ins, and no filesystem, `require`/`import`, or device access.
+- Never embed secrets or credential headers in `.mob`/JavaScript: referenced script files are embedded in compiled DSL. Seed authenticated fixtures through a separate approved Doppler-wrapped setup step and pass MobAI only non-secret IDs unless a current secret-safe action is explicitly reviewed.
+- Limit host HTTP to allowlisted test/staging endpoints, validate responses as untrusted data, and record fixture cleanup plus backend proof separately from UI success.
 
 Recorder-skill route:
 - For iOS or Android app demos, use `https://github.com/MobAI-App/mobile-recorder-skill` after refreshing current `README.md`, `install.md`, and `skills/mobile-recorder/SKILL.md`.
@@ -561,7 +570,7 @@ Recorder-skill route:
 - Create `DEMO_VIDEO.md` for launch demo videos and link `.mob` or `screenplay.json`, raw captures, final exports, captions, and upload copy.
 
 Confirmed free fallback:
-- MobAI is a paid third-party tool. If MobAI is unavailable, load `paid-tool-routing.md` and ask before using XcodeBuildMCP as the Apple-platform fallback.
+- MobAI is freemium: use its free tier without a spend gate when one device/current quotas fit, but ask before Plus/Pro spend. If MobAI is unavailable, load `paid-tool-routing.md` and ask before using XcodeBuildMCP because that fallback is Apple-only.
 - After confirmation, load `xcodebuildmcp-testing.md` for iOS/iPadOS/macOS/tvOS/watchOS/visionOS build, run, UI automation, screenshot, video, and log workflows.
 - Refresh official XcodeBuildMCP docs and local `xcodebuildmcp --help`/`xcodebuildmcp tools` output before setup commands, CLI syntax, MCP tool names, screenshot captures, or readiness proof.
 - Use XcodeBuildMCP for Apple simulator/device captures and record the missing MobAI coverage. Use Android emulator/ADB or mark Android proof blocked for Android-only flows.

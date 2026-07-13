@@ -99,7 +99,7 @@ Goal: avoid wasting tokens on weak free fallbacks when the founder may have, wan
 
 Do:
 - Load `paid-tool-routing.md`.
-- List paid/account-gated lanes that affect the launch: AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI, Fastlane AI, ASO/MMP/ad tools, Sideshift/creator marketplaces, RevenueCat, Stripe, PostHog, Resend, and App Store/Play accounts.
+- List paid/account-gated lanes that affect the launch: AppKittie, XPOZ, Firecrawl, Higgsfield, MobAI Plus/Pro capabilities, Fastlane AI, ASO/MMP/ad tools, Sideshift/creator marketplaces, RevenueCat, Stripe, PostHog, Resend, and App Store/Play accounts. Record separately when MobAI Free covers the lane and when a fallback narrows cross-platform proof.
 - Check current runtime access, local installs, user-provided exports, screenshots, PDFs, CSVs, API keys, and account sessions.
 - Ask before replacing any paid/account-gated tool with a free fallback.
 - Record selected routes, limitations, and blocked access in `TOOL_DECISIONS.md` or the relevant ops doc.

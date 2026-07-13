@@ -23,6 +23,7 @@ const knownValidators = new Set([
   "check-store-console-packet",
   "check-store-screenshots",
   "check-native-ios-proof",
+  "check-mobai-proof",
   "check-agent-operations",
   "check-founder-operator-bootstrap",
   "check-asc-command-contract",
