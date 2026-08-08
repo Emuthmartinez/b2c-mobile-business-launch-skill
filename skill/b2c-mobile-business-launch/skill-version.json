@@ -1,11 +1,11 @@
 {
   "skill": "b2c-mobile-business-launch",
-  "version": "0.103.0",
-  "updatedAt": "2026-08-07",
+  "version": "0.104.0",
+  "updatedAt": "2026-08-08",
   "sourcePath": "skill/b2c-mobile-business-launch",
   "releaseNotes": [
-    "PR-4c of the 2026-08 graph-consolidation audit's thin-domain rebalancing (the last of the three): domain.machine's own routeWhen names 'evals' as one of its six maintenance pillars, alongside versioning, graph integrity, source freshness, package parity, and runtime synchronization — but unlike the other pillars, nothing dispatchable owned it. The LaunchBench scenario suite and the agent-behavior eval suite both ran only as steps inside npm run audit, with no workflow node a maintainer session could point at directly. Added workflow.machine.eval-suite-execution-maintainer (catalog/workflows/maintenance.ts), gated on check:agent-evals.",
-    "launchbench could not be named in the new workflow's gates: catalog/gates.ts's discoverGates() only picks up check:/validate:/render:/catalog:-prefixed npm scripts, and launchbench is deliberately named for the aggregate harness it runs as its own serial audit step, not a narrow check. evals:behavioral (live-agent runs) is excluded from gates for an unrelated reason — cost and run-to-run variance make it unfit as a merge gate. Both are named in the workflow's trigger text instead, with the reason for each exclusion kept distinct rather than conflated.",
-    "Re-rendered the catalog (57 to 58 workflows; domain.machine workflows are excluded from the dispatchable/founder-facing projections by catalog/bridge.ts's toCatalogInput(), same as domain.process/orchestration, so this workflow appears in catalog/generated/catalog.json but not routing.md/spine.md). Updated two hardcoded workflow-count assertions in verification/fixtures/catalog.fixtures.ts (57 to 58 total; 14 to 15 excluded system/machine-domain workflows) that would otherwise have gone stale silently."
+    "Expanded onboarding into typed ONB-00 through ONB-22 catalog nodes so the durable engine can schedule, fan out, join, checkpoint, retry, resume, and verify the complete consumer onboarding system rather than executing one coarse prose node.",
+    "Rebuilt product/ONBOARDING.md as the canonical evidence, first-value, state, identity, analytics, design, monetization, lifecycle, implementation, hard-cutover, and zero-legacy contract, with a faithful searchable generated HTML view.",
+    "Added check:onboarding-graph to both package layouts and the standard audit, with deterministic fixtures for review timing, deferrals, placeholder completion, typed screen and control contracts, and legacy removal. Updated app-agent roles to continue the graph through Compound Engineering implementation and final proof."
   ]
 }
